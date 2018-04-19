@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_19_180336) do
+ActiveRecord::Schema.define(version: 2018_04_19_205944) do
 
   create_table "episodes", force: :cascade do |t|
     t.integer "feed_id"
     t.text "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "url"
     t.index ["feed_id"], name: "index_episodes_on_feed_id"
   end
 
