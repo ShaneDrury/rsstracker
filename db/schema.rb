@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_19_210838) do
+ActiveRecord::Schema.define(version: 2018_04_19_211508) do
 
   create_table "episodes", force: :cascade do |t|
     t.integer "feed_id"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 2018_04_19_210838) do
     t.integer "fetchable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "url"
     t.index ["fetchable_type", "fetchable_id"], name: "index_fetch_statuses_on_fetchable_type_and_fetchable_id"
   end
 
