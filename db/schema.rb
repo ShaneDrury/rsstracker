@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_19_145732) do
+ActiveRecord::Schema.define(version: 2018_04_19_180336) do
 
   create_table "episodes", force: :cascade do |t|
     t.integer "feed_id"
@@ -25,6 +25,16 @@ ActiveRecord::Schema.define(version: 2018_04_19_145732) do
     t.datetime "updated_at", null: false
     t.text "url"
     t.text "name"
+  end
+
+  create_table "fetch_statuses", force: :cascade do |t|
+    t.text "error_reason"
+    t.text "status"
+    t.string "fetchable_type"
+    t.integer "fetchable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fetchable_type", "fetchable_id"], name: "index_fetch_statuses_on_fetchable_type_and_fetchable_id"
   end
 
 end
