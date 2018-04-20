@@ -15,7 +15,7 @@ xml.rss version: '2.0' do
           xml.title ''
         end
         xml.pubDate episode.updated_at.to_s(:rfc822)
-        xml.link episode.fetch_status.url
+        xml.link episode.download_link(request)
         xml.guid episode.guid
       end
     end
