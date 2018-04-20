@@ -1,5 +1,5 @@
 class EpisodesController < ApplicationController
-  before_action :set_episode, only: [:show, :update, :destroy]
+  before_action :set_episode, only: [:show, :update, :destroy, :download]
 
   # GET /episodes
   def index
@@ -11,6 +11,12 @@ class EpisodesController < ApplicationController
   # GET /episodes/1
   def show
     render json: @episode
+  end
+
+  # POST /episodes/1/download
+  def download
+    job = DownloadEpisodeJob.perform_later(@episode.id)
+    render json: { job_id: job.job_id }, status: :accepted
   end
 
   # POST /episodes
@@ -39,13 +45,14 @@ class EpisodesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_episode
-      @episode = Episode.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def episode_params
-      params.require(:episode).permit(:feed_id, :name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_episode
+    @episode = Episode.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def episode_params
+    params.require(:episode).permit(:feed_id, :name)
+  end
 end
