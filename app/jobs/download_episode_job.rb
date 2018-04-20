@@ -28,11 +28,11 @@ class DownloadEpisodeJob < ApplicationJob
       if @bytes_total
         @tick += 1
         if (@tick % 100).zero?
-          episode.build_fetch_status(
+          episode.fetch_status.update_attributes(
             status: 'LOADING',
             bytes_transferred: bytes_transferred.to_d,
             bytes_total: @bytes_total.to_d,
-          ).save
+          )
           @tick = 0
         end
       end
