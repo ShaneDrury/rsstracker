@@ -13,6 +13,7 @@ xml.rss version: '2.0', 'xmlns:itunes' => 'http://www.itunes.com/dtds/podcast-1.
         else
           xml.title ''
         end
+        xml.description { xml.cdata! episode.description }
         xml.pubDate episode.updated_at.to_s(:rfc822)
         xml.link episode.download_link(request)
         xml.guid episode.guid
