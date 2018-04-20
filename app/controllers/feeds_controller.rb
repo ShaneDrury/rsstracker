@@ -1,5 +1,6 @@
 class FeedsController < ApplicationController
-  before_action :set_feed, only: [:show, :update, :destroy]
+  include ActionView::Layouts
+  before_action :set_feed, only: [:show, :update, :destroy, :feed]
 
   # GET /feeds
   def index
@@ -11,6 +12,12 @@ class FeedsController < ApplicationController
   # GET /feeds/1
   def show
     render json: @feed
+  end
+
+  def feed
+    respond_to do |format|
+      format.rss { render layout: false }
+    end
   end
 
   # POST /feeds
@@ -39,13 +46,14 @@ class FeedsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_feed
-      @feed = Feed.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def feed_params
-      params.fetch(:feed, {})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_feed
+    @feed = Feed.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def feed_params
+    params.fetch(:feed, {})
+  end
 end
