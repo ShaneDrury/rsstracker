@@ -7,6 +7,6 @@ class Episode < ApplicationRecord
   end
 
   def as_json(options={})
-    super(include: [:fetch_status], methods: [:download_link])
+    super(include: { fetch_status: { methods: :percentage_fetched } }, methods: [:download_link])
   end
 end

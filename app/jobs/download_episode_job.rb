@@ -1,18 +1,15 @@
 # frozen_string_literal: true
 
 require 'open-uri'
-require 'active_support/number_helper'
 
 BUFFER_SIZE = 8 * 1024
 
 class DownloadEpisodeJob < ApplicationJob
-  include ActionView::Helpers::NumberHelper
   queue_as :default
 
   def perform(episode_id)
     episode = Episode.find(episode_id)
-    episode.build_fetch_status(status: 'LOADING')
-    episode.save
+    episode.build_fetch_status(status: 'LOADING').save
     url = episode.url
 
     episode_filename = File.basename(URI(url).path)
@@ -31,8 +28,11 @@ class DownloadEpisodeJob < ApplicationJob
       if @bytes_total
         @tick += 1
         if (@tick % 100).zero?
-          percentage = number_with_precision(bytes_transferred.to_d / @bytes_total.to_d * 100.0, precision: 2)
-          print("\r#{bytes_transferred}/#{@bytes_total} #{percentage}")
+          episode.build_fetch_status(
+            status: 'LOADING',
+            bytes_transferred: bytes_transferred.to_d,
+            bytes_total: @bytes_total.to_d,
+          ).save
           @tick = 0
         end
       end
@@ -46,7 +46,6 @@ class DownloadEpisodeJob < ApplicationJob
       end
     end
 
-    episode.build_fetch_status(status: 'SUCCESS', url: download_path)
-    episode.save
+    episode.build_fetch_status(status: 'SUCCESS', url: download_path).save
   end
 end
