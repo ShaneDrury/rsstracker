@@ -46,6 +46,6 @@ class DownloadEpisodeJob < ApplicationJob
       end
     end
 
-    episode.build_fetch_status(status: 'SUCCESS', url: download_path).save
+    episode.build_fetch_status(status: 'SUCCESS', url: episode_filename).save
   end
 end
