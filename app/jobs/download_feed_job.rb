@@ -23,7 +23,10 @@ class DownloadFeedJob < ApplicationJob
         end
       end
     end
-    feed.update_attributes(image_url: thumbnail_filename)
+    feed.update_attributes(
+      image_url: thumbnail_filename,
+      description: rss.channel.description,
+    )
 
     rss.items.each do |result|
       Episode.find_or_create_by(feed: feed, name: result.title, guid: result.guid.content) do |ep|
