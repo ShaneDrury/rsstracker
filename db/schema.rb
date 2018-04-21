@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_21_103953) do
+ActiveRecord::Schema.define(version: 2018_04_21_132503) do
 
   create_table "episodes", force: :cascade do |t|
     t.integer "feed_id"
@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(version: 2018_04_21_103953) do
     t.text "url"
     t.text "guid"
     t.text "description"
-    t.integer "duration"
     t.integer "file_size"
+    t.string "duration"
     t.index ["feed_id"], name: "index_episodes_on_feed_id"
   end
 

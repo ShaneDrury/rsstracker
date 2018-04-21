@@ -32,6 +32,7 @@ class DownloadFeedJob < ApplicationJob
       Episode.find_or_create_by(feed: feed, name: result.title, guid: result.guid.content) do |ep|
         ep.build_fetch_status(status: 'NOT_ASKED')
         ep.description = result.description
+        ep.duration = result.itunes_duration.content
         ep.file_size = result.enclosure.length
         ep.url = result.link
         ep.save

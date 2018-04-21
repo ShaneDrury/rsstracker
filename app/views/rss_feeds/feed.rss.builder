@@ -17,7 +17,7 @@ xml.rss version: '2.0',
         end
         xml.description { xml.cdata! episode.description }
         xml.pubDate episode.updated_at.to_s(:rfc822)
-        xml.itunes :duration, Time.at(episode.duration).utc.strftime("%H:%M:%S")
+        xml.itunes :duration, episode.duration
         xml.media :content,
           url: episode.fetch_status.url,
           fileSize: episode.file_size.to_s,
