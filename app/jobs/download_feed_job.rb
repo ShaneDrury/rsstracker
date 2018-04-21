@@ -31,9 +31,12 @@ class DownloadFeedJob < ApplicationJob
     rss.items.each do |result|
       Episode.find_or_create_by(feed: feed, name: result.title, guid: result.guid.content) do |ep|
         ep.build_fetch_status(status: 'NOT_ASKED')
+        ep.description = result.description
+        ep.file_size = result.enclosure.length
         ep.url = result.link
         ep.save
       end
     end
+    nil
   end
 end
