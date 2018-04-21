@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :episodes do
     member do
       post 'download'
+      get 'stream', format: :mp3
     end
   end
   resources :feeds do
