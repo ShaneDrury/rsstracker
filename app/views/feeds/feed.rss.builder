@@ -19,10 +19,9 @@ xml.rss version: '2.0',
         xml.pubDate episode.updated_at.to_s(:rfc822)
         xml.itunes :duration, Time.at(episode.duration).utc.strftime("%H:%M:%S")
         xml.media :content,
-          url: stream_episode_url(episode, format: :mp3),
+          url: episode.fetch_status.url,
           fileSize: episode.file_size.to_s,
           duration: episode.duration.to_s
-        xml.link stream_episode_url(episode, format: :mp3)
         xml.guid episode.guid
       end
     end

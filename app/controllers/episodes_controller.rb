@@ -1,5 +1,5 @@
 class EpisodesController < ApplicationController
-  before_action :set_episode, only: [:show, :update, :destroy, :download, :stream]
+  before_action :set_episode, only: [:show, :update, :destroy, :download]
 
   # GET /episodes
   def index
@@ -11,15 +11,6 @@ class EpisodesController < ApplicationController
   # GET /episodes/1
   def show
     render json: @episode
-  end
-
-  def stream
-    respond_to do |format|
-      format.mp3 do
-        response.headers['Content-Length'] = @episode.fetch_status.bytes_total.to_i
-        send_file @episode.fetch_status.url, type: 'audio/mpeg', disposition: 'inline'
-      end
-    end
   end
 
   # POST /episodes/1/download
