@@ -16,6 +16,7 @@ class EpisodesController < ApplicationController
   def stream
     respond_to do |format|
       format.mp3 do
+        response.headers['Content-Length'] = @episode.fetch_status.bytes_total.to_i
         send_file @episode.fetch_status.url, type: 'audio/mpeg', disposition: 'inline'
       end
     end
