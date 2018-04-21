@@ -21,7 +21,7 @@ xml.rss version: '2.0',
         xml.media :content,
           url: episode.fetch_status.url,
           fileSize: episode.file_size.to_s,
-          duration: episode.duration.to_s
+          duration: episode.duration
         xml.guid episode.guid
       end
     end
