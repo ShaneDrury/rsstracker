@@ -8,15 +8,19 @@ class DownloadEpisodeJob < ApplicationJob
   queue_as :default
 
   def perform(episode_id)
+    unless (ENV.include? 'STORAGE_ROOT') && (ENV.include? 'DOWNLOAD_ROOT')
+      raise 'Must be run with STORAGE_ROOT and DOWNLOAD_ROOT env variables'
+    end
+
     episode = Episode.find(episode_id)
     episode.build_fetch_status(status: 'LOADING').save
     url = episode.url
 
     episode_filename = File.basename(URI(url).path)
-    feed_dir = Rails.root.join('public', 'uploads', episode.feed_id.to_s)
-    FileUtils.mkdir_p feed_dir
-
-    download_path = feed_dir.join(episode_filename)
+    episode_folder = episode.feed.name.parameterize
+    download_path = File.join(episode_folder, episode_filename)
+    abs_download_path = File.join(ENV['DOWNLOAD_ROOT'], download_path)
+    FileUtils.mkdir_p File.join(ENV['DOWNLOAD_ROOT'], episode_folder)
 
     content_length_proc = lambda do |content_length|
       @bytes_total = content_length
@@ -39,7 +43,7 @@ class DownloadEpisodeJob < ApplicationJob
     end
 
     open(url, 'r', content_length_proc: content_length_proc, progress_proc: progress_proc) do |input|
-      open(download_path, 'wb') do |output|
+      open(abs_download_path, 'wb') do |output|
         while (buffer = input.read(BUFFER_SIZE))
           output.write(buffer)
         end
@@ -48,7 +52,7 @@ class DownloadEpisodeJob < ApplicationJob
 
     episode.build_fetch_status(
       status: 'SUCCESS',
-      url: episode_filename,
+      url: File.join(ENV['STORAGE_ROOT'], download_path),
       bytes_total: @bytes_total.to_d,
     ).save
   end
