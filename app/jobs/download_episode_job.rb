@@ -13,6 +13,8 @@ class DownloadEpisodeJob < ApplicationJob
     end
 
     episode = Episode.find(episode_id)
+    fetch_status = episode.fetch_status&.status
+    return if fetch_status == "SUCCESS"
     episode.build_fetch_status(status: 'LOADING').save
     url = episode.url
 
