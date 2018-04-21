@@ -1,23 +1,15 @@
 class FeedsController < ApplicationController
-  include ActionView::Layouts
-  before_action :set_feed, only: [:show, :update, :destroy, :feed]
+  before_action :set_feed, only: [:show, :update, :destroy]
 
   # GET /feeds
   def index
     @feeds = Feed.all
-
     render json: @feeds
   end
 
   # GET /feeds/1
   def show
     render json: @feed
-  end
-
-  def feed
-    respond_to do |format|
-      format.rss { render layout: false }
-    end
   end
 
   # POST /feeds

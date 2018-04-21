@@ -5,7 +5,10 @@ Rails.application.routes.draw do
       post 'download'
     end
   end
-  resources :feeds do
+
+  resources :feeds
+
+  resources :rss_feeds do
     member do
       get 'feed', format: :rss
     end
