@@ -16,7 +16,7 @@ xml.rss version: '2.0',
           xml.title ''
         end
         xml.description { xml.cdata! episode.description }
-        xml.pubDate episode.updated_at.to_s(:rfc822)
+        xml.pubDate episode.publication_date.to_s(:rfc822)
         xml.itunes :duration, episode.duration
         xml.media :content,
           url: episode.fetch_status.url,

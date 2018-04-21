@@ -34,6 +34,7 @@ class DownloadFeedJob < ApplicationJob
         ep.description = result.description
         ep.duration = result.itunes_duration.content
         ep.file_size = result.enclosure.length
+        ep.publication_date = result.pubDate
         ep.url = result.link
         ep.save
       end
