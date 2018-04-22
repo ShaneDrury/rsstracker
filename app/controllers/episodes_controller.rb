@@ -3,7 +3,7 @@ class EpisodesController < ApplicationController
 
   # GET /episodes
   def index
-    @episodes = Episode.all
+    @episodes = Episode.includes(:fetch_status).all
 
     render json: @episodes
   end
@@ -48,7 +48,7 @@ class EpisodesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_episode
-    @episode = Episode.find(params[:id])
+    @episode = Episode.includes(:fetch_status).find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
