@@ -33,7 +33,7 @@ class DownloadEpisodeJob < ApplicationJob
     progress_proc = lambda do |bytes_transferred|
       if @bytes_total
         @tick += 1
-        if (@tick % 100).zero?
+        if (@tick % 500).zero?
           episode.fetch_status.update_attributes(
             status: 'LOADING',
             bytes_transferred: bytes_transferred.to_d,
