@@ -1,5 +1,9 @@
+import 'babel-polyfill';
+
 import React from "react";
 import ReactDOM from "react-dom";
 
-const element = <h1>Hello, world</h1>;
-ReactDOM.render(element, document.getElementById('root'));
+import { PrimaryContent } from "./components/PrimaryContent";
+
+const root = <PrimaryContent />;
+ReactDOM.render(root, document.getElementById('root'));
