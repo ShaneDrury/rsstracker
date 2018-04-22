@@ -26,3 +26,8 @@
 /config/master.key
 .irb_history
 public/uploads/
+/public/packs
+/public/packs-test
+/node_modules
+yarn-debug.log*
+.yarn-integrity
