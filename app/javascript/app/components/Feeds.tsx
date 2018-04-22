@@ -2,6 +2,7 @@ import React from "react";
 import { RemoteData } from "../modules/remoteData";
 import { RemoteFeed } from "../types/feed";
 import { getFeeds } from "../modules/feeds/sources";
+import { Feed } from "./Feed";
 
 interface Props {
 
@@ -35,9 +36,9 @@ export class Feeds extends React.Component<Props, State> {
       <div>
         {this.state.remoteData.type === "SUCCESS" && (
           this.state.remoteData.data.map(feed => (
-            <div key={feed.id}>
-              {feed.name}
-            </div>
+            <Feed key={feed.id}
+              {...feed}
+            />
           ))
         )}
         {this.state.remoteData.type === "NOT_ASKED" && (
