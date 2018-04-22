@@ -1,5 +1,5 @@
 class FeedsController < ApplicationController
-  before_action :set_feed, only: [:show, :update, :destroy]
+  before_action :set_feed, only: [:show, :update, :destroy, :update_feed]
 
   # GET /feeds
   def index
@@ -21,6 +21,11 @@ class FeedsController < ApplicationController
     else
       render json: @feed.errors, status: :unprocessable_entity
     end
+  end
+
+  def update_feed
+    job = DownloadFeedJob.perform_later(@feed.id)
+    render json: { job_id: job.job_id }, status: :accepted
   end
 
   # PATCH/PUT /feeds/1

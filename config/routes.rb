@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :feeds do
     member do
       resources :episodes
+      post 'update_feed'
     end
   end
 
