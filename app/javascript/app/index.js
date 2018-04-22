@@ -1,1 +1,2 @@
-console.log("foo!");
+import { myFoo } from "./test"
+myFoo("heasdf");
