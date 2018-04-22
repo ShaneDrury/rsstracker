@@ -8,6 +8,7 @@ interface Loading {
   status: "LOADING";
   bytesTransferred?: number;
   bytesTotal: number;
+  percentageFetched: string;
 }
 
 interface Failure {
@@ -15,4 +16,8 @@ interface Failure {
   errorReason: string;
 }
 
-export type FetchStatus = Success | Loading | Failure;
+interface NotAsked {
+  status: "NOT_ASKED";
+}
+
+export type FetchStatus = Success | Loading | Failure | NotAsked;
