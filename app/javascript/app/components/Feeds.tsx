@@ -1,8 +1,18 @@
 import React from "react";
-import apiFetch from "../modules/apiFetch";
+import { RemoteData } from "../modules/remoteData";
+import { RemoteFeed } from "../types/feed";
+import { getFeeds } from "../modules/feeds/sources";
 
-export class Feeds extends React.Component {
-  constructor(props) {
+interface Props {
+
+}
+
+interface State {
+  remoteData: RemoteData<RemoteFeed[], string>;
+}
+
+export class Feeds extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       remoteData: {
@@ -11,7 +21,7 @@ export class Feeds extends React.Component {
     }
   }
   async componentDidMount() {
-    const feeds = await apiFetch("/feeds");
+    const feeds = await getFeeds();
     this.setState({
       remoteData: {
         type: "SUCCESS",
