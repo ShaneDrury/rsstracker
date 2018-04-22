@@ -8,7 +8,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :feeds
+  resources :feeds do
+    member do
+      resources :episodes
+    end
+  end
 
   resources :rss_feeds do
     member do

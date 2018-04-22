@@ -1,16 +1,18 @@
 import React from "react";
 import { RemoteData } from "../modules/remoteData";
-import { RemoteFeed } from "../types/feed";
-import { getFeeds } from "../modules/feeds/sources";
-import { Feed } from "./Feed";
+import { RemoteEpisode } from "../types/episode";
+import { Episode } from "./Episode";
+import { getEpisodes } from "../modules/episodes/sources";
 
-interface Props {}
-
-interface State {
-  remoteData: RemoteData<RemoteFeed[], string>;
+interface Props {
+  feedId: number;
 }
 
-export class Feeds extends React.Component<Props, State> {
+interface State {
+  remoteData: RemoteData<RemoteEpisode[], string>;
+}
+
+export class Episodes extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -19,12 +21,13 @@ export class Feeds extends React.Component<Props, State> {
       }
     };
   }
+
   async componentDidMount() {
-    const feeds = await getFeeds();
+    const episodes = await getEpisodes(this.props.feedId);
     this.setState({
       remoteData: {
         type: "SUCCESS",
-        data: feeds
+        data: episodes
       }
     });
   }
@@ -33,8 +36,8 @@ export class Feeds extends React.Component<Props, State> {
     return (
       <div>
         {this.state.remoteData.type === "SUCCESS" &&
-          this.state.remoteData.data.map(feed => (
-            <Feed key={feed.id} {...feed} />
+          this.state.remoteData.data.map(episode => (
+            <Episode key={episode.id} {...episode} />
           ))}
         {this.state.remoteData.type === "NOT_ASKED" && <div>LOADING</div>}
       </div>
