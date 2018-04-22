@@ -51,6 +51,13 @@
     "@babel/helper-explode-assignable-expression" "7.0.0-beta.44"
     "@babel/types" "7.0.0-beta.44"
 
+"@babel/helper-builder-react-jsx@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@babel/helper-builder-react-jsx/-/helper-builder-react-jsx-7.0.0-beta.44.tgz#52a4fd63ce92df425a4fb550c7a1a3ca30e0f234"
+  dependencies:
+    "@babel/types" "7.0.0-beta.44"
+    esutils "^2.0.0"
+
 "@babel/helper-call-delegate@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.yarnpkg.com/@babel/helper-call-delegate/-/helper-call-delegate-7.0.0-beta.44.tgz#e644536f8b3d2eabeecca000037cdced8e453d26"
@@ -222,6 +229,12 @@
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.44"
 
+"@babel/plugin-syntax-jsx@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-jsx/-/plugin-syntax-jsx-7.0.0-beta.44.tgz#b3475f0e6ea797634f0ba823273d76e93727e52f"
+  dependencies:
+    "@babel/helper-plugin-utils" "7.0.0-beta.44"
+
 "@babel/plugin-syntax-object-rest-spread@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-object-rest-spread/-/plugin-syntax-object-rest-spread-7.0.0-beta.44.tgz#c37d271e4edf8a1b5d4623fb2917ba0f5a9da3b3"
@@ -382,6 +395,34 @@
     "@babel/helper-get-function-arity" "7.0.0-beta.44"
     "@babel/helper-plugin-utils" "7.0.0-beta.44"
 
+"@babel/plugin-transform-react-display-name@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-react-display-name/-/plugin-transform-react-display-name-7.0.0-beta.44.tgz#e7937554e209d72804808581c334945af238481d"
+  dependencies:
+    "@babel/helper-plugin-utils" "7.0.0-beta.44"
+
+"@babel/plugin-transform-react-jsx-self@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-react-jsx-self/-/plugin-transform-react-jsx-self-7.0.0-beta.44.tgz#5ae463928b5a8d432f8523ef783add643b5c2bc4"
+  dependencies:
+    "@babel/helper-plugin-utils" "7.0.0-beta.44"
+    "@babel/plugin-syntax-jsx" "7.0.0-beta.44"
+
+"@babel/plugin-transform-react-jsx-source@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-react-jsx-source/-/plugin-transform-react-jsx-source-7.0.0-beta.44.tgz#629101210cf86fe3cfb89a4278fb8d0966bdfc81"
+  dependencies:
+    "@babel/helper-plugin-utils" "7.0.0-beta.44"
+    "@babel/plugin-syntax-jsx" "7.0.0-beta.44"
+
+"@babel/plugin-transform-react-jsx@7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-react-jsx/-/plugin-transform-react-jsx-7.0.0-beta.44.tgz#656a2582002ff1b0eea4cd01b7c8f6cbbf3990bf"
+  dependencies:
+    "@babel/helper-builder-react-jsx" "7.0.0-beta.44"
+    "@babel/helper-plugin-utils" "7.0.0-beta.44"
+    "@babel/plugin-syntax-jsx" "7.0.0-beta.44"
+
 "@babel/plugin-transform-regenerator@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-regenerator/-/plugin-transform-regenerator-7.0.0-beta.44.tgz#e9a21db8fbedfd99b9e5d04ac405f7440d36b290"
@@ -479,6 +520,17 @@
     invariant "^2.2.2"
     semver "^5.3.0"
 
+"@babel/preset-react@^7.0.0-beta.44":
+  version "7.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@babel/preset-react/-/preset-react-7.0.0-beta.44.tgz#ab57e92f41518f871d82d62791c84383cfd9691a"
+  dependencies:
+    "@babel/helper-plugin-utils" "7.0.0-beta.44"
+    "@babel/plugin-syntax-jsx" "7.0.0-beta.44"
+    "@babel/plugin-transform-react-display-name" "7.0.0-beta.44"
+    "@babel/plugin-transform-react-jsx" "7.0.0-beta.44"
+    "@babel/plugin-transform-react-jsx-self" "7.0.0-beta.44"
+    "@babel/plugin-transform-react-jsx-source" "7.0.0-beta.44"
+
 "@babel/preset-typescript@^7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.yarnpkg.com/@babel/preset-typescript/-/preset-typescript-7.0.0-beta.44.tgz#2b5890bba7b21df6af11c0fc23b1251bd48b2c63"
@@ -546,6 +598,17 @@
     uglifyjs-webpack-plugin "^1.1.8"
     webpack "^3.10.0"
     webpack-manifest-plugin "^1.3.2"
+
+"@types/node@*":
+  version "9.6.6"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.6.tgz#439b91f9caf3983cad2eef1e11f6bedcbf9431d2"
+
+"@types/react-dom@^16.0.5":
+  version "16.0.5"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.5.tgz#a757457662e3819409229e8f86795ff37b371f96"
+  dependencies:
+    "@types/node" "*"
+    "@types/react" "*"
 
 "@types/react-redux@^5.0.16":
   version "5.0.16"
@@ -2438,7 +2501,7 @@ estraverse@^4.1.0, estraverse@^4.1.1:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/estraverse/-/estraverse-4.2.0.tgz#0dee3fed31fcd469618ce7342099fc1afa0bdb13"
 
-esutils@^2.0.2:
+esutils@^2.0.0, esutils@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.2.tgz#0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
 
@@ -5215,6 +5278,15 @@ rc@^1.1.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-dom@^16.3.2:
+  version "16.3.2"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.3.2.tgz#cb90f107e09536d683d84ed5d4888e9640e0e4df"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
 
 react-redux@^5.0.7:
   version "5.0.7"
