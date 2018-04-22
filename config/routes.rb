@@ -13,4 +13,6 @@ Rails.application.routes.draw do
       get 'feed', format: :rss
     end
   end
+
+  resources :jobs
 end
