@@ -2,7 +2,7 @@ import React from "react";
 import { Feeds } from "./Feeds";
 
 export const PrimaryContent = () => (
-  <div>
+  <section className="section">
     <Feeds />
-  </div>
+  </section>
 );

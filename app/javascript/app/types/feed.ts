@@ -5,4 +5,5 @@ export interface RemoteFeed {
   imageUrl: string;
   relativeImageLink: string;
   url: string;
+  updatedAt: string;
 }

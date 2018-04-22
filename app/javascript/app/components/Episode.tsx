@@ -12,18 +12,23 @@ export const Episode: React.SFC<Props> = ({
   fetchStatus
 }) => (
   <div>
-    <h2>{name}</h2>
-    <h3>{duration}</h3>
-    <h3>
+    <h2 className="title">{name}</h2>
+    <p className="subtitle">{duration}</p>
+    <div className="field">
       {fetchStatus.status === "SUCCESS" && <a href={fetchStatus.url}>Listen</a>}
       {(fetchStatus.status === "NOT_ASKED" ||
         fetchStatus.status === "FAILURE") && (
-        <button onClick={() => downloadEpisode(id)}>Download</button>
+        <button
+          className="button is-primary"
+          onClick={() => downloadEpisode(id)}
+        >
+          Download
+        </button>
       )}
       {fetchStatus.status === "LOADING" && (
         <div>Loading {fetchStatus.percentageFetched}%</div>
       )}
-    </h3>
+    </div>
     <p>{description}</p>
   </div>
 );

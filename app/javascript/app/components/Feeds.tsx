@@ -31,7 +31,7 @@ export class Feeds extends React.Component<Props, State> {
 
   render() {
     return (
-      <div>
+      <div className="container">
         {this.state.remoteData.type === "SUCCESS" &&
           this.state.remoteData.data.map(feed => (
             <Feed key={feed.id} {...feed} />
