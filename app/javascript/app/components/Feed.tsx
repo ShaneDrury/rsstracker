@@ -17,7 +17,7 @@ export const Feed: React.SFC<Props> = ({
     <div className="column is-one-third">
       <div className="card">
         <div className="card-image">
-          <figure className="image is-128x128">
+          <figure className="image is-1by1">
             <img src={relativeImageLink} />
           </figure>
         </div>
@@ -25,14 +25,6 @@ export const Feed: React.SFC<Props> = ({
           <div className="media">
             <div className="media-content">
               <p className="title is-4">{name}</p>
-              <span className="icon is-small">
-                <button
-                  className="button is-primary"
-                  onClick={() => updateFeed(id)}
-                >
-                  <i className="fas fa-sync" />&nbsp;Update
-                </button>
-              </span>
             </div>
           </div>
           <div className="content">
@@ -40,6 +32,12 @@ export const Feed: React.SFC<Props> = ({
             <br />
             <time>{updatedAt}</time>
           </div>
+          <button
+            className="button is-primary"
+            onClick={() => updateFeed(id)}
+          >
+            <i className="fas fa-sync" />&nbsp;Update
+          </button>
         </div>
       </div>
     </div>

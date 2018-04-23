@@ -27,7 +27,7 @@ export const Episode: React.SFC<Props> = ({
             {fetchStatus.status === "SUCCESS" && (
               <a className="level-item" href={fetchStatus.url}>
                 <span className="icon is-small">
-                  <i className="fas fa-file-audio" />Listen
+                  <i className="fas fa-file-audio" />
                 </span>
               </a>
             )}
