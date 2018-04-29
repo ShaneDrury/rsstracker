@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   end
 
   resources :feeds do
+    resources :episodes
     member do
-      resources :episodes
       post 'update_feed'
     end
   end

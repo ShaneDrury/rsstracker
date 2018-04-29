@@ -3,7 +3,7 @@ class EpisodesController < ApplicationController
 
   # GET /episodes
   def index
-    @episodes = Episode.includes(:fetch_status).all
+    @episodes = Episode.includes(:fetch_status).where(feed_id: params[:feed_id])
 
     render json: @episodes
   end
