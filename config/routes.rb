@@ -22,4 +22,6 @@ Rails.application.routes.draw do
   end
 
   resources :jobs
+
+  get '*path', to: 'operations#index'
 end
