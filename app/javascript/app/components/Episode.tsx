@@ -4,6 +4,21 @@ import { downloadEpisode } from "../modules/episodes/sources";
 
 interface Props extends RemoteEpisode {}
 
+interface DescriptionProps {
+  text: string;
+}
+
+const Description: React.SFC<DescriptionProps> = ({ text }) => (
+  <React.Fragment>
+    {text.split("\n").map((item, key) => (
+      <span key={key}>
+        {item}
+        <br />
+      </span>
+    ))}
+  </React.Fragment>
+);
+
 export const Episode: React.SFC<Props> = ({
   id,
   name,
@@ -18,7 +33,7 @@ export const Episode: React.SFC<Props> = ({
       </header>
       <div className="card-content">
         <div className="content">
-          {description}
+          <p>{description && <Description text={description} />}</p>
           <br />
           <time>{duration}</time>
         </div>
