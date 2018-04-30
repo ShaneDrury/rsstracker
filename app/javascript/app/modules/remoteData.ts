@@ -12,7 +12,7 @@ interface Success<D> {
 }
 
 interface Error<E> {
-  type: "ERROR";
+  type: "FAILURE";
   error: E;
 }
 
