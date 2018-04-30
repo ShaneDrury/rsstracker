@@ -15,7 +15,14 @@ class EpisodesController < ApplicationController
 
   # POST /episodes/1/download
   def download
-    job = DownloadEpisodeJob.perform_later(@episode.id)
+    source = @episode.feed.source
+    job = if source == "rss"
+            DownloadEpisodeJob.perform_later(@episode.id)
+          elsif source == "youtube"
+            DownloadYoutubeAudioJob.perform_later(@episode.id)
+          else
+            raise "Unknown source type"
+          end
     render json: { job_id: job.job_id }, status: :accepted
   end
 
