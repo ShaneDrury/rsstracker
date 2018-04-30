@@ -1,6 +1,7 @@
 import React from "react";
 import { RemoteEpisode } from "../types/episode";
 import { downloadEpisode } from "../modules/episodes/sources";
+import { Player } from "./Player";
 
 interface Props extends RemoteEpisode {}
 
@@ -36,6 +37,9 @@ export const Episode: React.SFC<Props> = ({
           <p>{description && <Description text={description} />}</p>
           <br />
           <time>{duration}</time>
+          {fetchStatus.status === "SUCCESS" && (
+            <Player url={fetchStatus.url} />
+          )}
         </div>
         <nav className="level is-mobile">
           <div className="level-left">
