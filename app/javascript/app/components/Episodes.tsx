@@ -59,7 +59,6 @@ export class Episodes extends React.Component<Props, State> {
   }
 
   render() {
-    console.log("rendering", this.state.remoteData);
     return (
       <div>
         {this.state.remoteData.type === "SUCCESS" &&

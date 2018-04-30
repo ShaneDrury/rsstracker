@@ -2,7 +2,7 @@ import React from "react";
 import { RemoteData } from "../modules/remoteData";
 import { RemoteFeed } from "../types/feed";
 import { getFeeds } from "../modules/feeds/sources";
-import { Feed } from "./Feed";
+import { Link } from "react-router-dom";
 
 interface Props {}
 
@@ -32,10 +32,15 @@ export class Feeds extends React.Component<Props, State> {
   render() {
     return (
       <div className="container">
-        {this.state.remoteData.type === "SUCCESS" &&
-          this.state.remoteData.data.map(feed => (
-            <Feed key={feed.id} {...feed} />
-          ))}
+        {this.state.remoteData.type === "SUCCESS" && (
+          <ul>
+            {this.state.remoteData.data.map(feed => (
+              <li key={feed.id}>
+                <Link to={`/${feed.id}`}>{feed.name}</Link>
+              </li>
+            ))}
+          </ul>
+        )}
         {this.state.remoteData.type === "NOT_ASKED" && <div>LOADING</div>}
       </div>
     );
