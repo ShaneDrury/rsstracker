@@ -1,19 +1,22 @@
-interface NotAsked {
+export interface NotAsked {
   type: "NOT_ASKED";
 }
 
-interface Loading {
+export interface Loading<D> {
   type: "LOADING";
+  data?: D;
 }
 
-interface Success<D> {
+export interface Success<D> {
   type: "SUCCESS";
   data: D;
 }
 
-interface Error<E> {
+export interface Error<E> {
   type: "FAILURE";
   error: E;
 }
 
-export type RemoteData<D, E> = NotAsked | Loading | Success<D> | Error<E>;
+type RemoteDataGeneric<D, E> = NotAsked | Loading<D> | Success<D> | Error<E>;
+
+export type RemoteData<D> = RemoteDataGeneric<D, string>;

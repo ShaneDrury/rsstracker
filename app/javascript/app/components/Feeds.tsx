@@ -1,48 +1,65 @@
 import React from "react";
+import { connect, Dispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { getFeeds } from "../modules/feeds/sources";
+import { bindActionCreators } from "redux";
+import * as shortid from "shortid";
+import { FeedsAction, fetchFeeds } from "../modules/feeds/actions";
+import { getFeeds } from "../modules/feeds/selectors";
+import { RootState } from "../modules/reducers";
 import { RemoteData } from "../modules/remoteData";
 import { RemoteFeed } from "../types/feed";
 
-interface Props {}
+type RemoteDataWithKey<D> = RemoteData<D> & {
+  key: string;
+};
 
-interface State {
-  remoteData: RemoteData<RemoteFeed[], string>;
+interface DataProps {
+  remoteFeeds: Array<RemoteDataWithKey<RemoteFeed>>;
 }
 
-export class Feeds extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      remoteData: {
-        type: "NOT_ASKED"
-      }
-    };
-  }
-  public async componentDidMount() {
-    const feeds = await getFeeds();
-    this.setState({
-      remoteData: {
-        type: "SUCCESS",
-        data: feeds
-      }
-    });
+interface DispatchProps {
+  fetchFeeds: () => void;
+}
+
+type Props = DataProps & DispatchProps;
+
+export class Feeds extends React.PureComponent<Props> {
+  public componentDidMount() {
+    this.props.fetchFeeds();
   }
 
   public render() {
     return (
       <div className="container">
-        {this.state.remoteData.type === "SUCCESS" && (
-          <ul>
-            {this.state.remoteData.data.map(feed => (
-              <li key={feed.id}>
-                <Link to={`/${feed.id}`}>{feed.name}</Link>
-              </li>
-            ))}
-          </ul>
-        )}
-        {this.state.remoteData.type === "NOT_ASKED" && <div>LOADING</div>}
+        <ul>
+          {this.props.remoteFeeds.map(remoteFeed => (
+            <li key={remoteFeed.key}>
+              {remoteFeed.type === "SUCCESS" && (
+                <Link to={`/${remoteFeed.data.id}`}>
+                  {remoteFeed.data.name}
+                </Link>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }
 }
+
+const mapStateToProps = (state: RootState): DataProps => {
+  const feeds = Object.values(getFeeds(state));
+  return {
+    remoteFeeds: feeds.map(feed => ({ ...feed, key: shortid.generate() }))
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<FeedsAction>): DispatchProps =>
+  bindActionCreators(
+    {
+      fetchFeeds
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Feeds);

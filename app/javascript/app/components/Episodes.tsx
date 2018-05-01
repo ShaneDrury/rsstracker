@@ -11,7 +11,7 @@ interface Props {
 }
 
 interface State {
-  remoteData: RemoteData<RemoteEpisode[], string>;
+  remoteData: RemoteData<RemoteEpisode[]>;
   filter: Filter;
 }
 

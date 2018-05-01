@@ -12,7 +12,7 @@ interface Props {
 
 interface State {
   filter: Filter;
-  remoteData: RemoteData<RemoteFeed, string>;
+  remoteData: RemoteData<RemoteFeed>;
   feedId?: number;
 }
 
