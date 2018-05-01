@@ -1,17 +1,20 @@
-import 'babel-polyfill';
+import "babel-polyfill";
 
 import React from "react";
-import {
-  BrowserRouter as Router,
-} from 'react-router-dom'
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+
+import { ConnectedRouter } from "react-router-redux";
 
 import { PrimaryContent } from "./components/PrimaryContent";
+import { history, store } from "./store";
 
 const root = (
-  <Router>
-    <PrimaryContent />
-  </Router>
-  );
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <PrimaryContent />
+    </ConnectedRouter>
+  </Provider>
+);
 
-ReactDOM.render(root, document.getElementById('root'));
+ReactDOM.render(root, document.getElementById("root"));
