@@ -1,13 +1,13 @@
-import { combineReducers } from "redux";
+import { combineReducers, Reducer } from "redux";
+import { RootAction } from "./actions";
+import feeds, { State as FeedsState } from "./feeds/reducers";
 
-type State = any;
+export interface RootState {
+  feeds: FeedsState;
+}
 
-const foo = (state: State = {}) => {
-  return state;
-};
-
-const rootReducer = combineReducers({
-  foo
+const rootReducer: Reducer<RootState, RootAction> = combineReducers({
+  feeds
 });
 
 export default rootReducer;
