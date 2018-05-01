@@ -1,6 +1,6 @@
 import React from "react";
 import { Route } from "react-router";
-import { FeedContainer } from "./FeedContainer";
+import Feed from "./Feed";
 import Feeds from "./Feeds";
 
 export const PrimaryContent = () => (
@@ -10,7 +10,7 @@ export const PrimaryContent = () => (
         <Feeds />
       </div>
       <div className="column">
-        <Route path="/:feedId" component={FeedContainer} />
+        <Route path="/:feedId" component={Feed} />
       </div>
     </div>
   </section>

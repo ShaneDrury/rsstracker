@@ -12,14 +12,19 @@ interface Props {
 
 interface State {
   remoteData: RemoteData<RemoteEpisode[]>;
+  feedId: number;
   filter: Filter;
 }
 
 export class Episodes extends React.Component<Props, State> {
   public static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.filter !== prevState.filter) {
+    if (
+      nextProps.filter !== prevState.filter ||
+      nextProps.feedId !== prevState.feedId
+    ) {
       return {
         filter: nextProps.filter,
+        feedId: nextProps.feedId,
         remoteData: {
           type: "NOT_ASKED"
         }
@@ -32,6 +37,7 @@ export class Episodes extends React.Component<Props, State> {
     super(props);
     this.state = {
       filter: this.props.filter,
+      feedId: this.props.feedId,
       remoteData: {
         type: "NOT_ASKED"
       }

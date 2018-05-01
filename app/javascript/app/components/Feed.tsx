@@ -14,7 +14,11 @@ interface DataProps {
 }
 
 interface PropsExtended {
-  feedId: number;
+  match: {
+    params: {
+      feedId: number;
+    };
+  };
 }
 
 interface State {
@@ -96,7 +100,7 @@ const mapStateToProps = (
   state: RootState,
   ownProps: PropsExtended
 ): DataProps => {
-  const remoteFeed = getFeeds(state)[ownProps.feedId];
+  const remoteFeed = getFeeds(state)[ownProps.match.params.feedId];
   return {
     remoteFeed
   };
