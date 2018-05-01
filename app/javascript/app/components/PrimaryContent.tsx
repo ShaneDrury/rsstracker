@@ -1,7 +1,7 @@
 import React from "react";
-import { Feeds } from "./Feeds";
-import { FeedContainer } from "./FeedContainer";
 import { Route } from "react-router";
+import { FeedContainer } from "./FeedContainer";
+import { Feeds } from "./Feeds";
 
 export const PrimaryContent = () => (
   <section className="section">

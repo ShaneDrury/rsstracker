@@ -1,15 +1,13 @@
 import { combineReducers } from "redux";
 
-interface State {
-
-}
+type State = any;
 
 const foo = (state: State = {}) => {
   return state;
 };
 
 const rootReducer = combineReducers({
-  foo,
+  foo
 });
 
 export default rootReducer;

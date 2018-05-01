@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-react",
+    "tslint-eslint-rules",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "interface-name": false,
+    "no-unused-variable": [true, {"ignore-pattern": "^_"}],
+    "object-curly-spacing": true,
+    "no-submodule-imports": false,
+    "object-literal-sort-keys": false,
+    "jsx-boolean-value": false,
+    "no-empty-interface": false
+  }
+}

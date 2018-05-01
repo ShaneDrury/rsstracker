@@ -10,5 +10,5 @@ interface Props {
 }
 
 export const FeedContainer: React.SFC<Props> = ({ match }) => (
-  <Feed feedId={parseInt(match.params.feedId)} />
+  <Feed feedId={parseInt(match.params.feedId, 10)} />
 );

@@ -18,13 +18,13 @@ export class Player extends React.Component<Props, State> {
     this.handleToggleShow = this.handleToggleShow.bind(this);
   }
 
-  handleToggleShow() {
+  public handleToggleShow() {
     this.setState({
       visible: !this.state.visible
     });
   }
 
-  render() {
+  public render() {
     return (
       <div>
         <button className="button" onClick={this.handleToggleShow}>

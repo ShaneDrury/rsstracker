@@ -1,8 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { getFeeds } from "../modules/feeds/sources";
 import { RemoteData } from "../modules/remoteData";
 import { RemoteFeed } from "../types/feed";
-import { getFeeds } from "../modules/feeds/sources";
-import { Link } from "react-router-dom";
 
 interface Props {}
 
@@ -19,7 +19,7 @@ export class Feeds extends React.Component<Props, State> {
       }
     };
   }
-  async componentDidMount() {
+  public async componentDidMount() {
     const feeds = await getFeeds();
     this.setState({
       remoteData: {
@@ -29,7 +29,7 @@ export class Feeds extends React.Component<Props, State> {
     });
   }
 
-  render() {
+  public render() {
     return (
       <div className="container">
         {this.state.remoteData.type === "SUCCESS" && (

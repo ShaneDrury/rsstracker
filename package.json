@@ -2,6 +2,10 @@
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0"
   },
+  "scripts": {
+    "prettier": "prettier --parser typescript --write",
+    "tslint": "tslint --project ./tsconfig.json"
+  },
   "dependencies": {
     "@babel/core": "^7.0.0-beta.44",
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.46",
@@ -36,6 +40,11 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
+    "prettier": "^1.12.1",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.12.0",
+    "tslint-eslint-rules": "^5.1.0",
+    "tslint-react": "^3.5.1",
     "typescript": "^2.8.3",
     "webpack-dev-server": "2.11.2"
   }

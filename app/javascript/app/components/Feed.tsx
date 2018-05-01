@@ -1,10 +1,10 @@
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
-import { Episodes } from "./Episodes";
 import { getFeed, updateFeed } from "../modules/feeds/sources";
 import { Filter } from "../modules/filters";
 import { RemoteData } from "../modules/remoteData";
+import { Episodes } from "./Episodes";
 
 interface Props {
   feedId: number;
@@ -17,22 +17,7 @@ interface State {
 }
 
 export class Feed extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      filter: Filter.ALL,
-      remoteData: {
-        type: "NOT_ASKED"
-      }
-    };
-    this.handleFilterChange = this.handleFilterChange.bind(this);
-  }
-
-  handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({ filter: event.target.value as Filter });
-  }
-
-  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+  public static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     if (nextProps.feedId !== prevState.feedId) {
       return {
         feedId: nextProps.feedId,
@@ -44,14 +29,29 @@ export class Feed extends React.Component<Props, State> {
     return null;
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      filter: Filter.ALL,
+      remoteData: {
+        type: "NOT_ASKED"
+      }
+    };
+    this.handleFilterChange = this.handleFilterChange.bind(this);
+  }
+
+  public handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    this.setState({ filter: event.target.value as Filter });
+  }
+
+  public componentDidUpdate(prevProps: Props, prevState: State) {
     if (this.state.remoteData.type === "NOT_ASKED") {
       const feedId = this.props.feedId;
       this._loadAsyncData(feedId);
     }
   }
 
-  async _loadAsyncData(feedId: number) {
+  public async _loadAsyncData(feedId: number) {
     const feed = await getFeed(feedId);
     this.setState({
       remoteData: {
@@ -61,12 +61,12 @@ export class Feed extends React.Component<Props, State> {
     });
   }
 
-  async componentDidMount() {
+  public async componentDidMount() {
     const feedId = this.props.feedId;
     this._loadAsyncData(feedId);
   }
 
-  render() {
+  public render() {
     if (this.state.remoteData.type === "SUCCESS") {
       const {
         id,
@@ -75,6 +75,7 @@ export class Feed extends React.Component<Props, State> {
         relativeImageLink,
         updatedAt
       } = this.state.remoteData.data;
+      const handleUpdateFeed = () => updateFeed(id);
       return (
         <div className="columns">
           <div className="column is-one-third">
@@ -97,7 +98,7 @@ export class Feed extends React.Component<Props, State> {
                 </div>
                 <button
                   className="button is-primary"
-                  onClick={() => updateFeed(id)}
+                  onClick={handleUpdateFeed}
                 >
                   <i className="fas fa-sync" />&nbsp;Update
                 </button>

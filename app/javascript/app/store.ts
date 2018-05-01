@@ -1,7 +1,7 @@
+import createHistory from "history/createBrowserHistory";
 import { applyMiddleware, compose, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
 import rootReducer from "./modules/reducers";
-import createHistory from "history/createBrowserHistory";
 
 import { routerMiddleware } from "react-router-redux";
 
@@ -16,7 +16,7 @@ interface ReduxWindow extends Window {
 }
 
 const windowIfDefined =
-  typeof window === "undefined" ? null : window as ReduxWindow;
+  typeof window === "undefined" ? null : (window as ReduxWindow);
 
 const composeEnhancers =
   windowIfDefined && windowIfDefined.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
