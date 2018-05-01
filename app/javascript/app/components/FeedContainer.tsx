@@ -1,14 +1,14 @@
 import React from "react";
-import { Feed } from "./Feed";
+import Feed from "./Feed";
 
 interface Props {
   match: {
     params: {
-      feedId: string;
+      feedId: number;
     };
   };
 }
 
 export const FeedContainer: React.SFC<Props> = ({ match }) => (
-  <Feed feedId={parseInt(match.params.feedId, 10)} />
+  <Feed feedId={match.params.feedId} />
 );

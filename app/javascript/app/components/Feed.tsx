@@ -1,41 +1,33 @@
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
-import { getFeed, updateFeed } from "../modules/feeds/sources";
+import { connect } from "react-redux";
+import { getFeeds } from "../modules/feeds/selectors";
+import { updateFeed } from "../modules/feeds/sources";
 import { Filter } from "../modules/filters";
+import { RootState } from "../modules/reducers";
 import { RemoteData } from "../modules/remoteData";
 import { Episodes } from "./Episodes";
 
-interface Props {
+interface DataProps {
+  remoteFeed?: RemoteData<RemoteFeed>;
+}
+
+interface PropsExtended {
   feedId: number;
 }
 
 interface State {
   filter: Filter;
-  remoteData: RemoteData<RemoteFeed>;
-  feedId?: number;
 }
 
-export class Feed extends React.Component<Props, State> {
-  public static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.feedId !== prevState.feedId) {
-      return {
-        feedId: nextProps.feedId,
-        remoteData: {
-          type: "NOT_ASKED"
-        }
-      };
-    }
-    return null;
-  }
+type Props = DataProps & PropsExtended;
 
+export class Feed extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      filter: Filter.ALL,
-      remoteData: {
-        type: "NOT_ASKED"
-      }
+      filter: Filter.ALL
     };
     this.handleFilterChange = this.handleFilterChange.bind(this);
   }
@@ -44,37 +36,15 @@ export class Feed extends React.Component<Props, State> {
     this.setState({ filter: event.target.value as Filter });
   }
 
-  public componentDidUpdate(prevProps: Props, prevState: State) {
-    if (this.state.remoteData.type === "NOT_ASKED") {
-      const feedId = this.props.feedId;
-      this._loadAsyncData(feedId);
-    }
-  }
-
-  public async _loadAsyncData(feedId: number) {
-    const feed = await getFeed(feedId);
-    this.setState({
-      remoteData: {
-        type: "SUCCESS",
-        data: feed
-      }
-    });
-  }
-
-  public async componentDidMount() {
-    const feedId = this.props.feedId;
-    this._loadAsyncData(feedId);
-  }
-
   public render() {
-    if (this.state.remoteData.type === "SUCCESS") {
+    if (this.props.remoteFeed && this.props.remoteFeed.type === "SUCCESS") {
       const {
         id,
         name,
         description,
         relativeImageLink,
         updatedAt
-      } = this.state.remoteData.data;
+      } = this.props.remoteFeed.data;
       const handleUpdateFeed = () => updateFeed(id);
       return (
         <div className="columns">
@@ -121,3 +91,15 @@ export class Feed extends React.Component<Props, State> {
     return <div>LOADING</div>;
   }
 }
+
+const mapStateToProps = (
+  state: RootState,
+  ownProps: PropsExtended
+): DataProps => {
+  const remoteFeed = getFeeds(state)[ownProps.feedId];
+  return {
+    remoteFeed
+  };
+};
+
+export default connect(mapStateToProps)(Feed);
