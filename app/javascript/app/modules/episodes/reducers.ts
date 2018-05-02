@@ -4,10 +4,12 @@ import { RemoteData } from "../remoteData";
 import { episodeActions, EpisodesAction } from "./actions";
 
 export interface State {
-  [key: string]: RemoteData<RemoteEpisode>;
+  items: {
+    [key: string]: RemoteData<RemoteEpisode>;
+  };
 }
 
-const initialState: State = {};
+const initialState: State = { items: {} };
 
 const episodes = (
   state: State = initialState,
@@ -22,8 +24,10 @@ const episodes = (
         remoteEpisodes[episode.id] = { type: "SUCCESS", data: episode };
       });
       return {
-        ...state,
-        ...remoteEpisodes
+        items: {
+          ...state.items,
+          ...remoteEpisodes
+        }
       };
     }
     default:
