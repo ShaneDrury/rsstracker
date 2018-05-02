@@ -1,5 +1,6 @@
 import { forEach } from "lodash";
 import { RemoteEpisode } from "../../types/episode";
+import { Filter } from "../filters";
 import { RemoteData } from "../remoteData";
 import { episodeActions, EpisodesAction } from "./actions";
 
@@ -7,9 +8,10 @@ export interface State {
   items: {
     [key: string]: RemoteData<RemoteEpisode>;
   };
+  filter: Filter;
 }
 
-const initialState: State = { items: {} };
+const initialState: State = { items: {}, filter: Filter.ALL };
 
 const episodes = (
   state: State = initialState,
@@ -24,12 +26,18 @@ const episodes = (
         remoteEpisodes[episode.id] = { type: "SUCCESS", data: episode };
       });
       return {
+        ...state,
         items: {
           ...state.items,
           ...remoteEpisodes
         }
       };
     }
+    case episodeActions.CHANGE_FILTER:
+      return {
+        ...state,
+        filter: action.payload.filter
+      };
     default:
       return state;
   }
