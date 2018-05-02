@@ -1,7 +1,7 @@
 import React from "react";
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { bindActionCreators } from "redux";
+import { bindActionCreators, Dispatch } from "redux";
 import * as shortid from "shortid";
 import { FeedsAction, fetchFeeds } from "../modules/feeds/actions";
 import { getFeeds } from "../modules/feeds/selectors";
@@ -54,7 +54,9 @@ const mapStateToProps = (state: RootState): DataProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<FeedsAction>): DispatchProps =>
+const mapDispatchToProps = (
+  dispatch: Dispatch<FeedsAction, RootState>
+): DispatchProps =>
   bindActionCreators(
     {
       fetchFeeds
