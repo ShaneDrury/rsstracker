@@ -1,78 +1,75 @@
 import React from "react";
-import { getEpisodes } from "../modules/episodes/sources";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
+import * as shortid from "shortid";
+import { EpisodesAction, fetchEpisodes } from "../modules/episodes/actions";
+import { getEpisodes } from "../modules/episodes/selectors";
 import { Filter } from "../modules/filters";
+import { RootState } from "../modules/reducers";
 import { RemoteData } from "../modules/remoteData";
 import { RemoteEpisode } from "../types/episode";
+
 import { Episode } from "./Episode";
 
-interface Props {
-  feedId: number;
-  filter: Filter;
+type RemoteDataWithKey<D> = RemoteData<D> & {
+  key: string;
+};
+
+interface DataProps {
+  remoteEpisodes: Array<RemoteDataWithKey<RemoteEpisode>>;
 }
 
-interface State {
-  remoteData: RemoteData<RemoteEpisode[]>;
-  feedId: number;
-  filter: Filter;
+interface DispatchProps {
+  fetchEpisodes: () => void;
 }
 
-export class Episodes extends React.Component<Props, State> {
-  public static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (
-      nextProps.filter !== prevState.filter ||
-      nextProps.feedId !== prevState.feedId
-    ) {
-      return {
-        filter: nextProps.filter,
-        feedId: nextProps.feedId,
-        remoteData: {
-          type: "NOT_ASKED"
-        }
-      };
-    }
-    return null;
-  }
+interface PropsExtended {
+  filter: Filter;
+  feedId: number;
+}
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      filter: this.props.filter,
-      feedId: this.props.feedId,
-      remoteData: {
-        type: "NOT_ASKED"
-      }
-    };
-  }
+type Props = DataProps & DispatchProps & PropsExtended;
 
-  public componentDidUpdate(prevProps: Props, prevState: State) {
-    if (this.state.remoteData.type === "NOT_ASKED") {
-      this._loadAsyncData(this.props.filter, this.props.feedId);
-    }
-  }
-
-  public async _loadAsyncData(filter: Filter, feedId: number) {
-    const episodes = await getEpisodes(filter, feedId);
-    this.setState({
-      remoteData: {
-        type: "SUCCESS",
-        data: episodes
-      }
-    });
-  }
-
-  public async componentDidMount() {
-    this._loadAsyncData(this.props.filter, this.props.feedId);
+export class Episodes extends React.PureComponent<Props> {
+  public componentDidMount() {
+    this.props.fetchEpisodes();
   }
 
   public render() {
     return (
       <div>
-        {this.state.remoteData.type === "SUCCESS" &&
-          this.state.remoteData.data.map(episode => (
-            <Episode key={episode.id} {...episode} />
-          ))}
-        {this.state.remoteData.type === "NOT_ASKED" && <div>LOADING</div>}
+        {this.props.remoteEpisodes.map(remoteEpisode => (
+          <div key={remoteEpisode.key}>
+            {remoteEpisode.type === "SUCCESS" && (
+              <Episode {...remoteEpisode.data} />
+            )}
+          </div>
+        ))}
       </div>
     );
   }
 }
+
+const mapStateToProps = (state: RootState): DataProps => {
+  const remoteEpisodes = Object.values(getEpisodes(state));
+
+  return {
+    remoteEpisodes: remoteEpisodes.map(remoteEpisode => ({
+      ...remoteEpisode,
+      key: shortid.generate()
+    }))
+  };
+};
+
+const mapDispatchToProps = (
+  dispatch: Dispatch<EpisodesAction, RootState>,
+  { filter, feedId }: PropsExtended
+): DispatchProps =>
+  bindActionCreators(
+    {
+      fetchEpisodes: fetchEpisodes(filter, feedId)
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Episodes);

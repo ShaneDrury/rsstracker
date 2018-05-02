@@ -48,10 +48,9 @@ export type EpisodesAction =
   | FetchEpisodesComplete
   | FetchEpisodesFailure;
 
-export const fetchEpisodes = (
-  status: Filter,
-  feedId: number
-): RootThunk<void> => async dispatch => {
+export const fetchEpisodes = (status: Filter, feedId: number) => (): RootThunk<
+  void
+> => async dispatch => {
   dispatch(fetchEpisodesStart());
   try {
     const episodes = await getEpisodes(status, feedId);

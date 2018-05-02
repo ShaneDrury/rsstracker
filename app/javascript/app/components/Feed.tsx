@@ -7,7 +7,7 @@ import { updateFeed } from "../modules/feeds/sources";
 import { Filter } from "../modules/filters";
 import { RootState } from "../modules/reducers";
 import { RemoteData } from "../modules/remoteData";
-import { Episodes } from "./Episodes";
+import Episodes from "./Episodes";
 
 interface DataProps {
   remoteFeed?: RemoteData<RemoteFeed>;
