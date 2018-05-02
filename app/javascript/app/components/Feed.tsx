@@ -19,6 +19,7 @@ import Episodes from "./Episodes";
 interface DataProps {
   remoteFeed?: RemoteData<RemoteFeed>;
   filter: Filter;
+  feedId: number;
 }
 
 interface DispatchProps {
@@ -43,6 +44,12 @@ export class Feed extends React.PureComponent<Props> {
 
   public componentDidMount() {
     this.props.fetchEpisodes();
+  }
+
+  public componentDidUpdate(prevProps: Props) {
+    if (prevProps.feedId !== this.props.feedId) {
+      this.props.fetchEpisodes();
+    }
   }
 
   public handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -112,11 +119,13 @@ const mapStateToProps = (
   state: RootState,
   ownProps: PropsExtended
 ): DataProps => {
-  const remoteFeed = getFeeds(state)[ownProps.match.params.feedId];
+  const feedId = ownProps.match.params.feedId;
+  const remoteFeed = getFeeds(state)[feedId];
   const filter = getFilter(state);
   return {
     remoteFeed,
-    filter
+    filter,
+    feedId
   };
 };
 
