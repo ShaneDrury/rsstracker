@@ -2,6 +2,13 @@ import React from "react";
 import { RemoteFeed } from "../types/feed";
 
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import {
+  changeFilter,
+  EpisodesAction,
+  fetchEpisodes
+} from "../modules/episodes/actions";
+import { getFilter } from "../modules/episodes/selectors";
 import { getFeeds } from "../modules/feeds/selectors";
 import { updateFeed } from "../modules/feeds/sources";
 import { Filter } from "../modules/filters";
@@ -11,6 +18,12 @@ import Episodes from "./Episodes";
 
 interface DataProps {
   remoteFeed?: RemoteData<RemoteFeed>;
+  filter: Filter;
+}
+
+interface DispatchProps {
+  changeFilter: (filter: Filter) => void;
+  fetchEpisodes: () => void;
 }
 
 interface PropsExtended {
@@ -20,24 +33,20 @@ interface PropsExtended {
     };
   };
 }
+type Props = DataProps & DispatchProps & PropsExtended;
 
-interface State {
-  filter: Filter;
-}
-
-type Props = DataProps & PropsExtended;
-
-export class Feed extends React.Component<Props, State> {
+export class Feed extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      filter: Filter.ALL
-    };
     this.handleFilterChange = this.handleFilterChange.bind(this);
   }
 
+  public componentDidMount() {
+    this.props.fetchEpisodes();
+  }
+
   public handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({ filter: event.target.value as Filter });
+    this.props.changeFilter(event.target.value as Filter);
   }
 
   public render() {
@@ -76,7 +85,10 @@ export class Feed extends React.Component<Props, State> {
                 >
                   <i className="fas fa-sync" />&nbsp;Update
                 </button>
-                <select onChange={this.handleFilterChange}>
+                <select
+                  onChange={this.handleFilterChange}
+                  value={this.props.filter}
+                >
                   <option value={Filter.ALL}>All</option>
                   <option value={Filter.SUCCESS}>Success</option>
                   <option value={Filter.NOT_ASKED}>Not asked</option>
@@ -87,7 +99,7 @@ export class Feed extends React.Component<Props, State> {
             </div>
           </div>
           <div className="column">
-            <Episodes feedId={id} filter={this.state.filter} />
+            <Episodes feedId={id} />
           </div>
         </div>
       );
@@ -101,9 +113,20 @@ const mapStateToProps = (
   ownProps: PropsExtended
 ): DataProps => {
   const remoteFeed = getFeeds(state)[ownProps.match.params.feedId];
+  const filter = getFilter(state);
   return {
-    remoteFeed
+    remoteFeed,
+    filter
   };
 };
 
-export default connect(mapStateToProps)(Feed);
+const mapDispatchToProps = (
+  dispatch: Dispatch<EpisodesAction, RootState>,
+  ownProps: PropsExtended
+): DispatchProps => ({
+  changeFilter: (filter: Filter) =>
+    dispatch(changeFilter(ownProps.match.params.feedId)(filter)),
+  fetchEpisodes: () => dispatch(fetchEpisodes(ownProps.match.params.feedId))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Feed);

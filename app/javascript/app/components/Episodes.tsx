@@ -1,10 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
 import * as shortid from "shortid";
-import { EpisodesAction, fetchEpisodes } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
-import { Filter } from "../modules/filters";
 import { RootState } from "../modules/reducers";
 import { RemoteData } from "../modules/remoteData";
 import { RemoteEpisode } from "../types/episode";
@@ -19,22 +16,13 @@ interface DataProps {
   remoteEpisodes: Array<RemoteDataWithKey<RemoteEpisode>>;
 }
 
-interface DispatchProps {
-  fetchEpisodes: () => void;
-}
-
 interface PropsExtended {
-  filter: Filter;
   feedId: number;
 }
 
-type Props = DataProps & DispatchProps & PropsExtended;
+type Props = DataProps & PropsExtended;
 
 export class Episodes extends React.PureComponent<Props> {
-  public componentDidMount() {
-    this.props.fetchEpisodes();
-  }
-
   public render() {
     return (
       <div>
@@ -52,7 +40,6 @@ export class Episodes extends React.PureComponent<Props> {
 
 const mapStateToProps = (state: RootState): DataProps => {
   const remoteEpisodes = Object.values(getEpisodes(state));
-
   return {
     remoteEpisodes: remoteEpisodes.map(remoteEpisode => ({
       ...remoteEpisode,
@@ -61,15 +48,4 @@ const mapStateToProps = (state: RootState): DataProps => {
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<EpisodesAction, RootState>,
-  { filter, feedId }: PropsExtended
-): DispatchProps =>
-  bindActionCreators(
-    {
-      fetchEpisodes: fetchEpisodes(filter, feedId)
-    },
-    dispatch
-  );
-
-export default connect(mapStateToProps, mapDispatchToProps)(Episodes);
+export default connect(mapStateToProps)(Episodes);

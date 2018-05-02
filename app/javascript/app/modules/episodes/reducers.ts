@@ -28,7 +28,6 @@ const episodes = (
       return {
         ...state,
         items: {
-          ...state.items,
           ...remoteEpisodes
         }
       };
