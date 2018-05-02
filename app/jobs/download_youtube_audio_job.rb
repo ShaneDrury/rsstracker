@@ -22,12 +22,12 @@ class DownloadYoutubeAudioJob < ApplicationJob
 
     Dir.mktmpdir do |temp_dir|
       tmp_path = File.join(temp_dir, episode_folder, episode_filename)
-      result = system "#{ENV['YOUTUBE_DL_PATH']} -f 22 -o \"#{tmp_path}\" -x #{url}"
+      result = system "#{ENV['YOUTUBE_DL_PATH']} -f 22 -o \"#{tmp_path}\" -x -- #{url}"
       unless result
         episode.build_fetch_status(status: 'FAILURE').save
         raise "Failed!"
       end
-      out = `#{ENV['YOUTUBE_DL_PATH']} -j #{url}`
+      out = `#{ENV['YOUTUBE_DL_PATH']} -j -- #{url}`
       json = JSON.parse(out)
       FileUtils.mv(File.join(temp_dir, episode_folder, "#{json['id']}.m4a"), File.join(ENV['DOWNLOAD_ROOT'], episode_folder, '/'))
       actual_download_path = File.join(episode_folder, "#{json['id']}.m4a")
