@@ -54,6 +54,15 @@ class EpisodesController < ApplicationController
     @episode.destroy
   end
 
+  def search
+    episodes = Episode
+                 .includes(:fetch_status)
+                 .where(feed_id: params[:feed_id])
+    episodes = episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
+    results = DbTextSearch::FullText.new(episodes, :description).search(params[:search_term])
+    render json: results
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

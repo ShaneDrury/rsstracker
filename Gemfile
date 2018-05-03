@@ -44,8 +44,9 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-
 gem 'delayed_job_active_record'
 gem 'daemons'
 
 gem 'webpacker', '~> 3.4'
+
+gem 'db_text_search', '~> 0.2.2'

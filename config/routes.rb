@@ -3,13 +3,20 @@ Rails.application.routes.draw do
   root 'operations#index'
 
   resources :episodes do
+    collection do
+      get 'search'
+    end
     member do
       post 'download'
     end
   end
 
   resources :feeds do
-    resources :episodes
+    resources :episodes do
+      collection do
+        get 'search'
+      end
+    end
     member do
       post 'update_feed'
     end
