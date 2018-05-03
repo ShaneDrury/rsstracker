@@ -29,7 +29,7 @@ interface FetchEpisodesFailure {
   };
 }
 
-interface ChangeFilter {
+export interface ChangeFilter {
   type: episodeActions.CHANGE_FILTER;
   payload: {
     filter: Filter;

@@ -1,4 +1,5 @@
 import { LOCATION_CHANGE, LocationChangeAction } from "react-router-redux";
+import { ChangeFilter, episodeActions } from "../episodes/actions";
 import { Action, actions } from "./actions";
 
 export interface State {
@@ -17,7 +18,7 @@ const initialState: State = {
 
 const player = (
   state: State = initialState,
-  action: Action | LocationChangeAction
+  action: Action | LocationChangeAction | ChangeFilter
 ): State => {
   switch (action.type) {
     case actions.UPDATE_PLAYED_SECONDS: {
@@ -41,6 +42,7 @@ const player = (
         playingEpisodeId: action.payload.playingEpisodeId
       };
     }
+    case episodeActions.CHANGE_FILTER:
     case LOCATION_CHANGE:
       return {
         ...state,
