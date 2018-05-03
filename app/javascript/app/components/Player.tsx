@@ -7,7 +7,10 @@ import {
   togglePlay,
   updatePlayedSeconds
 } from "../modules/player/actions";
-import { getPlayingEpisode } from "../modules/player/selectors";
+import {
+  getPlayedSeconds,
+  getPlayingEpisode
+} from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 
 interface DataProps {
@@ -16,10 +19,11 @@ interface DataProps {
 
 interface ConnectedProps {
   playing: boolean;
+  playedSeconds: number;
 }
 
 interface DispatchProps {
-  onChangePlayedSeconds: (playedSeconds: number) => void;
+  onChangePlayedSeconds: (episodeId: number, playedSeconds: number) => void;
   togglePlay: (episodeId: number) => void;
 }
 
@@ -29,11 +33,21 @@ interface PropsExtended {
 
 type Props = DataProps & DispatchProps & PropsExtended & ConnectedProps;
 
-export class Player extends React.Component<Props> {
+export class Player extends React.PureComponent<Props> {
+  private player: any = undefined;
+
   constructor(props: Props) {
     super(props);
     this.handleToggleShow = this.handleToggleShow.bind(this);
     this.handleProgress = this.handleProgress.bind(this);
+  }
+
+  public componentDidUpdate(prevProps: Props) {
+    if (!prevProps.playing && this.props.playing) {
+      if (this.player) {
+        this.player.seekTo(this.props.playedSeconds);
+      }
+    }
   }
 
   public handleToggleShow() {
@@ -41,7 +55,7 @@ export class Player extends React.Component<Props> {
   }
 
   public handleProgress({ playedSeconds }: { playedSeconds: number }) {
-    this.props.onChangePlayedSeconds(playedSeconds);
+    this.props.onChangePlayedSeconds(this.props.episodeId, playedSeconds);
   }
 
   public render() {
@@ -52,11 +66,13 @@ export class Player extends React.Component<Props> {
         </button>
         {this.props.playing && (
           <FilePlayer
+            ref={this.playerRef}
             url={this.props.url}
             controls
             playing={this.props.playing}
             config={{ file: { forceAudio: true } }}
             onProgress={this.handleProgress}
+            progressInterval={1500}
             width="600px"
             height="50px"
           />
@@ -64,6 +80,10 @@ export class Player extends React.Component<Props> {
       </div>
     );
   }
+
+  private playerRef = (player: Element) => {
+    this.player = player;
+  };
 }
 
 const mapStateToProps = (
@@ -71,16 +91,18 @@ const mapStateToProps = (
   ownProps: PropsExtended
 ): ConnectedProps => {
   const playing = ownProps.episodeId === getPlayingEpisode(state);
+  const playedSeconds = getPlayedSeconds(state)[ownProps.episodeId];
   return {
-    playing
+    playing,
+    playedSeconds: playedSeconds ? playedSeconds : 0
   };
 };
 
 const mapDispatchToProps = (
   dispatch: Dispatch<PlayerAction, RootState>
 ): DispatchProps => ({
-  onChangePlayedSeconds: (playedSeconds: number) =>
-    dispatch(updatePlayedSeconds(playedSeconds)),
+  onChangePlayedSeconds: (episodeId: number, playedSeconds: number) =>
+    dispatch(updatePlayedSeconds(episodeId, playedSeconds)),
   togglePlay: (episodeId: number) => dispatch(togglePlay(episodeId))
 });
 

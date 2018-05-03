@@ -1,12 +1,14 @@
 import { Action, actions } from "./actions";
 
 export interface State {
-  episodeId?: number;
-  playedSeconds: number;
+  playingEpisodeId?: number;
+  saved: {
+    [key: number]: number;
+  };
 }
 
 const initialState: State = {
-  playedSeconds: 0
+  saved: {}
 };
 
 const player = (state: State = initialState, action: Action): State => {
@@ -14,19 +16,22 @@ const player = (state: State = initialState, action: Action): State => {
     case actions.UPDATE_PLAYED_SECONDS: {
       return {
         ...state,
-        playedSeconds: action.payload.playedSeconds
+        saved: {
+          ...state.saved,
+          [action.payload.episodeId]: action.payload.playedSeconds
+        }
       };
     }
     case actions.TOGGLE_PLAY: {
-      if (state.episodeId === action.payload.episodeId) {
+      if (state.playingEpisodeId === action.payload.playingEpisodeId) {
         return {
-          playedSeconds: 0,
-          episodeId: undefined
+          ...state,
+          playingEpisodeId: undefined
         };
       }
       return {
-        playedSeconds: 0,
-        episodeId: action.payload.episodeId
+        ...state,
+        playingEpisodeId: action.payload.playingEpisodeId
       };
     }
     default:

@@ -5,24 +5,25 @@ export enum actions {
 
 interface UpdatePlayedSeconds {
   type: actions.UPDATE_PLAYED_SECONDS;
-  payload: { playedSeconds: number };
+  payload: { playedSeconds: number; episodeId: number };
 }
 
 interface TogglePlay {
   type: actions.TOGGLE_PLAY;
-  payload: { episodeId: number };
+  payload: { playingEpisodeId: number };
 }
 
 export type Action = UpdatePlayedSeconds | TogglePlay;
 
 export const updatePlayedSeconds = (
+  episodeId: number,
   playedSeconds: number
 ): UpdatePlayedSeconds => ({
   type: actions.UPDATE_PLAYED_SECONDS,
-  payload: { playedSeconds }
+  payload: { playedSeconds, episodeId }
 });
 
-export const togglePlay = (episodeId: number): TogglePlay => ({
+export const togglePlay = (playingEpisodeId: number): TogglePlay => ({
   type: actions.TOGGLE_PLAY,
-  payload: { episodeId }
+  payload: { playingEpisodeId }
 });
