@@ -6,7 +6,8 @@ import { Dispatch } from "redux";
 import {
   changeFilter,
   EpisodesAction,
-  fetchEpisodes
+  fetchEpisodes,
+  searchEpisodes
 } from "../modules/episodes/actions";
 import { getFilter } from "../modules/episodes/selectors";
 import { getFeeds } from "../modules/feeds/selectors";
@@ -25,6 +26,7 @@ interface DataProps {
 interface DispatchProps {
   changeFilter: (filter: Filter) => void;
   fetchEpisodes: () => void;
+  onChangeSearch: (searchParam: string) => void;
 }
 
 interface PropsExtended {
@@ -40,6 +42,7 @@ export class Feed extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
     this.handleFilterChange = this.handleFilterChange.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   public componentDidMount() {
@@ -54,6 +57,10 @@ export class Feed extends React.PureComponent<Props> {
 
   public handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
     this.props.changeFilter(event.target.value as Filter);
+  }
+
+  public handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
+    this.props.onChangeSearch(event.target.value);
   }
 
   public render() {
@@ -105,6 +112,7 @@ export class Feed extends React.PureComponent<Props> {
                   <option value={Filter.LOADING}>Loading</option>
                   <option value={Filter.FAILURE}>Failure</option>
                 </select>
+                <input type="text" onChange={this.handleSearch} />
               </div>
             </div>
           </div>
@@ -138,7 +146,9 @@ const mapDispatchToProps = (
 ): DispatchProps => ({
   changeFilter: (filter: Filter) =>
     dispatch(changeFilter(ownProps.match.params.feedId)(filter)),
-  fetchEpisodes: () => dispatch(fetchEpisodes(ownProps.match.params.feedId))
+  fetchEpisodes: () => dispatch(fetchEpisodes(ownProps.match.params.feedId)),
+  onChangeSearch: (searchTerm: string) =>
+    dispatch(searchEpisodes(ownProps.match.params.feedId)(searchTerm))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feed);

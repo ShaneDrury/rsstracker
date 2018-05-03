@@ -2,7 +2,7 @@ import { RemoteEpisode } from "../../types/episode";
 import { RootThunk } from "../../types/thunk";
 import { Filter } from "../filters";
 import { getFilter } from "./selectors";
-import { getEpisodes } from "./sources";
+import { fulltextSearchEpisodes, getEpisodes } from "./sources";
 
 export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
@@ -83,4 +83,16 @@ export const changeFilter = (feedId: number) => (
 ): RootThunk<void> => dispatch => {
   dispatch(changeFilterAction(filter));
   dispatch(fetchEpisodes(feedId));
+};
+
+export const searchEpisodes = (feedId: number) => (
+  searchTerm: string
+): RootThunk<void> => async dispatch => {
+  dispatch(fetchEpisodesStart());
+  try {
+    const episodes = await fulltextSearchEpisodes(searchTerm, feedId);
+    dispatch(fetchEpisodesComplete(episodes));
+  } catch (err) {
+    dispatch(fetchEpisodesFailure(err));
+  }
 };
