@@ -4,17 +4,13 @@ import { getLoadedEpisodes } from "../modules/episodes/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
 
-import { Episode } from "./Episode";
+import Episode from "./Episode";
 
 interface DataProps {
   remoteEpisodes: RemoteEpisode[];
 }
 
-interface PropsExtended {
-  feedId: number;
-}
-
-type Props = DataProps & PropsExtended;
+type Props = DataProps;
 
 export class Episodes extends React.PureComponent<Props> {
   public render() {

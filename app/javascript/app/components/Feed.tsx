@@ -106,7 +106,7 @@ export class Feed extends React.PureComponent<Props> {
             </div>
           </div>
           <div className="column">
-            <Episodes feedId={id} />
+            <Episodes />
           </div>
         </div>
       );

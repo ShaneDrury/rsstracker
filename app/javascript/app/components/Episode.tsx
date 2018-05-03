@@ -1,9 +1,19 @@
+import * as moment from "moment";
 import React from "react";
+import { connect } from "react-redux";
 import { downloadEpisode } from "../modules/episodes/sources";
+import { getPlayedSeconds } from "../modules/player/selectors";
+import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
 import Player from "./Player";
 
-type Props = RemoteEpisode;
+type DataProps = RemoteEpisode;
+
+interface PropsExtended {
+  playingSeconds?: number;
+}
+
+type Props = DataProps & PropsExtended;
 
 interface DescriptionProps {
   text: string;
@@ -25,7 +35,8 @@ export const Episode: React.SFC<Props> = ({
   name,
   description,
   duration,
-  fetchStatus
+  fetchStatus,
+  playingSeconds
 }) => {
   const handleDownload = () => downloadEpisode(id);
   return (
@@ -38,6 +49,11 @@ export const Episode: React.SFC<Props> = ({
           <div className="content">
             <p>{description && <Description text={description} />}</p>
             <br />
+            {playingSeconds && (
+              <div>
+                Played: {moment.duration(playingSeconds, "seconds").humanize()}
+              </div>
+            )}
             <time>{duration}</time>
             {fetchStatus.status === "SUCCESS" && (
               <Player url={fetchStatus.url} episodeId={id} />
@@ -68,3 +84,15 @@ export const Episode: React.SFC<Props> = ({
     </div>
   );
 };
+
+const mapStateToProps = (
+  state: RootState,
+  ownProps: DataProps
+): PropsExtended => {
+  const playingSeconds = getPlayedSeconds(state)[ownProps.id];
+  return {
+    playingSeconds
+  };
+};
+
+export default connect(mapStateToProps)(Episode);
