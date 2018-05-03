@@ -1,15 +1,18 @@
 import camelcaseKeys from "camelcase-keys";
-import { RemoteFeed } from "../../types/feed";
+import * as shortid from "shortid";
+import { ApiFeed, RemoteFeed } from "../../types/feed";
 import apiFetch from "../apiFetch";
 
 export const getFeeds = async (): Promise<RemoteFeed[]> => {
   const feedsResponse = await apiFetch("/feeds");
-  return camelcaseKeys(feedsResponse);
+  const camel = camelcaseKeys(feedsResponse);
+  return camel.map((feed: ApiFeed) => ({ ...feed, key: shortid.generate() }));
 };
 
 export const getFeed = async (feedId: number): Promise<RemoteFeed> => {
   const feedResponse = await apiFetch(`/feeds/${feedId}`);
-  return camelcaseKeys(feedResponse);
+  const camel = camelcaseKeys(feedResponse);
+  return { ...camel, key: shortid.generate() };
 };
 
 export const updateFeed = async (feedId: number): Promise<void> => {

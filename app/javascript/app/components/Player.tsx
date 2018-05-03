@@ -1,13 +1,26 @@
 import React from "react";
 import FilePlayer from "react-player/lib/players/FilePlayer";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import {
+  Action as PlayerAction,
+  updatePlayedSeconds
+} from "../modules/player/actions";
+import { RootState } from "../modules/reducers";
 
-interface Props {
+interface DataProps {
   url: string;
+}
+
+interface DispatchProps {
+  onChangePlayedSeconds: (playedSeconds: number) => void;
 }
 
 interface State {
   visible: boolean;
 }
+
+type Props = DataProps & DispatchProps;
 
 export class Player extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -16,12 +29,17 @@ export class Player extends React.Component<Props, State> {
       visible: false
     };
     this.handleToggleShow = this.handleToggleShow.bind(this);
+    this.handleProgress = this.handleProgress.bind(this);
   }
 
   public handleToggleShow() {
     this.setState({
       visible: !this.state.visible
     });
+  }
+
+  public handleProgress({ playedSeconds }: { playedSeconds: number }) {
+    this.props.onChangePlayedSeconds(playedSeconds);
   }
 
   public render() {
@@ -36,6 +54,7 @@ export class Player extends React.Component<Props, State> {
             controls
             playing
             config={{ file: { forceAudio: true } }}
+            onProgress={this.handleProgress}
             width="600px"
             height="50px"
           />
@@ -44,3 +63,12 @@ export class Player extends React.Component<Props, State> {
     );
   }
 }
+
+const mapDispatchToProps = (
+  dispatch: Dispatch<PlayerAction, RootState>
+): DispatchProps => ({
+  onChangePlayedSeconds: (playedSeconds: number) =>
+    dispatch(updatePlayedSeconds(playedSeconds))
+});
+
+export default connect(undefined, mapDispatchToProps)(Player);

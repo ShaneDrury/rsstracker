@@ -1,7 +1,7 @@
 import React from "react";
 import { downloadEpisode } from "../modules/episodes/sources";
 import { RemoteEpisode } from "../types/episode";
-import { Player } from "./Player";
+import Player from "./Player";
 
 type Props = RemoteEpisode;
 

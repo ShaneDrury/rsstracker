@@ -1,6 +1,6 @@
 import { FetchStatus } from "../modules/fetchStatus";
 
-export interface RemoteEpisode {
+export interface ApiEpisode {
   id: number;
   description: string;
   duration: string;
@@ -8,4 +8,8 @@ export interface RemoteEpisode {
   name: string;
   url: string;
   fetchStatus: FetchStatus;
+}
+
+export interface RemoteEpisode extends ApiEpisode {
+  key: string;
 }
