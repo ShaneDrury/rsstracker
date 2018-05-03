@@ -7,8 +7,11 @@ export interface State {
   };
 }
 
+const savedSecondsJSON = localStorage.getItem("savedSeconds");
+const savedSeconds = savedSecondsJSON ? JSON.parse(savedSecondsJSON) : {};
+
 const initialState: State = {
-  saved: {}
+  saved: savedSeconds
 };
 
 const player = (state: State = initialState, action: Action): State => {

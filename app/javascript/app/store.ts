@@ -4,6 +4,7 @@ import thunkMiddleware from "redux-thunk";
 import rootReducer from "./modules/reducers";
 
 import { routerMiddleware } from "react-router-redux";
+import savePlayedSeconds from "./middleware/savePlayedSeconds";
 
 // Fix for redux-devtools-extension not supporting redux 4.0.0 yet
 // tslint:disable-next-line:no-var-requires
@@ -28,7 +29,7 @@ export const history = createHistory();
 const historyMiddleware = routerMiddleware(history);
 
 const enhancer = composeEnhancers(
-  applyMiddleware(...[thunkMiddleware, historyMiddleware])
+  applyMiddleware(...[thunkMiddleware, historyMiddleware, savePlayedSeconds])
 );
 
 export const store = createStore(rootReducer, enhancer);
