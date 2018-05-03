@@ -90,7 +90,8 @@ const mapStateToProps = (
   state: RootState,
   ownProps: PropsExtended
 ): ConnectedProps => {
-  const playing = ownProps.episodeId === getPlayingEpisode(state);
+  const playingEpisodeId = getPlayingEpisode(state);
+  const playing = ownProps.episodeId === playingEpisodeId;
   const playedSeconds = getPlayedSeconds(state)[ownProps.episodeId];
   return {
     playing,
