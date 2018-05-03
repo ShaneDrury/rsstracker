@@ -63,7 +63,8 @@ export class Feed extends React.PureComponent<Props> {
         name,
         description,
         relativeImageLink,
-        updatedAt
+        updatedAt,
+        url
       } = this.props.remoteFeed.data;
       const handleUpdateFeed = () => updateFeed(id);
       return (
@@ -78,7 +79,9 @@ export class Feed extends React.PureComponent<Props> {
               <div className="card-content">
                 <div className="media">
                   <div className="media-content">
-                    <p className="title is-4">{name}</p>
+                    <p className="title is-4">
+                      <a href={url}>{name}</a>
+                    </p>
                   </div>
                 </div>
                 <div className="content">
