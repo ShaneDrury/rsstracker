@@ -40,7 +40,7 @@ export const Episode: React.SFC<Props> = ({
             <br />
             <time>{duration}</time>
             {fetchStatus.status === "SUCCESS" && (
-              <Player url={fetchStatus.url} />
+              <Player url={fetchStatus.url} episodeId={id} />
             )}
           </div>
           <nav className="level is-mobile">

@@ -4,38 +4,40 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import {
   Action as PlayerAction,
+  togglePlay,
   updatePlayedSeconds
 } from "../modules/player/actions";
+import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 
 interface DataProps {
   url: string;
 }
 
+interface ConnectedProps {
+  playing: boolean;
+}
+
 interface DispatchProps {
   onChangePlayedSeconds: (playedSeconds: number) => void;
+  togglePlay: (episodeId: number) => void;
 }
 
-interface State {
-  visible: boolean;
+interface PropsExtended {
+  episodeId: number;
 }
 
-type Props = DataProps & DispatchProps;
+type Props = DataProps & DispatchProps & PropsExtended & ConnectedProps;
 
-export class Player extends React.Component<Props, State> {
+export class Player extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      visible: false
-    };
     this.handleToggleShow = this.handleToggleShow.bind(this);
     this.handleProgress = this.handleProgress.bind(this);
   }
 
   public handleToggleShow() {
-    this.setState({
-      visible: !this.state.visible
-    });
+    this.props.togglePlay(this.props.episodeId);
   }
 
   public handleProgress({ playedSeconds }: { playedSeconds: number }) {
@@ -46,13 +48,13 @@ export class Player extends React.Component<Props, State> {
     return (
       <div>
         <button className="button" onClick={this.handleToggleShow}>
-          {this.state.visible ? "Stop" : "Play"}
+          {this.props.playing ? "Stop" : "Play"}
         </button>
-        {this.state.visible && (
+        {this.props.playing && (
           <FilePlayer
             url={this.props.url}
             controls
-            playing
+            playing={this.props.playing}
             config={{ file: { forceAudio: true } }}
             onProgress={this.handleProgress}
             width="600px"
@@ -64,11 +66,22 @@ export class Player extends React.Component<Props, State> {
   }
 }
 
+const mapStateToProps = (
+  state: RootState,
+  ownProps: PropsExtended
+): ConnectedProps => {
+  const playing = ownProps.episodeId === getPlayingEpisode(state);
+  return {
+    playing
+  };
+};
+
 const mapDispatchToProps = (
   dispatch: Dispatch<PlayerAction, RootState>
 ): DispatchProps => ({
   onChangePlayedSeconds: (playedSeconds: number) =>
-    dispatch(updatePlayedSeconds(playedSeconds))
+    dispatch(updatePlayedSeconds(playedSeconds)),
+  togglePlay: (episodeId: number) => dispatch(togglePlay(episodeId))
 });
 
-export default connect(undefined, mapDispatchToProps)(Player);
+export default connect(mapStateToProps, mapDispatchToProps)(Player);

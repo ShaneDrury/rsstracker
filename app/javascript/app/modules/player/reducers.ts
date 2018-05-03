@@ -1,7 +1,7 @@
 import { Action, actions } from "./actions";
 
 export interface State {
-  episodeId?: string;
+  episodeId?: number;
   playedSeconds: number;
 }
 
@@ -15,6 +15,18 @@ const player = (state: State = initialState, action: Action): State => {
       return {
         ...state,
         playedSeconds: action.payload.playedSeconds
+      };
+    }
+    case actions.TOGGLE_PLAY: {
+      if (state.episodeId === action.payload.episodeId) {
+        return {
+          playedSeconds: 0,
+          episodeId: undefined
+        };
+      }
+      return {
+        playedSeconds: 0,
+        episodeId: action.payload.episodeId
       };
     }
     default:
