@@ -17,6 +17,8 @@ export interface Error<E> {
   error: E;
 }
 
+export type FetchStatus = "NOT_ASKED" | "LOADING" | "SUCCESS" | "FAILURE";
+
 type RemoteDataGeneric<D, E> = NotAsked | Loading<D> | Success<D> | Error<E>;
 
 export type RemoteData<D> = RemoteDataGeneric<D, string>;

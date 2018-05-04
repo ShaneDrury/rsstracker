@@ -1,37 +1,49 @@
 import { forEach } from "lodash";
 import { RemoteEpisode } from "../../types/episode";
 import { Filter } from "../filters";
-import { RemoteData } from "../remoteData";
+import { FetchStatus } from "../remoteData";
 import { episodeActions, EpisodesAction } from "./actions";
 
 export interface State {
   items: {
-    [key: string]: RemoteData<RemoteEpisode>;
+    [key: string]: RemoteEpisode;
   };
+  fetchStatus: FetchStatus;
   ids: number[];
   filter: Filter;
 }
 
-const initialState: State = { items: {}, filter: Filter.ALL, ids: [] };
+const initialState: State = {
+  items: {},
+  fetchStatus: "NOT_ASKED",
+  filter: Filter.ALL,
+  ids: []
+};
 
 const episodes = (
   state: State = initialState,
   action: EpisodesAction
 ): State => {
   switch (action.type) {
-    case episodeActions.FETCH_EPISODES_START:
-      return state;
+    case episodeActions.FETCH_EPISODES_START: {
+      return {
+        ...state,
+        fetchStatus: "LOADING"
+      };
+    }
     case episodeActions.FETCH_EPISODES_COMPLETE: {
-      const remoteEpisodes: { [key: string]: RemoteData<RemoteEpisode> } = {};
+      const remoteEpisodes: { [key: string]: RemoteEpisode } = {};
       const ids: number[] = [];
       forEach(action.payload.episodes, episode => {
-        remoteEpisodes[episode.id] = { type: "SUCCESS", data: episode };
+        remoteEpisodes[episode.id] = episode;
         ids.push(episode.id);
       });
       return {
         ...state,
         ids,
+        fetchStatus: "SUCCESS",
         items: {
+          ...state.items,
           ...remoteEpisodes
         }
       };
