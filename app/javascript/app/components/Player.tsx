@@ -33,20 +33,35 @@ interface PropsExtended {
 
 type Props = DataProps & DispatchProps & PropsExtended & ConnectedProps;
 
-export class Player extends React.PureComponent<Props> {
+interface State {
+  shouldSeek: boolean;
+}
+
+export class Player extends React.PureComponent<Props, State> {
   private player: any = undefined;
 
   constructor(props: Props) {
     super(props);
+    this.state = {
+      shouldSeek: false
+    };
     this.handleToggleShow = this.handleToggleShow.bind(this);
     this.handleProgress = this.handleProgress.bind(this);
+    this.handleOnReady = this.handleOnReady.bind(this);
   }
 
   public componentDidUpdate(prevProps: Props) {
     if (!prevProps.playing && this.props.playing) {
-      if (this.player) {
-        this.player.seekTo(this.props.playedSeconds);
-      }
+      this.setState({
+        shouldSeek: true
+      });
+    }
+  }
+
+  public handleOnReady() {
+    if (this.player && this.state.shouldSeek) {
+      this.player.seekTo(this.props.playedSeconds);
+      this.setState({ shouldSeek: false });
     }
   }
 
@@ -72,6 +87,7 @@ export class Player extends React.PureComponent<Props> {
             playing={this.props.playing}
             config={{ file: { forceAudio: true } }}
             onProgress={this.handleProgress}
+            onReady={this.handleOnReady}
             progressInterval={1500}
             width="600px"
             height="50px"
