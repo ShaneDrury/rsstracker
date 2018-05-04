@@ -1,6 +1,7 @@
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
+import { DebounceInput } from "react-debounce-input";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import {
@@ -112,7 +113,12 @@ export class Feed extends React.PureComponent<Props> {
                   <option value={Filter.LOADING}>Loading</option>
                   <option value={Filter.FAILURE}>Failure</option>
                 </select>
-                <input type="text" onChange={this.handleSearch} />
+                <DebounceInput
+                  minLength={2}
+                  debounceTimeout={300}
+                  type="text"
+                  onChange={this.handleSearch}
+                />
               </div>
             </div>
           </div>
