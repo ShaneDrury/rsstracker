@@ -31,6 +31,7 @@ export class Feeds extends React.PureComponent<Props> {
   public render() {
     return (
       <div className="container">
+        {this.props.remoteFeeds.length === 0 && <div>No results</div>}
         <ul>
           {this.props.remoteFeeds.map(remoteFeed => (
             <li key={remoteFeed.key}>
