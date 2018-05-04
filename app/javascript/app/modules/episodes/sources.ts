@@ -13,27 +13,23 @@ const processEpisodesResponse = (response: ApiEpisode[]): RemoteEpisode[] => {
   }));
 };
 
-export const getEpisodes = async (
-  status: Filter,
-  feedId: number
-): Promise<RemoteEpisode[]> => {
-  const queryParams = stringify({ status });
-  const episodesResponse = await apiFetch(
-    `/feeds/${feedId}/episodes?${queryParams}`
-  );
+export const getEpisodes = async ({
+  status,
+  feedId,
+  searchTerm
+}: {
+  status?: Filter;
+  feedId?: number;
+  searchTerm?: string;
+}): Promise<RemoteEpisode[]> => {
+  const queryParams = stringify({
+    status,
+    feed_id: feedId,
+    search_term: searchTerm
+  });
+  const episodesResponse = await apiFetch(`/episodes/search?${queryParams}`);
   return processEpisodesResponse(episodesResponse);
 };
 
 export const downloadEpisode = async (episodeId: number): Promise<void> =>
   apiFetch(`/episodes/${episodeId}/download`, { method: "POST" });
-
-export const fulltextSearchEpisodes = async (
-  searchTerm: string,
-  feedId: number
-) => {
-  const queryParams = stringify({ search_term: searchTerm });
-  const episodesResponse = await apiFetch(
-    `/feeds/${feedId}/episodes/search?${queryParams}`
-  );
-  return processEpisodesResponse(episodesResponse);
-};
