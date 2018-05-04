@@ -1,4 +1,3 @@
-import { mapValues, pickBy } from "lodash";
 import { createSelector } from "reselect";
 import { RemoteEpisode } from "../../types/episode";
 import { Filter } from "../filters";
@@ -9,14 +8,20 @@ export const getEpisodes = (
   state: RootState
 ): { [key: string]: RemoteData<RemoteEpisode> } => state.episodes.items;
 
+export const getSortedEpisodeIds = (state: RootState): number[] =>
+  state.episodes.ids;
+
 export const getFilter = (state: RootState): Filter => state.episodes.filter;
 
-export const getLoadedEpisodes = createSelector(getEpisodes, (remoteEpisodes): {
-  [key: string]: RemoteEpisode;
-} => {
-  const successRemotes = pickBy(
-    remoteEpisodes,
-    remoteEpisode => remoteEpisode.type === "SUCCESS"
-  ) as { [key: string]: Success<RemoteEpisode> };
-  return mapValues(successRemotes, remoteEpisode => remoteEpisode.data);
-});
+export const getLoadedEpisodes = createSelector(
+  getEpisodes,
+  getSortedEpisodeIds,
+  (remoteEpisodes, episodeIds): RemoteEpisode[] => {
+    const sortedEpisodes = episodeIds.map(
+      episodeId => remoteEpisodes[episodeId]
+    );
+    return sortedEpisodes
+      .filter(episode => episode.type === "SUCCESS")
+      .map(episode => (episode as Success<RemoteEpisode>).data);
+  }
+);

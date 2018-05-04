@@ -27,7 +27,7 @@ export class Episodes extends React.PureComponent<Props> {
 }
 
 const mapStateToProps = (state: RootState): DataProps => {
-  const remoteEpisodes = Object.values(getLoadedEpisodes(state));
+  const remoteEpisodes = getLoadedEpisodes(state);
   return {
     remoteEpisodes
   };

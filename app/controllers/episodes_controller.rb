@@ -55,7 +55,7 @@ class EpisodesController < ApplicationController
   end
 
   def search
-    episodes = Episode.includes(:fetch_status)
+    episodes = Episode.includes(:fetch_status).order(publication_date: :desc)
     episodes = episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     episodes = episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
     results = if params[:search_term].present?
