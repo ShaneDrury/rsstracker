@@ -1,7 +1,7 @@
 import React from "react";
 import FilePlayer from "react-player/lib/players/FilePlayer";
 import { connect } from "react-redux";
-import { Dispatch } from "redux";
+import { bindActionCreators, Dispatch } from "redux";
 import {
   Action as PlayerAction,
   togglePlay,
@@ -117,10 +117,13 @@ const mapStateToProps = (
 
 const mapDispatchToProps = (
   dispatch: Dispatch<PlayerAction, RootState>
-): DispatchProps => ({
-  onChangePlayedSeconds: (episodeId: number, playedSeconds: number) =>
-    dispatch(updatePlayedSeconds(episodeId, playedSeconds)),
-  togglePlay: (episodeId: number) => dispatch(togglePlay(episodeId))
-});
+): DispatchProps =>
+  bindActionCreators(
+    {
+      onChangePlayedSeconds: updatePlayedSeconds,
+      togglePlay
+    },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Player);

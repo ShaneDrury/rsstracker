@@ -5,7 +5,7 @@ import * as qs from "qs";
 import { DebounceInput } from "react-debounce-input";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
-import { Dispatch } from "redux";
+import { bindActionCreators, Dispatch } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
 import { getFeeds } from "../modules/feeds/selectors";
 import { updateFeed } from "../modules/feeds/sources";
@@ -23,9 +23,9 @@ interface DataProps {
 }
 
 interface DispatchProps {
-  onChangeFilter: (filter: Filter, searchTerm: string) => void;
-  fetchEpisodes: (filter: Filter, searchTerm: string) => void;
-  onChangeSearch: (filter: Filter, searchTerm: string) => void;
+  onChangeFilter: (filter: Filter, searchTerm: string, feedId: number) => void;
+  fetchEpisodes: (filter: Filter, searchTerm: string, feedId: number) => void;
+  onChangeSearch: (filter: Filter, searchTerm: string, feedId: number) => void;
 }
 
 interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
@@ -40,12 +40,20 @@ export class Feed extends React.PureComponent<Props> {
   }
 
   public componentDidMount() {
-    this.props.fetchEpisodes(this.props.filter, this.props.searchTerm);
+    this.props.fetchEpisodes(
+      this.props.filter,
+      this.props.searchTerm,
+      this.props.feedId
+    );
   }
 
   public componentDidUpdate(prevProps: Props) {
     if (prevProps.feedId !== this.props.feedId) {
-      this.props.fetchEpisodes(this.props.filter, this.props.searchTerm);
+      this.props.fetchEpisodes(
+        this.props.filter,
+        this.props.searchTerm,
+        this.props.feedId
+      );
     }
   }
 
@@ -58,7 +66,8 @@ export class Feed extends React.PureComponent<Props> {
     history.push({ search: `?${queryParams}` });
     this.props.onChangeFilter(
       event.target.value as Filter,
-      this.props.searchTerm
+      this.props.searchTerm,
+      this.props.feedId
     );
   }
 
@@ -69,7 +78,7 @@ export class Feed extends React.PureComponent<Props> {
     });
     const queryParams = qs.stringify({ ...params, searchTerm });
     history.push({ search: `?${queryParams}` });
-    this.props.onChangeSearch(this.props.filter, searchTerm);
+    this.props.onChangeSearch(this.props.filter, searchTerm, this.props.feedId);
   }
 
   public render() {
@@ -164,18 +173,16 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = (
-  dispatch: Dispatch<EpisodesAction, RootState>,
-  ownProps: PropsExtended
+  dispatch: Dispatch<EpisodesAction, RootState>
 ): DispatchProps => {
-  const feedId = ownProps.match.params.feedId;
-  return {
-    onChangeFilter: (filter: Filter, searchTerm: string) =>
-      dispatch(searchEpisodes(filter, searchTerm, feedId)),
-    fetchEpisodes: (filter: Filter, searchTerm: string) =>
-      dispatch(searchEpisodes(filter, searchTerm, feedId)),
-    onChangeSearch: (filter: Filter, searchTerm: string) =>
-      dispatch(searchEpisodes(filter, searchTerm, feedId))
-  };
+  return bindActionCreators(
+    {
+      onChangeFilter: searchEpisodes,
+      fetchEpisodes: searchEpisodes,
+      onChangeSearch: searchEpisodes
+    },
+    dispatch
+  );
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feed);

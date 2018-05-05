@@ -2,9 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { bindActionCreators, Dispatch } from "redux";
-import * as shortid from "shortid";
 import { FeedsAction, fetchFeeds } from "../modules/feeds/actions";
-import { getFeeds } from "../modules/feeds/selectors";
+import { getFeedsList } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteData } from "../modules/remoteData";
 import { RemoteFeed } from "../types/feed";
@@ -49,9 +48,9 @@ export class Feeds extends React.PureComponent<Props> {
 }
 
 const mapStateToProps = (state: RootState): DataProps => {
-  const feeds = Object.values(getFeeds(state));
+  const remoteFeeds = getFeedsList(state);
   return {
-    remoteFeeds: feeds.map(feed => ({ ...feed, key: shortid.generate() }))
+    remoteFeeds
   };
 };
 
