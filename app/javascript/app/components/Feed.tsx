@@ -34,6 +34,16 @@ interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
 
 type Props = DataProps & DispatchProps & PropsExtended;
 
+const updateQueryParams = (
+  previous: string,
+  changes: { [key: string]: string }
+) => {
+  const params = qs.parse(previous, {
+    ignoreQueryPrefix: true
+  });
+  return qs.stringify({ ...params, ...changes });
+};
+
 export class Feed extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
@@ -60,20 +70,18 @@ export class Feed extends React.PureComponent<Props> {
   }
 
   public handleFilterChange(filter: Filter) {
-    const params = qs.parse(this.props.location.search, {
-      ignoreQueryPrefix: true
+    const queryParams = updateQueryParams(this.props.location.search, {
+      filter
     });
-    const queryParams = qs.stringify({ ...params, filter });
     history.push({ search: `?${queryParams}` });
     this.props.onChangeFilter(filter, this.props.searchTerm, this.props.feedId);
   }
 
   public handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const searchTerm = event.target.value;
-    const params = qs.parse(this.props.location.search, {
-      ignoreQueryPrefix: true
+    const queryParams = updateQueryParams(this.props.location.search, {
+      searchTerm
     });
-    const queryParams = qs.stringify({ ...params, searchTerm });
     history.push({ search: `?${queryParams}` });
     this.props.onChangeSearch(this.props.filter, searchTerm, this.props.feedId);
   }
