@@ -14,6 +14,7 @@ import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { history } from "../store";
 import Episodes from "./Episodes";
+import StatusSelect from "./StatusSelect";
 
 interface DataProps {
   remoteFeed: RemoteFeed;
@@ -58,18 +59,13 @@ export class Feed extends React.PureComponent<Props> {
     }
   }
 
-  public handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    const filter = event.target.value as Filter;
+  public handleFilterChange(filter: Filter) {
     const params = qs.parse(this.props.location.search, {
       ignoreQueryPrefix: true
     });
     const queryParams = qs.stringify({ ...params, filter });
     history.push({ search: `?${queryParams}` });
-    this.props.onChangeFilter(
-      event.target.value as Filter,
-      this.props.searchTerm,
-      this.props.feedId
-    );
+    this.props.onChangeFilter(filter, this.props.searchTerm, this.props.feedId);
   }
 
   public handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
@@ -121,16 +117,10 @@ export class Feed extends React.PureComponent<Props> {
                 >
                   <i className="fas fa-sync" />&nbsp;Update
                 </button>
-                <select
-                  onChange={this.handleFilterChange}
-                  value={this.props.filter}
-                >
-                  <option value={Filter.ALL}>All</option>
-                  <option value={Filter.SUCCESS}>Success</option>
-                  <option value={Filter.NOT_ASKED}>Not asked</option>
-                  <option value={Filter.LOADING}>Loading</option>
-                  <option value={Filter.FAILURE}>Failure</option>
-                </select>
+                <StatusSelect
+                  filter={this.props.filter}
+                  onChangeFilter={this.handleFilterChange}
+                />
                 <DebounceInput
                   minLength={2}
                   debounceTimeout={300}
