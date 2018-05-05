@@ -1,7 +1,6 @@
 import { RemoteEpisode } from "../../types/episode";
 import { RootThunk } from "../../types/thunk";
 import { Filter } from "../filters";
-import { getFilter } from "./selectors";
 import { getEpisodes } from "./sources";
 
 export enum episodeActions {
@@ -63,12 +62,10 @@ export type EpisodesAction =
   | FetchEpisodesFailure
   | ChangeFilter;
 
-export const fetchEpisodes = (feedId: number): RootThunk<void> => async (
-  dispatch,
-  getState
-) => {
-  const state = getState();
-  const status = getFilter(state);
+export const fetchEpisodes = (
+  status: Filter,
+  feedId: number
+): RootThunk<void> => async dispatch => {
   dispatch(fetchEpisodesStart());
   try {
     const episodes = await getEpisodes({ status, feedId });
@@ -82,14 +79,12 @@ export const changeFilter = (feedId: number) => (
   filter: Filter
 ): RootThunk<void> => dispatch => {
   dispatch(changeFilterAction(filter));
-  dispatch(fetchEpisodes(feedId));
+  dispatch(fetchEpisodes(filter, feedId));
 };
 
-export const searchEpisodes = (feedId: number) => (
+export const searchEpisodes = (status: Filter, feedId: number) => (
   searchTerm: string
-): RootThunk<void> => async (dispatch, getState) => {
-  const state = getState();
-  const status = getFilter(state);
+): RootThunk<void> => async dispatch => {
   dispatch(fetchEpisodesStart());
   try {
     const episodes = await getEpisodes({ status, feedId, searchTerm });

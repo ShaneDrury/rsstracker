@@ -1,6 +1,5 @@
 import { forEach } from "lodash";
 import { RemoteEpisode } from "../../types/episode";
-import { Filter } from "../filters";
 import { FetchStatus } from "../remoteData";
 import { episodeActions, EpisodesAction } from "./actions";
 
@@ -10,13 +9,11 @@ export interface State {
   };
   fetchStatus: FetchStatus;
   ids: number[];
-  filter: Filter;
 }
 
 const initialState: State = {
   items: {},
   fetchStatus: "NOT_ASKED",
-  filter: Filter.ALL,
   ids: []
 };
 
@@ -48,11 +45,6 @@ const episodes = (
         }
       };
     }
-    case episodeActions.CHANGE_FILTER:
-      return {
-        ...state,
-        filter: action.payload.filter
-      };
     default:
       return state;
   }
