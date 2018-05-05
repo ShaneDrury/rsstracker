@@ -7,16 +7,17 @@ import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
-import { getFeeds } from "../modules/feeds/selectors";
+import { getFeeds, getFetchStatus } from "../modules/feeds/selectors";
 import { updateFeed } from "../modules/feeds/sources";
 import { Filter } from "../modules/filters";
 import { RootState } from "../modules/reducers";
-import { RemoteData } from "../modules/remoteData";
+import { FetchStatus } from "../modules/remoteData";
 import { history } from "../store";
 import Episodes from "./Episodes";
 
 interface DataProps {
-  remoteFeed?: RemoteData<RemoteFeed>;
+  remoteFeed: RemoteFeed;
+  fetchStatus: FetchStatus;
   filter: Filter;
   feedId: number;
   searchTerm: string;
@@ -82,7 +83,7 @@ export class Feed extends React.PureComponent<Props> {
   }
 
   public render() {
-    if (this.props.remoteFeed && this.props.remoteFeed.type === "SUCCESS") {
+    if (this.props.remoteFeed && this.props.fetchStatus === "SUCCESS") {
       const {
         id,
         name,
@@ -90,7 +91,7 @@ export class Feed extends React.PureComponent<Props> {
         relativeImageLink,
         updatedAt,
         url
-      } = this.props.remoteFeed.data;
+      } = this.props.remoteFeed;
       const handleUpdateFeed = () => updateFeed(id);
       return (
         <div className="columns">
@@ -164,9 +165,11 @@ const mapStateToProps = (
 
   const feedId = ownProps.match.params.feedId;
   const remoteFeed = getFeeds(state)[feedId];
+  const fetchStatus = getFetchStatus(state);
   return {
     remoteFeed,
     feedId,
+    fetchStatus,
     filter,
     searchTerm
   };

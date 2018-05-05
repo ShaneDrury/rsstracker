@@ -1,26 +1,36 @@
 import { forEach } from "lodash";
 import { RemoteFeed } from "../../types/feed";
-import { RemoteData } from "../remoteData";
+import { FetchStatus } from "../remoteData";
 import { feedActions, FeedsAction } from "./actions";
 
 export interface State {
-  [key: string]: RemoteData<RemoteFeed>;
+  items: {
+    [key: string]: RemoteFeed;
+  };
+  fetchStatus: FetchStatus;
 }
 
-const initialState: State = {};
+const initialState: State = { fetchStatus: "NOT_ASKED", items: {} };
 
 const feeds = (state: State = initialState, action: FeedsAction): State => {
   switch (action.type) {
     case feedActions.FETCH_FEEDS_START:
-      return state;
+      return {
+        ...state,
+        fetchStatus: "LOADING"
+      };
     case feedActions.FETCH_FEEDS_COMPLETE: {
-      const remoteFeeds: { [key: string]: RemoteData<RemoteFeed> } = {};
+      const remoteFeeds: { [key: string]: RemoteFeed } = {};
       forEach(action.payload.feeds, feed => {
-        remoteFeeds[feed.id] = { type: "SUCCESS", data: feed };
+        remoteFeeds[feed.id] = feed;
       });
       return {
         ...state,
-        ...remoteFeeds
+        items: {
+          ...state.items,
+          ...remoteFeeds
+        },
+        fetchStatus: "SUCCESS"
       };
     }
     default:

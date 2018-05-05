@@ -3,17 +3,14 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { bindActionCreators, Dispatch } from "redux";
 import { FeedsAction, fetchFeeds } from "../modules/feeds/actions";
-import { getFeedsList } from "../modules/feeds/selectors";
+import { getFeedsList, getFetchStatus } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
-import { RemoteData } from "../modules/remoteData";
+import { FetchStatus } from "../modules/remoteData";
 import { RemoteFeed } from "../types/feed";
 
-type RemoteDataWithKey<D> = RemoteData<D> & {
-  key: string;
-};
-
 interface DataProps {
-  remoteFeeds: Array<RemoteDataWithKey<RemoteFeed>>;
+  remoteFeeds: RemoteFeed[];
+  fetchStatus: FetchStatus;
 }
 
 interface DispatchProps {
@@ -30,15 +27,13 @@ export class Feeds extends React.PureComponent<Props> {
   public render() {
     return (
       <div className="container">
-        {this.props.remoteFeeds.length === 0 && <div>No results</div>}
+        {this.props.fetchStatus === "SUCCESS" &&
+          this.props.remoteFeeds.length === 0 && <div>No results.</div>}
+        {this.props.fetchStatus === "LOADING" && <div>Loading...</div>}
         <ul>
           {this.props.remoteFeeds.map(remoteFeed => (
             <li key={remoteFeed.key}>
-              {remoteFeed.type === "SUCCESS" && (
-                <Link to={`/${remoteFeed.data.id}`}>
-                  {remoteFeed.data.name}
-                </Link>
-              )}
+              <Link to={`/${remoteFeed.id}`}>{remoteFeed.name}</Link>
             </li>
           ))}
         </ul>
@@ -49,8 +44,10 @@ export class Feeds extends React.PureComponent<Props> {
 
 const mapStateToProps = (state: RootState): DataProps => {
   const remoteFeeds = getFeedsList(state);
+  const fetchStatus = getFetchStatus(state);
   return {
-    remoteFeeds
+    remoteFeeds,
+    fetchStatus
   };
 };
 
