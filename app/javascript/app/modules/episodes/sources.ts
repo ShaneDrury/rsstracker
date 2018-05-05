@@ -1,5 +1,5 @@
 import camelcaseKeys from "camelcase-keys";
-import { stringify } from "query-string";
+import qs from "qs";
 import * as shortid from "shortid";
 import { ApiEpisode, RemoteEpisode } from "../../types/episode";
 import apiFetch from "../apiFetch";
@@ -22,7 +22,7 @@ export const getEpisodes = async ({
   feedId?: number;
   searchTerm?: string;
 }): Promise<RemoteEpisode[]> => {
-  const queryParams = stringify({
+  const queryParams = qs.stringify({
     status,
     feed_id: feedId,
     search_term: searchTerm

@@ -1,17 +1,12 @@
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
-import { stringify } from "query-string";
+import * as qs from "qs";
 import { DebounceInput } from "react-debounce-input";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { Dispatch } from "redux";
-import {
-  changeFilter,
-  EpisodesAction,
-  fetchEpisodes,
-  searchEpisodes
-} from "../modules/episodes/actions";
+import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
 import { getFeeds } from "../modules/feeds/selectors";
 import { updateFeed } from "../modules/feeds/sources";
 import { Filter } from "../modules/filters";
@@ -24,12 +19,13 @@ interface DataProps {
   remoteFeed?: RemoteData<RemoteFeed>;
   filter: Filter;
   feedId: number;
+  searchTerm: string;
 }
 
 interface DispatchProps {
-  changeFilter: (filter: Filter) => void;
-  fetchEpisodes: (filter: Filter) => void;
-  onChangeSearch: (filter: Filter, searchParam: string) => void;
+  onChangeFilter: (filter: Filter, searchTerm: string) => void;
+  fetchEpisodes: (filter: Filter, searchTerm: string) => void;
+  onChangeSearch: (filter: Filter, searchTerm: string) => void;
 }
 
 interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
@@ -44,24 +40,36 @@ export class Feed extends React.PureComponent<Props> {
   }
 
   public componentDidMount() {
-    this.props.fetchEpisodes(this.props.filter);
+    this.props.fetchEpisodes(this.props.filter, this.props.searchTerm);
   }
 
   public componentDidUpdate(prevProps: Props) {
     if (prevProps.feedId !== this.props.feedId) {
-      this.props.fetchEpisodes(this.props.filter);
+      this.props.fetchEpisodes(this.props.filter, this.props.searchTerm);
     }
   }
 
   public handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const filter = event.target.value as Filter;
-    const queryParams = stringify({ filter });
+    const params = qs.parse(this.props.location.search, {
+      ignoreQueryPrefix: true
+    });
+    const queryParams = qs.stringify({ ...params, filter });
     history.push({ search: `?${queryParams}` });
-    this.props.changeFilter(event.target.value as Filter);
+    this.props.onChangeFilter(
+      event.target.value as Filter,
+      this.props.searchTerm
+    );
   }
 
   public handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
-    this.props.onChangeSearch(this.props.filter, event.target.value);
+    const searchTerm = event.target.value;
+    const params = qs.parse(this.props.location.search, {
+      ignoreQueryPrefix: true
+    });
+    const queryParams = qs.stringify({ ...params, searchTerm });
+    history.push({ search: `?${queryParams}` });
+    this.props.onChangeSearch(this.props.filter, searchTerm);
   }
 
   public render() {
@@ -118,6 +126,7 @@ export class Feed extends React.PureComponent<Props> {
                   debounceTimeout={300}
                   type="text"
                   onChange={this.handleSearch}
+                  value={this.props.searchTerm}
                 />
               </div>
             </div>
@@ -136,29 +145,37 @@ const mapStateToProps = (
   state: RootState,
   ownProps: PropsExtended
 ): DataProps => {
-  const search = ownProps.location.search; // could be '?foo=bar'
-  const params = new URLSearchParams(search);
-  const filterParam = params.get("filter");
+  const params = qs.parse(ownProps.location.search, {
+    ignoreQueryPrefix: true
+  });
+  const filterParam = params.filter;
   const filter: Filter = (filterParam as Filter) || Filter.ALL;
+
+  const searchTerm = params.searchTerm || "";
+
   const feedId = ownProps.match.params.feedId;
   const remoteFeed = getFeeds(state)[feedId];
   return {
     remoteFeed,
     feedId,
-    filter
+    filter,
+    searchTerm
   };
 };
 
 const mapDispatchToProps = (
   dispatch: Dispatch<EpisodesAction, RootState>,
   ownProps: PropsExtended
-): DispatchProps => ({
-  changeFilter: (filter: Filter) =>
-    dispatch(changeFilter(ownProps.match.params.feedId)(filter)),
-  fetchEpisodes: (filter: Filter) =>
-    dispatch(fetchEpisodes(filter, ownProps.match.params.feedId)),
-  onChangeSearch: (filter: Filter, searchTerm: string) =>
-    dispatch(searchEpisodes(filter, ownProps.match.params.feedId)(searchTerm))
-});
+): DispatchProps => {
+  const feedId = ownProps.match.params.feedId;
+  return {
+    onChangeFilter: (filter: Filter, searchTerm: string) =>
+      dispatch(searchEpisodes(filter, searchTerm, feedId)),
+    fetchEpisodes: (filter: Filter, searchTerm: string) =>
+      dispatch(searchEpisodes(filter, searchTerm, feedId)),
+    onChangeSearch: (filter: Filter, searchTerm: string) =>
+      dispatch(searchEpisodes(filter, searchTerm, feedId))
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feed);

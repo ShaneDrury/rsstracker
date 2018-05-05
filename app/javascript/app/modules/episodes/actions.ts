@@ -6,8 +6,7 @@ import { getEpisodes } from "./sources";
 export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
   FETCH_EPISODES_COMPLETE = "FETCH_EPISODES_COMPLETE",
-  FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE",
-  CHANGE_FILTER = "CHANGE_FILTER"
+  FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE"
 }
 
 interface FetchEpisodesStart {
@@ -28,13 +27,6 @@ interface FetchEpisodesFailure {
   };
 }
 
-export interface ChangeFilter {
-  type: episodeActions.CHANGE_FILTER;
-  payload: {
-    filter: Filter;
-  };
-}
-
 export const fetchEpisodesStart = (): FetchEpisodesStart => ({
   type: episodeActions.FETCH_EPISODES_START
 });
@@ -51,16 +43,10 @@ export const fetchEpisodesFailure = (error: string): FetchEpisodesFailure => ({
   payload: { error }
 });
 
-const changeFilterAction = (filter: Filter): ChangeFilter => ({
-  type: episodeActions.CHANGE_FILTER,
-  payload: { filter }
-});
-
 export type EpisodesAction =
   | FetchEpisodesStart
   | FetchEpisodesComplete
-  | FetchEpisodesFailure
-  | ChangeFilter;
+  | FetchEpisodesFailure;
 
 export const fetchEpisodes = (
   status: Filter,
@@ -75,15 +61,10 @@ export const fetchEpisodes = (
   }
 };
 
-export const changeFilter = (feedId: number) => (
-  filter: Filter
-): RootThunk<void> => dispatch => {
-  dispatch(changeFilterAction(filter));
-  dispatch(fetchEpisodes(filter, feedId));
-};
-
-export const searchEpisodes = (status: Filter, feedId: number) => (
-  searchTerm: string
+export const searchEpisodes = (
+  status: Filter,
+  searchTerm: string,
+  feedId: number
 ): RootThunk<void> => async dispatch => {
   dispatch(fetchEpisodesStart());
   try {
