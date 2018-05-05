@@ -26,7 +26,7 @@ export class Episodes extends React.PureComponent<Props> {
           this.props.remoteEpisodes.length === 0 && <div>No results.</div>}
         {this.props.remoteEpisodes.map(remoteEpisode => (
           <div key={remoteEpisode.key}>
-            <Episode {...remoteEpisode} />
+            <Episode episodeId={remoteEpisode.id} />
           </div>
         ))}
       </div>

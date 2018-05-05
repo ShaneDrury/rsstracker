@@ -1,15 +1,18 @@
 import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
+import { getEpisodes } from "../modules/episodes/selectors";
 import { downloadEpisode } from "../modules/episodes/sources";
 import { getPlayedSeconds } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
 import Player from "./Player";
 
-type DataProps = RemoteEpisode;
+interface DataProps {
+  episodeId: number;
+}
 
-interface PropsExtended {
+interface PropsExtended extends RemoteEpisode {
   playingSeconds?: number;
 }
 
@@ -89,8 +92,10 @@ const mapStateToProps = (
   state: RootState,
   ownProps: DataProps
 ): PropsExtended => {
-  const playingSeconds = getPlayedSeconds(state)[ownProps.id];
+  const playingSeconds = getPlayedSeconds(state)[ownProps.episodeId];
+  const episode = getEpisodes(state)[ownProps.episodeId];
   return {
+    ...episode,
     playingSeconds
   };
 };
