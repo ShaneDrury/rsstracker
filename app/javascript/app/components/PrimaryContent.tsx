@@ -9,7 +9,7 @@ export const PrimaryContent = () => (
       <div className="column">
         <Route path="/:feedId" component={Feed} />
       </div>
-      <div className="column is-one-fifth">
+      <div className="column is-2">
         <Feeds />
       </div>
     </div>

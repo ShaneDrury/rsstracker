@@ -107,28 +107,41 @@ export class Feed extends React.PureComponent<Props> {
                     </p>
                   </div>
                 </div>
-                <div className="content">
-                  {description}
-                  <br />
-                  Updated at: <time>{moment(updatedAt).format("lll")}</time>
-                </div>
                 <button
                   className="button is-primary"
                   onClick={handleUpdateFeed}
                 >
                   <i className="fas fa-sync" />&nbsp;Update
                 </button>
-                <StatusSelect
-                  filter={this.props.filter}
-                  onChangeFilter={this.handleFilterChange}
-                />
-                <DebounceInput
-                  minLength={2}
-                  debounceTimeout={300}
-                  type="text"
-                  onChange={this.handleSearch}
-                  value={this.props.searchTerm}
-                />
+                <div className="field">
+                  <label className="label">Status</label>
+                  <div className="control">
+                    <div className="select">
+                      <StatusSelect
+                        filter={this.props.filter}
+                        onChangeFilter={this.handleFilterChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="field">
+                  <div className="control">
+                    <DebounceInput
+                      minLength={1}
+                      debounceTimeout={300}
+                      type="text"
+                      className="input"
+                      placeholder="Search..."
+                      onChange={this.handleSearch}
+                      value={this.props.searchTerm}
+                    />
+                  </div>
+                </div>
+                <div className="content">
+                  {description}
+                  <br />
+                  Updated at: <time>{moment(updatedAt).format("lll")}</time>
+                </div>
               </div>
             </div>
           </div>
