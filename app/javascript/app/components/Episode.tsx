@@ -47,18 +47,24 @@ export const Episode: React.SFC<Props> = ({
     <div>
       <div className="card">
         <header className="card-header">
-          <p className="card-header-title">{name}</p>
+          <p className="card-header-title">
+            {fetchStatus.status === "SUCCESS" && (
+              <a className="level-item" href={fetchStatus.url}>
+                {name}
+              </a>
+            )}
+            {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
+          </p>
         </header>
         <div className="card-content">
           <div className="content">
+            <p>{description && <Description text={description} />}</p>
+            <hr />
             {publicationDate && (
               <div>
-                Publication date:{" "}
-                <time>{moment(publicationDate).format("lll")}</time>
+                Date: <time>{moment(publicationDate).format("lll")}</time>
               </div>
             )}
-            <p>{description && <Description text={description} />}</p>
-            <br />
             {playingSeconds && (
               <div>
                 Played: {moment.duration(playingSeconds, "seconds").humanize()}
@@ -69,26 +75,24 @@ export const Episode: React.SFC<Props> = ({
               <Player url={fetchStatus.url} episodeId={id} />
             )}
           </div>
-          <nav className="level is-mobile">
-            <div className="level-left">
-              {fetchStatus.status === "SUCCESS" && (
-                <a className="level-item" href={fetchStatus.url}>
-                  <span className="icon is-small">
-                    <i className="fas fa-file-audio" />
-                  </span>
-                </a>
-              )}
-              {(fetchStatus.status === "NOT_ASKED" ||
-                fetchStatus.status === "FAILURE") && (
-                <button className="button is-primary" onClick={handleDownload}>
-                  Download
-                </button>
-              )}
-              {fetchStatus.status === "LOADING" && (
-                <div>Loading {fetchStatus.percentageFetched}%</div>
-              )}
-            </div>
-          </nav>
+          {!(fetchStatus.status === "SUCCESS") && (
+            <nav className="level is-mobile">
+              <div className="level-left">
+                {(fetchStatus.status === "NOT_ASKED" ||
+                  fetchStatus.status === "FAILURE") && (
+                  <button
+                    className="button is-primary"
+                    onClick={handleDownload}
+                  >
+                    Download
+                  </button>
+                )}
+                {fetchStatus.status === "LOADING" && (
+                  <div>Loading {fetchStatus.percentageFetched}%</div>
+                )}
+              </div>
+            </nav>
+          )}
         </div>
       </div>
     </div>
