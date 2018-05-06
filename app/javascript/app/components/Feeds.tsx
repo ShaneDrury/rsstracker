@@ -26,18 +26,19 @@ export class Feeds extends React.PureComponent<Props> {
 
   public render() {
     return (
-      <div className="container">
+      <aside className="menu">
+        <p className="menu-label">Feeds</p>
         {this.props.fetchStatus === "SUCCESS" &&
           this.props.remoteFeeds.length === 0 && <div>No results.</div>}
         {this.props.fetchStatus === "LOADING" && <div>Loading...</div>}
-        <ul>
+        <ul className="menu-list">
           {this.props.remoteFeeds.map(remoteFeed => (
             <li key={remoteFeed.key}>
               <Link to={`/${remoteFeed.id}`}>{remoteFeed.name}</Link>
             </li>
           ))}
         </ul>
-      </div>
+      </aside>
     );
   }
 }
@@ -47,7 +48,7 @@ const mapStateToProps = (state: RootState): DataProps => {
   const fetchStatus = getFetchStatus(state);
   return {
     remoteFeeds,
-    fetchStatus
+    fetchStatus,
   };
 };
 
@@ -56,7 +57,7 @@ const mapDispatchToProps = (
 ): DispatchProps =>
   bindActionCreators(
     {
-      fetchFeeds
+      fetchFeeds,
     },
     dispatch
   );
