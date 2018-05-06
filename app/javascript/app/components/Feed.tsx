@@ -3,7 +3,6 @@ import { RemoteFeed } from "../types/feed";
 
 import * as moment from "moment";
 import * as qs from "qs";
-import { DebounceInput } from "react-debounce-input";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
@@ -11,10 +10,12 @@ import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
 import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
 import { updateFeed } from "../modules/feeds/sources";
 import { Filter } from "../modules/filters";
+import { updateQueryParams } from "../modules/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { history } from "../store";
 import Episodes from "./Episodes";
+import Search from "./Search";
 import StatusSelect from "./StatusSelect";
 
 interface DataProps {
@@ -22,34 +23,21 @@ interface DataProps {
   fetchStatus: FetchStatus;
   filter: Filter;
   feedId: number;
-  searchTerm: string;
 }
 
 interface DispatchProps {
   onChangeFilter: (feedId: number) => void;
   fetchEpisodes: (feedId: number) => void;
-  onChangeSearch: (feedId: number) => void;
 }
 
 interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
 
 type Props = DataProps & DispatchProps & PropsExtended;
 
-const updateQueryParams = (
-  previous: string,
-  changes: { [key: string]: string }
-) => {
-  const params = qs.parse(previous, {
-    ignoreQueryPrefix: true,
-  });
-  return qs.stringify({ ...params, ...changes });
-};
-
 export class Feed extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
     this.handleFilterChange = this.handleFilterChange.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
   }
 
   public componentDidMount() {
@@ -68,15 +56,6 @@ export class Feed extends React.PureComponent<Props> {
     });
     history.push({ search: `?${queryParams}` });
     this.props.onChangeFilter(this.props.feedId);
-  }
-
-  public handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
-    const searchTerm = event.target.value;
-    const queryParams = updateQueryParams(this.props.location.search, {
-      searchTerm,
-    });
-    history.push({ search: `?${queryParams}` });
-    this.props.onChangeSearch(this.props.feedId);
   }
 
   public render() {
@@ -118,25 +97,17 @@ export class Feed extends React.PureComponent<Props> {
                   </div>
                 </div>
                 <div className="field is-grouped">
-                  <p className="control">
+                  <div className="control">
                     <div className="select">
                       <StatusSelect
                         filter={this.props.filter}
                         onChangeFilter={this.handleFilterChange}
                       />
                     </div>
-                  </p>
-                  <p className="control is-expanded">
-                    <DebounceInput
-                      minLength={1}
-                      debounceTimeout={300}
-                      type="text"
-                      className="input"
-                      placeholder="Search..."
-                      onChange={this.handleSearch}
-                      value={this.props.searchTerm}
-                    />
-                  </p>
+                  </div>
+                  <div className="control is-expanded">
+                    <Search feedId={this.props.feedId} />
+                  </div>
                 </div>
                 <hr />
                 <div className="content">
@@ -167,8 +138,6 @@ const mapStateToProps = (
   const filterParam = params.filter;
   const filter: Filter = (filterParam as Filter) || Filter.ALL;
 
-  const searchTerm = params.searchTerm || "";
-
   const feedId = ownProps.match.params.feedId;
   const remoteFeed = getFeedObjects(state)[feedId];
   const fetchStatus = getFetchStatus(state);
@@ -177,7 +146,6 @@ const mapStateToProps = (
     feedId,
     fetchStatus,
     filter,
-    searchTerm,
   };
 };
 
@@ -188,7 +156,6 @@ const mapDispatchToProps = (
     {
       onChangeFilter: searchEpisodes,
       fetchEpisodes: searchEpisodes,
-      onChangeSearch: searchEpisodes,
     },
     dispatch
   );
