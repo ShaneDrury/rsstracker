@@ -17,3 +17,5 @@ export const getLoadedEpisodes = createSelector(
   (remoteEpisodes, episodeIds): RemoteEpisode[] =>
     episodeIds.map(episodeId => remoteEpisodes[episodeId])
 );
+
+export const getPageInfo = (state: RootState) => state.episodes.pageInfo;
