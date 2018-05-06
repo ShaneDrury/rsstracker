@@ -2,7 +2,7 @@ import {
   Action,
   AnyAction,
   Dispatch as ReduxDispatch,
-  Middleware
+  Middleware,
 } from "redux";
 
 export type ThunkAction<R, S, A extends Action = AnyAction, E = {}> = (

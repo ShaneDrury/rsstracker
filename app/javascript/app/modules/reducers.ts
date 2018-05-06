@@ -16,7 +16,7 @@ const rootReducer: Reducer<RootState, RootAction> = combineReducers({
   episodes,
   feeds,
   player,
-  routing: routerReducer
+  routing: routerReducer,
 } as any);
 
 export default rootReducer;

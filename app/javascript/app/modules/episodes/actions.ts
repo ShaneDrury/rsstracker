@@ -6,7 +6,7 @@ import { getEpisodes } from "./sources";
 export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
   FETCH_EPISODES_COMPLETE = "FETCH_EPISODES_COMPLETE",
-  FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE"
+  FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE",
 }
 
 interface FetchEpisodesStart {
@@ -28,19 +28,19 @@ interface FetchEpisodesFailure {
 }
 
 export const fetchEpisodesStart = (): FetchEpisodesStart => ({
-  type: episodeActions.FETCH_EPISODES_START
+  type: episodeActions.FETCH_EPISODES_START,
 });
 
 export const fetchEpisodesComplete = (
   episodes: RemoteEpisode[]
 ): FetchEpisodesComplete => ({
   type: episodeActions.FETCH_EPISODES_COMPLETE,
-  payload: { episodes }
+  payload: { episodes },
 });
 
 export const fetchEpisodesFailure = (error: string): FetchEpisodesFailure => ({
   type: episodeActions.FETCH_EPISODES_FAILURE,
-  payload: { error }
+  payload: { error },
 });
 
 export type EpisodesAction =

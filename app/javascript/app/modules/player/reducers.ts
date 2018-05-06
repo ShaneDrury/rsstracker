@@ -12,7 +12,7 @@ const savedSecondsJSON = localStorage.getItem("savedSeconds");
 const savedSeconds = savedSecondsJSON ? JSON.parse(savedSecondsJSON) : {};
 
 const initialState: State = {
-  saved: savedSeconds
+  saved: savedSeconds,
 };
 
 const player = (
@@ -25,26 +25,26 @@ const player = (
         ...state,
         saved: {
           ...state.saved,
-          [action.payload.episodeId]: action.payload.playedSeconds
-        }
+          [action.payload.episodeId]: action.payload.playedSeconds,
+        },
       };
     }
     case actions.TOGGLE_PLAY: {
       if (state.playingEpisodeId === action.payload.playingEpisodeId) {
         return {
           ...state,
-          playingEpisodeId: undefined
+          playingEpisodeId: undefined,
         };
       }
       return {
         ...state,
-        playingEpisodeId: action.payload.playingEpisodeId
+        playingEpisodeId: action.payload.playingEpisodeId,
       };
     }
     case LOCATION_CHANGE:
       return {
         ...state,
-        playingEpisodeId: undefined
+        playingEpisodeId: undefined,
       };
     default:
       return state;

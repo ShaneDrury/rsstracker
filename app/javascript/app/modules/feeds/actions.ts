@@ -5,7 +5,7 @@ import { getFeeds } from "./sources";
 export enum feedActions {
   FETCH_FEEDS_START = "FETCH_FEEDS_START",
   FETCH_FEEDS_COMPLETE = "FETCH_FEEDS_COMPLETE",
-  FETCH_FEEDS_FAILURE = "FETCH_FEEDS_FAILURE"
+  FETCH_FEEDS_FAILURE = "FETCH_FEEDS_FAILURE",
 }
 
 interface FetchFeedsStart {
@@ -27,19 +27,19 @@ interface FetchFeedsFailure {
 }
 
 export const fetchFeedsStart = (): FetchFeedsStart => ({
-  type: feedActions.FETCH_FEEDS_START
+  type: feedActions.FETCH_FEEDS_START,
 });
 
 export const fetchFeedsComplete = (
   feeds: RemoteFeed[]
 ): FetchFeedsComplete => ({
   type: feedActions.FETCH_FEEDS_COMPLETE,
-  payload: { feeds }
+  payload: { feeds },
 });
 
 export const fetchFeedsFailure = (error: string): FetchFeedsFailure => ({
   type: feedActions.FETCH_FEEDS_FAILURE,
-  payload: { error }
+  payload: { error },
 });
 
 export type FeedsAction =

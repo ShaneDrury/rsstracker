@@ -17,7 +17,7 @@ const feeds = (state: State = initialState, action: FeedsAction): State => {
     case feedActions.FETCH_FEEDS_START:
       return {
         ...state,
-        fetchStatus: "LOADING"
+        fetchStatus: "LOADING",
       };
     case feedActions.FETCH_FEEDS_COMPLETE: {
       const remoteFeeds: { [key: string]: RemoteFeed } = {};
@@ -28,9 +28,9 @@ const feeds = (state: State = initialState, action: FeedsAction): State => {
         ...state,
         items: {
           ...state.items,
-          ...remoteFeeds
+          ...remoteFeeds,
         },
-        fetchStatus: "SUCCESS"
+        fetchStatus: "SUCCESS",
       };
     }
     default:

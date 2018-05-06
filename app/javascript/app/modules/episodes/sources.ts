@@ -21,15 +21,15 @@ const processEpisodesResponse = (
     ...camel,
     items: camel.items.map((episode: ApiEpisode) => ({
       ...episode,
-      key: shortid.generate()
-    }))
+      key: shortid.generate(),
+    })),
   };
 };
 
 export const getEpisodes = async ({
   status,
   feedId,
-  searchTerm
+  searchTerm,
 }: {
   status?: Filter;
   feedId?: number;
@@ -38,7 +38,7 @@ export const getEpisodes = async ({
   const queryParams = qs.stringify({
     status,
     feed_id: feedId,
-    search_term: searchTerm
+    search_term: searchTerm,
   });
   const episodesResponse = await apiFetch(`/episodes/search?${queryParams}`);
   return processEpisodesResponse(episodesResponse);

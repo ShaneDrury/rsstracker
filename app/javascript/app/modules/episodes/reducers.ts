@@ -14,7 +14,7 @@ export interface State {
 const initialState: State = {
   items: {},
   fetchStatus: "NOT_ASKED",
-  ids: []
+  ids: [],
 };
 
 const episodes = (
@@ -25,7 +25,7 @@ const episodes = (
     case episodeActions.FETCH_EPISODES_START: {
       return {
         ...state,
-        fetchStatus: "LOADING"
+        fetchStatus: "LOADING",
       };
     }
     case episodeActions.FETCH_EPISODES_COMPLETE: {
@@ -41,8 +41,8 @@ const episodes = (
         fetchStatus: "SUCCESS",
         items: {
           ...state.items,
-          ...remoteEpisodes
-        }
+          ...remoteEpisodes,
+        },
       };
     }
     default:
