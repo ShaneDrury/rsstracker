@@ -1,6 +1,7 @@
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
+import * as moment from "moment";
 import * as qs from "qs";
 import { DebounceInput } from "react-debounce-input";
 import { connect } from "react-redux";
@@ -109,7 +110,7 @@ export class Feed extends React.PureComponent<Props> {
                 <div className="content">
                   {description}
                   <br />
-                  <time>{updatedAt}</time>
+                  Updated at: <time>{moment(updatedAt).format("lll")}</time>
                 </div>
                 <button
                   className="button is-primary"

@@ -8,6 +8,7 @@ export interface ApiEpisode {
   name: string;
   url: string;
   fetchStatus: FetchStatus;
+  publicationDate: string;
 }
 
 export interface RemoteEpisode extends ApiEpisode {

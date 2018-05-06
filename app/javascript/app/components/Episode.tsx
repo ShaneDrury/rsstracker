@@ -39,7 +39,8 @@ export const Episode: React.SFC<Props> = ({
   description,
   duration,
   fetchStatus,
-  playingSeconds
+  playingSeconds,
+  publicationDate,
 }) => {
   const handleDownload = () => downloadEpisode(id);
   return (
@@ -50,6 +51,12 @@ export const Episode: React.SFC<Props> = ({
         </header>
         <div className="card-content">
           <div className="content">
+            {publicationDate && (
+              <div>
+                Publication date:{" "}
+                <time>{moment(publicationDate).format("lll")}</time>
+              </div>
+            )}
             <p>{description && <Description text={description} />}</p>
             <br />
             {playingSeconds && (
@@ -96,7 +103,7 @@ const mapStateToProps = (
   const episode = getEpisodes(state)[ownProps.episodeId];
   return {
     ...episode,
-    playingSeconds
+    playingSeconds,
   };
 };
 
