@@ -62,7 +62,7 @@ export class Episodes extends React.PureComponent<Props> {
             >
               <ReactPaginate
                 pageCount={pageInfo.totalPages}
-                initialPage={pageInfo.currentPage - 1}
+                forcePage={pageInfo.currentPage - 1}
                 pageRangeDisplayed={5}
                 marginPagesDisplayed={2}
                 activeClassName="pagination-link is-current"
