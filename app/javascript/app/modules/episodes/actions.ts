@@ -48,19 +48,6 @@ export type EpisodesAction =
   | FetchEpisodesComplete
   | FetchEpisodesFailure;
 
-export const fetchEpisodes = (
-  status: Filter,
-  feedId: number
-): RootThunk<void> => async dispatch => {
-  dispatch(fetchEpisodesStart());
-  try {
-    const episodes = await getEpisodes({ status, feedId });
-    dispatch(fetchEpisodesComplete(episodes));
-  } catch (err) {
-    dispatch(fetchEpisodesFailure(err));
-  }
-};
-
 export const searchEpisodes = (
   status: Filter,
   searchTerm: string,
@@ -69,7 +56,7 @@ export const searchEpisodes = (
   dispatch(fetchEpisodesStart());
   try {
     const episodes = await getEpisodes({ status, feedId, searchTerm });
-    dispatch(fetchEpisodesComplete(episodes));
+    dispatch(fetchEpisodesComplete(episodes.items));
   } catch (err) {
     dispatch(fetchEpisodesFailure(err));
   }

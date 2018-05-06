@@ -5,12 +5,25 @@ import { ApiEpisode, RemoteEpisode } from "../../types/episode";
 import apiFetch from "../apiFetch";
 import { Filter } from "../filters";
 
-const processEpisodesResponse = (response: ApiEpisode[]): RemoteEpisode[] => {
-  const camel = camelcaseKeys(response, { deep: true });
-  return camel.map((episode: ApiEpisode) => ({
-    ...episode,
-    key: shortid.generate()
-  }));
+interface EpisodesResponse {
+  items: ApiEpisode[];
+}
+
+interface ProcessedResponse {
+  items: RemoteEpisode[];
+}
+
+const processEpisodesResponse = (
+  response: EpisodesResponse
+): ProcessedResponse => {
+  const camel: EpisodesResponse = camelcaseKeys(response, { deep: true });
+  return {
+    ...camel,
+    items: camel.items.map((episode: ApiEpisode) => ({
+      ...episode,
+      key: shortid.generate()
+    }))
+  };
 };
 
 export const getEpisodes = async ({
@@ -21,7 +34,7 @@ export const getEpisodes = async ({
   status?: Filter;
   feedId?: number;
   searchTerm?: string;
-}): Promise<RemoteEpisode[]> => {
+}): Promise<ProcessedResponse> => {
   const queryParams = qs.stringify({
     status,
     feed_id: feedId,
