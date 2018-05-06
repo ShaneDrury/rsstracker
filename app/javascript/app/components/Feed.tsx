@@ -92,7 +92,7 @@ export class Feed extends React.PureComponent<Props> {
       const handleUpdateFeed = () => updateFeed(id);
       return (
         <div className="columns">
-          <div className="column is-one-third">
+          <div className="column is-one-quarter">
             <div className="card">
               <div className="card-image">
                 <figure className="image is-1by1">

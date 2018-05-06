@@ -15,15 +15,13 @@ const StatusSelect: React.SFC<Props> = ({ onChangeFilter, filter }) => {
   };
 
   return (
-    <div className="select">
-      <select onChange={handleFilterChange} value={filter}>
-        <option value={Filter.ALL}>All</option>
-        <option value={Filter.SUCCESS}>Success</option>
-        <option value={Filter.NOT_ASKED}>Not asked</option>
-        <option value={Filter.LOADING}>Loading</option>
-        <option value={Filter.FAILURE}>Failure</option>
-      </select>
-    </div>
+    <select className="select" onChange={handleFilterChange} value={filter}>
+      <option value={Filter.ALL}>All</option>
+      <option value={Filter.SUCCESS}>Success</option>
+      <option value={Filter.NOT_ASKED}>Not asked</option>
+      <option value={Filter.LOADING}>Loading</option>
+      <option value={Filter.FAILURE}>Failure</option>
+    </select>
   );
 };
 
