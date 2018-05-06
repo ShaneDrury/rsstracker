@@ -65,7 +65,19 @@ class EpisodesController < ApplicationController
               else
                 episodes
               end
-    render json: { items: results, count: results.count }
+    paged = results.page(params[:page_number] || 1)
+    render json: {
+      items: paged,
+      count: paged.count,
+      current_page: paged.current_page,
+      limit_value: paged.limit_value,
+      total_pages: paged.total_pages,
+      next_page: paged.next_page,
+      prev_page: paged.prev_page,
+      first_page: paged.first_page?,
+      last_page: paged.last_page?,
+      out_of_range: paged.out_of_range?,
+    }
   end
 
   private
