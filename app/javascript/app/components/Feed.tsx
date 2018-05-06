@@ -6,12 +6,7 @@ import { DebounceInput } from "react-debounce-input";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
-import {
-  changeSearchTerm,
-  changeStatus,
-  EpisodesAction,
-  searchEpisodes,
-} from "../modules/episodes/actions";
+import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
 import { getFeeds, getFetchStatus } from "../modules/feeds/selectors";
 import { updateFeed } from "../modules/feeds/sources";
 import { Filter } from "../modules/filters";
@@ -30,9 +25,9 @@ interface DataProps {
 }
 
 interface DispatchProps {
-  onChangeFilter: (filter: Filter, feedId: number) => void;
+  onChangeFilter: (feedId: number) => void;
   fetchEpisodes: (feedId: number) => void;
-  onChangeSearch: (searchTerm: string, feedId: number) => void;
+  onChangeSearch: (feedId: number) => void;
 }
 
 interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
@@ -71,7 +66,7 @@ export class Feed extends React.PureComponent<Props> {
       filter,
     });
     history.push({ search: `?${queryParams}` });
-    this.props.onChangeFilter(filter, this.props.feedId);
+    this.props.onChangeFilter(this.props.feedId);
   }
 
   public handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
@@ -80,7 +75,7 @@ export class Feed extends React.PureComponent<Props> {
       searchTerm,
     });
     history.push({ search: `?${queryParams}` });
-    this.props.onChangeSearch(searchTerm, this.props.feedId);
+    this.props.onChangeSearch(this.props.feedId);
   }
 
   public render() {
@@ -175,9 +170,9 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return bindActionCreators(
     {
-      onChangeFilter: changeStatus,
+      onChangeFilter: searchEpisodes,
       fetchEpisodes: searchEpisodes,
-      onChangeSearch: changeSearchTerm,
+      onChangeSearch: searchEpisodes,
     },
     dispatch
   );
