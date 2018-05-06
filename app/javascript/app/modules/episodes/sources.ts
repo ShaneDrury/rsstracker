@@ -32,15 +32,18 @@ export const getEpisodes = async ({
   status,
   feedId,
   searchTerm,
+  currentPage,
 }: {
   status?: Filter;
   feedId?: number;
   searchTerm?: string;
+  currentPage?: number;
 }): Promise<ProcessedResponse> => {
   const queryParams = qs.stringify({
     status,
     feed_id: feedId,
     search_term: searchTerm,
+    page_number: currentPage,
   });
   const episodesResponse = await apiFetch(`/episodes/search?${queryParams}`);
   return processEpisodesResponse(episodesResponse);

@@ -1,6 +1,7 @@
 import { forEach } from "lodash";
 import { RemoteEpisode } from "../../types/episode";
 import { PageInfo } from "../../types/page";
+import { Filter } from "../filters";
 import { FetchStatus } from "../remoteData";
 import { episodeActions, EpisodesAction } from "./actions";
 
@@ -11,12 +12,15 @@ export interface State {
   fetchStatus: FetchStatus;
   ids: number[];
   pageInfo?: PageInfo;
+  searchTerm?: string;
+  status: Filter;
 }
 
 const initialState: State = {
   items: {},
   fetchStatus: "NOT_ASKED",
   ids: [],
+  status: Filter.ALL,
 };
 
 const episodes = (
@@ -60,6 +64,16 @@ const episodes = (
       }
       return state;
     }
+    case episodeActions.CHANGE_SEARCH_TERM:
+      return {
+        ...state,
+        searchTerm: action.payload.searchTerm,
+      };
+    case episodeActions.CHANGE_STATUS:
+      return {
+        ...state,
+        status: action.payload.status,
+      };
     default:
       return state;
   }

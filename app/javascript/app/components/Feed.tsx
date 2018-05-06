@@ -6,7 +6,12 @@ import { DebounceInput } from "react-debounce-input";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
-import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
+import {
+  changeSearchTerm,
+  changeStatus,
+  EpisodesAction,
+  searchEpisodes,
+} from "../modules/episodes/actions";
 import { getFeeds, getFetchStatus } from "../modules/feeds/selectors";
 import { updateFeed } from "../modules/feeds/sources";
 import { Filter } from "../modules/filters";
@@ -25,9 +30,9 @@ interface DataProps {
 }
 
 interface DispatchProps {
-  onChangeFilter: (filter: Filter, searchTerm: string, feedId: number) => void;
-  fetchEpisodes: (filter: Filter, searchTerm: string, feedId: number) => void;
-  onChangeSearch: (filter: Filter, searchTerm: string, feedId: number) => void;
+  onChangeFilter: (filter: Filter, feedId: number) => void;
+  fetchEpisodes: (feedId: number) => void;
+  onChangeSearch: (searchTerm: string, feedId: number) => void;
 }
 
 interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
@@ -39,7 +44,7 @@ const updateQueryParams = (
   changes: { [key: string]: string }
 ) => {
   const params = qs.parse(previous, {
-    ignoreQueryPrefix: true
+    ignoreQueryPrefix: true,
   });
   return qs.stringify({ ...params, ...changes });
 };
@@ -52,38 +57,30 @@ export class Feed extends React.PureComponent<Props> {
   }
 
   public componentDidMount() {
-    this.props.fetchEpisodes(
-      this.props.filter,
-      this.props.searchTerm,
-      this.props.feedId
-    );
+    this.props.fetchEpisodes(this.props.feedId);
   }
 
   public componentDidUpdate(prevProps: Props) {
     if (prevProps.feedId !== this.props.feedId) {
-      this.props.fetchEpisodes(
-        this.props.filter,
-        this.props.searchTerm,
-        this.props.feedId
-      );
+      this.props.fetchEpisodes(this.props.feedId);
     }
   }
 
   public handleFilterChange(filter: Filter) {
     const queryParams = updateQueryParams(this.props.location.search, {
-      filter
+      filter,
     });
     history.push({ search: `?${queryParams}` });
-    this.props.onChangeFilter(filter, this.props.searchTerm, this.props.feedId);
+    this.props.onChangeFilter(filter, this.props.feedId);
   }
 
   public handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const searchTerm = event.target.value;
     const queryParams = updateQueryParams(this.props.location.search, {
-      searchTerm
+      searchTerm,
     });
     history.push({ search: `?${queryParams}` });
-    this.props.onChangeSearch(this.props.filter, searchTerm, this.props.feedId);
+    this.props.onChangeSearch(searchTerm, this.props.feedId);
   }
 
   public render() {
@@ -94,7 +91,7 @@ export class Feed extends React.PureComponent<Props> {
         description,
         relativeImageLink,
         updatedAt,
-        url
+        url,
       } = this.props.remoteFeed;
       const handleUpdateFeed = () => updateFeed(id);
       return (
@@ -140,7 +137,7 @@ export class Feed extends React.PureComponent<Props> {
             </div>
           </div>
           <div className="column">
-            <Episodes />
+            <Episodes feedId={this.props.feedId} />
           </div>
         </div>
       );
@@ -154,7 +151,7 @@ const mapStateToProps = (
   ownProps: PropsExtended
 ): DataProps => {
   const params = qs.parse(ownProps.location.search, {
-    ignoreQueryPrefix: true
+    ignoreQueryPrefix: true,
   });
   const filterParam = params.filter;
   const filter: Filter = (filterParam as Filter) || Filter.ALL;
@@ -169,7 +166,7 @@ const mapStateToProps = (
     feedId,
     fetchStatus,
     filter,
-    searchTerm
+    searchTerm,
   };
 };
 
@@ -178,9 +175,9 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return bindActionCreators(
     {
-      onChangeFilter: searchEpisodes,
+      onChangeFilter: changeStatus,
       fetchEpisodes: searchEpisodes,
-      onChangeSearch: searchEpisodes
+      onChangeSearch: changeSearchTerm,
     },
     dispatch
   );

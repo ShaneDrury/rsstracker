@@ -16,16 +16,20 @@ import { PageInfo } from "../types/page";
 import Episode from "./Episode";
 
 interface DataProps {
+  feedId: number;
+}
+
+interface EnhancedProps {
   remoteEpisodes: RemoteEpisode[];
   fetchStatus: FetchStatus;
   pageInfo?: PageInfo;
 }
 
 interface DispatchProps {
-  onPageChange: (page: number) => void;
+  onPageChange: (page: number, feedId: number) => void;
 }
 
-type Props = DataProps & DispatchProps;
+type Props = DataProps & DispatchProps & EnhancedProps;
 
 export class Episodes extends React.PureComponent<Props> {
   constructor(props: Props) {
@@ -34,7 +38,7 @@ export class Episodes extends React.PureComponent<Props> {
   }
 
   public handlePageChange({ selected }: { selected: number }) {
-    this.props.onPageChange(selected + 1);
+    this.props.onPageChange(selected + 1, this.props.feedId);
   }
 
   public render() {
@@ -76,7 +80,7 @@ export class Episodes extends React.PureComponent<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState): DataProps => {
+const mapStateToProps = (state: RootState): EnhancedProps => {
   const remoteEpisodes = getLoadedEpisodes(state);
   const fetchStatus = getFetchStatus(state);
   const pageInfo = getPageInfo(state);

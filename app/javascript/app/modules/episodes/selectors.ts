@@ -19,3 +19,7 @@ export const getLoadedEpisodes = createSelector(
 );
 
 export const getPageInfo = (state: RootState) => state.episodes.pageInfo;
+
+export const getFilter = (state: RootState) => state.episodes.status;
+
+export const getSearchTerm = (state: RootState) => state.episodes.searchTerm;
