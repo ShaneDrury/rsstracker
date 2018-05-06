@@ -3,7 +3,7 @@ class FeedsController < ApplicationController
 
   # GET /feeds
   def index
-    @feeds = Feed.all
+    @feeds = Feed.all.order(name: :asc)
     render json: @feeds
   end
 

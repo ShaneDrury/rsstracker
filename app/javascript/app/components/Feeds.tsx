@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { bindActionCreators, Dispatch } from "redux";
 import { FeedsAction, fetchFeeds } from "../modules/feeds/actions";
-import { getFeedsList, getFetchStatus } from "../modules/feeds/selectors";
+import { getFeeds, getFetchStatus } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { RemoteFeed } from "../types/feed";
@@ -45,7 +45,7 @@ export class Feeds extends React.PureComponent<Props> {
 }
 
 const mapStateToProps = (state: RootState): DataProps => {
-  const remoteFeeds = getFeedsList(state);
+  const remoteFeeds = getFeeds(state);
   const fetchStatus = getFetchStatus(state);
   return {
     remoteFeeds,

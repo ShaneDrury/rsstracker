@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
-import { getFeeds, getFetchStatus } from "../modules/feeds/selectors";
+import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
 import { updateFeed } from "../modules/feeds/sources";
 import { Filter } from "../modules/filters";
 import { RootState } from "../modules/reducers";
@@ -168,7 +168,7 @@ const mapStateToProps = (
   const searchTerm = params.searchTerm || "";
 
   const feedId = ownProps.match.params.feedId;
-  const remoteFeed = getFeeds(state)[feedId];
+  const remoteFeed = getFeedObjects(state)[feedId];
   const fetchStatus = getFetchStatus(state);
   return {
     remoteFeed,
