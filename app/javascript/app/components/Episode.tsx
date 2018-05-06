@@ -47,18 +47,18 @@ export const Episode: React.SFC<Props> = ({
     <div>
       <div className="card">
         <header className="card-header">
-          <p className="card-header-title">
+          <div className="card-header-title">
             {fetchStatus.status === "SUCCESS" && (
               <a className="level-item" href={fetchStatus.url}>
                 {name}
               </a>
             )}
             {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
-          </p>
+          </div>
         </header>
         <div className="card-content">
           <div className="content">
-            <p>{description && <Description text={description} />}</p>
+            {description && <Description text={description} />}
             <hr />
             {publicationDate && (
               <div>

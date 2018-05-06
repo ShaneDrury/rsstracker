@@ -1,6 +1,7 @@
 import { RemoteEpisode } from "../../types/episode";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
+import { getFeedId } from "../feeds/selectors";
 import { getFilter, getPageInfo, getSearchTerm } from "./selectors";
 import { getEpisodes } from "./sources";
 
@@ -60,11 +61,12 @@ export type EpisodesAction =
   | FetchEpisodesFailure
   | ChangePage;
 
-export const searchEpisodes = (feedId: number): RootThunk<void> => async (
+export const searchEpisodes = (): RootThunk<void> => async (
   dispatch,
   getState
 ) => {
   const state = getState();
+  const feedId = getFeedId(state);
   const searchTerm = getSearchTerm(state);
   const status = getFilter(state);
   const pageInfo = getPageInfo(state);
@@ -89,9 +91,8 @@ export const changePageAction = (currentPage: number): ChangePage => ({
 });
 
 export const changePage = (
-  currentPage: number,
-  feedId: number
+  currentPage: number
 ): RootThunk<void> => async dispatch => {
   dispatch(changePageAction(currentPage));
-  dispatch(searchEpisodes(feedId));
+  dispatch(searchEpisodes());
 };

@@ -26,8 +26,8 @@ interface DataProps {
 }
 
 interface DispatchProps {
-  onChangeFilter: (feedId: number) => void;
-  fetchEpisodes: (feedId: number) => void;
+  onChangeFilter: () => void;
+  fetchEpisodes: () => void;
 }
 
 interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
@@ -41,12 +41,12 @@ export class Feed extends React.PureComponent<Props> {
   }
 
   public componentDidMount() {
-    this.props.fetchEpisodes(this.props.feedId);
+    this.props.fetchEpisodes();
   }
 
   public componentDidUpdate(prevProps: Props) {
     if (prevProps.feedId !== this.props.feedId) {
-      this.props.fetchEpisodes(this.props.feedId);
+      this.props.fetchEpisodes();
     }
   }
 
@@ -55,7 +55,7 @@ export class Feed extends React.PureComponent<Props> {
       filter,
     });
     history.push({ search: `?${queryParams}` });
-    this.props.onChangeFilter(this.props.feedId);
+    this.props.onChangeFilter();
   }
 
   public render() {
@@ -106,7 +106,7 @@ export class Feed extends React.PureComponent<Props> {
                     </div>
                   </div>
                   <div className="control is-expanded">
-                    <Search feedId={this.props.feedId} />
+                    <Search />
                   </div>
                 </div>
                 <hr />
@@ -119,7 +119,7 @@ export class Feed extends React.PureComponent<Props> {
             </div>
           </div>
           <div className="column">
-            <Episodes feedId={this.props.feedId} />
+            <Episodes />
           </div>
         </div>
       );

@@ -10,9 +10,7 @@ import { getLocation } from "../modules/location/selectors";
 import { updateQueryParams } from "../modules/queryParams";
 import { history } from "../store";
 
-interface DataProps {
-  feedId: number;
-}
+interface DataProps {}
 
 interface EnhancedProps {
   searchTerm: string;
@@ -20,7 +18,7 @@ interface EnhancedProps {
 }
 
 interface DispatchProps {
-  onChangeSearch: (feedId: number) => void;
+  onChangeSearch: () => void;
 }
 
 type Props = DataProps & DispatchProps & EnhancedProps;
@@ -37,7 +35,7 @@ export class Search extends React.PureComponent<Props> {
       searchTerm,
     });
     history.push({ search: `?${queryParams}` });
-    this.props.onChangeSearch(this.props.feedId);
+    this.props.onChangeSearch();
   }
 
   public render() {

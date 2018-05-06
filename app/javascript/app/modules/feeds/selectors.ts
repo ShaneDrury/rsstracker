@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { RemoteFeed } from "../../types/feed";
+import { getLocation } from "../location/selectors";
 import { RootState } from "../reducers";
 
 export const getSortedFeedIds = (state: RootState): number[] => state.feeds.ids;
@@ -15,3 +16,9 @@ export const getFeeds = createSelector(
 );
 
 export const getFetchStatus = (state: RootState) => state.feeds.fetchStatus;
+
+export const getFeedId = createSelector(
+  getLocation,
+  location =>
+    location ? parseInt(location.pathname.substring(1), 10) : undefined
+);

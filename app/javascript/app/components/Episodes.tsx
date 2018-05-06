@@ -15,9 +15,7 @@ import { FetchStatus } from "../modules/remoteData";
 import { PageInfo } from "../types/page";
 import Episode from "./Episode";
 
-interface DataProps {
-  feedId: number;
-}
+interface DataProps {}
 
 interface EnhancedProps {
   remoteEpisodes: RemoteEpisode[];
@@ -26,7 +24,7 @@ interface EnhancedProps {
 }
 
 interface DispatchProps {
-  onPageChange: (page: number, feedId: number) => void;
+  onPageChange: (page: number) => void;
 }
 
 type Props = DataProps & DispatchProps & EnhancedProps;
@@ -38,7 +36,7 @@ export class Episodes extends React.PureComponent<Props> {
   }
 
   public handlePageChange({ selected }: { selected: number }) {
-    this.props.onPageChange(selected + 1, this.props.feedId);
+    this.props.onPageChange(selected + 1);
   }
 
   public render() {
