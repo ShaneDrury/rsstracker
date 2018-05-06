@@ -65,7 +65,7 @@ class EpisodesController < ApplicationController
               else
                 episodes
               end
-    render json: { items: results }
+    render json: { items: results, count: results.count }
   end
 
   private

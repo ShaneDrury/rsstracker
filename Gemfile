@@ -51,3 +51,5 @@ gem 'daemons'
 gem 'webpacker', '~> 3.4'
 
 gem 'db_text_search', '~> 0.2.2'
+
+gem 'kaminari'
