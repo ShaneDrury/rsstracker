@@ -13,7 +13,7 @@ export interface State {
   };
   fetchStatus: FetchStatus;
   ids: number[];
-  pageInfo?: PageInfo;
+  pageInfo: PageInfo;
   searchTerm?: string;
   status: Filter;
 }
@@ -23,6 +23,15 @@ const initialState: State = {
   fetchStatus: "NOT_ASKED",
   ids: [],
   status: Filter.ALL,
+  pageInfo: {
+    count: 0,
+    currentPage: 1,
+    limitValue: 10,
+    totalPages: 1,
+    firstPage: true,
+    lastPage: false,
+    outOfRange: false,
+  },
 };
 
 const episodes = (
@@ -55,16 +64,13 @@ const episodes = (
       };
     }
     case episodeActions.CHANGE_PAGE: {
-      if (state.pageInfo) {
-        return {
-          ...state,
-          pageInfo: {
-            ...state.pageInfo,
-            currentPage: action.payload.currentPage,
-          },
-        };
-      }
-      return state;
+      return {
+        ...state,
+        pageInfo: {
+          ...state.pageInfo,
+          currentPage: action.payload.currentPage,
+        },
+      };
     }
     case LOCATION_CHANGE: {
       const search = action.payload.search;
@@ -73,6 +79,10 @@ const episodes = (
         ...state,
         status: params.filter,
         searchTerm: params.searchTerm,
+        pageInfo: {
+          ...state.pageInfo,
+          currentPage: 1,
+        },
       };
     }
     default:
