@@ -107,25 +107,26 @@ export class Feed extends React.PureComponent<Props> {
                     </p>
                   </div>
                 </div>
-                <button
-                  className="button is-primary"
-                  onClick={handleUpdateFeed}
-                >
-                  <i className="fas fa-sync" />&nbsp;Update
-                </button>
                 <div className="field">
-                  <label className="label">Status</label>
                   <div className="control">
+                    <button
+                      className="button is-primary"
+                      onClick={handleUpdateFeed}
+                    >
+                      <i className="fas fa-sync" />&nbsp;Update
+                    </button>
+                  </div>
+                </div>
+                <div className="field is-grouped">
+                  <p className="control">
                     <div className="select">
                       <StatusSelect
                         filter={this.props.filter}
                         onChangeFilter={this.handleFilterChange}
                       />
                     </div>
-                  </div>
-                </div>
-                <div className="field">
-                  <div className="control">
+                  </p>
+                  <p className="control is-expanded">
                     <DebounceInput
                       minLength={1}
                       debounceTimeout={300}
@@ -135,8 +136,9 @@ export class Feed extends React.PureComponent<Props> {
                       onChange={this.handleSearch}
                       value={this.props.searchTerm}
                     />
-                  </div>
+                  </p>
                 </div>
+                <hr />
                 <div className="content">
                   {description}
                   <br />
