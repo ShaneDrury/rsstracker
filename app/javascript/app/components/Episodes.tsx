@@ -9,6 +9,8 @@ import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
 
 import * as ReactPaginate from "react-paginate";
+import { bindActionCreators, Dispatch } from "redux";
+import { changePage, EpisodesAction } from "../modules/episodes/actions";
 import { FetchStatus } from "../modules/remoteData";
 import { PageInfo } from "../types/page";
 import Episode from "./Episode";
@@ -19,9 +21,22 @@ interface DataProps {
   pageInfo?: PageInfo;
 }
 
-type Props = DataProps;
+interface DispatchProps {
+  onPageChange: (page: number) => void;
+}
+
+type Props = DataProps & DispatchProps;
 
 export class Episodes extends React.PureComponent<Props> {
+  constructor(props: Props) {
+    super(props);
+    this.handlePageChange = this.handlePageChange.bind(this);
+  }
+
+  public handlePageChange({ selected }: { selected: number }) {
+    this.props.onPageChange(selected + 1);
+  }
+
   public render() {
     const pageInfo = this.props.pageInfo;
     return (
@@ -43,7 +58,7 @@ export class Episodes extends React.PureComponent<Props> {
             >
               <ReactPaginate
                 pageCount={pageInfo.totalPages}
-                initialPage={pageInfo.currentPage}
+                initialPage={pageInfo.currentPage - 1}
                 pageRangeDisplayed={5}
                 marginPagesDisplayed={2}
                 activeClassName="pagination-link is-current"
@@ -52,6 +67,7 @@ export class Episodes extends React.PureComponent<Props> {
                 previousClassName="pagination-previous"
                 nextClassName="pagination-next"
                 breakClassName="pagination-ellipsis"
+                onPageChange={this.handlePageChange}
               />
             </nav>
           )}
@@ -71,4 +87,14 @@ const mapStateToProps = (state: RootState): DataProps => {
   };
 };
 
-export default connect(mapStateToProps)(Episodes);
+const mapDispatchToProps = (
+  dispatch: Dispatch<EpisodesAction, RootState>
+): DispatchProps =>
+  bindActionCreators(
+    {
+      onPageChange: changePage,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Episodes);

@@ -48,6 +48,18 @@ const episodes = (
         },
       };
     }
+    case episodeActions.CHANGE_PAGE: {
+      if (state.pageInfo) {
+        return {
+          ...state,
+          pageInfo: {
+            ...state.pageInfo,
+            currentPage: action.payload.currentPage,
+          },
+        };
+      }
+      return state;
+    }
     default:
       return state;
   }
