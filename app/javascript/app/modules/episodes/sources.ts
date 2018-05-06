@@ -2,14 +2,16 @@ import camelcaseKeys from "camelcase-keys";
 import qs from "qs";
 import * as shortid from "shortid";
 import { ApiEpisode, RemoteEpisode } from "../../types/episode";
+import { PageInfo } from "../../types/page";
 import apiFetch from "../apiFetch";
 import { Filter } from "../filters";
 
 interface EpisodesResponse {
   items: ApiEpisode[];
+  pageInfo: PageInfo;
 }
 
-interface ProcessedResponse {
+interface ProcessedResponse extends EpisodesResponse {
   items: RemoteEpisode[];
 }
 

@@ -1,4 +1,5 @@
 import { RemoteEpisode } from "../../types/episode";
+import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
 import { Filter } from "../filters";
 import { getEpisodes } from "./sources";
@@ -17,6 +18,7 @@ interface FetchEpisodesComplete {
   type: episodeActions.FETCH_EPISODES_COMPLETE;
   payload: {
     episodes: RemoteEpisode[];
+    pageInfo: PageInfo;
   };
 }
 
@@ -32,10 +34,11 @@ export const fetchEpisodesStart = (): FetchEpisodesStart => ({
 });
 
 export const fetchEpisodesComplete = (
-  episodes: RemoteEpisode[]
+  episodes: RemoteEpisode[],
+  pageInfo: PageInfo
 ): FetchEpisodesComplete => ({
   type: episodeActions.FETCH_EPISODES_COMPLETE,
-  payload: { episodes },
+  payload: { episodes, pageInfo },
 });
 
 export const fetchEpisodesFailure = (error: string): FetchEpisodesFailure => ({
@@ -56,7 +59,7 @@ export const searchEpisodes = (
   dispatch(fetchEpisodesStart());
   try {
     const episodes = await getEpisodes({ status, feedId, searchTerm });
-    dispatch(fetchEpisodesComplete(episodes.items));
+    dispatch(fetchEpisodesComplete(episodes.items, episodes.pageInfo));
   } catch (err) {
     dispatch(fetchEpisodesFailure(err));
   }

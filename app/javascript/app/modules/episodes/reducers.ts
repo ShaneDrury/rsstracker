@@ -1,5 +1,6 @@
 import { forEach } from "lodash";
 import { RemoteEpisode } from "../../types/episode";
+import { PageInfo } from "../../types/page";
 import { FetchStatus } from "../remoteData";
 import { episodeActions, EpisodesAction } from "./actions";
 
@@ -9,6 +10,7 @@ export interface State {
   };
   fetchStatus: FetchStatus;
   ids: number[];
+  pageInfo?: PageInfo;
 }
 
 const initialState: State = {
@@ -39,6 +41,7 @@ const episodes = (
         ...state,
         ids,
         fetchStatus: "SUCCESS",
+        pageInfo: action.payload.pageInfo,
         items: {
           ...state.items,
           ...remoteEpisodes,
