@@ -26,19 +26,20 @@ export class Feeds extends React.PureComponent<Props> {
 
   public render() {
     return (
-      <aside className="menu">
-        <p className="menu-label">Feeds</p>
+      <div className="navbar-dropdown">
         {this.props.fetchStatus === "SUCCESS" &&
           this.props.remoteFeeds.length === 0 && <div>No results.</div>}
         {this.props.fetchStatus === "LOADING" && <div>Loading...</div>}
-        <ul className="menu-list">
-          {this.props.remoteFeeds.map(remoteFeed => (
-            <li key={remoteFeed.key}>
-              <Link to={`/${remoteFeed.id}`}>{remoteFeed.name}</Link>
-            </li>
-          ))}
-        </ul>
-      </aside>
+        {this.props.remoteFeeds.map(remoteFeed => (
+          <Link
+            className="navbar-item"
+            key={remoteFeed.key}
+            to={`/${remoteFeed.id}`}
+          >
+            {remoteFeed.name}
+          </Link>
+        ))}
+      </div>
     );
   }
 }
