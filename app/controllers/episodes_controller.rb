@@ -59,9 +59,9 @@ class EpisodesController < ApplicationController
     episodes = episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     episodes = episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
     results = if params[:search_term].present?
-                descriptions = DbTextSearch::FullText.new(episodes, :description).search(params[:search_term])
-                titles = DbTextSearch::FullText.new(episodes, :name).search(params[:search_term])
-                descriptions | titles
+                description = DbTextSearch::FullText.new(episodes, :description).search(params[:search_term])
+                name = DbTextSearch::FullText.new(episodes, :name).search(params[:search_term])
+                description.or(name)
               else
                 episodes
               end
