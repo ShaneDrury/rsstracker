@@ -37,6 +37,7 @@ class DownloadFeedJob < ApplicationJob
         ep.publication_date = result.pubDate
         ep.url = result.link
         ep.save
+        feed.touch
       end
     end
     nil

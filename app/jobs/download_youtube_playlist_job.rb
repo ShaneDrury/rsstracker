@@ -16,6 +16,7 @@ class DownloadYoutubePlaylistJob < ApplicationJob
         ep.build_fetch_status(status: 'NOT_ASKED')
         ep.url = url
         ep.save
+        feed.touch
       end
     end
     nil
