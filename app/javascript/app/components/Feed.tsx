@@ -35,11 +35,6 @@ interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
 type Props = DataProps & DispatchProps & PropsExtended;
 
 export class Feed extends React.PureComponent<Props> {
-  constructor(props: Props) {
-    super(props);
-    this.handleFilterChange = this.handleFilterChange.bind(this);
-  }
-
   public componentDidMount() {
     this.props.fetchEpisodes();
   }
@@ -50,13 +45,13 @@ export class Feed extends React.PureComponent<Props> {
     }
   }
 
-  public handleFilterChange(filter: Filter) {
+  public handleFilterChange = (filter: Filter) => {
     const queryParams = updateQueryParams(this.props.location.search, {
       filter,
     });
     history.push({ search: `?${queryParams}` });
     this.props.onChangeFilter();
-  }
+  };
 
   public render() {
     if (this.props.remoteFeed && this.props.fetchStatus === "SUCCESS") {

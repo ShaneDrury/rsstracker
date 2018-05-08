@@ -5,11 +5,11 @@ import { bindActionCreators, Dispatch } from "redux";
 import {
   Action as PlayerAction,
   togglePlay,
-  updatePlayedSeconds
+  updatePlayedSeconds,
 } from "../modules/player/actions";
 import {
   getPlayedSeconds,
-  getPlayingEpisode
+  getPlayingEpisode,
 } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 
@@ -38,40 +38,34 @@ interface State {
 }
 
 export class Player extends React.PureComponent<Props, State> {
-  private player: any = undefined;
+  public state = {
+    shouldSeek: false,
+  };
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      shouldSeek: false
-    };
-    this.handleToggleShow = this.handleToggleShow.bind(this);
-    this.handleProgress = this.handleProgress.bind(this);
-    this.handleOnReady = this.handleOnReady.bind(this);
-  }
+  private player: any = undefined;
 
   public componentDidUpdate(prevProps: Props) {
     if (!prevProps.playing && this.props.playing) {
       this.setState({
-        shouldSeek: true
+        shouldSeek: true,
       });
     }
   }
 
-  public handleOnReady() {
+  public handleOnReady = () => {
     if (this.player && this.state.shouldSeek) {
       this.player.seekTo(this.props.playedSeconds);
       this.setState({ shouldSeek: false });
     }
-  }
+  };
 
-  public handleToggleShow() {
+  public handleToggleShow = () => {
     this.props.togglePlay(this.props.episodeId);
-  }
+  };
 
-  public handleProgress({ playedSeconds }: { playedSeconds: number }) {
+  public handleProgress = ({ playedSeconds }: { playedSeconds: number }) => {
     this.props.onChangePlayedSeconds(this.props.episodeId, playedSeconds);
-  }
+  };
 
   public render() {
     return (
@@ -111,7 +105,7 @@ const mapStateToProps = (
   const playedSeconds = getPlayedSeconds(state)[ownProps.episodeId];
   return {
     playing,
-    playedSeconds: playedSeconds ? playedSeconds : 0
+    playedSeconds: playedSeconds ? playedSeconds : 0,
   };
 };
 
@@ -121,7 +115,7 @@ const mapDispatchToProps = (
   bindActionCreators(
     {
       onChangePlayedSeconds: updatePlayedSeconds,
-      togglePlay
+      togglePlay,
     },
     dispatch
   );

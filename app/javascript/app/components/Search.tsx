@@ -24,19 +24,14 @@ interface DispatchProps {
 type Props = DataProps & DispatchProps & EnhancedProps;
 
 export class Search extends React.PureComponent<Props> {
-  constructor(props: Props) {
-    super(props);
-    this.handleSearch = this.handleSearch.bind(this);
-  }
-
-  public handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
+  public handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value;
     const queryParams = updateQueryParams(this.props.queryParams, {
       searchTerm,
     });
     history.push({ search: `?${queryParams}` });
     this.props.onChangeSearch();
-  }
+  };
 
   public render() {
     return (

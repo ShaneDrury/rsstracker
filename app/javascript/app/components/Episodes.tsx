@@ -30,14 +30,9 @@ interface DispatchProps {
 type Props = DataProps & DispatchProps & EnhancedProps;
 
 export class Episodes extends React.PureComponent<Props> {
-  constructor(props: Props) {
-    super(props);
-    this.handlePageChange = this.handlePageChange.bind(this);
-  }
-
-  public handlePageChange({ selected }: { selected: number }) {
+  public handlePageChange = ({ selected }: { selected: number }) => {
     this.props.onPageChange(selected + 1);
-  }
+  };
 
   public render() {
     const pageInfo = this.props.pageInfo;
