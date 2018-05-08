@@ -2,18 +2,14 @@ import React from "react";
 import { RemoteFeed } from "../types/feed";
 
 import * as moment from "moment";
-import * as qs from "qs";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
 import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
 import { updateFeed } from "../modules/feeds/sources";
-import { Filter } from "../modules/filters";
-import { updateQueryParams } from "../modules/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
-import { history } from "../store";
 import Episodes from "./Episodes";
 import Search from "./Search";
 import StatusSelect from "./StatusSelect";
@@ -21,12 +17,10 @@ import StatusSelect from "./StatusSelect";
 interface DataProps {
   remoteFeed: RemoteFeed;
   fetchStatus: FetchStatus;
-  filter: Filter;
   feedId: number;
 }
 
 interface DispatchProps {
-  onChangeFilter: () => void;
   fetchEpisodes: () => void;
 }
 
@@ -44,14 +38,6 @@ export class Feed extends React.PureComponent<Props> {
       this.props.fetchEpisodes();
     }
   }
-
-  public handleFilterChange = (filter: Filter) => {
-    const queryParams = updateQueryParams(this.props.location.search, {
-      filter,
-    });
-    history.push({ search: `?${queryParams}` });
-    this.props.onChangeFilter();
-  };
 
   public render() {
     if (this.props.remoteFeed && this.props.fetchStatus === "SUCCESS") {
@@ -94,10 +80,7 @@ export class Feed extends React.PureComponent<Props> {
                 <div className="field is-grouped">
                   <div className="control">
                     <div className="select">
-                      <StatusSelect
-                        filter={this.props.filter}
-                        onChangeFilter={this.handleFilterChange}
-                      />
+                      <StatusSelect />
                     </div>
                   </div>
                   <div className="control is-expanded">
@@ -127,12 +110,6 @@ const mapStateToProps = (
   state: RootState,
   ownProps: PropsExtended
 ): DataProps => {
-  const params = qs.parse(ownProps.location.search, {
-    ignoreQueryPrefix: true,
-  });
-  const filterParam = params.filter;
-  const filter: Filter = (filterParam as Filter) || Filter.ALL;
-
   const feedId = ownProps.match.params.feedId;
   const remoteFeed = getFeedObjects(state)[feedId];
   const fetchStatus = getFetchStatus(state);
@@ -140,7 +117,6 @@ const mapStateToProps = (
     remoteFeed,
     feedId,
     fetchStatus,
-    filter,
   };
 };
 
@@ -149,7 +125,6 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return bindActionCreators(
     {
-      onChangeFilter: searchEpisodes,
       fetchEpisodes: searchEpisodes,
     },
     dispatch
