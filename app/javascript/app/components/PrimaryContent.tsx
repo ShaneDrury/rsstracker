@@ -11,13 +11,17 @@ export const PrimaryContent = () => (
       role="navigation"
       aria-label="dropdown navigation"
     >
-      <div className="navbar-item">Feed Tracker</div>
-      <div className="navbar-item has-dropdown is-hoverable">
-        <div className="navbar-link">Feeds</div>
-        <Feeds />
+      <div className="navbar-start">
+        <div className="navbar-item">Feed Tracker</div>
+        <div className="navbar-item has-dropdown is-hoverable">
+          <div className="navbar-link">Feeds</div>
+          <Feeds />
+        </div>
       </div>
-      <div className="navbar-item">
-        <GlobalPlayer />
+      <div className="navbar-end">
+        <div className="navbar-item is-right">
+          <GlobalPlayer />
+        </div>
       </div>
     </nav>
     <section className="section">
