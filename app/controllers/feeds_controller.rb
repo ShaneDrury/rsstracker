@@ -24,14 +24,7 @@ class FeedsController < ApplicationController
   end
 
   def update_feed
-    source = @feed.source
-    job = if source == "rss"
-            DownloadFeedJob.perform_later(@feed.id)
-          elsif source == "youtube"
-            DownloadYoutubePlaylistJob.perform_later(@feed.id)
-          else
-            raise "Unknown source type"
-          end
+    job = @feed.update
     render json: { job_id: job.job_id }, status: :accepted
   end
 

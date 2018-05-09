@@ -9,6 +9,16 @@ class Feed < ApplicationRecord
     "/uploads/#{id}/#{image_url}"
   end
 
+  def update
+    if source == 'rss'
+      DownloadFeedJob.perform_later(id)
+    elsif source == 'youtube'
+      DownloadYoutubePlaylistJob.perform_later(id)
+    else
+      raise 'Unknown source type'
+    end
+  end
+
   def as_json(args)
     super(methods: [:relative_image_link])
   end
