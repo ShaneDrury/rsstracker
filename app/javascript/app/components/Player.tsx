@@ -2,24 +2,21 @@ import React from "react";
 import FilePlayer from "react-player/lib/players/FilePlayer";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
+import { getEpisodes } from "../modules/episodes/selectors";
 import {
   Action as PlayerAction,
   togglePlay,
   updatePlayedSeconds,
 } from "../modules/player/actions";
-import {
-  getPlayedSeconds,
-  getPlayingEpisode,
-} from "../modules/player/selectors";
+import { getPlayedSeconds } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 
-interface DataProps {
-  url: string;
-}
+interface DataProps {}
 
 interface ConnectedProps {
   playing: boolean;
   playedSeconds: number;
+  url?: string;
 }
 
 interface DispatchProps {
@@ -37,15 +34,16 @@ interface State {
   shouldSeek: boolean;
 }
 
-export class Player extends React.PureComponent<Props, State> {
+export class Player extends React.Component<Props, State> {
   public state = {
-    shouldSeek: false,
+    shouldSeek: true,
   };
 
   private player: any = undefined;
 
   public componentDidUpdate(prevProps: Props) {
-    if (!prevProps.playing && this.props.playing) {
+    if (prevProps.episodeId !== this.props.episodeId) {
+      this.seekToPlayedSeconds();
       this.setState({
         shouldSeek: true,
       });
@@ -54,8 +52,7 @@ export class Player extends React.PureComponent<Props, State> {
 
   public handleOnReady = () => {
     if (this.player && this.state.shouldSeek) {
-      this.player.seekTo(this.props.playedSeconds);
-      this.setState({ shouldSeek: false });
+      this.seekToPlayedSeconds();
     }
   };
 
@@ -70,25 +67,28 @@ export class Player extends React.PureComponent<Props, State> {
   public render() {
     return (
       <div>
-        <button className="button" onClick={this.handleToggleShow}>
-          {this.props.playing ? "Stop" : "Play"}
-        </button>
-        {this.props.playing && (
-          <FilePlayer
-            ref={this.playerRef}
-            url={this.props.url}
-            controls
-            playing={this.props.playing}
-            config={{ file: { forceAudio: true } }}
-            onProgress={this.handleProgress}
-            onReady={this.handleOnReady}
-            progressInterval={1500}
-            width="600px"
-            height="50px"
-          />
-        )}
+        {this.props.playing &&
+          this.props.url && (
+            <FilePlayer
+              ref={this.playerRef}
+              url={this.props.url}
+              controls
+              playing={this.props.playing}
+              config={{ file: { forceAudio: true } }}
+              onProgress={this.handleProgress}
+              onReady={this.handleOnReady}
+              progressInterval={1500}
+              width="600px"
+              height="50px"
+            />
+          )}
       </div>
     );
+  }
+
+  private seekToPlayedSeconds() {
+    this.player.seekTo(this.props.playedSeconds);
+    this.setState({ shouldSeek: false });
   }
 
   private playerRef = (player: Element) => {
@@ -100,11 +100,15 @@ const mapStateToProps = (
   state: RootState,
   ownProps: PropsExtended
 ): ConnectedProps => {
-  const playingEpisodeId = getPlayingEpisode(state);
+  const playingEpisodeId = ownProps.episodeId;
+  const episode = getEpisodes(state)[playingEpisodeId];
+  const fetchStatus = episode && episode.fetchStatus;
+  const url = fetchStatus.status === "SUCCESS" ? fetchStatus.url : undefined;
   const playing = ownProps.episodeId === playingEpisodeId;
   const playedSeconds = getPlayedSeconds(state)[ownProps.episodeId];
   return {
     playing,
+    url,
     playedSeconds: playedSeconds ? playedSeconds : 0,
   };
 };

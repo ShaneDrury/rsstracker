@@ -1,12 +1,19 @@
 import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
 import { getEpisodes } from "../modules/episodes/selectors";
 import { downloadEpisode } from "../modules/episodes/sources";
-import { getPlayedSeconds } from "../modules/player/selectors";
+import {
+  Action as PlayerAction,
+  togglePlay as togglePlayAction,
+} from "../modules/player/actions";
+import {
+  getPlayedSeconds,
+  getPlayingEpisode,
+} from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
-import Player from "./Player";
 
 interface DataProps {
   episodeId: number;
@@ -14,9 +21,14 @@ interface DataProps {
 
 interface PropsExtended extends RemoteEpisode {
   playingSeconds?: number;
+  playing: boolean;
 }
 
-type Props = DataProps & PropsExtended;
+interface DispatchProps {
+  togglePlay: (episodeId: number) => void;
+}
+
+type Props = DataProps & PropsExtended & DispatchProps;
 
 interface DescriptionProps {
   text: string;
@@ -40,9 +52,14 @@ export const Episode: React.SFC<Props> = ({
   duration,
   fetchStatus,
   playingSeconds,
+  playing,
   publicationDate,
+  togglePlay,
 }) => {
   const handleDownload = () => downloadEpisode(id);
+  const handleToggleShow = () => {
+    togglePlay(id);
+  };
   return (
     <div>
       <div className="card">
@@ -72,7 +89,9 @@ export const Episode: React.SFC<Props> = ({
             )}
             <time>{duration}</time>
             {fetchStatus.status === "SUCCESS" && (
-              <Player url={fetchStatus.url} episodeId={id} />
+              <button className="button" onClick={handleToggleShow}>
+                {playing ? "Stop" : "Play"}
+              </button>
             )}
           </div>
           {!(fetchStatus.status === "SUCCESS") && (
@@ -105,10 +124,23 @@ const mapStateToProps = (
 ): PropsExtended => {
   const playingSeconds = getPlayedSeconds(state)[ownProps.episodeId];
   const episode = getEpisodes(state)[ownProps.episodeId];
+  const playingEpisodeId = getPlayingEpisode(state);
+  const playing = ownProps.episodeId === playingEpisodeId;
   return {
     ...episode,
     playingSeconds,
+    playing,
   };
 };
 
-export default connect(mapStateToProps)(Episode);
+const mapDispatchToProps = (
+  dispatch: Dispatch<PlayerAction, RootState>
+): DispatchProps =>
+  bindActionCreators(
+    {
+      togglePlay: togglePlayAction,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Episode);
