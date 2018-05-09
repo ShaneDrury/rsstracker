@@ -88,8 +88,9 @@ export const Episode: React.SFC<Props> = ({
               </div>
             )}
             <time>{duration}</time>
+            <br />
             {fetchStatus.status === "SUCCESS" && (
-              <button className="button" onClick={handleToggleShow}>
+              <button className="button is-link" onClick={handleToggleShow}>
                 {playing ? "Stop" : "Play"}
               </button>
             )}
