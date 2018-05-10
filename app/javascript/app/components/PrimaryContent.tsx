@@ -3,6 +3,7 @@ import { Route } from "react-router";
 import Feed from "./Feed";
 import Feeds from "./Feeds";
 import GlobalPlayer from "./GlobalPlayer";
+import UpdateFeeds from "./UpdateFeeds";
 
 export const PrimaryContent = () => (
   <div>
@@ -16,6 +17,9 @@ export const PrimaryContent = () => (
         <div className="navbar-item has-dropdown is-hoverable">
           <div className="navbar-link">Feeds</div>
           <Feeds />
+        </div>
+        <div className="navbar-item">
+          <UpdateFeeds />
         </div>
       </div>
       <div className="navbar-end">

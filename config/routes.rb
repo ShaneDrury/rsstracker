@@ -17,6 +17,9 @@ Rails.application.routes.draw do
         get 'search'
       end
     end
+    collection do
+      post 'update_feeds'
+    end
     member do
       post 'update_feed'
     end
