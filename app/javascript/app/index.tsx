@@ -8,6 +8,9 @@ import { ConnectedRouter } from "react-router-redux";
 
 import { PrimaryContent } from "./components/PrimaryContent";
 import { history, store } from "./store";
+import { init } from "./websocket";
+
+init(store);
 
 const root = (
   <Provider store={store}>
