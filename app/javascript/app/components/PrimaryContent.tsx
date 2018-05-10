@@ -1,5 +1,6 @@
 import React from "react";
 import { Route } from "react-router";
+import ActiveJobs from "./ActiveJobs";
 import Feed from "./Feed";
 import Feeds from "./Feeds";
 import GlobalPlayer from "./GlobalPlayer";
@@ -20,6 +21,9 @@ export const PrimaryContent = () => (
         </div>
         <div className="navbar-item">
           <UpdateFeeds />
+        </div>
+        <div className="navbar-item">
+          <ActiveJobs />
         </div>
       </div>
       <div className="navbar-end">
