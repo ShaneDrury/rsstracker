@@ -24,7 +24,7 @@ class FeedsController < ApplicationController
   end
 
   def update_feed
-    job = @feed.update
+    job = @feed.update_episodes
     render json: { job_id: job.job_id }, status: :accepted
   end
 

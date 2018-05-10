@@ -9,7 +9,7 @@ class Feed < ApplicationRecord
     "/uploads/#{id}/#{image_url}"
   end
 
-  def update
+  def update_episodes
     if source == 'rss'
       DownloadFeedJob.perform_later(id)
     elsif source == 'youtube'
