@@ -15,16 +15,18 @@ interface ProcessedResponse extends EpisodesResponse {
   items: RemoteEpisode[];
 }
 
+export const processEpisode = (episode: ApiEpisode): RemoteEpisode => ({
+  ...episode,
+  key: shortid.generate(),
+});
+
 const processEpisodesResponse = (
   response: EpisodesResponse
 ): ProcessedResponse => {
   const camel: EpisodesResponse = camelcaseKeys(response, { deep: true });
   return {
     ...camel,
-    items: camel.items.map((episode: ApiEpisode) => ({
-      ...episode,
-      key: shortid.generate(),
-    })),
+    items: camel.items.map(processEpisode),
   };
 };
 

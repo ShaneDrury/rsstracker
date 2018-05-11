@@ -42,9 +42,7 @@ export class Episodes extends React.PureComponent<Props> {
         {this.props.fetchStatus === "SUCCESS" &&
           this.props.remoteEpisodes.length === 0 && <div>No results.</div>}
         {this.props.remoteEpisodes.map(remoteEpisode => (
-          <div key={remoteEpisode.key}>
-            <Episode episodeId={remoteEpisode.id} />
-          </div>
+          <Episode episodeId={remoteEpisode.id} key={remoteEpisode.key} />
         ))}
         {pageInfo &&
           pageInfo.totalPages > 1 && (

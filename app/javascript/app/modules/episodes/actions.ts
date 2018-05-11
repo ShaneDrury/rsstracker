@@ -10,6 +10,7 @@ export enum episodeActions {
   FETCH_EPISODES_COMPLETE = "FETCH_EPISODES_COMPLETE",
   FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE",
   CHANGE_PAGE = "CHANGE_PAGE",
+  FETCH_EPISODE_COMPLETE = "FETCH_EPISODE_COMPLETE",
 }
 
 interface FetchEpisodesStart {
@@ -38,6 +39,13 @@ interface ChangePage {
   };
 }
 
+interface FetchEpisodeComplete {
+  type: episodeActions.FETCH_EPISODE_COMPLETE;
+  payload: {
+    episode: RemoteEpisode;
+  };
+}
+
 export const fetchEpisodesStart = (): FetchEpisodesStart => ({
   type: episodeActions.FETCH_EPISODES_START,
 });
@@ -55,11 +63,19 @@ export const fetchEpisodesFailure = (error: string): FetchEpisodesFailure => ({
   payload: { error },
 });
 
+export const fetchEpisodeComplete = (
+  episode: RemoteEpisode
+): FetchEpisodeComplete => ({
+  type: episodeActions.FETCH_EPISODE_COMPLETE,
+  payload: { episode },
+});
+
 export type EpisodesAction =
   | FetchEpisodesStart
   | FetchEpisodesComplete
   | FetchEpisodesFailure
-  | ChangePage;
+  | ChangePage
+  | FetchEpisodeComplete;
 
 export const searchEpisodes = (): RootThunk<void> => async (
   dispatch,

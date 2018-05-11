@@ -72,6 +72,16 @@ const episodes = (
         },
       };
     }
+    case episodeActions.FETCH_EPISODE_COMPLETE: {
+      const episode = action.payload.episode;
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          [episode.id]: episode,
+        },
+      };
+    }
     case LOCATION_CHANGE: {
       const search = action.payload.search;
       const params = qs.parse(search, { ignoreQueryPrefix: true });
