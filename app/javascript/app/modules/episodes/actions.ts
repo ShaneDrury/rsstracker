@@ -2,8 +2,10 @@ import { RemoteEpisode } from "../../types/episode";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
 import { getFeedId } from "../feeds/selectors";
+import { fetchJobsComplete } from "../jobs/actions";
+import { processJobsResponse } from "../jobs/sources";
 import { getFilter, getPageInfo, getSearchTerm } from "./selectors";
-import { getEpisodes } from "./sources";
+import { downloadEpisode, getEpisodes } from "./sources";
 
 export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
@@ -111,4 +113,12 @@ export const changePage = (
 ): RootThunk<void> => async dispatch => {
   dispatch(changePageAction(currentPage));
   dispatch(searchEpisodes());
+};
+
+export const downloadEpisodeAction = (
+  episodeId: number
+): RootThunk<void> => async dispatch => {
+  const downloadResponse = await downloadEpisode(episodeId);
+  const jobs = processJobsResponse([downloadResponse.job]);
+  dispatch(fetchJobsComplete(jobs));
 };

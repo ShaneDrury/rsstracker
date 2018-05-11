@@ -2,8 +2,8 @@ import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
+import { downloadEpisodeAction } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
-import { downloadEpisode } from "../modules/episodes/sources";
 import {
   Action as PlayerAction,
   togglePlay as togglePlayAction,
@@ -26,6 +26,7 @@ interface PropsExtended extends RemoteEpisode {
 
 interface DispatchProps {
   togglePlay: (episodeId: number) => void;
+  downloadEpisode: (episodeId: number) => void;
 }
 
 type Props = DataProps & PropsExtended & DispatchProps;
@@ -49,6 +50,7 @@ export const Episode: React.SFC<Props> = ({
   id,
   name,
   description,
+  downloadEpisode,
   duration,
   fetchStatus,
   playingSeconds,
@@ -140,6 +142,7 @@ const mapDispatchToProps = (
   bindActionCreators(
     {
       togglePlay: togglePlayAction,
+      downloadEpisode: downloadEpisodeAction,
     },
     dispatch
   );

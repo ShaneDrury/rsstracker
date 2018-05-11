@@ -3,7 +3,6 @@ require 'delayed_job'
 class JobNotifyPlugin < Delayed::Plugin
   callbacks do |lifecycle|
     lifecycle.before(:invoke_job) do |job|
-      pp job
       ActionCable
         .server
         .broadcast(
@@ -14,7 +13,7 @@ class JobNotifyPlugin < Delayed::Plugin
           }
         )
     end
-    lifecycle.after(:perform) do |worker, job|
+    lifecycle.after(:perform) do |_, job|
       ActionCable
         .server
         .broadcast(
