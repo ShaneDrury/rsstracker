@@ -34,7 +34,11 @@ export class Feed extends React.PureComponent<Props> {
   }
 
   public componentDidUpdate(prevProps: Props) {
-    if (prevProps.feedId !== this.props.feedId) {
+    if (
+      prevProps.feedId !== this.props.feedId ||
+      (prevProps.remoteFeed &&
+        prevProps.remoteFeed.key !== this.props.remoteFeed.key)
+    ) {
       this.props.fetchEpisodes();
     }
   }

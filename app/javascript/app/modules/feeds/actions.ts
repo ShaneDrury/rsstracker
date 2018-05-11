@@ -6,6 +6,7 @@ export enum feedActions {
   FETCH_FEEDS_START = "FETCH_FEEDS_START",
   FETCH_FEEDS_COMPLETE = "FETCH_FEEDS_COMPLETE",
   FETCH_FEEDS_FAILURE = "FETCH_FEEDS_FAILURE",
+  FETCH_FEED_COMPLETE = "FETCH_FEED_COMPLETE",
 }
 
 interface FetchFeedsStart {
@@ -26,6 +27,13 @@ interface FetchFeedsFailure {
   };
 }
 
+interface FetchFeedComplete {
+  type: feedActions.FETCH_FEED_COMPLETE;
+  payload: {
+    feed: RemoteFeed;
+  };
+}
+
 export const fetchFeedsStart = (): FetchFeedsStart => ({
   type: feedActions.FETCH_FEEDS_START,
 });
@@ -42,10 +50,16 @@ export const fetchFeedsFailure = (error: string): FetchFeedsFailure => ({
   payload: { error },
 });
 
+export const fetchFeedComplete = (feed: RemoteFeed): FetchFeedComplete => ({
+  type: feedActions.FETCH_FEED_COMPLETE,
+  payload: { feed },
+});
+
 export type FeedsAction =
   | FetchFeedsStart
   | FetchFeedsComplete
-  | FetchFeedsFailure;
+  | FetchFeedsFailure
+  | FetchFeedComplete;
 
 export const fetchFeeds = (): RootThunk<void> => async dispatch => {
   dispatch(fetchFeedsStart());

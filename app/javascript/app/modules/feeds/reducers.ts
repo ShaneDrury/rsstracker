@@ -37,6 +37,16 @@ const feeds = (state: State = initialState, action: FeedsAction): State => {
         fetchStatus: "SUCCESS",
       };
     }
+    case feedActions.FETCH_FEED_COMPLETE: {
+      const updatedFeed = action.payload.feed;
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          [updatedFeed.id]: updatedFeed,
+        },
+      };
+    }
     default:
       return state;
   }

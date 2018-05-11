@@ -1,12 +1,21 @@
 import Cable from "actioncable";
+import camelcaseKeys from "camelcase-keys";
+import { fetchFeedComplete } from "./modules/feeds/actions";
+import { processFeed } from "./modules/feeds/sources";
+import { ApiFeed } from "./types/feed";
 
 interface Meta extends Element {
   content: string;
 }
 
-interface CableAction {
-  type: "FOO";
+interface UpdateFeed {
+  type: "UPDATE_FEED";
+  payload: {
+    feed: string;
+  };
 }
+
+type CableAction = UpdateFeed;
 
 export const init = (store: any) => {
   const meta = document.head.querySelector("[name=action-cable-url]") as Meta;
@@ -21,8 +30,11 @@ export const init = (store: any) => {
       connected: () => {},
       received: (action: CableAction) => {
         switch (action.type) {
-          case "FOO": {
-            store.dispatch({ type: "FOO" });
+          case "UPDATE_FEED": {
+            const feed = camelcaseKeys(JSON.parse(action.payload.feed), {
+              deep: true,
+            }) as ApiFeed;
+            store.dispatch(fetchFeedComplete(processFeed(feed)));
           }
         }
       },

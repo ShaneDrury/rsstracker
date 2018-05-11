@@ -3,11 +3,14 @@ class FeedUpdateBroadcastJob < ApplicationJob
 
   def perform(feed_id)
     feed = Feed.find(feed_id)
-    FeedsChannel.broadcast_to(feed, "hello")
     ActionCable
       .server
-      .broadcast('feeds_channel',
-        id: feed_id,
+      .broadcast(
+        'feeds_channel',
+        type: 'UPDATE_FEED',
+        payload: {
+          feed: feed.to_json,
+        }
       )
   end
 end
