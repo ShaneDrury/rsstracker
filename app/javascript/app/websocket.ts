@@ -4,6 +4,7 @@ import { fetchEpisodeComplete } from "./modules/episodes/actions";
 import { processEpisode } from "./modules/episodes/sources";
 import { fetchFeedComplete } from "./modules/feeds/actions";
 import { processFeed } from "./modules/feeds/sources";
+import { removeJobs } from "./modules/jobs/actions";
 import { ApiEpisode } from "./types/episode";
 import { ApiFeed } from "./types/feed";
 
@@ -25,7 +26,14 @@ interface UpdateEpisode {
   };
 }
 
-type CableAction = UpdateFeed | UpdateEpisode;
+interface JobComplete {
+  type: "JOB_COMPLETE";
+  payload: {
+    job_id: number;
+  };
+}
+
+type CableAction = UpdateFeed | UpdateEpisode | JobComplete;
 
 export const init = (store: any) => {
   const meta = document.head.querySelector("[name=action-cable-url]") as Meta;
@@ -52,6 +60,11 @@ export const init = (store: any) => {
               deep: true,
             }) as ApiEpisode;
             store.dispatch(fetchEpisodeComplete(processEpisode(episode)));
+            break;
+          }
+          case "JOB_COMPLETE": {
+            const jobId = action.payload.job_id;
+            store.dispatch(removeJobs([jobId]));
             break;
           }
         }

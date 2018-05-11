@@ -6,6 +6,7 @@ export enum jobActions {
   FETCH_JOBS_START = "FETCH_JOBS_START",
   FETCH_JOBS_COMPLETE = "FETCH_JOBS_COMPLETE",
   FETCH_JOBS_FAILURE = "FETCH_JOBS_FAILURE",
+  REMOVE_JOBS = "REMOVE_JOBS",
 }
 
 interface FetchJobsStart {
@@ -26,6 +27,13 @@ interface FetchJobsFailure {
   };
 }
 
+interface RemoveJobs {
+  type: jobActions.REMOVE_JOBS;
+  payload: {
+    jobIds: number[];
+  };
+}
+
 export const fetchJobsStart = (): FetchJobsStart => ({
   type: jobActions.FETCH_JOBS_START,
 });
@@ -40,7 +48,16 @@ export const fetchJobsFailure = (error: string): FetchJobsFailure => ({
   payload: { error },
 });
 
-export type JobsAction = FetchJobsStart | FetchJobsComplete | FetchJobsFailure;
+export const removeJobs = (jobIds: number[]): RemoveJobs => ({
+  type: jobActions.REMOVE_JOBS,
+  payload: { jobIds },
+});
+
+export type JobsAction =
+  | FetchJobsStart
+  | FetchJobsComplete
+  | FetchJobsFailure
+  | RemoveJobs;
 
 export const fetchJobs = (): RootThunk<void> => async dispatch => {
   dispatch(fetchJobsStart());

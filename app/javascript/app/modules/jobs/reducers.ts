@@ -1,4 +1,4 @@
-import { forEach } from "lodash";
+import { difference, forEach, omit } from "lodash";
 import { RemoteJob } from "../../types/job";
 import { FetchStatus } from "../remoteData";
 import { jobActions, JobsAction } from "./actions";
@@ -43,6 +43,15 @@ const episodes = (
           ...state.items,
           ...remoteJobs,
         },
+      };
+    }
+    case jobActions.REMOVE_JOBS: {
+      const newIds = difference(state.ids, action.payload.jobIds);
+      const newItems = omit(state.items, action.payload.jobIds);
+      return {
+        ...state,
+        ids: newIds,
+        items: newItems,
       };
     }
     default:
