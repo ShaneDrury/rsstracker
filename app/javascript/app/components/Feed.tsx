@@ -6,8 +6,8 @@ import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
+import { updateFeedAction } from "../modules/feeds/actions";
 import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
-import { updateFeed } from "../modules/feeds/sources";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import Episodes from "./Episodes";
@@ -22,6 +22,7 @@ interface DataProps {
 
 interface DispatchProps {
   fetchEpisodes: () => void;
+  updateFeed: (feedId: number) => void;
 }
 
 interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
@@ -43,17 +44,19 @@ export class Feed extends React.PureComponent<Props> {
     }
   }
 
+  public handleUpdateFeed = () => {
+    this.props.updateFeed(this.props.remoteFeed.id);
+  };
+
   public render() {
     if (this.props.remoteFeed && this.props.fetchStatus === "SUCCESS") {
       const {
-        id,
         name,
         description,
         relativeImageLink,
         updatedAt,
         url,
       } = this.props.remoteFeed;
-      const handleUpdateFeed = () => updateFeed(id);
       return (
         <div className="columns">
           <div className="column is-one-quarter">
@@ -75,7 +78,7 @@ export class Feed extends React.PureComponent<Props> {
                   <div className="control">
                     <button
                       className="button is-primary"
-                      onClick={handleUpdateFeed}
+                      onClick={this.handleUpdateFeed}
                     >
                       <i className="fas fa-sync" />&nbsp;Update
                     </button>
@@ -130,6 +133,7 @@ const mapDispatchToProps = (
   return bindActionCreators(
     {
       fetchEpisodes: searchEpisodes,
+      updateFeed: updateFeedAction,
     },
     dispatch
   );

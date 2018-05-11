@@ -2,7 +2,7 @@ import { RemoteFeed } from "../../types/feed";
 import { RootThunk } from "../../types/thunk";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobsResponse } from "../jobs/sources";
-import { getFeeds, updateFeeds } from "./sources";
+import { getFeeds, updateFeed, updateFeeds } from "./sources";
 
 export enum feedActions {
   FETCH_FEEDS_START = "FETCH_FEEDS_START",
@@ -71,6 +71,14 @@ export const fetchFeeds = (): RootThunk<void> => async dispatch => {
   } catch (err) {
     dispatch(fetchFeedsFailure(err));
   }
+};
+
+export const updateFeedAction = (
+  feedId: number
+): RootThunk<void> => async dispatch => {
+  const updateResponse = await updateFeed(feedId);
+  const jobs = processJobsResponse([updateResponse.job]);
+  dispatch(fetchJobsComplete(jobs));
 };
 
 export const updateFeedsAction = (): RootThunk<void> => async dispatch => {

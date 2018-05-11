@@ -8,6 +8,10 @@ interface UpdateFeedsResponse {
   jobs: ApiJob[];
 }
 
+interface UpdateFeedResponse {
+  job: ApiJob;
+}
+
 export const processFeed = (feed: ApiFeed): RemoteFeed => ({
   ...feed,
   key: shortid.generate(),
@@ -19,7 +23,7 @@ export const getFeeds = async (): Promise<RemoteFeed[]> => {
   return camel.map(processFeed);
 };
 
-export const updateFeed = async (feedId: number): Promise<void> =>
+export const updateFeed = async (feedId: number): Promise<UpdateFeedResponse> =>
   apiFetch(`/feeds/${feedId}/update_feed`, { method: "POST" });
 
 export const updateFeeds = async (): Promise<UpdateFeedsResponse> =>
