@@ -25,12 +25,12 @@ class FeedsController < ApplicationController
 
   def update_feed
     job = @feed.update_episodes
-    render json: { job_id: job.job_id }, status: :accepted
+    render json: { job: job }, status: :accepted
   end
 
   def update_feeds
     jobs = Feed.all.map(&:update_episodes)
-    render json: { job_ids: jobs.map(&:job_id) }, status: :accepted
+    render json: { jobs: jobs }, status: :accepted
   end
 
   # PATCH/PUT /feeds/1

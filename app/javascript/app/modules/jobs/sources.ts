@@ -4,7 +4,7 @@ import * as shortid from "shortid";
 import { ApiJob, RemoteJob } from "../../types/job";
 import apiFetch from "../apiFetch";
 
-const processJobsResponse = (response: ApiJob[]) => {
+export const processJobsResponse = (response: ApiJob[]): RemoteJob[] => {
   const camel = camelcaseKeys(response, { deep: true });
   return camel.map((job: ApiJob) => ({
     ...job,

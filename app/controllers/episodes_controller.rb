@@ -26,7 +26,7 @@ class EpisodesController < ApplicationController
           else
             raise "Unknown source type"
           end
-    render json: { job_id: job.job_id }, status: :accepted
+    render json: { job_id: job.provider_job_id }, status: :accepted
   end
 
   # POST /episodes

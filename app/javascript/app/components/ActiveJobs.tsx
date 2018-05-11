@@ -23,7 +23,11 @@ export class ActiveJobs extends React.PureComponent<Props> {
 
   public render() {
     return (
-      <div>{this.props.jobs.map(job => <div key={job.key}>{job.id}</div>)}</div>
+      <div>
+        {this.props.jobs.map(job => (
+          <span key={job.key}>{job.providerJobId}&nbsp;</span>
+        ))}
+      </div>
     );
   }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { EpisodesAction } from "../modules/episodes/actions";
-import { updateFeeds } from "../modules/feeds/sources";
+import { updateFeedsAction } from "../modules/feeds/actions";
 import { RootState } from "../modules/reducers";
 
 interface DispatchProps {
@@ -30,7 +30,7 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return bindActionCreators(
     {
-      updateFeeds,
+      updateFeeds: updateFeedsAction,
     },
     dispatch
   );
