@@ -9,7 +9,7 @@ class FeedUpdateBroadcastJob < ApplicationJob
         'feeds_channel',
         type: 'UPDATE_FEED',
         payload: {
-          feed: feed.to_json,
+          feed: feed,
         }
       )
   end

@@ -1,10 +1,14 @@
 import Cable from "actioncable";
 import camelcaseKeys from "camelcase-keys";
+import { Store } from "react-redux";
+import { Dispatch } from "redux";
+import { RootAction } from "./modules/actions";
 import { fetchEpisodeComplete } from "./modules/episodes/actions";
 import { processEpisode } from "./modules/episodes/sources";
 import { fetchFeedComplete } from "./modules/feeds/actions";
 import { processFeed } from "./modules/feeds/sources";
 import { removeJobs } from "./modules/jobs/actions";
+import { RootState } from "./modules/reducers";
 import { ApiEpisode } from "./types/episode";
 import { ApiFeed } from "./types/feed";
 
@@ -29,13 +33,37 @@ interface UpdateEpisode {
 interface JobComplete {
   type: "JOB_COMPLETE";
   payload: {
-    job_id: number;
+    jobId: string;
   };
 }
 
 type CableAction = UpdateFeed | UpdateEpisode | JobComplete;
 
-export const init = (store: any) => {
+const handleCableAction = (
+  action: CableAction,
+  dispatch: Dispatch<RootAction, RootState>
+) => {
+  const payload = camelcaseKeys(action.payload, { deep: true });
+  switch (action.type) {
+    case "UPDATE_FEED": {
+      const feed: ApiFeed = payload.feed;
+      dispatch(fetchFeedComplete(processFeed(feed)));
+      break;
+    }
+    case "UPDATE_EPISODE": {
+      const episode: ApiEpisode = payload.episode;
+      dispatch(fetchEpisodeComplete(processEpisode(episode)));
+      break;
+    }
+    case "JOB_COMPLETE": {
+      const jobId = payload.jobId;
+      dispatch(removeJobs([jobId.toString()]));
+      break;
+    }
+  }
+};
+
+export const init = (store: Store<RootState>) => {
   const meta = document.head.querySelector("[name=action-cable-url]") as Meta;
   const url = meta ? meta.content : "";
 
@@ -47,27 +75,7 @@ export const init = (store: any) => {
     {
       connected: () => {},
       received: (action: CableAction) => {
-        switch (action.type) {
-          case "UPDATE_FEED": {
-            const feed = camelcaseKeys(JSON.parse(action.payload.feed), {
-              deep: true,
-            }) as ApiFeed;
-            store.dispatch(fetchFeedComplete(processFeed(feed)));
-            break;
-          }
-          case "UPDATE_EPISODE": {
-            const episode = camelcaseKeys(JSON.parse(action.payload.episode), {
-              deep: true,
-            }) as ApiEpisode;
-            store.dispatch(fetchEpisodeComplete(processEpisode(episode)));
-            break;
-          }
-          case "JOB_COMPLETE": {
-            const jobId = action.payload.job_id;
-            store.dispatch(removeJobs([jobId.toString()]));
-            break;
-          }
-        }
+        handleCableAction(action, store.dispatch);
       },
       disconnected: () => {},
     }
