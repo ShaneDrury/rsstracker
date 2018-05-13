@@ -2,6 +2,7 @@ import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
+import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { downloadEpisodeAction } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
 import {
@@ -22,6 +23,7 @@ interface DataProps {
 interface PropsExtended extends RemoteEpisode {
   playingSeconds?: number;
   playing: boolean;
+  isUpdating: boolean;
 }
 
 interface DispatchProps {
@@ -53,6 +55,7 @@ export const Episode: React.SFC<Props> = ({
   downloadEpisode,
   duration,
   fetchStatus,
+  isUpdating,
   playingSeconds,
   playing,
   publicationDate,
@@ -105,7 +108,13 @@ export const Episode: React.SFC<Props> = ({
                   <button
                     className="button is-primary"
                     onClick={handleDownload}
+                    disabled={isUpdating}
                   >
+                    {isUpdating && (
+                      <div>
+                        <i className="fas fa-sync fa-spin" />&nbsp;
+                      </div>
+                    )}
                     Download
                   </button>
                 )}
@@ -129,8 +138,10 @@ const mapStateToProps = (
   const episode = getEpisodes(state)[ownProps.episodeId];
   const playingEpisodeId = getPlayingEpisode(state);
   const playing = ownProps.episodeId === playingEpisodeId;
+  const isUpdating = !!getEpisodeJobs(state)[ownProps.episodeId];
   return {
     ...episode,
+    isUpdating,
     playingSeconds,
     playing,
   };
