@@ -29,7 +29,7 @@ class FeedsController < ApplicationController
   end
 
   def update_feeds
-    jobs = Feed.all.map(&:update_episodes)
+    jobs = Feed.find(params[:feed_ids]).map(&:update_episodes)
     render json: { jobs: jobs }, status: :accepted
   end
 

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { bindActionCreators, Dispatch } from "redux";
-import { FeedsAction, fetchFeeds } from "../modules/feeds/actions";
+import { FeedsAction, fetchFeedsAction } from "../modules/feeds/actions";
 import { getFeeds, getFetchStatus } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
@@ -58,7 +58,7 @@ const mapDispatchToProps = (
 ): DispatchProps =>
   bindActionCreators(
     {
-      fetchFeeds,
+      fetchFeeds: fetchFeedsAction,
     },
     dispatch
   );

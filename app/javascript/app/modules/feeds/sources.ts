@@ -17,7 +17,7 @@ export const processFeed = (feed: ApiFeed): RemoteFeed => ({
   key: shortid.generate(),
 });
 
-export const getFeeds = async (): Promise<RemoteFeed[]> => {
+export const fetchFeeds = async (): Promise<RemoteFeed[]> => {
   const feedsResponse = await apiFetch("/feeds");
   const camel = camelcaseKeys(feedsResponse, { deep: true });
   return camel.map(processFeed);
@@ -26,5 +26,10 @@ export const getFeeds = async (): Promise<RemoteFeed[]> => {
 export const updateFeed = async (feedId: number): Promise<UpdateFeedResponse> =>
   apiFetch(`/feeds/${feedId}/update_feed`, { method: "POST" });
 
-export const updateFeeds = async (): Promise<UpdateFeedsResponse> =>
-  apiFetch(`/feeds/update_feeds`, { method: "POST" });
+export const updateFeeds = async (
+  feedIds: number[]
+): Promise<UpdateFeedsResponse> =>
+  apiFetch(`/feeds/update_feeds`, {
+    method: "POST",
+    body: JSON.stringify({ feed_ids: feedIds }),
+  });

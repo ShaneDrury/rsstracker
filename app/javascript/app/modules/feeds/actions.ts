@@ -5,7 +5,8 @@ import { RootThunk } from "../../types/thunk";
 import { updateFeedStart } from "../feedJobs/actions";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobResponse } from "../jobs/sources";
-import { getFeeds, updateFeed, updateFeeds } from "./sources";
+import { getSortedFeedIds } from "./selectors";
+import { fetchFeeds, updateFeed, updateFeeds } from "./sources";
 
 export enum feedActions {
   FETCH_FEEDS_START = "FETCH_FEEDS_START",
@@ -66,10 +67,10 @@ export type FeedsAction =
   | FetchFeedsFailure
   | FetchFeedComplete;
 
-export const fetchFeeds = (): RootThunk<void> => async dispatch => {
+export const fetchFeedsAction = (): RootThunk<void> => async dispatch => {
   dispatch(fetchFeedsStart());
   try {
-    const feeds = await getFeeds();
+    const feeds = await fetchFeeds();
     dispatch(fetchFeedsComplete(feeds));
   } catch (err) {
     dispatch(fetchFeedsFailure(err));
@@ -90,8 +91,17 @@ export const updateFeedAction = (
   dispatch(fetchJobsComplete([job]));
 };
 
-export const updateFeedsAction = (): RootThunk<void> => async dispatch => {
-  const updateResponse = await updateFeeds();
+export const updateFeedsAction = (): RootThunk<void> => async (
+  dispatch,
+  getState
+) => {
+  const state = getState();
+  const feedIds = getSortedFeedIds(state);
+  const updateResponse = await updateFeeds(feedIds);
   const jobs = updateResponse.jobs.map(processJobResponse);
+  jobs.forEach((job, idx) => {
+    const feedId = feedIds[idx];
+    dispatch(updateFeedStart(job.providerJobId, feedId));
+  });
   dispatch(fetchJobsComplete(jobs));
 };
