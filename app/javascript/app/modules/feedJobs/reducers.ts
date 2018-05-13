@@ -1,10 +1,10 @@
-import { includes, omitBy } from "lodash";
+import { invert, omit } from "lodash";
 import { jobActions, JobsAction } from "../jobs/actions";
 import { FeedJobsAction, feedJobsActions } from "./actions";
 
 export interface State {
   items: {
-    [key: number]: number;
+    [key: string]: string;
   };
 }
 
@@ -25,13 +25,10 @@ const feedJobs = (
       };
     }
     case jobActions.REMOVE_JOBS: {
-      const jobs = omitBy(
-        state.items,
-        (feedId, jobId) => !includes(action.payload.jobIds, parseInt(jobId, 10))
-      );
+      const jobsByFeedId = invert(state.items);
       return {
         ...state,
-        items: jobs,
+        items: omit(jobsByFeedId, action.payload.jobIds),
       };
     }
     default:

@@ -64,7 +64,7 @@ export const init = (store: any) => {
           }
           case "JOB_COMPLETE": {
             const jobId = action.payload.job_id;
-            store.dispatch(removeJobs([jobId]));
+            store.dispatch(removeJobs([jobId.toString()]));
             break;
           }
         }

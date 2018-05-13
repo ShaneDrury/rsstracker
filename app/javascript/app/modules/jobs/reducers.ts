@@ -8,7 +8,7 @@ export interface JobsState {
     [key: string]: RemoteJob;
   };
   fetchStatus: FetchStatus;
-  ids: number[];
+  ids: string[];
 }
 
 const initialState: JobsState = {
@@ -30,7 +30,7 @@ const episodes = (
     }
     case jobActions.FETCH_JOBS_COMPLETE: {
       const remoteJobs: { [key: string]: RemoteJob } = {};
-      const ids: number[] = [];
+      const ids: string[] = [];
       forEach(action.payload.jobs, job => {
         remoteJobs[job.providerJobId] = job;
         ids.push(job.providerJobId);

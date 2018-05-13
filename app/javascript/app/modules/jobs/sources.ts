@@ -4,15 +4,16 @@ import * as shortid from "shortid";
 import { ApiJob, RemoteJob } from "../../types/job";
 import apiFetch from "../apiFetch";
 
-export const processJobsResponse = (response: ApiJob[]): RemoteJob[] => {
-  const camel = camelcaseKeys(response, { deep: true });
-  return camel.map((job: ApiJob) => ({
-    ...job,
+export const processJobResponse = (response: ApiJob): RemoteJob => {
+  const camel: ApiJob = camelcaseKeys(response, { deep: true });
+  return {
+    ...camel,
     key: shortid.generate(),
-  }));
+    providerJobId: camel.providerJobId.toString(),
+  };
 };
 
 export const getJobs = async (): Promise<RemoteJob[]> => {
   const response = await apiFetch(`/jobs`);
-  return processJobsResponse(response);
+  return response.map(processJobResponse);
 };

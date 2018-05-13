@@ -5,13 +5,13 @@ export enum feedJobsActions {
 interface UpdateFeedStart {
   type: feedJobsActions.UPDATE_FEED_START;
   payload: {
-    jobId: number;
+    jobId: string;
     feedId: number;
   };
 }
 
 export const updateFeedStart = (
-  jobId: number,
+  jobId: string,
   feedId: number
 ): UpdateFeedStart => ({
   type: feedJobsActions.UPDATE_FEED_START,

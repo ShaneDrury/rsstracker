@@ -30,7 +30,7 @@ interface FetchJobsFailure {
 interface RemoveJobs {
   type: jobActions.REMOVE_JOBS;
   payload: {
-    jobIds: number[];
+    jobIds: string[];
   };
 }
 
@@ -48,7 +48,7 @@ export const fetchJobsFailure = (error: string): FetchJobsFailure => ({
   payload: { error },
 });
 
-export const removeJobs = (jobIds: number[]): RemoveJobs => ({
+export const removeJobs = (jobIds: string[]): RemoveJobs => ({
   type: jobActions.REMOVE_JOBS,
   payload: { jobIds },
 });

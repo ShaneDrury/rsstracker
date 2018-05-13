@@ -3,7 +3,7 @@ import { RemoteFeed } from "../../types/feed";
 import { RootThunk } from "../../types/thunk";
 import { updateFeedStart } from "../feedJobs/actions";
 import { fetchJobsComplete } from "../jobs/actions";
-import { processJobsResponse } from "../jobs/sources";
+import { processJobResponse } from "../jobs/sources";
 import { getFeeds, updateFeed, updateFeeds } from "./sources";
 
 export enum feedActions {
@@ -81,13 +81,13 @@ export const updateFeedAction = (
   const updateResponse = camelcaseKeys(await updateFeed(feedId), {
     deep: true,
   });
-  dispatch(updateFeedStart(updateResponse.job.providerJobId, feedId));
-  const jobs = processJobsResponse([updateResponse.job]);
-  dispatch(fetchJobsComplete(jobs));
+  const job = processJobResponse(updateResponse.job);
+  dispatch(updateFeedStart(job.providerJobId, feedId));
+  dispatch(fetchJobsComplete([job]));
 };
 
 export const updateFeedsAction = (): RootThunk<void> => async dispatch => {
   const updateResponse = await updateFeeds();
-  const jobs = processJobsResponse(updateResponse.jobs);
+  const jobs = updateResponse.jobs.map(processJobResponse);
   dispatch(fetchJobsComplete(jobs));
 };

@@ -3,7 +3,7 @@ import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
 import { getFeedId } from "../feeds/selectors";
 import { fetchJobsComplete } from "../jobs/actions";
-import { processJobsResponse } from "../jobs/sources";
+import { processJobResponse } from "../jobs/sources";
 import { getFilter, getPageInfo, getSearchTerm } from "./selectors";
 import { downloadEpisode, getEpisodes } from "./sources";
 
@@ -119,6 +119,6 @@ export const downloadEpisodeAction = (
   episodeId: number
 ): RootThunk<void> => async dispatch => {
   const downloadResponse = await downloadEpisode(episodeId);
-  const jobs = processJobsResponse([downloadResponse.job]);
-  dispatch(fetchJobsComplete(jobs));
+  const job = processJobResponse(downloadResponse.job);
+  dispatch(fetchJobsComplete([job]));
 };
