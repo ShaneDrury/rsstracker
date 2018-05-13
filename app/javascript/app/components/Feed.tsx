@@ -1,11 +1,13 @@
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
+import classNames from "classnames";
 import * as moment from "moment";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
+import { getFeedJobs } from "../modules/feedJobs/selectors";
 import { updateFeedAction } from "../modules/feeds/actions";
 import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
@@ -15,6 +17,7 @@ import Search from "./Search";
 import StatusSelect from "./StatusSelect";
 
 interface DataProps {
+  isUpdating: boolean;
   remoteFeed: RemoteFeed;
   fetchStatus: FetchStatus;
   feedId: number;
@@ -57,6 +60,9 @@ export class Feed extends React.PureComponent<Props> {
         updatedAt,
         url,
       } = this.props.remoteFeed;
+      const updatingClass = classNames("fas fa-sync", {
+        "fa-spin": this.props.isUpdating,
+      });
       return (
         <div className="columns">
           <div className="column is-one-quarter">
@@ -79,8 +85,10 @@ export class Feed extends React.PureComponent<Props> {
                     <button
                       className="button is-primary"
                       onClick={this.handleUpdateFeed}
+                      disabled={this.props.isUpdating}
+                      key={updatingClass}
                     >
-                      <i className="fas fa-sync" />&nbsp;Update
+                      <i className={updatingClass} />&nbsp;Update
                     </button>
                   </div>
                 </div>
@@ -120,7 +128,9 @@ const mapStateToProps = (
   const feedId = ownProps.match.params.feedId;
   const remoteFeed = getFeedObjects(state)[feedId];
   const fetchStatus = getFetchStatus(state);
+  const isUpdating = !!getFeedJobs(state)[feedId];
   return {
+    isUpdating,
     remoteFeed,
     feedId,
     fetchStatus,

@@ -1,5 +1,7 @@
+import camelcaseKeys from "camelcase-keys";
 import { RemoteFeed } from "../../types/feed";
 import { RootThunk } from "../../types/thunk";
+import { updateFeedStart } from "../feedJobs/actions";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobsResponse } from "../jobs/sources";
 import { getFeeds, updateFeed, updateFeeds } from "./sources";
@@ -76,7 +78,10 @@ export const fetchFeeds = (): RootThunk<void> => async dispatch => {
 export const updateFeedAction = (
   feedId: number
 ): RootThunk<void> => async dispatch => {
-  const updateResponse = await updateFeed(feedId);
+  const updateResponse = camelcaseKeys(await updateFeed(feedId), {
+    deep: true,
+  });
+  dispatch(updateFeedStart(updateResponse.job.providerJobId, feedId));
   const jobs = processJobsResponse([updateResponse.job]);
   dispatch(fetchJobsComplete(jobs));
 };

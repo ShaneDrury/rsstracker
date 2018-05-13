@@ -628,6 +628,10 @@
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/camelcase-keys/-/camelcase-keys-4.0.0.tgz#528da23e7bd41068ee25e3ba52a96a4d0d263ed5"
 
+"@types/classnames@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.3.tgz#3f0ff6873da793870e20a260cada55982f38a9e5"
+
 "@types/history@*", "@types/history@^4.6.2":
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.6.2.tgz#12cfaba693ba20f114ed5765467ff25fdf67ddb0"
@@ -1826,6 +1830,10 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
+
+classnames@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
 cliui@^2.1.0:
   version "2.1.0"
