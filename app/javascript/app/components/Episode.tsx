@@ -77,20 +77,21 @@ export const Episode: React.SFC<Props> = ({
             )}
             {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
           </div>
+          {publicationDate && (
+            <div className="card-header-icon">
+              <time>{moment(publicationDate).format("lll")}</time>
+            </div>
+          )}
         </header>
         <div className="card-content">
           <div className="content">
             {description && <Description text={description} />}
             <hr />
-            {publicationDate && (
-              <div>
-                Date: <time>{moment(publicationDate).format("lll")}</time>
-              </div>
-            )}
             {playingSeconds && (
-              <div>
+              <span>
                 Played: {moment.duration(playingSeconds, "seconds").humanize()}
-              </div>
+                {" - "}
+              </span>
             )}
             <time>{duration}</time>
             <br />
@@ -104,7 +105,8 @@ export const Episode: React.SFC<Props> = ({
             <nav className="level is-mobile">
               <div className="level-left">
                 {(fetchStatus.status === "NOT_ASKED" ||
-                  fetchStatus.status === "FAILURE") && (
+                  fetchStatus.status === "FAILURE" ||
+                  isUpdating) && (
                   <button
                     className="button is-primary"
                     onClick={handleDownload}

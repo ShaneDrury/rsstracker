@@ -67,19 +67,17 @@ export class Feed extends React.PureComponent<Props> {
         <div className="columns">
           <div className="column is-one-quarter">
             <div className="card">
+              <header className="card-header">
+                <p className="card-header-title">
+                  <a href={url}>{name}</a>
+                </p>
+              </header>
               <div className="card-image">
                 <figure className="image is-1by1">
                   <img src={relativeImageLink} />
                 </figure>
               </div>
               <div className="card-content">
-                <div className="media">
-                  <div className="media-content">
-                    <p className="title is-4">
-                      <a href={url}>{name}</a>
-                    </p>
-                  </div>
-                </div>
                 <div className="field">
                   <div className="control">
                     <button
