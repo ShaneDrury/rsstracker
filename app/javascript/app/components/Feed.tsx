@@ -93,7 +93,7 @@ export class Feed extends React.PureComponent<Props> {
                 <div className="field is-grouped">
                   <div className="control">
                     <div className="select">
-                      <StatusSelect />
+                      <StatusSelect feedId={this.props.feedId} />
                     </div>
                   </div>
                   <div className="control is-expanded">

@@ -9,6 +9,12 @@ class Feed < ApplicationRecord
     "/uploads/#{id}/#{image_url}"
   end
 
+  def status_counts
+    counts = FetchStatus.where(fetchable: episodes).group(:status).count
+    counts['all'] = counts.values.sum
+    counts
+  end
+
   def update_episodes
     if source == 'rss'
       DownloadFeedJob.perform_later(id)
@@ -24,6 +30,6 @@ class Feed < ApplicationRecord
   end
 
   def as_json(args)
-    super(methods: [:relative_image_link])
+    super(methods: [:relative_image_link, :status_counts])
   end
 end
