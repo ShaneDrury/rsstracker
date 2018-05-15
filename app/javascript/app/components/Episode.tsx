@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
@@ -96,7 +97,13 @@ export const Episode: React.SFC<Props> = ({
             <time>{duration}</time>
             <br />
             {fetchStatus.status === "SUCCESS" && (
-              <button className="button is-link" onClick={handleToggleShow}>
+              <button
+                className={classNames("button", {
+                  "is-link": !playing,
+                  "is-danger": playing,
+                })}
+                onClick={handleToggleShow}
+              >
                 {playing ? "Stop" : "Play"}
               </button>
             )}
