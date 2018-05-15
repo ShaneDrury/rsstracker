@@ -5,7 +5,12 @@ import { updateEpisodeStart } from "../episodeJobs/actions";
 import { getFeedId } from "../feeds/selectors";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobResponse } from "../jobs/sources";
-import { getFilter, getPageInfo, getSearchTerm } from "./selectors";
+import {
+  getFetchStatus,
+  getFilter,
+  getPageInfo,
+  getSearchTerm,
+} from "./selectors";
 import { downloadEpisode, getEpisodes } from "./sources";
 
 export enum episodeActions {
@@ -85,6 +90,10 @@ export const searchEpisodes = (): RootThunk<void> => async (
   getState
 ) => {
   const state = getState();
+  const fetchStatus = getFetchStatus(state);
+  if (fetchStatus === "LOADING") {
+    return;
+  }
   const feedId = getFeedId(state);
   const searchTerm = getSearchTerm(state);
   const status = getFilter(state);

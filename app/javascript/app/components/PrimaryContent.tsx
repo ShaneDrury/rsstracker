@@ -6,7 +6,7 @@ import Feeds from "./Feeds";
 import GlobalPlayer from "./GlobalPlayer";
 import UpdateFeeds from "./UpdateFeeds";
 
-export const PrimaryContent = () => (
+export const PrimaryContent: React.SFC = () => (
   <div>
     <nav
       className="navbar is-fixed-top"

@@ -40,6 +40,7 @@ export class Feed extends React.PureComponent<Props> {
   public componentDidUpdate(prevProps: Props) {
     if (
       prevProps.feedId !== this.props.feedId ||
+      prevProps.location.key !== this.props.location.key ||
       (prevProps.remoteFeed &&
         prevProps.remoteFeed.key !== this.props.remoteFeed.key)
     ) {
