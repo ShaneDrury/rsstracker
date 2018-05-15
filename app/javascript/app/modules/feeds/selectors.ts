@@ -17,8 +17,12 @@ export const getFeeds = createSelector(
 
 export const getFetchStatus = (state: RootState) => state.feeds.fetchStatus;
 
-export const getFeedId = createSelector(
-  getLocation,
-  location =>
-    location ? parseInt(location.pathname.substring(1), 10) : undefined
-);
+export const getAllStatusCounts = (state: RootState) =>
+  state.feeds.statusCounts;
+
+export const getFeedId = createSelector(getLocation, location => {
+  if (!location || location.pathname === "/") {
+    return undefined;
+  }
+  return parseInt(location.pathname.substring(1), 10);
+});

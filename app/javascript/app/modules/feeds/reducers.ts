@@ -1,5 +1,5 @@
 import { forEach } from "lodash";
-import { RemoteFeed } from "../../types/feed";
+import { RemoteFeed, StatusKey } from "../../types/feed";
 import { FetchStatus } from "../remoteData";
 import { feedActions, FeedsAction } from "./actions";
 
@@ -9,9 +9,15 @@ export interface State {
   };
   ids: number[];
   fetchStatus: FetchStatus;
+  statusCounts: { [key in StatusKey]?: number };
 }
 
-const initialState: State = { fetchStatus: "NOT_ASKED", items: {}, ids: [] };
+const initialState: State = {
+  fetchStatus: "NOT_ASKED",
+  items: {},
+  ids: [],
+  statusCounts: {},
+};
 
 const feeds = (state: State = initialState, action: FeedsAction): State => {
   switch (action.type) {
@@ -35,6 +41,7 @@ const feeds = (state: State = initialState, action: FeedsAction): State => {
           ...remoteFeeds,
         },
         fetchStatus: "SUCCESS",
+        statusCounts: action.payload.statusCounts,
       };
     }
     case feedActions.FETCH_FEED_COMPLETE: {

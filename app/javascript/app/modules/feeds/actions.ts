@@ -1,5 +1,5 @@
 import camelcaseKeys from "camelcase-keys";
-import { RemoteFeed } from "../../types/feed";
+import { RemoteFeed, StatusKey } from "../../types/feed";
 import { ApiJob } from "../../types/job";
 import { RootThunk } from "../../types/thunk";
 import { updateFeedStart } from "../feedJobs/actions";
@@ -23,6 +23,7 @@ interface FetchFeedsComplete {
   type: feedActions.FETCH_FEEDS_COMPLETE;
   payload: {
     feeds: RemoteFeed[];
+    statusCounts: { [key in StatusKey]?: number };
   };
 }
 
@@ -45,10 +46,11 @@ export const fetchFeedsStart = (): FetchFeedsStart => ({
 });
 
 export const fetchFeedsComplete = (
-  feeds: RemoteFeed[]
+  feeds: RemoteFeed[],
+  statusCounts: { [key in StatusKey]?: number }
 ): FetchFeedsComplete => ({
   type: feedActions.FETCH_FEEDS_COMPLETE,
-  payload: { feeds },
+  payload: { feeds, statusCounts },
 });
 
 export const fetchFeedsFailure = (error: string): FetchFeedsFailure => ({
@@ -70,8 +72,8 @@ export type FeedsAction =
 export const fetchFeedsAction = (): RootThunk<void> => async dispatch => {
   dispatch(fetchFeedsStart());
   try {
-    const feeds = await fetchFeeds();
-    dispatch(fetchFeedsComplete(feeds));
+    const { items, statusCounts } = await fetchFeeds();
+    dispatch(fetchFeedsComplete(items, statusCounts));
   } catch (err) {
     dispatch(fetchFeedsFailure(err));
   }

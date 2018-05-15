@@ -1,6 +1,7 @@
 import React from "react";
 import { Route } from "react-router";
 import ActiveJobs from "./ActiveJobs";
+import AllFeeds from "./AllFeeds";
 import Feed from "./Feed";
 import Feeds from "./Feeds";
 import GlobalPlayer from "./GlobalPlayer";
@@ -35,6 +36,7 @@ export const PrimaryContent: React.SFC = () => (
     <section className="section">
       <div className="columns">
         <div className="column">
+          <Route exact path="/" component={AllFeeds} />
           <Route path="/:feedId" component={Feed} />
         </div>
       </div>

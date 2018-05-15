@@ -27,7 +27,7 @@ interface OwnProps {
 }
 
 type Props = EnhancedProps & DispatchProps;
-class StatusSelect extends React.PureComponent<Props> {
+export class StatusSelect extends React.PureComponent<Props> {
   public handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const filter = event.target.value as Filter;
     const queryParams = updateQueryParams(this.props.queryParams, {
