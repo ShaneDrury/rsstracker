@@ -28,7 +28,7 @@ const feedJobs = (
       const jobsByFeedId = invert(state.items);
       return {
         ...state,
-        items: omit(jobsByFeedId, action.payload.jobIds),
+        items: invert(omit(jobsByFeedId, action.payload.jobIds)),
       };
     }
     default:
