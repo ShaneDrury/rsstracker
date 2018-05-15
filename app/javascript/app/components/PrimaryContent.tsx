@@ -31,7 +31,7 @@ export const PrimaryContent: React.SFC = () => (
         </div>
       </div>
       <div className="navbar-end">
-        <div className="navbar-item is-right">
+        <div className="navbar-item is-right is-paddingless">
           <GlobalPlayer />
         </div>
       </div>

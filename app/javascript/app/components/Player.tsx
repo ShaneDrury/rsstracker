@@ -79,7 +79,7 @@ export class Player extends React.Component<Props, State> {
               onReady={this.handleOnReady}
               progressInterval={1500}
               width="600px"
-              height="30px"
+              height="28px"
             />
           )}
       </div>
