@@ -1,5 +1,6 @@
 import React from "react";
 import { Route } from "react-router";
+import { Link } from "react-router-dom";
 import ActiveJobs from "./ActiveJobs";
 import AllFeeds from "./AllFeeds";
 import Feed from "./Feed";
@@ -15,7 +16,9 @@ export const PrimaryContent: React.SFC = () => (
       aria-label="dropdown navigation"
     >
       <div className="navbar-start">
-        <div className="navbar-item">Feed Tracker</div>
+        <div className="navbar-item">
+          <Link to="/">Feed Tracker</Link>
+        </div>
         <div className="navbar-item has-dropdown is-hoverable">
           <div className="navbar-link">Feeds</div>
           <Feeds />
