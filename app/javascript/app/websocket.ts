@@ -5,7 +5,7 @@ import { Dispatch } from "redux";
 import { RootAction } from "./modules/actions";
 import { fetchEpisodeComplete } from "./modules/episodes/actions";
 import { processEpisode } from "./modules/episodes/sources";
-import { fetchFeedComplete } from "./modules/feeds/actions";
+import { fetchFeedAction, fetchFeedComplete } from "./modules/feeds/actions";
 import { processFeed } from "./modules/feeds/sources";
 import { removeJobs } from "./modules/jobs/actions";
 import { RootState } from "./modules/reducers";
@@ -53,6 +53,7 @@ const handleCableAction = (
     case "UPDATE_EPISODE": {
       const episode: ApiEpisode = payload.episode;
       dispatch(fetchEpisodeComplete(processEpisode(episode)));
+      dispatch(fetchFeedAction(episode.feedId));
       break;
     }
     case "JOB_COMPLETE": {

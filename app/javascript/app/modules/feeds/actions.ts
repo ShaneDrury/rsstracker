@@ -6,7 +6,7 @@ import { updateFeedStart } from "../feedJobs/actions";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobResponse } from "../jobs/sources";
 import { getSortedFeedIds } from "./selectors";
-import { fetchFeeds, updateFeed, updateFeeds } from "./sources";
+import { fetchFeed, fetchFeeds, updateFeed, updateFeeds } from "./sources";
 
 export enum feedActions {
   FETCH_FEEDS_START = "FETCH_FEEDS_START",
@@ -77,6 +77,13 @@ export const fetchFeedsAction = (): RootThunk<void> => async dispatch => {
   } catch (err) {
     dispatch(fetchFeedsFailure(err));
   }
+};
+
+export const fetchFeedAction = (
+  feedId: string
+): RootThunk<void> => async dispatch => {
+  const feed = await fetchFeed(feedId);
+  dispatch(fetchFeedComplete(feed));
 };
 
 export const updateFeedAction = (

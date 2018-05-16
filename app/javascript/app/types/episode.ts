@@ -4,6 +4,7 @@ export interface ApiEpisode {
   id: number;
   description: string;
   duration: string;
+  feedId: string;
   guid: string;
   name: string;
   url: string;
