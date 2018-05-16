@@ -1,7 +1,8 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
-import classNames from "classnames";
+import { faSync } from "@fortawesome/fontawesome-free-solid";
 import * as moment from "moment";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
@@ -61,9 +62,6 @@ export class Feed extends React.PureComponent<Props> {
         updatedAt,
         url,
       } = this.props.remoteFeed;
-      const updatingClass = classNames("fas fa-sync", {
-        "fa-spin": this.props.isUpdating,
-      });
       return (
         <div className="columns">
           <div className="column is-one-quarter">
@@ -85,9 +83,11 @@ export class Feed extends React.PureComponent<Props> {
                       className="button is-primary"
                       onClick={this.handleUpdateFeed}
                       disabled={this.props.isUpdating}
-                      key={updatingClass}
                     >
-                      <i className={updatingClass} />&nbsp;Update
+                      <FontAwesomeIcon
+                        icon={faSync}
+                        spin={this.props.isUpdating}
+                      />&nbsp;Update
                     </button>
                   </div>
                 </div>

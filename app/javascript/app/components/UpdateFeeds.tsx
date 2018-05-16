@@ -1,3 +1,5 @@
+import { faSync } from "@fortawesome/fontawesome-free-solid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
@@ -19,7 +21,7 @@ export class UpdateFeeds extends React.PureComponent<Props> {
   public render() {
     return (
       <button className="button is-primary" onClick={this.handleUpdateFeeds}>
-        <i className="fas fa-sync" />&nbsp;Update all
+        <FontAwesomeIcon icon={faSync} />&nbsp;Update all
       </button>
     );
   }

@@ -1,3 +1,5 @@
+import { faSync } from "@fortawesome/fontawesome-free-solid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
@@ -121,10 +123,10 @@ export const Episode: React.SFC<Props> = ({
                   >
                     {isUpdating && (
                       <div>
-                        <i className="fas fa-sync fa-spin" />&nbsp;
+                        <FontAwesomeIcon icon={faSync} spin />
                       </div>
                     )}
-                    Download
+                    &nbsp;Download
                   </button>
                 )}
                 {fetchStatus.status === "LOADING" && (
