@@ -11,7 +11,7 @@ import UpdateFeeds from "./UpdateFeeds";
 export const PrimaryContent: React.SFC = () => (
   <div>
     <nav
-      className="navbar is-fixed-top"
+      className="navbar is-fixed-top has-background-light"
       role="navigation"
       aria-label="dropdown navigation"
     >
