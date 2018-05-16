@@ -91,6 +91,9 @@ export class Feed extends React.PureComponent<Props> {
                     </button>
                   </div>
                 </div>
+                <div className="field">
+                  Updated at: <time>{moment(updatedAt).format("lll")}</time>
+                </div>
                 <div className="field is-grouped">
                   <div className="control">
                     <div className="select">
@@ -102,11 +105,7 @@ export class Feed extends React.PureComponent<Props> {
                   </div>
                 </div>
                 <hr />
-                <div className="content">
-                  {description}
-                  <br />
-                  Updated at: <time>{moment(updatedAt).format("lll")}</time>
-                </div>
+                <div className="content">{description}</div>
               </div>
             </div>
           </div>
