@@ -6,6 +6,7 @@ class YoutubeEpisodeDetails
 
   def details
     out = `#{youtube_dl_path} -j -- #{url}`
+    raise IOError, "Error downloading #{url}" unless out != ''
     details = JSON.parse(out)
     description = details['description']
     duration = Time.at(details['duration']).utc.strftime('%H:%M:%S')
