@@ -19,12 +19,7 @@ class YoutubePlaylistDownloader
     description = episode['title']
     url = episode['url']
     Episode.find_or_create_by(feed: feed, name: description, guid: url) do |ep|
-      details = full_details(url)
-      ep.build_fetch_status(status: 'NOT_ASKED')
-      ep.description = details.description
-      ep.duration = details.duration
-      ep.publication_date = details.publication_date
-      ep.url = url
+      YoutubeEpisodeUpdater.new(youtube_dl_path).update(ep, url)
       ep.save
       feed.touch
     end
@@ -33,10 +28,6 @@ class YoutubePlaylistDownloader
   def short_episode_details
     out = `#{youtube_dl_path} --flat-playlist -j -- #{feed.url}`
     out.split("\n").map { |line| JSON.parse(line) }
-  end
-
-  def full_details(url)
-    YoutubeEpisodeDetails.new(url, youtube_dl_path).details
   end
 
   def feed
