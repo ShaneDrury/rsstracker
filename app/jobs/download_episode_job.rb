@@ -44,12 +44,20 @@ class DownloadEpisodeJob < ApplicationJob
       end
     end
 
-    open(url, 'r', content_length_proc: content_length_proc, progress_proc: progress_proc) do |input|
-      open(abs_download_path, 'wb') do |output|
-        while (buffer = input.read(BUFFER_SIZE))
-          output.write(buffer)
+    Dir.mktmpdir do |temp_dir|
+      tmp_path = File.join(temp_dir, episode_folder, episode_filename)
+      FileUtils.mkdir_p File.join(temp_dir, episode_folder)
+      pp tmp_path
+      pp File.join(ENV['DOWNLOAD_ROOT'], episode_folder, '/')
+      open(url, 'r', content_length_proc: content_length_proc, progress_proc: progress_proc) do |input|
+        open(tmp_path, 'wb') do |output|
+          while (buffer = input.read(BUFFER_SIZE))
+            output.write(buffer)
+          end
         end
       end
+
+      FileUtils.mv(tmp_path, File.join(ENV['DOWNLOAD_ROOT'], episode_folder, '/'))
     end
 
     episode.build_fetch_status(
