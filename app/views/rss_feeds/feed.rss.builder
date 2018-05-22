@@ -7,7 +7,7 @@ xml.rss version: '2.0',
     xml.description @feed.description
     xml.language 'en'
     xml.itunes :image, href: @feed.image_link(request)
-    @feed.episodes.each do |episode|
+    @feed.episodes.includes(:fetch_status).each do |episode|
       next unless episode.fetch_status&.status == 'SUCCESS'
       xml.item do
         if episode.name
