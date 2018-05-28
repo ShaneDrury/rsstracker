@@ -2,7 +2,10 @@ import * as qs from "qs";
 
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
+import {
+  changeFilterAction,
+  EpisodesAction,
+} from "../modules/episodes/actions";
 import { getAllStatusCounts } from "../modules/feeds/selectors";
 import { Filter } from "../modules/filters";
 import { getLocation } from "../modules/location/selectors";
@@ -12,12 +15,11 @@ import { StatusSelect } from "./StatusSelect";
 
 interface EnhancedProps {
   filter: Filter;
-  queryParams: string;
   counts: { [key in StatusKey]?: number };
 }
 
 interface DispatchProps {
-  onChangeFilter: () => void;
+  onChangeFilter: (filter: Filter) => void;
 }
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
@@ -34,7 +36,6 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
   return {
     filter,
     counts,
-    queryParams: location ? location.search : "",
   };
 };
 
@@ -43,7 +44,7 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return bindActionCreators(
     {
-      onChangeFilter: searchEpisodes,
+      onChangeFilter: changeFilterAction,
     },
     dispatch
   );

@@ -3,23 +3,23 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
+import {
+  changeFilterAction,
+  EpisodesAction,
+} from "../modules/episodes/actions";
 import { getFeedObjects } from "../modules/feeds/selectors";
 import { Filter } from "../modules/filters";
 import { getLocation } from "../modules/location/selectors";
-import { updateQueryParams } from "../modules/queryParams";
 import { RootState } from "../modules/reducers";
-import { history } from "../store";
 import { StatusKey } from "../types/feed";
 
 interface EnhancedProps {
   filter: Filter;
-  queryParams: string;
   counts: { [key in StatusKey]?: number };
 }
 
 interface DispatchProps {
-  onChangeFilter: () => void;
+  onChangeFilter: (filter: Filter) => void;
 }
 
 interface OwnProps {
@@ -27,14 +27,11 @@ interface OwnProps {
 }
 
 type Props = EnhancedProps & DispatchProps;
+
 export class StatusSelect extends React.PureComponent<Props> {
   public handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const filter = event.target.value as Filter;
-    const queryParams = updateQueryParams(this.props.queryParams, {
-      filter,
-    });
-    history.push({ search: `?${queryParams}` });
-    this.props.onChangeFilter();
+    this.props.onChangeFilter(filter);
   };
 
   public render() {
@@ -100,7 +97,6 @@ const mapStateToProps = (
   return {
     filter,
     counts,
-    queryParams: location ? location.search : "",
   };
 };
 
@@ -109,7 +105,7 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return bindActionCreators(
     {
-      onChangeFilter: searchEpisodes,
+      onChangeFilter: changeFilterAction,
     },
     dispatch
   );

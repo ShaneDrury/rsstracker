@@ -3,6 +3,7 @@ import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
 import { updateEpisodeStart } from "../episodeJobs/actions";
 import { getFeedId } from "../feeds/selectors";
+import { Filter } from "../filters";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobResponse } from "../jobs/sources";
 import {
@@ -19,6 +20,7 @@ export enum episodeActions {
   FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE",
   CHANGE_PAGE = "CHANGE_PAGE",
   FETCH_EPISODE_COMPLETE = "FETCH_EPISODE_COMPLETE",
+  CHANGE_FILTER = "CHANGE_FILTER",
 }
 
 interface FetchEpisodesStart {
@@ -44,6 +46,13 @@ interface ChangePage {
   type: episodeActions.CHANGE_PAGE;
   payload: {
     currentPage: number;
+  };
+}
+
+interface ChangeFilter {
+  type: episodeActions.CHANGE_FILTER;
+  payload: {
+    filter: Filter;
   };
 }
 
@@ -83,7 +92,20 @@ export type EpisodesAction =
   | FetchEpisodesComplete
   | FetchEpisodesFailure
   | ChangePage
+  | ChangeFilter
   | FetchEpisodeComplete;
+
+export const changeFilter = (filter: Filter): ChangeFilter => ({
+  type: episodeActions.CHANGE_FILTER,
+  payload: { filter },
+});
+
+export const changeFilterAction = (
+  filter: Filter
+): RootThunk<void> => dispatch => {
+  dispatch(changeFilter(filter));
+  dispatch(searchEpisodes());
+};
 
 export const searchEpisodes = (): RootThunk<void> => async (
   dispatch,
