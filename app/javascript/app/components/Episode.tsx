@@ -12,19 +12,16 @@ import {
   Action as PlayerAction,
   togglePlay as togglePlayAction,
 } from "../modules/player/actions";
-import {
-  getPlayedSeconds,
-  getPlayingEpisode,
-} from "../modules/player/selectors";
+import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
+import PlayingSeconds from "./PlayingSeconds";
 
 interface DataProps {
   episodeId: number;
 }
 
 interface PropsExtended extends RemoteEpisode {
-  playingSeconds?: number;
   playing: boolean;
   isUpdating: boolean;
 }
@@ -59,7 +56,6 @@ export const Episode: React.SFC<Props> = ({
   duration,
   fetchStatus,
   isUpdating,
-  playingSeconds,
   playing,
   publicationDate,
   togglePlay,
@@ -90,12 +86,7 @@ export const Episode: React.SFC<Props> = ({
           <div className="content">
             {description && <Description text={description} />}
             <hr />
-            {playingSeconds && (
-              <span>
-                Played: {moment.duration(playingSeconds, "seconds").humanize()}
-                {" - "}
-              </span>
-            )}
+            <PlayingSeconds episodeId={id} />
             <time>{duration}</time>
             <br />
             {fetchStatus.status === "SUCCESS" && (
@@ -145,7 +136,6 @@ const mapStateToProps = (
   state: RootState,
   ownProps: DataProps
 ): PropsExtended => {
-  const playingSeconds = getPlayedSeconds(state)[ownProps.episodeId];
   const episode = getEpisodes(state)[ownProps.episodeId];
   const playingEpisodeId = getPlayingEpisode(state);
   const playing = ownProps.episodeId === playingEpisodeId;
@@ -153,7 +143,6 @@ const mapStateToProps = (
   return {
     ...episode,
     isUpdating,
-    playingSeconds,
     playing,
   };
 };
