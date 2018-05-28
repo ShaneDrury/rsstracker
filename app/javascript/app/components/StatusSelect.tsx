@@ -1,4 +1,3 @@
-import * as qs from "qs";
 import React from "react";
 
 import { connect } from "react-redux";
@@ -9,7 +8,7 @@ import {
 } from "../modules/episodes/actions";
 import { getFeedObjects } from "../modules/feeds/selectors";
 import { Filter } from "../modules/filters";
-import { getLocation } from "../modules/location/selectors";
+import { getQueryParams } from "../modules/location/selectors";
 import { RootState } from "../modules/reducers";
 import { StatusKey } from "../types/feed";
 
@@ -84,12 +83,7 @@ const mapStateToProps = (
   state: RootState,
   ownProps: OwnProps
 ): EnhancedProps => {
-  const location = getLocation(state);
-  const params = location
-    ? qs.parse(location.search, {
-        ignoreQueryPrefix: true,
-      })
-    : {};
+  const params = getQueryParams(state);
   const filterParam = params.filter;
   const filter: Filter = (filterParam as Filter) || Filter.ALL;
   const counts = getFeedObjects(state)[ownProps.feedId].statusCounts;

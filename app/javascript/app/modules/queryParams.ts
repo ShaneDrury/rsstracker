@@ -1,11 +1,9 @@
 import * as qs from "qs";
+import { QueryParams } from "./location/queryParams";
 
 export const updateQueryParams = (
-  previous: string,
+  previous: QueryParams,
   changes: { [key: string]: string }
 ) => {
-  const params = qs.parse(previous, {
-    ignoreQueryPrefix: true,
-  });
-  return qs.stringify({ ...params, ...changes });
+  return qs.stringify({ ...previous, ...changes });
 };

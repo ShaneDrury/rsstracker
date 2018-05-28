@@ -1,24 +1,23 @@
-import * as qs from "qs";
 import React from "react";
 import { connect } from "react-redux";
 import { RootState } from "../modules/reducers";
 
 import { DebounceInput } from "react-debounce-input";
 import { bindActionCreators, Dispatch } from "redux";
-import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
-import { getLocation } from "../modules/location/selectors";
-import { updateQueryParams } from "../modules/queryParams";
-import { history } from "../store";
+import {
+  changeSearchAction,
+  EpisodesAction,
+} from "../modules/episodes/actions";
+import { getQueryParams } from "../modules/location/selectors";
 
 interface DataProps {}
 
 interface EnhancedProps {
   searchTerm: string;
-  queryParams: string;
 }
 
 interface DispatchProps {
-  onChangeSearch: () => void;
+  onChangeSearch: (searchTerm: string) => void;
 }
 
 type Props = DataProps & DispatchProps & EnhancedProps;
@@ -26,11 +25,7 @@ type Props = DataProps & DispatchProps & EnhancedProps;
 export class Search extends React.PureComponent<Props> {
   public handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value;
-    const queryParams = updateQueryParams(this.props.queryParams, {
-      searchTerm,
-    });
-    history.push({ search: `?${queryParams}` });
-    this.props.onChangeSearch();
+    this.props.onChangeSearch(searchTerm);
   };
 
   public render() {
@@ -49,17 +44,11 @@ export class Search extends React.PureComponent<Props> {
 }
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
-  const location = getLocation(state);
-  const params = location
-    ? qs.parse(location.search, {
-        ignoreQueryPrefix: true,
-      })
-    : {};
+  const params = getQueryParams(state);
   const searchTerm = params.searchTerm || "";
 
   return {
     searchTerm,
-    queryParams: location ? location.search : "",
   };
 };
 
@@ -68,7 +57,7 @@ const mapDispatchToProps = (
 ): DispatchProps =>
   bindActionCreators(
     {
-      onChangeSearch: searchEpisodes,
+      onChangeSearch: changeSearchAction,
     },
     dispatch
   );

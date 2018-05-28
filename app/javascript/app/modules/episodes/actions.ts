@@ -21,6 +21,7 @@ export enum episodeActions {
   CHANGE_PAGE = "CHANGE_PAGE",
   FETCH_EPISODE_COMPLETE = "FETCH_EPISODE_COMPLETE",
   CHANGE_FILTER = "CHANGE_FILTER",
+  CHANGE_SEARCH = "CHANGE_SEARCH",
 }
 
 interface FetchEpisodesStart {
@@ -53,6 +54,13 @@ interface ChangeFilter {
   type: episodeActions.CHANGE_FILTER;
   payload: {
     filter: Filter;
+  };
+}
+
+interface ChangeSearch {
+  type: episodeActions.CHANGE_SEARCH;
+  payload: {
+    searchTerm: string;
   };
 }
 
@@ -93,6 +101,7 @@ export type EpisodesAction =
   | FetchEpisodesFailure
   | ChangePage
   | ChangeFilter
+  | ChangeSearch
   | FetchEpisodeComplete;
 
 export const changeFilter = (filter: Filter): ChangeFilter => ({
@@ -100,10 +109,22 @@ export const changeFilter = (filter: Filter): ChangeFilter => ({
   payload: { filter },
 });
 
+export const changeSearch = (searchTerm: string): ChangeSearch => ({
+  type: episodeActions.CHANGE_SEARCH,
+  payload: { searchTerm },
+});
+
 export const changeFilterAction = (
   filter: Filter
 ): RootThunk<void> => dispatch => {
   dispatch(changeFilter(filter));
+  dispatch(searchEpisodes());
+};
+
+export const changeSearchAction = (
+  searchTerm: string
+): RootThunk<void> => dispatch => {
+  dispatch(changeSearch(searchTerm));
   dispatch(searchEpisodes());
 };
 
