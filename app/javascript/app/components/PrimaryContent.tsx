@@ -15,7 +15,7 @@ interface State {
   isOpen: boolean;
 }
 
-export class PrimaryContent extends React.Component<Props, State> {
+export class PrimaryContent extends React.PureComponent<Props, State> {
   public state = {
     isOpen: false,
   };
