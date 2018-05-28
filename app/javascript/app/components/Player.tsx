@@ -41,6 +41,10 @@ export class Player extends React.Component<Props, State> {
 
   private player: any = undefined;
 
+  public shouldComponentUpdate(nextProps: Props) {
+    return nextProps.episodeId !== this.props.episodeId;
+  }
+
   public componentDidUpdate(prevProps: Props) {
     if (prevProps.episodeId !== this.props.episodeId) {
       this.seekToPlayedSeconds();
