@@ -1,5 +1,4 @@
 import { faSync } from "@fortawesome/fontawesome-free-solid";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
@@ -15,6 +14,7 @@ import {
 import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
+import { Icon } from "./Icon";
 import PlayingSeconds from "./PlayingSeconds";
 
 interface DataProps {
@@ -114,7 +114,7 @@ export const Episode: React.SFC<Props> = ({
                   >
                     {isUpdating && (
                       <div>
-                        <FontAwesomeIcon icon={faSync} spin />
+                        <Icon icon={faSync} spin />
                       </div>
                     )}
                     &nbsp;Download

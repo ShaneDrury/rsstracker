@@ -1,11 +1,11 @@
 import { faSync } from "@fortawesome/fontawesome-free-solid";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { EpisodesAction } from "../modules/episodes/actions";
 import { updateFeedsAction } from "../modules/feeds/actions";
 import { RootState } from "../modules/reducers";
+import { Icon } from "./Icon";
 
 interface DispatchProps {
   updateFeeds: () => void;
@@ -21,7 +21,7 @@ export class UpdateFeeds extends React.PureComponent<Props> {
   public render() {
     return (
       <button className="button is-primary" onClick={this.handleUpdateFeeds}>
-        <FontAwesomeIcon icon={faSync} />&nbsp;Update all
+        <Icon icon={faSync} />&nbsp;Update all
       </button>
     );
   }

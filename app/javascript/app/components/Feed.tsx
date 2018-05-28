@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
@@ -14,6 +13,7 @@ import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import Episodes from "./Episodes";
+import { Icon } from "./Icon";
 import Search from "./Search";
 import StatusSelect from "./StatusSelect";
 
@@ -84,10 +84,7 @@ export class Feed extends React.PureComponent<Props> {
                       onClick={this.handleUpdateFeed}
                       disabled={this.props.isUpdating}
                     >
-                      <FontAwesomeIcon
-                        icon={faSync}
-                        spin={this.props.isUpdating}
-                      />&nbsp;Update
+                      <Icon icon={faSync} spin={this.props.isUpdating} />&nbsp;Update
                     </button>
                   </div>
                 </div>
