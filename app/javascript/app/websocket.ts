@@ -1,7 +1,6 @@
 import Cable from "actioncable";
 import camelcaseKeys from "camelcase-keys";
 import { Store } from "react-redux";
-import { Dispatch } from "redux";
 import { RootAction } from "./modules/actions";
 import { fetchEpisodeComplete } from "./modules/episodes/actions";
 import { processEpisode } from "./modules/episodes/sources";
@@ -11,6 +10,7 @@ import { removeJobs } from "./modules/jobs/actions";
 import { RootState } from "./modules/reducers";
 import { ApiEpisode } from "./types/episode";
 import { ApiFeed } from "./types/feed";
+import { Dispatch } from "./types/thunk";
 
 interface Meta extends Element {
   content: string;

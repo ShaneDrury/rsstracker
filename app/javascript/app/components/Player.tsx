@@ -1,7 +1,7 @@
 import React from "react";
 import FilePlayer from "react-player/lib/players/FilePlayer";
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
+import { bindActionCreators } from "redux";
 import { getEpisodes } from "../modules/episodes/selectors";
 import {
   Action as PlayerAction,
@@ -10,6 +10,7 @@ import {
 } from "../modules/player/actions";
 import { getPlayedSeconds } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
+import { Dispatch } from "../types/thunk";
 
 interface DataProps {}
 

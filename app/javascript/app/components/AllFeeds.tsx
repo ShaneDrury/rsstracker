@@ -1,12 +1,13 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
+import { bindActionCreators } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
 import { updateFeedAction } from "../modules/feeds/actions";
 import { getFetchStatus } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
+import { Dispatch } from "../types/thunk";
 import AllStatusSelect from "./AllStatusSelect";
 import Episodes from "./Episodes";
 import Search from "./Search";

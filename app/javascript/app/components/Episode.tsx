@@ -3,7 +3,7 @@ import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
+import { bindActionCreators } from "redux";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { downloadEpisodeAction } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
@@ -14,6 +14,7 @@ import {
 import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
+import { Dispatch } from "../types/thunk";
 import { Icon } from "./Icon";
 import PlayingSeconds from "./PlayingSeconds";
 

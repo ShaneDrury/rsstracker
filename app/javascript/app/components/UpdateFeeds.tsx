@@ -1,10 +1,11 @@
 import { faSync } from "@fortawesome/fontawesome-free-solid";
 import React from "react";
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
+import { bindActionCreators } from "redux";
 import { EpisodesAction } from "../modules/episodes/actions";
 import { updateFeedsAction } from "../modules/feeds/actions";
 import { RootState } from "../modules/reducers";
+import { Dispatch } from "../types/thunk";
 import { Icon } from "./Icon";
 
 interface DispatchProps {

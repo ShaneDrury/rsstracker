@@ -1,7 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
+import { bindActionCreators } from "redux";
 import {
   changeFilterAction,
   EpisodesAction,
@@ -11,6 +11,7 @@ import { Filter } from "../modules/filters";
 import { getQueryParams } from "../modules/location/selectors";
 import { RootState } from "../modules/reducers";
 import { StatusKey } from "../types/feed";
+import { Dispatch } from "../types/thunk";
 
 interface EnhancedProps {
   filter: Filter;

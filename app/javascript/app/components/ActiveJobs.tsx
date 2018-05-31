@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
+import { bindActionCreators } from "redux";
 import { fetchJobs, JobsAction } from "../modules/jobs/actions";
 import { getJobs } from "../modules/jobs/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteJob } from "../types/job";
+import { Dispatch } from "../types/thunk";
 
 interface EnhancedProps {
   jobs: RemoteJob[];

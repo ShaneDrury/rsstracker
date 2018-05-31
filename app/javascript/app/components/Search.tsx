@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import { RootState } from "../modules/reducers";
 
 import { DebounceInput } from "react-debounce-input";
-import { bindActionCreators, Dispatch } from "redux";
+import { bindActionCreators } from "redux";
 import {
   changeSearchAction,
   EpisodesAction,
 } from "../modules/episodes/actions";
 import { getQueryParams } from "../modules/location/selectors";
+import { Dispatch } from "../types/thunk";
 
 interface DataProps {}
 

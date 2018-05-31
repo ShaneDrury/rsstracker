@@ -9,10 +9,11 @@ import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
 
 import * as ReactPaginate from "react-paginate";
-import { bindActionCreators, Dispatch } from "redux";
+import { bindActionCreators } from "redux";
 import { changePage, EpisodesAction } from "../modules/episodes/actions";
 import { FetchStatus } from "../modules/remoteData";
 import { PageInfo } from "../types/page";
+import { Dispatch } from "../types/thunk";
 import Episode from "./Episode";
 
 interface DataProps {}
