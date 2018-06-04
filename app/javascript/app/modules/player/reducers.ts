@@ -10,8 +10,14 @@ export interface State {
 const savedSecondsJSON = localStorage.getItem("savedSeconds");
 const savedSeconds = savedSecondsJSON ? JSON.parse(savedSecondsJSON) : {};
 
+const playingEpisodeIdJSON = localStorage.getItem("lastPlayedEpisode");
+const playingEpisodeId = playingEpisodeIdJSON
+  ? JSON.parse(playingEpisodeIdJSON)
+  : undefined;
+
 const initialState: State = {
   saved: savedSeconds,
+  playingEpisodeId,
 };
 
 const player = (state: State = initialState, action: Action): State => {

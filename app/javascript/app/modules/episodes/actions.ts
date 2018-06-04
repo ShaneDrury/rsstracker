@@ -7,19 +7,22 @@ import { Filter } from "../filters";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobResponse } from "../jobs/sources";
 import {
+  getEpisodes as getEpisodesSelector,
   getFetchStatus,
   getFilter,
   getPageInfo,
   getSearchTerm,
 } from "./selectors";
-import { downloadEpisode, getEpisodes } from "./sources";
+import { downloadEpisode, getEpisode, getEpisodes } from "./sources";
 
 export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
   FETCH_EPISODES_COMPLETE = "FETCH_EPISODES_COMPLETE",
   FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE",
   CHANGE_PAGE = "CHANGE_PAGE",
+  FETCH_EPISODE_START = "FETCH_EPISODE_START",
   FETCH_EPISODE_COMPLETE = "FETCH_EPISODE_COMPLETE",
+  FETCH_EPISODE_FAILURE = "FETCH_EPISODE_FAILURE",
   CHANGE_FILTER = "CHANGE_FILTER",
   CHANGE_SEARCH = "CHANGE_SEARCH",
 }
@@ -64,10 +67,22 @@ interface ChangeSearch {
   };
 }
 
+interface FetchEpisodeStart {
+  type: episodeActions.FETCH_EPISODE_START;
+}
+
 interface FetchEpisodeComplete {
   type: episodeActions.FETCH_EPISODE_COMPLETE;
   payload: {
     episode: RemoteEpisode;
+  };
+}
+
+interface FetchEpisodeFailure {
+  type: episodeActions.FETCH_EPISODE_FAILURE;
+  payload: {
+    error: string;
+    episodeId: number;
   };
 }
 
@@ -88,11 +103,23 @@ export const fetchEpisodesFailure = (error: string): FetchEpisodesFailure => ({
   payload: { error },
 });
 
+export const fetchEpisodeStart = (): FetchEpisodeStart => ({
+  type: episodeActions.FETCH_EPISODE_START,
+});
+
 export const fetchEpisodeComplete = (
   episode: RemoteEpisode
 ): FetchEpisodeComplete => ({
   type: episodeActions.FETCH_EPISODE_COMPLETE,
   payload: { episode },
+});
+
+export const fetchEpisodeFailure = (
+  error: string,
+  episodeId: number
+): FetchEpisodeFailure => ({
+  type: episodeActions.FETCH_EPISODE_FAILURE,
+  payload: { error, episodeId },
 });
 
 export type EpisodesAction =
@@ -102,7 +129,9 @@ export type EpisodesAction =
   | ChangePage
   | ChangeFilter
   | ChangeSearch
-  | FetchEpisodeComplete;
+  | FetchEpisodeStart
+  | FetchEpisodeComplete
+  | FetchEpisodeFailure;
 
 export const changeFilter = (filter: Filter): ChangeFilter => ({
   type: episodeActions.CHANGE_FILTER,
@@ -175,4 +204,26 @@ export const downloadEpisodeAction = (
   const job = processJobResponse(downloadResponse.job);
   dispatch(updateEpisodeStart(job.providerJobId, episodeId));
   dispatch(fetchJobsComplete([job]));
+};
+
+export const fetchEpisode = (
+  episodeId: number
+): RootThunk<void> => async dispatch => {
+  dispatch(fetchEpisodeStart());
+  try {
+    const episode = await getEpisode(episodeId);
+    dispatch(fetchEpisodeComplete(episode));
+  } catch (err) {
+    dispatch(fetchEpisodeFailure(err, episodeId));
+  }
+};
+
+export const fetchEpisodeIfNeeded = (episodeId: number): RootThunk<void> => (
+  dispatch,
+  getState
+) => {
+  const state = getState();
+  if (!getEpisodesSelector(state)[episodeId]) {
+    dispatch(fetchEpisode(episodeId));
+  }
 };

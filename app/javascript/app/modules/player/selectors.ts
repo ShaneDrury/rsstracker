@@ -2,7 +2,8 @@ import { createSelector } from "reselect";
 import { getEpisodes } from "../episodes/selectors";
 import { RootState } from "../reducers";
 
-const getPlayingEpisodeId = (state: RootState) => state.player.playingEpisodeId;
+export const getPlayingEpisodeId = (state: RootState) =>
+  state.player.playingEpisodeId;
 
 export const getPlayingEpisode = createSelector(
   getEpisodes,

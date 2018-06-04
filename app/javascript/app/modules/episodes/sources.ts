@@ -56,6 +56,12 @@ export const getEpisodes = async ({
   return processEpisodesResponse(episodesResponse);
 };
 
+export const getEpisode = async (episodeId: number): Promise<RemoteEpisode> => {
+  const episodeResponse: ApiEpisode = await apiFetch(`/episodes/${episodeId}`);
+  const camel: ApiEpisode = camelcaseKeys(episodeResponse, { deep: true });
+  return processEpisode(camel);
+};
+
 export const downloadEpisode = async (
   episodeId: number
 ): Promise<DownloadEpisodeResponse> =>

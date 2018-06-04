@@ -1,3 +1,4 @@
+
 export enum actions {
   UPDATE_PLAYED_SECONDS = "UPDATE_PLAYED_SECONDS",
   TOGGLE_PLAY = "TOGGLE_PLAY",
