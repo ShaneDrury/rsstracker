@@ -15,7 +15,6 @@ import { Dispatch } from "../types/thunk";
 interface DataProps {}
 
 interface ConnectedProps {
-  playing: boolean;
   playedSeconds: number;
   url?: string;
 }
@@ -27,6 +26,7 @@ interface DispatchProps {
 
 interface PropsExtended {
   episodeId: number;
+  playing: boolean;
 }
 
 type Props = DataProps & DispatchProps & PropsExtended & ConnectedProps;
@@ -72,21 +72,20 @@ export class Player extends React.Component<Props, State> {
   public render() {
     return (
       <div>
-        {this.props.playing &&
-          this.props.url && (
-            <FilePlayer
-              ref={this.playerRef}
-              url={this.props.url}
-              controls
-              playing={this.props.playing}
-              config={{ file: { forceAudio: true } }}
-              onProgress={this.handleProgress}
-              onReady={this.handleOnReady}
-              progressInterval={1500}
-              width="600px"
-              height="28px"
-            />
-          )}
+        {this.props.url && (
+          <FilePlayer
+            ref={this.playerRef}
+            url={this.props.url}
+            controls
+            playing={this.props.playing}
+            config={{ file: { forceAudio: true } }}
+            onProgress={this.handleProgress}
+            onReady={this.handleOnReady}
+            progressInterval={1500}
+            width="600px"
+            height="28px"
+          />
+        )}
       </div>
     );
   }
@@ -109,10 +108,8 @@ const mapStateToProps = (
   const episode = getEpisodes(state)[playingEpisodeId];
   const fetchStatus = episode && episode.fetchStatus;
   const url = fetchStatus.status === "SUCCESS" ? fetchStatus.url : undefined;
-  const playing = ownProps.episodeId === playingEpisodeId;
   const playedSeconds = getPlayedSeconds(state)[ownProps.episodeId];
   return {
-    playing,
     url,
     playedSeconds: playedSeconds ? playedSeconds : 0,
   };
@@ -129,4 +126,7 @@ const mapDispatchToProps = (
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Player);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Player);
