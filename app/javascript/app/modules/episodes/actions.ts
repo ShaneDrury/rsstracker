@@ -202,7 +202,7 @@ export const downloadEpisodeAction = (
 ): RootThunk<void> => async dispatch => {
   const downloadResponse = await downloadEpisode(episodeId);
   const job = processJobResponse(downloadResponse.job);
-  dispatch(updateEpisodeStart(job.providerJobId, episodeId));
+  dispatch(updateEpisodeStart(job.id, episodeId));
   dispatch(fetchJobsComplete([job]));
 };
 

@@ -25,9 +25,7 @@ export class ActiveJobs extends React.PureComponent<Props> {
   public render() {
     return (
       <div>
-        {this.props.jobs.map(job => (
-          <span key={job.key}>{job.providerJobId}&nbsp;</span>
-        ))}
+        {this.props.jobs.map(job => <span key={job.key}>{job.id}&nbsp;</span>)}
       </div>
     );
   }
@@ -51,4 +49,7 @@ const mapDispatchToProps = (
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActiveJobs);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ActiveJobs);

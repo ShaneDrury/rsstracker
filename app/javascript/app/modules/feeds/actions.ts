@@ -96,7 +96,7 @@ export const updateFeedAction = (
     }
   );
   const job = processJobResponse(updateResponse.job);
-  dispatch(updateFeedStart(job.providerJobId, feedId));
+  dispatch(updateFeedStart(job.id, feedId));
   dispatch(fetchJobsComplete([job]));
 };
 
@@ -110,7 +110,7 @@ export const updateFeedsAction = (): RootThunk<void> => async (
   const jobs = updateResponse.jobs.map(processJobResponse);
   jobs.forEach((job, idx) => {
     const feedId = feedIds[idx];
-    dispatch(updateFeedStart(job.providerJobId, feedId));
+    dispatch(updateFeedStart(job.id, feedId));
   });
   dispatch(fetchJobsComplete(jobs));
 };

@@ -32,8 +32,8 @@ const episodes = (
       const remoteJobs: { [key: string]: RemoteJob } = {};
       const ids: string[] = [];
       forEach(action.payload.jobs, job => {
-        remoteJobs[job.providerJobId] = job;
-        ids.push(job.providerJobId);
+        remoteJobs[job.id] = job;
+        ids.push(job.id);
       });
       return {
         ...state,
