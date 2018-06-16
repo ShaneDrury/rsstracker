@@ -25,37 +25,33 @@ interface State {
 }
 
 export class ActiveJobs extends React.PureComponent<Props, State> {
+  public static getDerivedStateFromProps(props: Props, state: State) {
+    const keysToRemove = difference(state.keys, props.jobs.map(job => job.id));
+    keysToRemove.forEach(key => {
+      Notification.remove(key);
+    });
+    const keys: string[] = [];
+    props.jobs.forEach(job => {
+      const key = job.id;
+      if (!state.keys.includes(key)) {
+        Notification.info(job.jobData.jobClass, {
+          key,
+          duration: 0,
+          closable: false,
+          placement: "bottomLeft",
+        });
+      }
+      keys.push(key);
+    });
+    return { keys };
+  }
+
   public state: State = {
     keys: [],
   };
 
   public componentDidMount() {
     this.props.getJobs();
-  }
-
-  public componentDidUpdate(prevProps: Props, prevState: State) {
-    if (prevProps.jobs !== this.props.jobs) {
-      const keysToRemove = difference(
-        prevState.keys,
-        this.props.jobs.map(job => job.id)
-      );
-      keysToRemove.forEach(key => {
-        Notification.remove(key);
-      });
-      const keys = this.props.jobs.map(job => {
-        const key = job.id;
-        if (!this.state.keys.includes(key)) {
-          Notification.info(job.jobData.jobClass, {
-            key,
-            duration: 0,
-            closable: false,
-            placement: "bottomLeft",
-          });
-        }
-        return key;
-      });
-      this.setState({ keys });
-    }
   }
 
   public render() {
