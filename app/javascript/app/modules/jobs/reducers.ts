@@ -30,7 +30,7 @@ const episodes = (
     }
     case jobActions.FETCH_JOBS_COMPLETE: {
       const remoteJobs: { [key: string]: RemoteJob } = {};
-      const ids: string[] = [];
+      const ids: string[] = [...state.ids];
       forEach(action.payload.jobs, job => {
         remoteJobs[job.id] = job;
         ids.push(job.id);

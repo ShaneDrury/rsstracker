@@ -1,10 +1,17 @@
+export type JobClass =
+  | "DownloadFeedJob"
+  | "DownloadYoutubePlaylistJob"
+  | "DownloadEpisodeJob"
+  | "DownloadYoutubeAudioJob";
+
 export interface ProviderJob {
   id: number;
   priority: number;
   jobData: {
-    jobClass: string;
+    jobClass: JobClass;
     jobId: string;
     providerJobId: string;
+    arguments: number[];
   };
 }
 
@@ -13,8 +20,9 @@ export interface RemoteJob {
   id: string;
   priority: number;
   jobData: {
-    jobClass: string;
+    jobClass: JobClass;
     jobId: string;
     providerJobId: string;
+    arguments: number[];
   };
 }

@@ -5,13 +5,13 @@ import "react-bulma-notification/build/css/index.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { fetchJobs, JobsAction } from "../modules/jobs/actions";
-import { getJobs } from "../modules/jobs/selectors";
+import { JobDescription } from "../modules/jobs/descriptions";
+import { getJobDescriptions } from "../modules/jobs/selectors";
 import { RootState } from "../modules/reducers";
-import { RemoteJob } from "../types/job";
 import { Dispatch } from "../types/thunk";
 
 interface EnhancedProps {
-  jobs: RemoteJob[];
+  jobDescriptions: JobDescription[];
 }
 
 interface DispatchProps {
@@ -26,24 +26,23 @@ interface State {
 
 export class ActiveJobs extends React.PureComponent<Props, State> {
   public static getDerivedStateFromProps(props: Props, state: State) {
-    const keysToRemove = difference(state.keys, props.jobs.map(job => job.id));
+    const newKeys = props.jobDescriptions.map(job => job.id);
+    const keysToRemove = difference(state.keys, newKeys);
     keysToRemove.forEach(key => {
       Notification.remove(key);
     });
-    const keys: string[] = [];
-    props.jobs.forEach(job => {
+    props.jobDescriptions.forEach(job => {
       const key = job.id;
       if (!state.keys.includes(key)) {
-        Notification.info(job.jobData.jobClass, {
+        Notification.info(job.description, {
           key,
           duration: 0,
           closable: false,
           placement: "bottomLeft",
         });
       }
-      keys.push(key);
     });
-    return { keys };
+    return { keys: newKeys };
   }
 
   public state: State = {
@@ -60,9 +59,9 @@ export class ActiveJobs extends React.PureComponent<Props, State> {
 }
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
-  const jobs = getJobs(state);
+  const jobDescriptions = getJobDescriptions(state);
   return {
-    jobs,
+    jobDescriptions,
   };
 };
 
