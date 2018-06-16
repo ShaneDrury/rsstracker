@@ -2,7 +2,7 @@ import camelcaseKeys from "camelcase-keys";
 import qs from "qs";
 import * as shortid from "shortid";
 import { ApiEpisode, RemoteEpisode } from "../../types/episode";
-import { ApiJob } from "../../types/job";
+import { ProviderJob } from "../../types/job";
 import { PageInfo } from "../../types/page";
 import apiFetch from "../apiFetch";
 import { Filter } from "../filters";
@@ -17,7 +17,7 @@ interface ProcessedResponse extends EpisodesResponse {
 }
 
 interface DownloadEpisodeResponse {
-  job: ApiJob;
+  job: ProviderJob;
 }
 
 export const processEpisode = (episode: ApiEpisode): RemoteEpisode => ({

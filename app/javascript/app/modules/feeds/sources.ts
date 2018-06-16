@@ -1,15 +1,15 @@
 import camelcaseKeys from "camelcase-keys";
 import * as shortid from "shortid";
 import { ApiFeed, RemoteFeed, StatusKey } from "../../types/feed";
-import { ApiJob } from "../../types/job";
+import { ProviderJob } from "../../types/job";
 import apiFetch from "../apiFetch";
 
 interface UpdateFeedsResponse {
-  jobs: ApiJob[];
+  jobs: ProviderJob[];
 }
 
 interface UpdateFeedResponse {
-  job: ApiJob;
+  job: ProviderJob;
 }
 
 interface FeedsResponse {
