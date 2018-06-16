@@ -1,5 +1,6 @@
 import { RemoteJob } from "../../types/job";
 import { RootThunk } from "../../types/thunk";
+import { fetchEpisodeIfNeeded } from "../episodes/actions";
 import { getJobs } from "./sources";
 
 export enum jobActions {
@@ -63,6 +64,14 @@ export const fetchJobs = (): RootThunk<void> => async dispatch => {
   dispatch(fetchJobsStart());
   try {
     const jobs = await getJobs();
+    jobs.forEach(job => {
+      switch (job.jobData.jobClass) {
+        case "DownloadEpisodeJob":
+        case "DownloadYoutubeAudioJob": {
+          dispatch(fetchEpisodeIfNeeded(job.jobData.arguments[0]));
+        }
+      }
+    });
     dispatch(fetchJobsComplete(jobs));
   } catch (err) {
     dispatch(fetchJobsFailure(err));
