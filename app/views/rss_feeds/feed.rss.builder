@@ -18,6 +18,9 @@ xml.rss version: '2.0',
         xml.description { xml.cdata! episode.description }
         xml.pubDate episode.publication_date.to_s(:rfc822)
         xml.itunes :duration, episode.duration
+        if episode.thumbnail_url
+          xml.media :thumbnail, url: episode.thumbnail_url
+        end
         xml.media :content,
           url: episode.fetch_status.url,
           fileSize: episode.file_size.to_s,
