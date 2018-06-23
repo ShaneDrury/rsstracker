@@ -8,9 +8,9 @@ import { getFetchStatus } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { Dispatch } from "../types/thunk";
-import AllStatusSelect from "./AllStatusSelect";
 import Episodes from "./Episodes";
 import Search from "./Search";
+import StatusSelect from "./StatusSelect";
 import UpdateFeeds from "./UpdateFeeds";
 
 interface DataProps {
@@ -51,7 +51,7 @@ export class AllFeeds extends React.PureComponent<Props> {
                 <div className="field is-grouped">
                   <div className="control">
                     <div className="select">
-                      <AllStatusSelect />
+                      <StatusSelect />
                     </div>
                   </div>
                   <div className="control is-expanded">
@@ -91,4 +91,7 @@ const mapDispatchToProps = (
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllFeeds);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AllFeeds);

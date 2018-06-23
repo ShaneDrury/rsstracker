@@ -95,7 +95,7 @@ export class Feed extends React.PureComponent<Props> {
                 <div className="field is-grouped">
                   <div className="control">
                     <div className="select">
-                      <StatusSelect feedId={this.props.feedId} />
+                      <StatusSelect />
                     </div>
                   </div>
                   <div className="control is-expanded">
@@ -145,4 +145,7 @@ const mapDispatchToProps = (
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Feed);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Feed);

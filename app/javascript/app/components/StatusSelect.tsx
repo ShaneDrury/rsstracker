@@ -6,10 +6,10 @@ import {
   changeFilterAction,
   EpisodesAction,
 } from "../modules/episodes/actions";
-import { getFeedObjects } from "../modules/feeds/selectors";
 import { Filter } from "../modules/filters";
 import { getQueryParams } from "../modules/location/selectors";
 import { RootState } from "../modules/reducers";
+import { getAllStatusCounts } from "../modules/statusCounts/selectors";
 import { StatusCounts } from "../types/feed";
 import { Dispatch } from "../types/thunk";
 
@@ -22,11 +22,27 @@ interface DispatchProps {
   onChangeFilter: (filter: Filter) => void;
 }
 
-interface OwnProps {
-  feedId: number;
+type Props = EnhancedProps & DispatchProps;
+
+interface OptionProps {
+  value: Filter;
+  statusKey: string;
+  label: string;
+  count?: number;
 }
 
-type Props = EnhancedProps & DispatchProps;
+class StatusSelectOption extends React.PureComponent<OptionProps> {
+  public render() {
+    return (
+      <option
+        value={this.props.value}
+        key={`${this.props.statusKey}-${this.props.count || 0}`}
+      >
+        {this.props.label} {this.props.count && `(${this.props.count})`}
+      </option>
+    );
+  }
+}
 
 export class StatusSelect extends React.PureComponent<Props> {
   public handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -36,59 +52,50 @@ export class StatusSelect extends React.PureComponent<Props> {
 
   public render() {
     const counts = this.props.counts;
-    const countsWithDefault = {
-      all: counts.all,
-      loading: counts.loading || 0,
-      success: counts.success || 0,
-      notAsked: counts.notAsked || 0,
-      failure: counts.failure || 0,
-    };
+
     return (
       <select
         className="select"
         onChange={this.handleFilterChange}
         value={this.props.filter}
       >
-        <option value={Filter.ALL} key={`all-${countsWithDefault.all}`}>
+        <option value={Filter.ALL} key={`all-${counts.all}`}>
           All ({counts.all})
         </option>
-        <option
+        <StatusSelectOption
           value={Filter.SUCCESS}
-          key={`success-${countsWithDefault.success}`}
-        >
-          Success {counts.success && `(${counts.success})`}
-        </option>
-        <option
+          statusKey="success"
+          label="Success"
+          count={counts.success}
+        />
+        <StatusSelectOption
           value={Filter.NOT_ASKED}
-          key={`notAsked-${countsWithDefault.notAsked}`}
-        >
-          Not asked {counts.notAsked && `(${counts.notAsked})`}
-        </option>
-        <option
+          statusKey="notAsked"
+          label="Not asked"
+          count={counts.notAsked}
+        />
+        <StatusSelectOption
           value={Filter.LOADING}
-          key={`loading-${countsWithDefault.loading}`}
-        >
-          Loading {counts.loading && `(${counts.loading})`}
-        </option>
-        <option
+          statusKey="loading"
+          label="Loading"
+          count={counts.loading}
+        />
+        <StatusSelectOption
           value={Filter.FAILURE}
-          key={`failure-${countsWithDefault.failure}`}
-        >
-          Failure {counts.failure && `(${counts.failure})`}
-        </option>
+          statusKey="failure"
+          label="Failure"
+          count={counts.failure}
+        />
       </select>
     );
   }
 }
 
-const mapStateToProps = (
-  state: RootState,
-  ownProps: OwnProps
-): EnhancedProps => {
+const mapStateToProps = (state: RootState): EnhancedProps => {
   const params = getQueryParams(state);
   const filterParam = params.filter;
   const filter: Filter = (filterParam as Filter) || Filter.ALL;
-  const counts = getFeedObjects(state)[ownProps.feedId].statusCounts;
+  const counts = getAllStatusCounts(state);
 
   return {
     filter,
