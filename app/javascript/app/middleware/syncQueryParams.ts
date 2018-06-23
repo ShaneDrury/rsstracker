@@ -1,3 +1,4 @@
+import { isEqual } from "lodash";
 import * as qs from "qs";
 import { Middleware } from "redux";
 import {
@@ -24,8 +25,10 @@ const syncQueryParams: Middleware = store => next => (
     if (action.type === actions.CHANGE_SEARCH) {
       newParams.searchTerm = action.payload.searchTerm;
     }
-    const newQueryParams = qs.stringify({ ...params, ...newParams });
-    history.push({ search: `?${newQueryParams}` });
+    const newQueryParams = { ...params, ...newParams };
+    if (!isEqual(newQueryParams, params)) {
+      history.push({ search: `?${qs.stringify(newQueryParams)}` });
+    }
   }
   return next(action);
 };
