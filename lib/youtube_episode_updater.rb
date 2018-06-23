@@ -9,6 +9,7 @@ class YoutubeEpisodeUpdater
     ep.description = details.description
     ep.duration = details.duration
     ep.publication_date = details.publication_date
+    ep.source_thumbnail_url = details.thumbnail_url
     ep.url = url
   end
 

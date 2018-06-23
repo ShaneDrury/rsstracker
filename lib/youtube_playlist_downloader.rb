@@ -23,6 +23,7 @@ class YoutubePlaylistDownloader
       updater.update(ep, url)
       ep.save
       feed.touch
+      DownloadThumbnailJob.perform_later(ep.id)
     end
   end
 

@@ -11,12 +11,13 @@ class YoutubeEpisodeDetails
     description = details['description']
     duration = Time.at(details['duration']).utc.strftime('%H:%M:%S')
     publication_date = Date.strptime(details['upload_date'], '%Y%m%d')
-    EpisodeDetails.new(description, duration, publication_date)
+    thumbnail_url = details['thumbnail']
+    EpisodeDetails.new(description, duration, publication_date, thumbnail_url)
   end
 
   private
 
   attr_reader :url, :youtube_dl_path
 
-  EpisodeDetails = Struct.new(:description, :duration, :publication_date)
+  EpisodeDetails = Struct.new(:description, :duration, :publication_date, :thumbnail_url)
 end
