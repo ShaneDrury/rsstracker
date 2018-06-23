@@ -8,13 +8,13 @@ import {
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
 
-import * as ReactPaginate from "react-paginate";
 import { bindActionCreators } from "redux";
 import { changePage, EpisodesAction } from "../modules/episodes/actions";
 import { FetchStatus } from "../modules/remoteData";
 import { PageInfo } from "../types/page";
 import { Dispatch } from "../types/thunk";
 import Episode from "./Episode";
+import Pagination from "./Pagination";
 
 interface DataProps {}
 
@@ -52,12 +52,12 @@ export class Episodes extends React.PureComponent<Props> {
               role="navigation"
               aria-label="pagination"
             >
-              <ReactPaginate
+              <Pagination
                 pageCount={pageInfo.totalPages}
                 forcePage={pageInfo.currentPage - 1}
                 pageRangeDisplayed={5}
                 marginPagesDisplayed={2}
-                activeClassName="pagination-link is-current"
+                activePageLinkClassName="pagination-link is-current"
                 pageLinkClassName="pagination-link"
                 containerClassName="pagination-list"
                 previousClassName="pagination-previous"
@@ -93,4 +93,7 @@ const mapDispatchToProps = (
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Episodes);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Episodes);
