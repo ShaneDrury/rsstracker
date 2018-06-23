@@ -4,10 +4,10 @@ import {
   changeFilterAction,
   EpisodesAction,
 } from "../modules/episodes/actions";
-import { getAllStatusCounts } from "../modules/feeds/selectors";
 import { Filter } from "../modules/filters";
 import { getQueryParams } from "../modules/location/selectors";
 import { RootState } from "../modules/reducers";
+import { getAllStatusCounts } from "../modules/statusCounts/selectors";
 import { StatusCounts } from "../types/feed";
 import { Dispatch } from "../types/thunk";
 import { StatusSelect } from "./StatusSelect";

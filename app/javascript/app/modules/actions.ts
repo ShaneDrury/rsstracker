@@ -4,6 +4,7 @@ import { EpisodesAction } from "./episodes/actions";
 import { FeedJobsAction } from "./feedJobs/actions";
 import { FeedsAction } from "./feeds/actions";
 import { JobsAction } from "./jobs/actions";
+import { StatusCountsAction } from "./statusCounts/actions";
 
 export type RootAction =
   | FeedsAction
@@ -11,4 +12,5 @@ export type RootAction =
   | EpisodeJobsAction
   | EpisodesAction
   | RouterAction
-  | JobsAction;
+  | JobsAction
+  | StatusCountsAction;
