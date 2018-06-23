@@ -31,6 +31,6 @@ const rootReducer: Reducer<RootState, RootAction> = combineReducers({
   player,
   routing: routerReducer,
   statusCounts,
-} as any);
+});
 
 export default rootReducer;
