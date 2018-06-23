@@ -10,7 +10,7 @@ import { getFeedObjects } from "../modules/feeds/selectors";
 import { Filter } from "../modules/filters";
 import { getQueryParams } from "../modules/location/selectors";
 import { RootState } from "../modules/reducers";
-import { StatusCounts, StatusKey } from "../types/feed";
+import { StatusCounts } from "../types/feed";
 import { Dispatch } from "../types/thunk";
 
 interface EnhancedProps {
@@ -36,12 +36,13 @@ export class StatusSelect extends React.PureComponent<Props> {
 
   public render() {
     const counts = this.props.counts;
-    const countsWithDefault = ["all", "success", "notAsked", "failure"].reduce<{
-      [key: string]: number;
-    }>((acc, key) => {
-      acc[key] = counts[key as StatusKey] || 0;
-      return acc;
-    }, {});
+    const countsWithDefault = {
+      all: counts.all,
+      loading: counts.loading || 0,
+      success: counts.success || 0,
+      notAsked: counts.notAsked || 0,
+      failure: counts.failure || 0,
+    };
     return (
       <select
         className="select"
@@ -49,7 +50,7 @@ export class StatusSelect extends React.PureComponent<Props> {
         value={this.props.filter}
       >
         <option value={Filter.ALL} key={`all-${countsWithDefault.all}`}>
-          All {counts.all && `(${counts.all})`}
+          All ({counts.all})
         </option>
         <option
           value={Filter.SUCCESS}

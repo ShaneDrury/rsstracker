@@ -6,6 +6,7 @@ import { getFeedId } from "../feeds/selectors";
 import { Filter } from "../filters";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobResponse } from "../jobs/sources";
+import { fetchStatusesComplete } from "../statusCounts/actions";
 import {
   getEpisodes as getEpisodesSelector,
   getFetchStatus,
@@ -180,6 +181,7 @@ export const searchEpisodes = (): RootThunk<void> => async (
       currentPage,
     });
     dispatch(fetchEpisodesComplete(episodes.items, episodes.pageInfo));
+    dispatch(fetchStatusesComplete(episodes.statusCounts));
   } catch (err) {
     dispatch(fetchEpisodesFailure(err));
   }

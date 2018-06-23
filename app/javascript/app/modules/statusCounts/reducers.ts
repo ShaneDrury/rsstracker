@@ -6,7 +6,9 @@ export interface State {
 }
 
 const initialState: State = {
-  items: {},
+  items: {
+    all: 0,
+  },
 };
 
 const feeds = (
