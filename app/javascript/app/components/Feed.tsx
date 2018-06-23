@@ -20,9 +20,8 @@ import StatusSelect from "./StatusSelect";
 
 interface DataProps {
   isUpdating: boolean;
-  remoteFeed: RemoteFeed;
+  remoteFeed?: RemoteFeed;
   fetchStatus: FetchStatus;
-  feedId: number;
 }
 
 interface DispatchProps {
@@ -40,18 +39,15 @@ export class Feed extends React.PureComponent<Props> {
   }
 
   public componentDidUpdate(prevProps: Props) {
-    if (
-      prevProps.feedId !== this.props.feedId ||
-      prevProps.location.key !== this.props.location.key ||
-      (prevProps.remoteFeed &&
-        prevProps.remoteFeed.key !== this.props.remoteFeed.key)
-    ) {
+    if (prevProps.location.key !== this.props.location.key) {
       this.props.fetchEpisodes();
     }
   }
 
   public handleUpdateFeed = () => {
-    this.props.updateFeed(this.props.remoteFeed.id);
+    if (this.props.remoteFeed) {
+      this.props.updateFeed(this.props.remoteFeed.id);
+    }
   };
 
   public render() {
@@ -128,7 +124,6 @@ const mapStateToProps = (
   return {
     isUpdating,
     remoteFeed,
-    feedId,
     fetchStatus,
   };
 };
