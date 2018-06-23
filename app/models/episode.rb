@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Episode < ApplicationRecord
   belongs_to :feed
   has_one :fetch_status, as: :fetchable, dependent: :destroy
@@ -6,7 +7,11 @@ class Episode < ApplicationRecord
     EpisodeUpdateBroadcastJob.perform_later(id)
   end
 
+  def full_url
+    feed.source == 'youtube' ? "https://www.youtube.com/watch?v=#{url}" : url
+  end
+
   def as_json(options={})
-    super(include: { fetch_status: { methods: :percentage_fetched } })
+    super(include: { fetch_status: { methods: :percentage_fetched } }, methods: [:full_url])
   end
 end

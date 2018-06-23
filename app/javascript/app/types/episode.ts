@@ -8,6 +8,7 @@ export interface ApiEpisode {
   guid: string;
   name: string;
   url: string;
+  fullUrl: string;
   fetchStatus: FetchStatus;
   publicationDate: string;
 }

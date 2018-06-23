@@ -1,4 +1,4 @@
-import { faSync } from "@fortawesome/fontawesome-free-solid";
+import { faFileAudio, faSync } from "@fortawesome/fontawesome-free-solid";
 import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
@@ -60,6 +60,7 @@ export const Episode: React.SFC<Props> = ({
   playing,
   publicationDate,
   togglePlay,
+  fullUrl,
 }) => {
   const handleDownload = () => downloadEpisode(id);
   const handleToggleShow = () => {
@@ -88,7 +89,10 @@ export const Episode: React.SFC<Props> = ({
             {description && <Description text={description} />}
             <hr />
             <PlayingSeconds episodeId={id} />
-            <time>{duration}</time>
+            <time>{duration}</time>{" "}
+            <a href={fullUrl}>
+              <Icon icon={faFileAudio} />
+            </a>
             <br />
             {fetchStatus.status === "SUCCESS" && (
               <button
@@ -159,4 +163,7 @@ const mapDispatchToProps = (
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Episode);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Episode);
