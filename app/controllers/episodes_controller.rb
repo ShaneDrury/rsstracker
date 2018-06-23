@@ -58,15 +58,18 @@ class EpisodesController < ApplicationController
   def search
     episodes = Episode.includes(:fetch_status).order(publication_date: :desc)
     episodes = episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
+    episodes = if params[:search_term].present?
+                 description = DbTextSearch::FullText.new(episodes, :description).search(params[:search_term])
+                 name = DbTextSearch::FullText.new(episodes, :name).search(params[:search_term])
+                 description.or(name)
+               else
+                 episodes
+               end
+    counts = episodes.joins(:fetch_status).group(:status).count
+    counts['all'] = counts.values.sum
     episodes = episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
-    results = if params[:search_term].present?
-                description = DbTextSearch::FullText.new(episodes, :description).search(params[:search_term])
-                name = DbTextSearch::FullText.new(episodes, :name).search(params[:search_term])
-                description.or(name)
-              else
-                episodes
-              end
-    paged = results.page(params[:page_number] || 1)
+    paged = episodes.page(params[:page_number] || 1)
+
     render json: {
       items: paged,
       page_info: {
@@ -80,6 +83,7 @@ class EpisodesController < ApplicationController
         last_page: paged.last_page?,
         out_of_range: paged.out_of_range?,
       },
+      status_counts: counts,
     }
   end
 
