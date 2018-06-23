@@ -11,6 +11,7 @@ export interface ApiEpisode {
   fullUrl: string;
   fetchStatus: FetchStatus;
   publicationDate: string;
+  thumbnailUrl?: string;
 }
 
 export interface RemoteEpisode extends ApiEpisode {

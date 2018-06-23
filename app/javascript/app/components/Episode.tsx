@@ -60,6 +60,7 @@ export const Episode: React.SFC<Props> = ({
   playing,
   publicationDate,
   togglePlay,
+  thumbnailUrl,
   fullUrl,
 }) => {
   const handleDownload = () => downloadEpisode(id);
@@ -85,8 +86,19 @@ export const Episode: React.SFC<Props> = ({
           )}
         </header>
         <div className="card-content">
+          <div className="media">
+            <div className="media-content">
+              {description && <Description text={description} />}
+            </div>
+            {thumbnailUrl && (
+              <div className="media-right">
+                <figure className="image is-128x128">
+                  <img src={thumbnailUrl} />
+                </figure>
+              </div>
+            )}
+          </div>
           <div className="content">
-            {description && <Description text={description} />}
             <hr />
             <PlayingSeconds episodeId={id} />
             <time>{duration}</time>{" "}
