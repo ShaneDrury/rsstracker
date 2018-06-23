@@ -2,6 +2,7 @@ import camelcaseKeys from "camelcase-keys";
 import qs from "qs";
 import * as shortid from "shortid";
 import { ApiEpisode, RemoteEpisode } from "../../types/episode";
+import { StatusCounts } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
 import { PageInfo } from "../../types/page";
 import apiFetch from "../apiFetch";
@@ -10,6 +11,7 @@ import { Filter } from "../filters";
 interface EpisodesResponse {
   items: ApiEpisode[];
   pageInfo: PageInfo;
+  statusCounts: StatusCounts;
 }
 
 interface ProcessedResponse extends EpisodesResponse {

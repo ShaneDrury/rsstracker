@@ -14,3 +14,5 @@ export interface ApiFeed {
 export interface RemoteFeed extends ApiFeed {
   key: string;
 }
+
+export type StatusCounts = { [key in StatusKey]?: number };

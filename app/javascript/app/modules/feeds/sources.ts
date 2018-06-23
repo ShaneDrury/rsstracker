@@ -1,6 +1,6 @@
 import camelcaseKeys from "camelcase-keys";
 import * as shortid from "shortid";
-import { ApiFeed, RemoteFeed, StatusKey } from "../../types/feed";
+import { ApiFeed, RemoteFeed, StatusCounts } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
 import apiFetch from "../apiFetch";
 
@@ -14,12 +14,12 @@ interface UpdateFeedResponse {
 
 interface FeedsResponse {
   items: ApiFeed[];
-  statusCounts: { [key in StatusKey]?: number };
+  statusCounts: StatusCounts;
 }
 
 interface ProcessedFeeds {
   items: RemoteFeed[];
-  statusCounts: { [key in StatusKey]?: number };
+  statusCounts: StatusCounts;
 }
 
 export const processFeed = (feed: ApiFeed): RemoteFeed => ({

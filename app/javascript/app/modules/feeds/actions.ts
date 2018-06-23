@@ -1,5 +1,5 @@
 import camelcaseKeys from "camelcase-keys";
-import { RemoteFeed, StatusKey } from "../../types/feed";
+import { RemoteFeed, StatusCounts } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
 import { RootThunk } from "../../types/thunk";
 import { updateFeedStart } from "../feedJobs/actions";
@@ -23,7 +23,7 @@ interface FetchFeedsComplete {
   type: feedActions.FETCH_FEEDS_COMPLETE;
   payload: {
     feeds: RemoteFeed[];
-    statusCounts: { [key in StatusKey]?: number };
+    statusCounts: StatusCounts;
   };
 }
 
@@ -47,7 +47,7 @@ export const fetchFeedsStart = (): FetchFeedsStart => ({
 
 export const fetchFeedsComplete = (
   feeds: RemoteFeed[],
-  statusCounts: { [key in StatusKey]?: number }
+  statusCounts: StatusCounts
 ): FetchFeedsComplete => ({
   type: feedActions.FETCH_FEEDS_COMPLETE,
   payload: { feeds, statusCounts },

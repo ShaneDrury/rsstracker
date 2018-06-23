@@ -8,13 +8,13 @@ import { getAllStatusCounts } from "../modules/feeds/selectors";
 import { Filter } from "../modules/filters";
 import { getQueryParams } from "../modules/location/selectors";
 import { RootState } from "../modules/reducers";
-import { StatusKey } from "../types/feed";
+import { StatusCounts } from "../types/feed";
 import { Dispatch } from "../types/thunk";
 import { StatusSelect } from "./StatusSelect";
 
 interface EnhancedProps {
   filter: Filter;
-  counts: { [key in StatusKey]?: number };
+  counts: StatusCounts;
 }
 
 interface DispatchProps {
@@ -44,4 +44,7 @@ const mapDispatchToProps = (
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(StatusSelect);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StatusSelect);

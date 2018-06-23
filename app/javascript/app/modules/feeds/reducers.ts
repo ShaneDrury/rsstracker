@@ -1,5 +1,5 @@
 import { forEach } from "lodash";
-import { RemoteFeed, StatusKey } from "../../types/feed";
+import { RemoteFeed, StatusCounts } from "../../types/feed";
 import { FetchStatus } from "../remoteData";
 import { feedActions, FeedsAction } from "./actions";
 
@@ -9,7 +9,7 @@ export interface State {
   };
   ids: number[];
   fetchStatus: FetchStatus;
-  statusCounts: { [key in StatusKey]?: number };
+  statusCounts: StatusCounts;
 }
 
 const initialState: State = {
