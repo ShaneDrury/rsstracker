@@ -5,7 +5,6 @@ class YoutubeEpisodeUpdater
 
   def update(ep, url)
     details = full_details(url)
-    ep.build_fetch_status(status: 'NOT_ASKED')
     ep.description = details.description
     ep.duration = details.duration
     ep.publication_date = details.publication_date
