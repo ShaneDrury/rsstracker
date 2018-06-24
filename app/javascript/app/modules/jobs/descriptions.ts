@@ -58,10 +58,10 @@ export const mapJobToDescription = (
         description: `Downloading thumbnail`,
       };
     }
-    case "FeedUpdateBroadcastJob": {
+    default: {
       return {
         id: `${job.id}`,
-        description: "Broadcasting",
+        description: `${job.jobData.jobClass}`,
       };
     }
   }
