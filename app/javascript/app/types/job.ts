@@ -3,7 +3,9 @@ export type JobClass =
   | "DownloadYoutubePlaylistJob"
   | "DownloadEpisodeJob"
   | "DownloadYoutubeAudioJob"
-  | "FetchOldThumbnailsJob";
+  | "FetchOldThumbnailsJob"
+  | "DownloadThumbnailJob"
+  | "FeedUpdateBroadcastJob";
 
 export interface ProviderJob {
   id: number;

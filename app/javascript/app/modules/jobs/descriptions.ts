@@ -51,10 +51,17 @@ export const mapJobToDescription = (
         description: `Downloading: ${episode.name}`,
       };
     }
+    case "DownloadThumbnailJob":
     case "FetchOldThumbnailsJob": {
       return {
         id: `${job.id}`,
         description: `Downloading thumbnail`,
+      };
+    }
+    case "FeedUpdateBroadcastJob": {
+      return {
+        id: `${job.id}`,
+        description: "Broadcasting",
       };
     }
   }
