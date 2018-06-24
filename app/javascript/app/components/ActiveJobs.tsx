@@ -34,12 +34,21 @@ export class ActiveJobs extends React.PureComponent<Props, State> {
     props.jobDescriptions.forEach(job => {
       const key = job.id;
       if (!state.keys.includes(key)) {
-        Notification.info(job.description, {
-          key,
-          duration: 0,
-          closable: false,
-          placement: "bottomLeft",
-        });
+        if (job.error) {
+          Notification.error(job.error, {
+            key,
+            duration: 0,
+            closable: false,
+            placement: "bottomLeft",
+          });
+        } else {
+          Notification.info(job.description, {
+            key,
+            duration: 0,
+            closable: false,
+            placement: "bottomLeft",
+          });
+        }
       }
     });
     return { keys: newKeys };

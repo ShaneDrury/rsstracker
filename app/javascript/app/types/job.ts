@@ -7,6 +7,7 @@ export type JobClass =
 
 export interface ProviderJob {
   id: number;
+  lastError?: string;
   priority: number;
   jobData: {
     jobClass: JobClass;
@@ -19,6 +20,7 @@ export interface ProviderJob {
 export interface RemoteJob {
   key: string;
   id: string;
+  lastError?: string;
   priority: number;
   jobData: {
     jobClass: JobClass;

@@ -5,6 +5,7 @@ import { RemoteJob } from "../../types/job";
 export interface JobDescription {
   id: string;
   description: string;
+  error?: string;
 }
 
 export const mapJobToDescription = (
@@ -17,15 +18,19 @@ export const mapJobToDescription = (
     case "DownloadFeedJob":
     case "DownloadYoutubePlaylistJob": {
       const feed = feeds[itemId];
+      const errorMessage = job.lastError && job.lastError.split("\n")[0];
+      const error = `${errorMessage} during Updating: ${feed.name}`;
       if (!feed) {
         return {
           id: `${job.id}/notfetched`,
           description: `Updating: ${itemId}`,
+          error,
         };
       }
       return {
         id: `${job.id}`,
         description: `Updating: ${feed.name}`,
+        error,
       };
     }
     case "DownloadYoutubeAudioJob":
