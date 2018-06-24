@@ -1,7 +1,7 @@
 import { RemoteJob } from "../../types/job";
 import { RootThunk } from "../../types/thunk";
 import { fetchEpisodeIfNeeded } from "../episodes/actions";
-import { getJobs } from "./sources";
+import { deleteJob, getJobs } from "./sources";
 
 export enum jobActions {
   FETCH_JOBS_START = "FETCH_JOBS_START",
@@ -76,4 +76,10 @@ export const fetchJobs = (): RootThunk<void> => async dispatch => {
   } catch (err) {
     dispatch(fetchJobsFailure(err));
   }
+};
+
+export const deleteJobAction = (
+  jobId: string
+): RootThunk<void> => async dispatch => {
+  await deleteJob(jobId);
 };

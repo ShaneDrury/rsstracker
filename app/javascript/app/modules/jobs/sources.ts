@@ -28,3 +28,9 @@ export const getJobs = async (): Promise<RemoteJob[]> => {
   const response = await apiFetch(`/jobs`);
   return response.map(processAllJobResponse);
 };
+
+export const deleteJob = async (jobId: string): Promise<void> => {
+  return apiFetch(`/jobs/${jobId}`, {
+    method: "DELETE",
+  });
+};

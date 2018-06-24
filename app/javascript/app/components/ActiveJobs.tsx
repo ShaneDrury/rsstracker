@@ -4,7 +4,11 @@ import Notification from "react-bulma-notification";
 import "react-bulma-notification/build/css/index.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchJobs, JobsAction } from "../modules/jobs/actions";
+import {
+  deleteJobAction,
+  fetchJobs,
+  JobsAction,
+} from "../modules/jobs/actions";
 import { JobDescription } from "../modules/jobs/descriptions";
 import { getJobDescriptions } from "../modules/jobs/selectors";
 import { RootState } from "../modules/reducers";
@@ -16,6 +20,7 @@ interface EnhancedProps {
 
 interface DispatchProps {
   getJobs: () => void;
+  onCloseErrorJob: (jobId: string) => void;
 }
 
 type Props = EnhancedProps & DispatchProps;
@@ -38,8 +43,9 @@ export class ActiveJobs extends React.PureComponent<Props, State> {
           Notification.error(job.error, {
             key,
             duration: 0,
-            closable: false,
+            closable: true,
             placement: "bottomLeft",
+            onClose: () => props.onCloseErrorJob(job.id),
           });
         } else {
           Notification.info(job.description, {
@@ -80,6 +86,7 @@ const mapDispatchToProps = (
   return bindActionCreators(
     {
       getJobs: fetchJobs,
+      onCloseErrorJob: deleteJobAction,
     },
     dispatch
   );

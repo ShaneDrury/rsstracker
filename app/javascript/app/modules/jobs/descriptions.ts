@@ -19,7 +19,11 @@ export const mapJobToDescription = (
     case "DownloadYoutubePlaylistJob": {
       const feed = feeds[itemId];
       const errorMessage = job.lastError && job.lastError.split("\n")[0];
-      const error = `${errorMessage} during Updating: ${feed.name}`;
+      const error = errorMessage
+        ? feed
+          ? `${errorMessage} during Updating: ${feed.name}`
+          : `${errorMessage} during Updating: ${itemId}`
+        : undefined;
       if (!feed) {
         return {
           id: `${job.id}/notfetched`,
