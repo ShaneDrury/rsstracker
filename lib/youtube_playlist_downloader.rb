@@ -21,7 +21,11 @@ class YoutubePlaylistDownloader
     updater = YoutubeEpisodeUpdater.new(youtube_dl_path)
     Episode.find_or_create_by(feed: feed, name: description, guid: url) do |ep|
       ep.build_fetch_status(status: 'NOT_ASKED')
-      updater.update(ep, url)
+      begin
+        updater.update(ep, url)
+      rescue IOError
+        break
+      end
       ep.save
       feed.touch
       DownloadThumbnailJob.perform_later(ep.id)
