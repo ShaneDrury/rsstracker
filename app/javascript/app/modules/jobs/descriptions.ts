@@ -14,11 +14,11 @@ export const mapJobToDescription = (
   job: RemoteJob
 ): JobDescription => {
   const itemId = job.jobData.arguments[0];
+  const errorMessage = job.lastError && job.lastError.split("\n")[0];
   switch (job.jobData.jobClass) {
     case "DownloadFeedJob":
     case "DownloadYoutubePlaylistJob": {
       const feed = feeds[itemId];
-      const errorMessage = job.lastError && job.lastError.split("\n")[0];
       const error = errorMessage
         ? feed
           ? `${errorMessage} during Updating: ${feed.name}`
@@ -40,15 +40,22 @@ export const mapJobToDescription = (
     case "DownloadYoutubeAudioJob":
     case "DownloadEpisodeJob": {
       const episode = episodes[itemId];
+      const error = errorMessage
+        ? episode
+          ? `${errorMessage} during Updating: ${episode.name}`
+          : `${errorMessage} during Updating: ${itemId}`
+        : undefined;
       if (!episode) {
         return {
           id: `${job.id}/notfetched`,
           description: `Downloading ${itemId}`,
+          error,
         };
       }
       return {
         id: `${job.id}`,
         description: `Downloading: ${episode.name}`,
+        error,
       };
     }
     case "DownloadThumbnailJob":
@@ -56,12 +63,14 @@ export const mapJobToDescription = (
       return {
         id: `${job.id}`,
         description: `Downloading thumbnail`,
+        error: errorMessage,
       };
     }
     default: {
       return {
         id: `${job.id}`,
         description: `${job.jobData.jobClass}`,
+        error: errorMessage,
       };
     }
   }
