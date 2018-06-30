@@ -1,21 +1,21 @@
 export enum episodeJobsActions {
-  UPDATE_EPISODE_START = "UPDATE_EPISODE_START",
+  UPDATE_EPISODE_STARTED = "UPDATE_EPISODE_STARTED",
 }
 
-interface UpdateEpisodeStart {
-  type: episodeJobsActions.UPDATE_EPISODE_START;
+interface UpdateEpisodeStarted {
+  type: episodeJobsActions.UPDATE_EPISODE_STARTED;
   payload: {
     jobId: string;
     episodeId: number;
   };
 }
 
-export const updateEpisodeStart = (
+export const updateEpisodeStarted = (
   jobId: string,
   episodeId: number
-): UpdateEpisodeStart => ({
-  type: episodeJobsActions.UPDATE_EPISODE_START,
+): UpdateEpisodeStarted => ({
+  type: episodeJobsActions.UPDATE_EPISODE_STARTED,
   payload: { jobId, episodeId },
 });
 
-export type EpisodeJobsAction = UpdateEpisodeStart;
+export type EpisodeJobsAction = UpdateEpisodeStarted;

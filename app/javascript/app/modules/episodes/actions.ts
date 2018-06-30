@@ -1,7 +1,7 @@
 import { RemoteEpisode } from "../../types/episode";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
-import { updateEpisodeStart } from "../episodeJobs/actions";
+import { updateEpisodeStarted } from "../episodeJobs/actions";
 import { getFeedId } from "../feeds/selectors";
 import { Filter } from "../filters";
 import { fetchJobsComplete } from "../jobs/actions";
@@ -204,7 +204,7 @@ export const downloadEpisodeAction = (
 ): RootThunk<void> => async dispatch => {
   const downloadResponse = await downloadEpisode(episodeId);
   const job = processJobResponse(downloadResponse.job);
-  dispatch(updateEpisodeStart(job.id, episodeId));
+  dispatch(updateEpisodeStarted(job.id, episodeId));
   dispatch(fetchJobsComplete([job]));
 };
 

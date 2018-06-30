@@ -15,7 +15,7 @@ const episodeJobs = (
   action: EpisodeJobsAction | JobsAction
 ): State => {
   switch (action.type) {
-    case episodeJobsActions.UPDATE_EPISODE_START: {
+    case episodeJobsActions.UPDATE_EPISODE_STARTED: {
       return {
         ...state,
         items: {
