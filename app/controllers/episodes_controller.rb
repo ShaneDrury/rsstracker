@@ -56,7 +56,7 @@ class EpisodesController < ApplicationController
   end
 
   def search
-    episodes = Episode.includes(:fetch_status).order(publication_date: :desc)
+    episodes = Episode.includes(:fetch_status, :feed).order(publication_date: :desc)
     episodes = episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     episodes = if params[:search_term].present?
                  description = DbTextSearch::FullText.new(episodes, :description).search(params[:search_term])
