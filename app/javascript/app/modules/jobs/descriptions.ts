@@ -9,6 +9,14 @@ export interface JobDescription {
   error?: string;
 }
 
+const keyFromJob = (job: RemoteJob): string => {
+  const parts = [job.id];
+  if (job.lastError) {
+    parts.push("error");
+  }
+  return parts.join("-");
+};
+
 export const mapJobToDescription = (
   episodes: { [key: string]: RemoteEpisode },
   feeds: { [key: string]: RemoteFeed },
@@ -16,6 +24,7 @@ export const mapJobToDescription = (
 ): JobDescription => {
   const itemId = job.jobData.arguments[0];
   const errorMessage = job.lastError && job.lastError.split("\n")[0];
+  const key = keyFromJob(job);
   switch (job.jobData.jobClass) {
     case "DownloadFeedJob":
     case "DownloadYoutubePlaylistJob": {
@@ -28,14 +37,14 @@ export const mapJobToDescription = (
       if (!feed) {
         return {
           id: job.id,
-          key: `${job.id}-${job.lastError ? "error-" : ""}notfetched`,
+          key: `${key}-notfetched`,
           description: `Updating: ${itemId}`,
           error,
         };
       }
       return {
         id: job.id,
-        key: `${job.id}${job.lastError ? "-error" : ""}`,
+        key,
         description: `Updating: ${feed.name}`,
         error,
       };
@@ -51,14 +60,14 @@ export const mapJobToDescription = (
       if (!episode) {
         return {
           id: job.id,
-          key: `${job.id}-${job.lastError ? "error-" : ""}notfetched`,
+          key: `${key}-notfetched`,
           description: `Downloading ${itemId}`,
           error,
         };
       }
       return {
         id: job.id,
-        key: `${job.id}${job.lastError ? "-error" : ""}`,
+        key,
         description: `Downloading: ${episode.name}`,
         error,
       };
@@ -67,7 +76,7 @@ export const mapJobToDescription = (
     case "FetchOldThumbnailsJob": {
       return {
         id: job.id,
-        key: job.id,
+        key,
         description: `Downloading thumbnail`,
         error: errorMessage,
       };
@@ -75,7 +84,7 @@ export const mapJobToDescription = (
     default: {
       return {
         id: job.id,
-        key: job.id,
+        key,
         description: `${job.jobData.jobClass}`,
         error: errorMessage,
       };
