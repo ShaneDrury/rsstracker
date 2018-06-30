@@ -71,9 +71,9 @@ const episodes = (
         },
       };
     }
-    case jobActions.REMOVE_JOBS: {
-      const newIds = difference(state.ids, action.payload.jobIds);
-      const newItems = omit(state.items, action.payload.jobIds);
+    case jobActions.JOB_COMPLETE: {
+      const newIds = difference(state.ids, [action.payload.jobId]);
+      const newItems = omit(state.items, [action.payload.jobId]);
       return {
         ...state,
         ids: newIds,

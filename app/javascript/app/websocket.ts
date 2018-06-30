@@ -6,7 +6,7 @@ import { fetchEpisodeComplete } from "./modules/episodes/actions";
 import { processEpisode } from "./modules/episodes/sources";
 import { fetchFeedAction, fetchFeedComplete } from "./modules/feeds/actions";
 import { processFeed } from "./modules/feeds/sources";
-import { removeJobs } from "./modules/jobs/actions";
+import { jobComplete } from "./modules/jobs/actions";
 import { RootState } from "./modules/reducers";
 import { ApiEpisode } from "./types/episode";
 import { ApiFeed } from "./types/feed";
@@ -58,7 +58,7 @@ const handleCableAction = (
     }
     case "JOB_COMPLETE": {
       const jobId = payload.jobId;
-      dispatch(removeJobs([jobId.toString()]));
+      dispatch(jobComplete(jobId.toString()));
       break;
     }
   }

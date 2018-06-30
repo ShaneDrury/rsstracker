@@ -37,11 +37,11 @@ const feedJobs = (
         },
       };
     }
-    case jobActions.REMOVE_JOBS: {
+    case jobActions.JOB_COMPLETE: {
       const jobsByFeedId = invert(state.items);
       return {
         ...state,
-        items: invert(omit(jobsByFeedId, action.payload.jobIds)),
+        items: invert(omit(jobsByFeedId, [action.payload.jobId])),
       };
     }
     default:

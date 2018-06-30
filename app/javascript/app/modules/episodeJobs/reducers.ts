@@ -24,11 +24,11 @@ const episodeJobs = (
         },
       };
     }
-    case jobActions.REMOVE_JOBS: {
+    case jobActions.JOB_COMPLETE: {
       const jobsByEpisodeId = invert(state.items);
       return {
         ...state,
-        items: omit(jobsByEpisodeId, action.payload.jobIds),
+        items: omit(jobsByEpisodeId, [action.payload.jobId]),
       };
     }
     default:
