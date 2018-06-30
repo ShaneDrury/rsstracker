@@ -13,7 +13,7 @@ class JobNotifyPlugin < Delayed::Plugin
           }
         )
     end
-    lifecycle.after(:perform) do |_, job|
+    lifecycle.after(:invoke_job) do |job|
       ActionCable
         .server
         .broadcast(
@@ -21,6 +21,17 @@ class JobNotifyPlugin < Delayed::Plugin
           type: 'JOB_COMPLETE',
           payload: {
             job_id: job.id
+          }
+        )
+    end
+    lifecycle.after(:error) do |_, job|
+      ActionCable
+        .server
+        .broadcast(
+          'feeds_channel',
+          type: 'JOB_ERROR',
+          payload: {
+            job: job.with_extra
           }
         )
     end
