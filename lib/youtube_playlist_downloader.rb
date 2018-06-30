@@ -33,7 +33,8 @@ class YoutubePlaylistDownloader
   end
 
   def short_episode_details
-    out = `#{youtube_dl_path} --flat-playlist -j -- #{feed.url}`
+    out, status = Open3.capture2(youtube_dl_path, '--flat-playlist', '-j', '--', "#{feed.url}")
+    raise IOError, 'Error downloading youtube playlist' if status.exitstatus != 0
     out.split("\n").map { |line| JSON.parse(line) }
   end
 
