@@ -1,5 +1,6 @@
-import { difference, forEach, omit } from "lodash";
+import { difference, forEach, omit, values, zipObject } from "lodash";
 import { RemoteJob } from "../../types/job";
+import { FeedJobsAction, feedJobsActions } from "../feedJobs/actions";
 import { FetchStatus } from "../remoteData";
 import { jobActions, JobsAction } from "./actions";
 
@@ -19,13 +20,38 @@ const initialState: JobsState = {
 
 const episodes = (
   state: JobsState = initialState,
-  action: JobsAction
+  action: JobsAction | FeedJobsAction
 ): JobsState => {
   switch (action.type) {
     case jobActions.FETCH_JOBS_START: {
       return {
         ...state,
         fetchStatus: "LOADING",
+      };
+    }
+    case feedJobsActions.UPDATE_FEED_STARTED: {
+      return {
+        ...state,
+        ids: [...state.ids, action.payload.job.id],
+        fetchStatus: "SUCCESS",
+        items: {
+          ...state.items,
+          [action.payload.job.id]: action.payload.job,
+        },
+      };
+    }
+    case feedJobsActions.UPDATE_FEEDS_STARTED: {
+      const jobs = values(action.payload.feedsToJobs);
+      const jobIds = jobs.map(job => job.id);
+      const jobIdsToJob = zipObject(jobIds, jobs);
+      return {
+        ...state,
+        ids: [...state.ids, ...jobIds],
+        fetchStatus: "SUCCESS",
+        items: {
+          ...state.items,
+          ...jobIdsToJob,
+        },
       };
     }
     case jobActions.FETCH_JOBS_COMPLETE: {

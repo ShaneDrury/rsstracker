@@ -1,9 +1,9 @@
 import camelcaseKeys from "camelcase-keys";
+import { zipObject } from "lodash";
 import { RemoteFeed } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
 import { RootThunk } from "../../types/thunk";
-import { updateFeedStart } from "../feedJobs/actions";
-import { fetchJobsComplete } from "../jobs/actions";
+import { updateFeedsStarted, updateFeedStarted } from "../feedJobs/actions";
 import { processJobResponse } from "../jobs/sources";
 import { fetchStatusesComplete } from "../statusCounts/actions";
 import { getSortedFeedIds } from "./selectors";
@@ -96,8 +96,7 @@ export const updateFeedAction = (
     }
   );
   const job = processJobResponse(updateResponse.job);
-  dispatch(updateFeedStart(job.id, feedId));
-  dispatch(fetchJobsComplete([job]));
+  dispatch(updateFeedStarted(feedId, job));
 };
 
 export const updateFeedsAction = (): RootThunk<void> => async (
@@ -108,9 +107,6 @@ export const updateFeedsAction = (): RootThunk<void> => async (
   const feedIds = getSortedFeedIds(state);
   const updateResponse = await updateFeeds(feedIds);
   const jobs = updateResponse.jobs.map(processJobResponse);
-  jobs.forEach((job, idx) => {
-    const feedId = feedIds[idx];
-    dispatch(updateFeedStart(job.id, feedId));
-  });
-  dispatch(fetchJobsComplete(jobs));
+  const feedsToJobs = zipObject(feedIds, jobs);
+  dispatch(updateFeedsStarted(feedsToJobs));
 };

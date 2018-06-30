@@ -1,21 +1,38 @@
+import { RemoteJob } from "../../types/job";
+
 export enum feedJobsActions {
-  UPDATE_FEED_START = "UPDATE_FEED_START",
+  UPDATE_FEED_STARTED = "UPDATE_FEED_STARTED",
+  UPDATE_FEEDS_STARTED = "UPDATE_FEEDS_STARTED",
 }
 
-interface UpdateFeedStart {
-  type: feedJobsActions.UPDATE_FEED_START;
+interface UpdateFeedStarted {
+  type: feedJobsActions.UPDATE_FEED_STARTED;
   payload: {
-    jobId: string;
+    job: RemoteJob;
     feedId: number;
   };
 }
 
-export const updateFeedStart = (
-  jobId: string,
-  feedId: number
-): UpdateFeedStart => ({
-  type: feedJobsActions.UPDATE_FEED_START,
-  payload: { jobId, feedId },
+export const updateFeedStarted = (
+  feedId: number,
+  job: RemoteJob
+): UpdateFeedStarted => ({
+  type: feedJobsActions.UPDATE_FEED_STARTED,
+  payload: { job, feedId },
 });
 
-export type FeedJobsAction = UpdateFeedStart;
+interface UpdateFeedsStarted {
+  type: feedJobsActions.UPDATE_FEEDS_STARTED;
+  payload: {
+    feedsToJobs: { [feedId: number]: RemoteJob };
+  };
+}
+
+export const updateFeedsStarted = (feedsToJobs: {
+  [feedId: number]: RemoteJob;
+}): UpdateFeedsStarted => ({
+  type: feedJobsActions.UPDATE_FEEDS_STARTED,
+  payload: { feedsToJobs },
+});
+
+export type FeedJobsAction = UpdateFeedStarted | UpdateFeedsStarted;
