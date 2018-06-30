@@ -8,6 +8,7 @@ export enum jobActions {
   FETCH_JOBS_COMPLETE = "FETCH_JOBS_COMPLETE",
   FETCH_JOBS_FAILURE = "FETCH_JOBS_FAILURE",
   JOB_COMPLETE = "JOB_COMPLETE",
+  JOB_ERROR = "JOB_ERROR",
 }
 
 interface FetchJobsStart {
@@ -35,6 +36,13 @@ interface JobComplete {
   };
 }
 
+interface JobError {
+  type: jobActions.JOB_ERROR;
+  payload: {
+    job: RemoteJob;
+  };
+}
+
 export const fetchJobsStart = (): FetchJobsStart => ({
   type: jobActions.FETCH_JOBS_START,
 });
@@ -54,11 +62,17 @@ export const jobComplete = (jobId: string): JobComplete => ({
   payload: { jobId },
 });
 
+export const jobError = (job: RemoteJob): JobError => ({
+  type: jobActions.JOB_ERROR,
+  payload: { job },
+});
+
 export type JobsAction =
   | FetchJobsStart
   | FetchJobsComplete
   | FetchJobsFailure
-  | JobComplete;
+  | JobComplete
+  | JobError;
 
 export const fetchJobs = (): RootThunk<void> => async dispatch => {
   dispatch(fetchJobsStart());

@@ -80,6 +80,15 @@ const episodes = (
         items: newItems,
       };
     }
+    case jobActions.JOB_ERROR: {
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          [action.payload.job.id]: action.payload.job,
+        },
+      };
+    }
     default:
       return state;
   }

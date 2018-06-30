@@ -6,10 +6,11 @@ import { fetchEpisodeComplete } from "./modules/episodes/actions";
 import { processEpisode } from "./modules/episodes/sources";
 import { fetchFeedAction, fetchFeedComplete } from "./modules/feeds/actions";
 import { processFeed } from "./modules/feeds/sources";
-import { jobComplete } from "./modules/jobs/actions";
+import { jobComplete, jobError } from "./modules/jobs/actions";
 import { RootState } from "./modules/reducers";
 import { ApiEpisode } from "./types/episode";
 import { ApiFeed } from "./types/feed";
+import { RemoteJob } from "./types/job";
 import { Dispatch } from "./types/thunk";
 
 interface Meta extends Element {
@@ -37,7 +38,14 @@ interface JobComplete {
   };
 }
 
-type CableAction = UpdateFeed | UpdateEpisode | JobComplete;
+interface JobError {
+  type: "JOB_ERROR";
+  payload: {
+    job: RemoteJob;
+  };
+}
+
+type CableAction = UpdateFeed | UpdateEpisode | JobComplete | JobError;
 
 const handleCableAction = (
   action: CableAction,
@@ -59,6 +67,11 @@ const handleCableAction = (
     case "JOB_COMPLETE": {
       const jobId = payload.jobId;
       dispatch(jobComplete(jobId.toString()));
+      break;
+    }
+    case "JOB_ERROR": {
+      const job = payload.job;
+      dispatch(jobError(job));
       break;
     }
   }

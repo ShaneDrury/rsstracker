@@ -4,6 +4,7 @@ import { RemoteJob } from "../../types/job";
 
 export interface JobDescription {
   id: string;
+  key: string;
   description: string;
   error?: string;
 }
@@ -26,13 +27,15 @@ export const mapJobToDescription = (
         : undefined;
       if (!feed) {
         return {
-          id: `${job.id}/notfetched`,
+          id: job.id,
+          key: `${job.id}-${job.lastError ? "error-" : ""}notfetched`,
           description: `Updating: ${itemId}`,
           error,
         };
       }
       return {
-        id: `${job.id}`,
+        id: job.id,
+        key: `${job.id}${job.lastError ? "-error" : ""}`,
         description: `Updating: ${feed.name}`,
         error,
       };
@@ -47,13 +50,15 @@ export const mapJobToDescription = (
         : undefined;
       if (!episode) {
         return {
-          id: `${job.id}/notfetched`,
+          id: job.id,
+          key: `${job.id}-${job.lastError ? "error-" : ""}notfetched`,
           description: `Downloading ${itemId}`,
           error,
         };
       }
       return {
-        id: `${job.id}`,
+        id: job.id,
+        key: `${job.id}${job.lastError ? "-error" : ""}`,
         description: `Downloading: ${episode.name}`,
         error,
       };
@@ -61,14 +66,16 @@ export const mapJobToDescription = (
     case "DownloadThumbnailJob":
     case "FetchOldThumbnailsJob": {
       return {
-        id: `${job.id}`,
+        id: job.id,
+        key: job.id,
         description: `Downloading thumbnail`,
         error: errorMessage,
       };
     }
     default: {
       return {
-        id: `${job.id}`,
+        id: job.id,
+        key: job.id,
         description: `${job.jobData.jobClass}`,
         error: errorMessage,
       };

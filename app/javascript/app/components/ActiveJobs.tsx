@@ -31,13 +31,13 @@ interface State {
 
 export class ActiveJobs extends React.PureComponent<Props, State> {
   public static getDerivedStateFromProps(props: Props, state: State) {
-    const newKeys = props.jobDescriptions.map(job => job.id);
+    const newKeys = props.jobDescriptions.map(job => job.key);
     const keysToRemove = difference(state.keys, newKeys);
     keysToRemove.forEach(key => {
       Notification.remove(key);
     });
     props.jobDescriptions.forEach(job => {
-      const key = job.id;
+      const key = job.key;
       if (!state.keys.includes(key)) {
         if (job.error) {
           Notification.error(job.error, {
