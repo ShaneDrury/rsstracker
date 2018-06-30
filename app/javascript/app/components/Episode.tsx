@@ -9,7 +9,7 @@ import { downloadEpisodeAction } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
 import {
   Action as PlayerAction,
-  togglePlay as togglePlayAction,
+  playToggled as togglePlayAction,
 } from "../modules/player/actions";
 import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";

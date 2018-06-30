@@ -63,7 +63,7 @@ const episodes = (
         },
       };
     }
-    case episodeActions.CHANGE_PAGE: {
+    case episodeActions.PAGE_CHANGED: {
       return {
         ...state,
         pageInfo: {

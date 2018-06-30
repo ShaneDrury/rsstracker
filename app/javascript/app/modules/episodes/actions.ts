@@ -20,12 +20,12 @@ export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
   FETCH_EPISODES_COMPLETE = "FETCH_EPISODES_COMPLETE",
   FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE",
-  CHANGE_PAGE = "CHANGE_PAGE",
+  PAGE_CHANGED = "PAGE_CHANGED",
   FETCH_EPISODE_START = "FETCH_EPISODE_START",
   FETCH_EPISODE_COMPLETE = "FETCH_EPISODE_COMPLETE",
   FETCH_EPISODE_FAILURE = "FETCH_EPISODE_FAILURE",
-  CHANGE_FILTER = "CHANGE_FILTER",
-  CHANGE_SEARCH = "CHANGE_SEARCH",
+  FILTER_CHANGED = "FILTER_CHANGED",
+  SEARCH_CHANGED = "SEARCH_CHANGED",
 }
 
 interface FetchEpisodesStart {
@@ -47,22 +47,22 @@ interface FetchEpisodesFailure {
   };
 }
 
-interface ChangePage {
-  type: episodeActions.CHANGE_PAGE;
+interface PageChanged {
+  type: episodeActions.PAGE_CHANGED;
   payload: {
     currentPage: number;
   };
 }
 
-interface ChangeFilter {
-  type: episodeActions.CHANGE_FILTER;
+interface FilterChanged {
+  type: episodeActions.FILTER_CHANGED;
   payload: {
     filter: Filter;
   };
 }
 
-interface ChangeSearch {
-  type: episodeActions.CHANGE_SEARCH;
+interface SearchChanged {
+  type: episodeActions.SEARCH_CHANGED;
   payload: {
     searchTerm: string;
   };
@@ -127,20 +127,20 @@ export type EpisodesAction =
   | FetchEpisodesStart
   | FetchEpisodesComplete
   | FetchEpisodesFailure
-  | ChangePage
-  | ChangeFilter
-  | ChangeSearch
+  | PageChanged
+  | FilterChanged
+  | SearchChanged
   | FetchEpisodeStart
   | FetchEpisodeComplete
   | FetchEpisodeFailure;
 
-export const changeFilter = (filter: Filter): ChangeFilter => ({
-  type: episodeActions.CHANGE_FILTER,
+export const changeFilter = (filter: Filter): FilterChanged => ({
+  type: episodeActions.FILTER_CHANGED,
   payload: { filter },
 });
 
-export const changeSearch = (searchTerm: string): ChangeSearch => ({
-  type: episodeActions.CHANGE_SEARCH,
+export const changeSearch = (searchTerm: string): SearchChanged => ({
+  type: episodeActions.SEARCH_CHANGED,
   payload: { searchTerm },
 });
 
@@ -187,8 +187,8 @@ export const searchEpisodes = (): RootThunk<void> => async (
   }
 };
 
-export const changePageAction = (currentPage: number): ChangePage => ({
-  type: episodeActions.CHANGE_PAGE,
+export const changePageAction = (currentPage: number): PageChanged => ({
+  type: episodeActions.PAGE_CHANGED,
   payload: { currentPage },
 });
 

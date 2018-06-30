@@ -5,8 +5,8 @@ import { bindActionCreators } from "redux";
 import { getEpisodes } from "../modules/episodes/selectors";
 import {
   Action as PlayerAction,
-  togglePlay,
-  updatePlayedSeconds,
+  playedSecondsUpdated,
+  playToggled,
 } from "../modules/player/actions";
 import { getPlayedSeconds } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
@@ -120,8 +120,8 @@ const mapDispatchToProps = (
 ): DispatchProps =>
   bindActionCreators(
     {
-      onChangePlayedSeconds: updatePlayedSeconds,
-      togglePlay,
+      onChangePlayedSeconds: playedSecondsUpdated,
+      togglePlay: playToggled,
     },
     dispatch
   );

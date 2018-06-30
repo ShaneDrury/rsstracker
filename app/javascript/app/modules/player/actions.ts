@@ -1,30 +1,29 @@
-
 export enum actions {
-  UPDATE_PLAYED_SECONDS = "UPDATE_PLAYED_SECONDS",
-  TOGGLE_PLAY = "TOGGLE_PLAY",
+  PLAYED_SECONDS_UPDATED = "PLAYED_SECONDS_UPDATED",
+  PLAY_TOGGLED = "PLAY_TOGGLED",
 }
 
-interface UpdatePlayedSeconds {
-  type: actions.UPDATE_PLAYED_SECONDS;
+interface PlayedSecondsUpdated {
+  type: actions.PLAYED_SECONDS_UPDATED;
   payload: { playedSeconds: number; episodeId: number };
 }
 
-interface TogglePlay {
-  type: actions.TOGGLE_PLAY;
+interface PlayToggled {
+  type: actions.PLAY_TOGGLED;
   payload: { playingEpisodeId: number };
 }
 
-export type Action = UpdatePlayedSeconds | TogglePlay;
+export type Action = PlayedSecondsUpdated | PlayToggled;
 
-export const updatePlayedSeconds = (
+export const playedSecondsUpdated = (
   episodeId: number,
   playedSeconds: number
-): UpdatePlayedSeconds => ({
-  type: actions.UPDATE_PLAYED_SECONDS,
+): PlayedSecondsUpdated => ({
+  type: actions.PLAYED_SECONDS_UPDATED,
   payload: { playedSeconds, episodeId },
 });
 
-export const togglePlay = (playingEpisodeId: number): TogglePlay => ({
-  type: actions.TOGGLE_PLAY,
+export const playToggled = (playingEpisodeId: number): PlayToggled => ({
+  type: actions.PLAY_TOGGLED,
   payload: { playingEpisodeId },
 });

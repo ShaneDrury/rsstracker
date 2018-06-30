@@ -24,7 +24,7 @@ const initialState: State = {
 
 const player = (state: State = initialState, action: Action): State => {
   switch (action.type) {
-    case actions.UPDATE_PLAYED_SECONDS: {
+    case actions.PLAYED_SECONDS_UPDATED: {
       return {
         ...state,
         saved: {
@@ -33,7 +33,7 @@ const player = (state: State = initialState, action: Action): State => {
         },
       };
     }
-    case actions.TOGGLE_PLAY: {
+    case actions.PLAY_TOGGLED: {
       if (state.playingEpisodeId === action.payload.playingEpisodeId) {
         return {
           ...state,

@@ -13,16 +13,16 @@ const syncQueryParams: Middleware = store => next => (
   action: EpisodesAction
 ) => {
   if (
-    action.type === actions.CHANGE_FILTER ||
-    action.type === actions.CHANGE_SEARCH
+    action.type === actions.FILTER_CHANGED ||
+    action.type === actions.SEARCH_CHANGED
   ) {
     const state = store.getState();
     const params = getQueryParams(state);
     const newParams: QueryParams = {};
-    if (action.type === actions.CHANGE_FILTER) {
+    if (action.type === actions.FILTER_CHANGED) {
       newParams.filter = action.payload.filter;
     }
-    if (action.type === actions.CHANGE_SEARCH) {
+    if (action.type === actions.SEARCH_CHANGED) {
       newParams.searchTerm = action.payload.searchTerm;
     }
     const newQueryParams = { ...params, ...newParams };

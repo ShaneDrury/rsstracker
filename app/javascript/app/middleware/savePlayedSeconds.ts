@@ -5,7 +5,7 @@ import { getPlayedSeconds } from "../modules/player/selectors";
 const savePlayedSeconds: Middleware = store => next => (
   action: PlayerAction
 ) => {
-  if (action.type === actions.UPDATE_PLAYED_SECONDS) {
+  if (action.type === actions.PLAYED_SECONDS_UPDATED) {
     const state = store.getState();
     const savedSecondsJSON = localStorage.getItem("savedSeconds");
     const savedSeconds = savedSecondsJSON && JSON.parse(savedSecondsJSON);
