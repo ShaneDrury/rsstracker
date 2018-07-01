@@ -6,26 +6,26 @@ import {
   changeFilterAction,
   EpisodesAction,
 } from "../modules/episodes/actions";
-import { getFilter } from "../modules/episodes/selectors";
-import { Filter } from "../modules/filters";
+import { getStatus } from "../modules/episodes/selectors";
+import { Status } from "../modules/filters";
 import { RootState } from "../modules/reducers";
 import { getAllStatusCounts } from "../modules/statusCounts/selectors";
 import { StatusCounts } from "../types/feed";
 import { Dispatch } from "../types/thunk";
 
 interface EnhancedProps {
-  filter: Filter;
+  filter: Status;
   counts: StatusCounts;
 }
 
 interface DispatchProps {
-  onChangeFilter: (filter: Filter) => void;
+  onChangeFilter: (filter: Status) => void;
 }
 
 type Props = EnhancedProps & DispatchProps;
 
 interface OptionProps {
-  value: Filter;
+  value: Status;
   statusKey: string;
   label: string;
   count?: number;
@@ -46,7 +46,7 @@ class StatusSelectOption extends React.PureComponent<OptionProps> {
 
 export class StatusSelect extends React.PureComponent<Props> {
   public handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const filter = event.target.value as Filter;
+    const filter = event.target.value as Status;
     this.props.onChangeFilter(filter);
   };
 
@@ -59,29 +59,29 @@ export class StatusSelect extends React.PureComponent<Props> {
         onChange={this.handleFilterChange}
         value={this.props.filter}
       >
-        <option value={Filter.ALL} key={`all-${counts.all}`}>
+        <option value={Status.ALL} key={`all-${counts.all}`}>
           All ({counts.all})
         </option>
         <StatusSelectOption
-          value={Filter.SUCCESS}
+          value={Status.SUCCESS}
           statusKey="success"
           label="Success"
           count={counts.success}
         />
         <StatusSelectOption
-          value={Filter.NOT_ASKED}
+          value={Status.NOT_ASKED}
           statusKey="notAsked"
           label="Not asked"
           count={counts.notAsked}
         />
         <StatusSelectOption
-          value={Filter.LOADING}
+          value={Status.LOADING}
           statusKey="loading"
           label="Loading"
           count={counts.loading}
         />
         <StatusSelectOption
-          value={Filter.FAILURE}
+          value={Status.FAILURE}
           statusKey="failure"
           label="Failure"
           count={counts.failure}
@@ -92,7 +92,7 @@ export class StatusSelect extends React.PureComponent<Props> {
 }
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
-  const filter = getFilter(state);
+  const filter = getStatus(state);
   const counts = getAllStatusCounts(state);
   return {
     filter,

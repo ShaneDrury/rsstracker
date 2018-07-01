@@ -6,7 +6,7 @@ import { StatusCounts } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
 import { PageInfo } from "../../types/page";
 import apiFetch from "../apiFetch";
-import { Filter } from "../filters";
+import { Status } from "../filters";
 
 interface EpisodesResponse {
   items: ApiEpisode[];
@@ -38,13 +38,13 @@ const processEpisodesResponse = (
 };
 
 export const getEpisodes = async (queryParams: {
-  filter?: Filter;
+  status?: Status;
   feedId?: number;
   searchTerm?: string;
   currentPage?: number;
 }): Promise<ProcessedResponse> => {
   const stringified = qs.stringify({
-    status: queryParams.filter,
+    status: queryParams.status,
     feed_id: queryParams.feedId,
     search_term: queryParams.searchTerm,
     page_number: queryParams.currentPage,

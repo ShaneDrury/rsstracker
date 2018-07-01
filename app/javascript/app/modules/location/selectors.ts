@@ -5,7 +5,7 @@ import { QueryParams } from "./queryParams";
 
 export const getLocation = (state: RootState) => state.routing.location;
 
-export const getQueryParams = createSelector(
+export const getRoutingQueryParams = createSelector(
   getLocation,
   (location): QueryParams =>
     location

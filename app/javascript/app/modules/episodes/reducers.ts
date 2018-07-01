@@ -3,7 +3,7 @@ import * as qs from "qs";
 import { LOCATION_CHANGE, LocationChangeAction } from "react-router-redux";
 import { RemoteEpisode } from "../../types/episode";
 import { PageInfo } from "../../types/page";
-import { Filter } from "../filters";
+import { Status } from "../filters";
 import { FetchStatus } from "../remoteData";
 import { episodeActions, EpisodesAction } from "./actions";
 
@@ -15,7 +15,7 @@ export interface State {
   ids: number[];
   pageInfo: PageInfo;
   searchTerm: string;
-  status: Filter;
+  status: Status;
 }
 
 const initialState: State = {
@@ -23,7 +23,7 @@ const initialState: State = {
   fetchStatus: "NOT_ASKED",
   ids: [],
   searchTerm: "",
-  status: Filter.ALL,
+  status: Status.ALL,
   pageInfo: {
     count: 0,
     currentPage: 1,

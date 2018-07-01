@@ -21,18 +21,18 @@ export const getLoadedEpisodes = createSelector(
 
 export const getPageInfo = (state: RootState) => state.episodes.pageInfo;
 
-export const getFilter = (state: RootState) => state.episodes.status;
+export const getStatus = (state: RootState) => state.episodes.status;
 
 export const getSearchTerm = (state: RootState) => state.episodes.searchTerm;
 
 export const getQueryParams = createSelector(
   getFeedId,
   getSearchTerm,
-  getFilter,
+  getStatus,
   getPageInfo,
-  (feedId, searchTerm, filter, pageInfo) => {
+  (feedId, searchTerm, status, pageInfo) => {
     return {
-      filter,
+      status,
       feedId,
       searchTerm,
       currentPage: pageInfo.currentPage,

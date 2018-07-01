@@ -2,7 +2,7 @@ import { RemoteEpisode } from "../../types/episode";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
 import { updateEpisodeStarted } from "../episodeJobs/actions";
-import { Filter } from "../filters";
+import { Status } from "../filters";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobResponse } from "../jobs/sources";
 import { fetchStatusesComplete } from "../statusCounts/actions";
@@ -54,7 +54,7 @@ interface PageChanged {
 interface FilterChanged {
   type: episodeActions.FILTER_CHANGED;
   payload: {
-    filter: Filter;
+    filter: Status;
   };
 }
 
@@ -131,7 +131,7 @@ export type EpisodesAction =
   | FetchEpisodeComplete
   | FetchEpisodeFailure;
 
-export const changeFilter = (filter: Filter): FilterChanged => ({
+export const changeFilter = (filter: Status): FilterChanged => ({
   type: episodeActions.FILTER_CHANGED,
   payload: { filter },
 });
@@ -142,7 +142,7 @@ export const changeSearch = (searchTerm: string): SearchChanged => ({
 });
 
 export const changeFilterAction = (
-  filter: Filter
+  filter: Status
 ): RootThunk<void> => dispatch => {
   dispatch(changeFilter(filter));
   dispatch(searchEpisodes());
