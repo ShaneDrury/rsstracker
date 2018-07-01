@@ -1,9 +1,11 @@
-import { difference } from "lodash";
+import { difference, keys } from "lodash";
 import React from "react";
 import Notification from "react-bulma-notification";
 import "react-bulma-notification/build/css/index.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
+import { fetchEpisodeIfNeeded } from "../modules/episodes/actions";
 import {
   deleteJobAction,
   fetchJobs,
@@ -16,11 +18,13 @@ import { Dispatch } from "../types/thunk";
 
 interface EnhancedProps {
   jobDescriptions: JobDescription[];
+  relatedEpisodeIds: number[];
 }
 
 interface DispatchProps {
   getJobs: () => void;
   onCloseErrorJob: (jobId: string) => void;
+  fetchEpisodeIfNeeded: (episodeId: number) => void;
 }
 
 type Props = EnhancedProps & DispatchProps;
@@ -68,6 +72,12 @@ export class ActiveJobs extends React.PureComponent<Props, State> {
     this.props.getJobs();
   }
 
+  public componentDidUpdate() {
+    this.props.relatedEpisodeIds.forEach(episodeId => {
+      this.props.fetchEpisodeIfNeeded(episodeId);
+    });
+  }
+
   public render() {
     return null;
   }
@@ -77,6 +87,7 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
   const jobDescriptions = getJobDescriptions(state);
   return {
     jobDescriptions,
+    relatedEpisodeIds: keys(getEpisodeJobs(state)).map(id => parseInt(id, 10)),
   };
 };
 
@@ -87,6 +98,7 @@ const mapDispatchToProps = (
     {
       getJobs: fetchJobs,
       onCloseErrorJob: deleteJobAction,
+      fetchEpisodeIfNeeded,
     },
     dispatch
   );
