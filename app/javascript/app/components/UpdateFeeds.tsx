@@ -4,19 +4,24 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { EpisodesAction } from "../modules/episodes/actions";
 import { updateFeedsAction } from "../modules/feeds/actions";
+import { getSortedFeedIds } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { Dispatch } from "../types/thunk";
 import { Icon } from "./Icon";
 
-interface DispatchProps {
-  updateFeeds: () => void;
+interface EnhancedProps {
+  feedIds: number[];
 }
 
-type Props = DispatchProps;
+interface DispatchProps {
+  updateFeeds: (feedIds: number[]) => void;
+}
+
+type Props = DispatchProps & EnhancedProps;
 
 export class UpdateFeeds extends React.PureComponent<Props> {
   public handleUpdateFeeds = () => {
-    return this.props.updateFeeds();
+    return this.props.updateFeeds(this.props.feedIds);
   };
 
   public render() {
@@ -27,6 +32,10 @@ export class UpdateFeeds extends React.PureComponent<Props> {
     );
   }
 }
+
+const mapStateToProps = (state: RootState) => ({
+  feedIds: getSortedFeedIds(state),
+});
 
 const mapDispatchToProps = (
   dispatch: Dispatch<EpisodesAction, RootState>
@@ -39,4 +48,7 @@ const mapDispatchToProps = (
   );
 };
 
-export default connect(undefined, mapDispatchToProps)(UpdateFeeds);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UpdateFeeds);

@@ -5,7 +5,6 @@ import { ProviderJob } from "../../types/job";
 import { RootThunk } from "../../types/thunk";
 import { updateFeedsStarted, updateFeedStarted } from "../feedJobs/actions";
 import { processJobResponse } from "../jobs/sources";
-import { getSortedFeedIds } from "./selectors";
 import { fetchFeed, fetchFeeds, updateFeed, updateFeeds } from "./sources";
 
 export enum feedActions {
@@ -99,12 +98,9 @@ export const updateFeedAction = (
   dispatch(updateFeedStarted(feedId, job));
 };
 
-export const updateFeedsAction = (): RootThunk<void> => async (
-  dispatch,
-  getState
-) => {
-  const state = getState();
-  const feedIds = getSortedFeedIds(state);
+export const updateFeedsAction = (
+  feedIds: number[]
+): RootThunk<void> => async dispatch => {
   const updateResponse = await updateFeeds(feedIds);
   const jobs = updateResponse.jobs.map(processJobResponse);
   const feedsToJobs = zipObject(feedIds, jobs);
