@@ -39,3 +39,6 @@ export const getQueryParams = createSelector(
     };
   }
 );
+
+export const getAllStatusCounts = (state: RootState) =>
+  state.episodes.statusCounts;

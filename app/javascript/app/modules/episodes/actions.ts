@@ -1,4 +1,5 @@
 import { RemoteEpisode } from "../../types/episode";
+import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
 import { updateEpisodeStarted } from "../episodeJobs/actions";
@@ -6,7 +7,6 @@ import { Status } from "../filters";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobResponse } from "../jobs/sources";
 import { QueryParams } from "../location/queryParams";
-import { fetchStatusesComplete } from "../statusCounts/actions";
 import {
   getEpisodes as getEpisodesSelector,
   getFetchStatus,
@@ -34,6 +34,7 @@ interface FetchEpisodesComplete {
   payload: {
     episodes: RemoteEpisode[];
     pageInfo: PageInfo;
+    statusCounts: StatusCounts;
   };
 }
 
@@ -90,10 +91,11 @@ export const fetchEpisodesStart = (): FetchEpisodesStart => ({
 
 export const fetchEpisodesComplete = (
   episodes: RemoteEpisode[],
-  pageInfo: PageInfo
+  pageInfo: PageInfo,
+  statusCounts: StatusCounts
 ): FetchEpisodesComplete => ({
   type: episodeActions.FETCH_EPISODES_COMPLETE,
-  payload: { episodes, pageInfo },
+  payload: { episodes, pageInfo, statusCounts },
 });
 
 export const fetchEpisodesFailure = (error: string): FetchEpisodesFailure => ({
@@ -152,8 +154,13 @@ export const searchEpisodes = (
   dispatch(fetchEpisodesStart());
   try {
     const episodes = await getEpisodes(queryParams);
-    dispatch(fetchEpisodesComplete(episodes.items, episodes.pageInfo));
-    dispatch(fetchStatusesComplete(episodes.statusCounts));
+    dispatch(
+      fetchEpisodesComplete(
+        episodes.items,
+        episodes.pageInfo,
+        episodes.statusCounts
+      )
+    );
   } catch (err) {
     dispatch(fetchEpisodesFailure(err));
   }

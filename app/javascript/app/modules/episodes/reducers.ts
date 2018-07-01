@@ -1,7 +1,9 @@
 import { forEach } from "lodash";
 import { LocationChangeAction } from "react-router-redux";
 import { RemoteEpisode } from "../../types/episode";
+import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
+import { feedActions, FeedsAction } from "../feeds/actions";
 import { Status } from "../filters";
 import { FetchStatus } from "../remoteData";
 import { episodeActions, EpisodesAction } from "./actions";
@@ -15,6 +17,7 @@ export interface State {
   pageInfo: PageInfo;
   searchTerm: string;
   status: Status;
+  statusCounts: StatusCounts;
 }
 
 const initialState: State = {
@@ -32,11 +35,14 @@ const initialState: State = {
     lastPage: false,
     outOfRange: false,
   },
+  statusCounts: {
+    all: 0,
+  },
 };
 
 const episodes = (
   state: State = initialState,
-  action: EpisodesAction | LocationChangeAction
+  action: EpisodesAction | LocationChangeAction | FeedsAction
 ): State => {
   switch (action.type) {
     case episodeActions.FETCH_EPISODES_START: {
@@ -61,6 +67,7 @@ const episodes = (
           ...state.items,
           ...remoteEpisodes,
         },
+        statusCounts: action.payload.statusCounts,
       };
     }
     case episodeActions.PAGE_CHANGED: {
@@ -82,6 +89,7 @@ const episodes = (
         },
       };
     }
+
     case episodeActions.FILTER_CHANGED: {
       return {
         ...state,
@@ -92,6 +100,12 @@ const episodes = (
       return {
         ...state,
         searchTerm: action.payload.searchTerm,
+      };
+    }
+    case feedActions.FETCH_FEEDS_COMPLETE: {
+      return {
+        ...state,
+        statusCounts: action.payload.statusCounts,
       };
     }
     default:

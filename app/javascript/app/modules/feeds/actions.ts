@@ -1,11 +1,10 @@
 import camelcaseKeys from "camelcase-keys";
 import { zipObject } from "lodash";
-import { RemoteFeed } from "../../types/feed";
+import { RemoteFeed, StatusCounts } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
 import { RootThunk } from "../../types/thunk";
 import { updateFeedsStarted, updateFeedStarted } from "../feedJobs/actions";
 import { processJobResponse } from "../jobs/sources";
-import { fetchStatusesComplete } from "../statusCounts/actions";
 import { getSortedFeedIds } from "./selectors";
 import { fetchFeed, fetchFeeds, updateFeed, updateFeeds } from "./sources";
 
@@ -24,6 +23,7 @@ interface FetchFeedsComplete {
   type: feedActions.FETCH_FEEDS_COMPLETE;
   payload: {
     feeds: RemoteFeed[];
+    statusCounts: StatusCounts;
   };
 }
 
@@ -46,10 +46,11 @@ export const fetchFeedsStart = (): FetchFeedsStart => ({
 });
 
 export const fetchFeedsComplete = (
-  feeds: RemoteFeed[]
+  feeds: RemoteFeed[],
+  statusCounts: StatusCounts
 ): FetchFeedsComplete => ({
   type: feedActions.FETCH_FEEDS_COMPLETE,
-  payload: { feeds },
+  payload: { feeds, statusCounts },
 });
 
 export const fetchFeedsFailure = (error: string): FetchFeedsFailure => ({
@@ -72,8 +73,7 @@ export const fetchFeedsAction = (): RootThunk<void> => async dispatch => {
   dispatch(fetchFeedsStart());
   try {
     const { items, statusCounts } = await fetchFeeds();
-    dispatch(fetchFeedsComplete(items));
-    dispatch(fetchStatusesComplete(statusCounts));
+    dispatch(fetchFeedsComplete(items, statusCounts));
   } catch (err) {
     dispatch(fetchFeedsFailure(err));
   }

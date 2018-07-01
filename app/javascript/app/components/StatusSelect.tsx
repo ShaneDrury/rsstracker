@@ -3,10 +3,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { changeFilter, EpisodesAction } from "../modules/episodes/actions";
-import { getStatus } from "../modules/episodes/selectors";
+import { getAllStatusCounts, getStatus } from "../modules/episodes/selectors";
 import { Status } from "../modules/filters";
 import { RootState } from "../modules/reducers";
-import { getAllStatusCounts } from "../modules/statusCounts/selectors";
 import { StatusCounts } from "../types/feed";
 import { Dispatch } from "../types/thunk";
 
