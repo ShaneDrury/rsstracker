@@ -6,8 +6,8 @@ import {
   changeFilterAction,
   EpisodesAction,
 } from "../modules/episodes/actions";
+import { getFilter } from "../modules/episodes/selectors";
 import { Filter } from "../modules/filters";
-import { getQueryParams } from "../modules/location/selectors";
 import { RootState } from "../modules/reducers";
 import { getAllStatusCounts } from "../modules/statusCounts/selectors";
 import { StatusCounts } from "../types/feed";
@@ -92,11 +92,8 @@ export class StatusSelect extends React.PureComponent<Props> {
 }
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
-  const params = getQueryParams(state);
-  const filterParam = params.filter;
-  const filter: Filter = (filterParam as Filter) || Filter.ALL;
+  const filter = getFilter(state);
   const counts = getAllStatusCounts(state);
-
   return {
     filter,
     counts,

@@ -8,7 +8,7 @@ import {
   changeSearchAction,
   EpisodesAction,
 } from "../modules/episodes/actions";
-import { getQueryParams } from "../modules/location/selectors";
+import { getSearchTerm } from "../modules/episodes/selectors";
 import { Dispatch } from "../types/thunk";
 
 interface DataProps {}
@@ -44,14 +44,9 @@ export class Search extends React.PureComponent<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState): EnhancedProps => {
-  const params = getQueryParams(state);
-  const searchTerm = params.searchTerm || "";
-
-  return {
-    searchTerm,
-  };
-};
+const mapStateToProps = (state: RootState): EnhancedProps => ({
+  searchTerm: getSearchTerm(state),
+});
 
 const mapDispatchToProps = (
   dispatch: Dispatch<EpisodesAction, RootState>
@@ -63,4 +58,7 @@ const mapDispatchToProps = (
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Search);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Search);

@@ -2,7 +2,6 @@ import { RemoteEpisode } from "../../types/episode";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
 import { updateEpisodeStarted } from "../episodeJobs/actions";
-import { getFeedId } from "../feeds/selectors";
 import { Filter } from "../filters";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobResponse } from "../jobs/sources";
@@ -10,9 +9,7 @@ import { fetchStatusesComplete } from "../statusCounts/actions";
 import {
   getEpisodes as getEpisodesSelector,
   getFetchStatus,
-  getFilter,
-  getPageInfo,
-  getSearchTerm,
+  getQueryParams,
 } from "./selectors";
 import { downloadEpisode, getEpisode, getEpisodes } from "./sources";
 
@@ -167,19 +164,11 @@ export const searchEpisodes = (): RootThunk<void> => async (
   if (fetchStatus === "LOADING") {
     return;
   }
-  const feedId = getFeedId(state);
-  const searchTerm = getSearchTerm(state);
-  const status = getFilter(state);
-  const pageInfo = getPageInfo(state);
-  const currentPage = pageInfo && pageInfo.currentPage;
+  const queryParams = getQueryParams(state);
+
   dispatch(fetchEpisodesStart());
   try {
-    const episodes = await getEpisodes({
-      status,
-      feedId,
-      searchTerm,
-      currentPage,
-    });
+    const episodes = await getEpisodes(queryParams);
     dispatch(fetchEpisodesComplete(episodes.items, episodes.pageInfo));
     dispatch(fetchStatusesComplete(episodes.statusCounts));
   } catch (err) {

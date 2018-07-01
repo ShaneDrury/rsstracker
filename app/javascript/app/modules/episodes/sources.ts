@@ -37,24 +37,19 @@ const processEpisodesResponse = (
   };
 };
 
-export const getEpisodes = async ({
-  status,
-  feedId,
-  searchTerm,
-  currentPage,
-}: {
-  status?: Filter;
+export const getEpisodes = async (queryParams: {
+  filter?: Filter;
   feedId?: number;
   searchTerm?: string;
   currentPage?: number;
 }): Promise<ProcessedResponse> => {
-  const queryParams = qs.stringify({
-    status,
-    feed_id: feedId,
-    search_term: searchTerm,
-    page_number: currentPage,
+  const stringified = qs.stringify({
+    status: queryParams.filter,
+    feed_id: queryParams.feedId,
+    search_term: queryParams.searchTerm,
+    page_number: queryParams.currentPage,
   });
-  const episodesResponse = await apiFetch(`/episodes/search?${queryParams}`);
+  const episodesResponse = await apiFetch(`/episodes/search?${stringified}`);
   return processEpisodesResponse(episodesResponse);
 };
 

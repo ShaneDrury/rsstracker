@@ -14,7 +14,7 @@ export interface State {
   fetchStatus: FetchStatus;
   ids: number[];
   pageInfo: PageInfo;
-  searchTerm?: string;
+  searchTerm: string;
   status: Filter;
 }
 
@@ -22,6 +22,7 @@ const initialState: State = {
   items: {},
   fetchStatus: "NOT_ASKED",
   ids: [],
+  searchTerm: "",
   status: Filter.ALL,
   pageInfo: {
     count: 0,

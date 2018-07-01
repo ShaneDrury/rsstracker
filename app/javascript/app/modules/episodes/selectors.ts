@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { RemoteEpisode } from "../../types/episode";
+import { getFeedId } from "../feeds/selectors";
 import { RootState } from "../reducers";
 
 export const getEpisodes = (
@@ -23,3 +24,18 @@ export const getPageInfo = (state: RootState) => state.episodes.pageInfo;
 export const getFilter = (state: RootState) => state.episodes.status;
 
 export const getSearchTerm = (state: RootState) => state.episodes.searchTerm;
+
+export const getQueryParams = createSelector(
+  getFeedId,
+  getSearchTerm,
+  getFilter,
+  getPageInfo,
+  (feedId, searchTerm, filter, pageInfo) => {
+    return {
+      filter,
+      feedId,
+      searchTerm,
+      currentPage: pageInfo.currentPage,
+    };
+  }
+);
