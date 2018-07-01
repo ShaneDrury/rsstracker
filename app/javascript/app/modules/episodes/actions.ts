@@ -9,7 +9,6 @@ import { processJobResponse } from "../jobs/sources";
 import { QueryParams } from "../location/queryParams";
 import {
   getEpisodes as getEpisodesSelector,
-  getFetchStatus,
 } from "./selectors";
 import { downloadEpisode, getEpisode, getEpisodes } from "./sources";
 
@@ -145,12 +144,7 @@ export const changeSearch = (searchTerm: string): SearchChanged => ({
 
 export const searchEpisodes = (
   queryParams: QueryParams
-): RootThunk<void> => async (dispatch, getState) => {
-  const state = getState();
-  const fetchStatus = getFetchStatus(state);
-  if (fetchStatus === "LOADING") {
-    return;
-  }
+): RootThunk<void> => async dispatch => {
   dispatch(fetchEpisodesStart());
   try {
     const episodes = await getEpisodes(queryParams);

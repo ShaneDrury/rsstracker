@@ -41,7 +41,12 @@ export class AllFeeds extends React.Component<Props> {
   }
 
   public componentDidUpdate(prevProps: Props) {
-    this.props.fetchEpisodes(this.props.queryParams);
+    if (
+      !isEqual(this.props.queryParams, prevProps.queryParams) &&
+      this.props.fetchStatus !== "LOADING"
+    ) {
+      this.props.fetchEpisodes(this.props.queryParams);
+    }
   }
 
   public render() {
