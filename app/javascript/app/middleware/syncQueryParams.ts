@@ -18,9 +18,9 @@ const syncQueryParams: Middleware = store => next => (
   ) {
     const state = store.getState();
     const params = getRoutingQueryParams(state);
-    const newParams: QueryParams = {};
+    const newParams: Partial<QueryParams> = {};
     if (action.type === actions.FILTER_CHANGED) {
-      newParams.filter = action.payload.filter;
+      newParams.status = action.payload.status;
     }
     if (action.type === actions.SEARCH_CHANGED) {
       newParams.searchTerm = action.payload.searchTerm;

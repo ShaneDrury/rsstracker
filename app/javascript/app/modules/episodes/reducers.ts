@@ -1,6 +1,5 @@
 import { forEach } from "lodash";
-import * as qs from "qs";
-import { LOCATION_CHANGE, LocationChangeAction } from "react-router-redux";
+import { LocationChangeAction } from "react-router-redux";
 import { RemoteEpisode } from "../../types/episode";
 import { PageInfo } from "../../types/page";
 import { Status } from "../filters";
@@ -83,17 +82,16 @@ const episodes = (
         },
       };
     }
-    case LOCATION_CHANGE: {
-      const search = action.payload.search;
-      const params = qs.parse(search, { ignoreQueryPrefix: true });
+    case episodeActions.FILTER_CHANGED: {
       return {
         ...state,
-        status: params.filter,
-        searchTerm: params.searchTerm,
-        pageInfo: {
-          ...state.pageInfo,
-          currentPage: 1,
-        },
+        status: action.payload.status,
+      };
+    }
+    case episodeActions.SEARCH_CHANGED: {
+      return {
+        ...state,
+        searchTerm: action.payload.searchTerm,
       };
     }
     default:

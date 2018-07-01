@@ -5,11 +5,11 @@ import { updateEpisodeStarted } from "../episodeJobs/actions";
 import { Status } from "../filters";
 import { fetchJobsComplete } from "../jobs/actions";
 import { processJobResponse } from "../jobs/sources";
+import { QueryParams } from "../location/queryParams";
 import { fetchStatusesComplete } from "../statusCounts/actions";
 import {
   getEpisodes as getEpisodesSelector,
   getFetchStatus,
-  getQueryParams,
 } from "./selectors";
 import { downloadEpisode, getEpisode, getEpisodes } from "./sources";
 
@@ -17,10 +17,10 @@ export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
   FETCH_EPISODES_COMPLETE = "FETCH_EPISODES_COMPLETE",
   FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE",
-  PAGE_CHANGED = "PAGE_CHANGED",
   FETCH_EPISODE_START = "FETCH_EPISODE_START",
   FETCH_EPISODE_COMPLETE = "FETCH_EPISODE_COMPLETE",
   FETCH_EPISODE_FAILURE = "FETCH_EPISODE_FAILURE",
+  PAGE_CHANGED = "PAGE_CHANGED",
   FILTER_CHANGED = "FILTER_CHANGED",
   SEARCH_CHANGED = "SEARCH_CHANGED",
 }
@@ -54,7 +54,7 @@ interface PageChanged {
 interface FilterChanged {
   type: episodeActions.FILTER_CHANGED;
   payload: {
-    filter: Status;
+    status: Status;
   };
 }
 
@@ -131,9 +131,9 @@ export type EpisodesAction =
   | FetchEpisodeComplete
   | FetchEpisodeFailure;
 
-export const changeFilter = (filter: Status): FilterChanged => ({
+export const changeFilter = (status: Status): FilterChanged => ({
   type: episodeActions.FILTER_CHANGED,
-  payload: { filter },
+  payload: { status },
 });
 
 export const changeSearch = (searchTerm: string): SearchChanged => ({
@@ -141,31 +141,14 @@ export const changeSearch = (searchTerm: string): SearchChanged => ({
   payload: { searchTerm },
 });
 
-export const changeFilterActionCreator = (
-  filter: Status
-): RootThunk<void> => dispatch => {
-  dispatch(changeFilter(filter));
-  dispatch(searchEpisodes());
-};
-
-export const changeSearchAction = (
-  searchTerm: string
-): RootThunk<void> => dispatch => {
-  dispatch(changeSearch(searchTerm));
-  dispatch(searchEpisodes());
-};
-
-export const searchEpisodes = (): RootThunk<void> => async (
-  dispatch,
-  getState
-) => {
+export const searchEpisodes = (
+  queryParams: QueryParams
+): RootThunk<void> => async (dispatch, getState) => {
   const state = getState();
   const fetchStatus = getFetchStatus(state);
   if (fetchStatus === "LOADING") {
     return;
   }
-  const queryParams = getQueryParams(state);
-
   dispatch(fetchEpisodesStart());
   try {
     const episodes = await getEpisodes(queryParams);
@@ -176,17 +159,10 @@ export const searchEpisodes = (): RootThunk<void> => async (
   }
 };
 
-export const changePageAction = (currentPage: number): PageChanged => ({
+export const changePage = (currentPage: number): PageChanged => ({
   type: episodeActions.PAGE_CHANGED,
   payload: { currentPage },
 });
-
-export const changePage = (
-  currentPage: number
-): RootThunk<void> => async dispatch => {
-  dispatch(changePageAction(currentPage));
-  dispatch(searchEpisodes());
-};
 
 export const downloadEpisodeAction = (
   episodeId: number

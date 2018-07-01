@@ -1,4 +1,8 @@
+import { Status } from "../filters";
+
 export interface QueryParams {
-  filter?: string;
-  searchTerm?: string;
+  status: Status;
+  feedId?: number;
+  searchTerm: string;
+  currentPage: number;
 }

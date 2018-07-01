@@ -4,10 +4,7 @@ import { RootState } from "../modules/reducers";
 
 import { DebounceInput } from "react-debounce-input";
 import { bindActionCreators } from "redux";
-import {
-  changeSearchAction,
-  EpisodesAction,
-} from "../modules/episodes/actions";
+import { changeSearch, EpisodesAction } from "../modules/episodes/actions";
 import { getSearchTerm } from "../modules/episodes/selectors";
 import { Dispatch } from "../types/thunk";
 
@@ -53,7 +50,7 @@ const mapDispatchToProps = (
 ): DispatchProps =>
   bindActionCreators(
     {
-      onChangeSearch: changeSearchAction,
+      onChangeSearch: changeSearch,
     },
     dispatch
   );

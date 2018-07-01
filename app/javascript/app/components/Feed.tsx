@@ -2,14 +2,17 @@ import React from "react";
 import { RemoteFeed } from "../types/feed";
 
 import { faSync } from "@fortawesome/fontawesome-free-solid";
+import { isEqual } from "lodash";
 import * as moment from "moment";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { bindActionCreators } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
+import { getQueryParams } from "../modules/episodes/selectors";
 import { getFeedJobs } from "../modules/feedJobs/selectors";
 import { updateFeedAction } from "../modules/feeds/actions";
 import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
+import { QueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { Dispatch } from "../types/thunk";
@@ -22,10 +25,11 @@ interface DataProps {
   isUpdating: boolean;
   remoteFeed?: RemoteFeed;
   fetchStatus: FetchStatus;
+  queryParams: QueryParams;
 }
 
 interface DispatchProps {
-  fetchEpisodes: () => void;
+  fetchEpisodes: (queryParams: QueryParams) => void;
   updateFeed: (feedId: number) => void;
 }
 
@@ -33,15 +37,20 @@ interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
 
 type Props = DataProps & DispatchProps & PropsExtended;
 
-export class Feed extends React.PureComponent<Props> {
+export class Feed extends React.Component<Props> {
   public componentDidMount() {
-    this.props.fetchEpisodes();
+    this.props.fetchEpisodes(this.props.queryParams);
+  }
+
+  public shouldComponentUpdate(nextProps: Props) {
+    return (
+      !isEqual(this.props.queryParams, nextProps.queryParams) ||
+      !isEqual(this.props, nextProps)
+    );
   }
 
   public componentDidUpdate(prevProps: Props) {
-    if (prevProps.location.key !== this.props.location.key) {
-      this.props.fetchEpisodes();
-    }
+    this.props.fetchEpisodes(this.props.queryParams);
   }
 
   public handleUpdateFeed = () => {
@@ -125,6 +134,7 @@ const mapStateToProps = (
     isUpdating,
     remoteFeed,
     fetchStatus,
+    queryParams: getQueryParams(state),
   };
 };
 

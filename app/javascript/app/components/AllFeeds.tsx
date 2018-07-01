@@ -3,8 +3,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
+import { getQueryParams } from "../modules/episodes/selectors";
 import { updateFeedAction } from "../modules/feeds/actions";
 import { getFetchStatus } from "../modules/feeds/selectors";
+import { QueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { Dispatch } from "../types/thunk";
@@ -13,24 +15,33 @@ import Search from "./Search";
 import StatusSelect from "./StatusSelect";
 import UpdateFeeds from "./UpdateFeeds";
 
+import { isEqual } from "lodash";
 interface DataProps {
   fetchStatus: FetchStatus;
+  queryParams: QueryParams;
 }
 
 interface DispatchProps {
-  fetchEpisodes: () => void;
+  fetchEpisodes: (queryParams: QueryParams) => void;
   updateFeed: (feedId: number) => void;
 }
 
 type Props = DataProps & DispatchProps;
 
-export class AllFeeds extends React.PureComponent<Props> {
+export class AllFeeds extends React.Component<Props> {
   public componentDidMount() {
-    this.props.fetchEpisodes();
+    this.props.fetchEpisodes(this.props.queryParams);
+  }
+
+  public shouldComponentUpdate(nextProps: Props) {
+    return (
+      !isEqual(this.props.queryParams, nextProps.queryParams) ||
+      nextProps.fetchStatus !== this.props.fetchStatus
+    );
   }
 
   public componentDidUpdate(prevProps: Props) {
-    this.props.fetchEpisodes();
+    this.props.fetchEpisodes(this.props.queryParams);
   }
 
   public render() {
@@ -76,6 +87,7 @@ const mapStateToProps = (state: RootState): DataProps => {
   const fetchStatus = getFetchStatus(state);
   return {
     fetchStatus,
+    queryParams: getQueryParams(state),
   };
 };
 

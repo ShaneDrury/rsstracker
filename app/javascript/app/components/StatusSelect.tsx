@@ -2,10 +2,7 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {
-  changeFilterActionCreator,
-  EpisodesAction,
-} from "../modules/episodes/actions";
+import { changeFilter, EpisodesAction } from "../modules/episodes/actions";
 import { getStatus } from "../modules/episodes/selectors";
 import { Status } from "../modules/filters";
 import { RootState } from "../modules/reducers";
@@ -14,12 +11,12 @@ import { StatusCounts } from "../types/feed";
 import { Dispatch } from "../types/thunk";
 
 interface EnhancedProps {
-  filter: Status;
+  status: Status;
   counts: StatusCounts;
 }
 
 interface DispatchProps {
-  onChangeFilter: (filter: Status) => void;
+  onChangeFilter: (status: Status) => void;
 }
 
 type Props = EnhancedProps & DispatchProps;
@@ -46,8 +43,8 @@ class StatusSelectOption extends React.PureComponent<OptionProps> {
 
 export class StatusSelect extends React.PureComponent<Props> {
   public handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const filter = event.target.value as Status;
-    this.props.onChangeFilter(filter);
+    const status = event.target.value as Status;
+    this.props.onChangeFilter(status);
   };
 
   public render() {
@@ -57,7 +54,7 @@ export class StatusSelect extends React.PureComponent<Props> {
       <select
         className="select"
         onChange={this.handleFilterChange}
-        value={this.props.filter}
+        value={this.props.status}
       >
         <option value={Status.ALL} key={`all-${counts.all}`}>
           All ({counts.all})
@@ -92,10 +89,10 @@ export class StatusSelect extends React.PureComponent<Props> {
 }
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
-  const filter = getStatus(state);
+  const status = getStatus(state);
   const counts = getAllStatusCounts(state);
   return {
-    filter,
+    status,
     counts,
   };
 };
@@ -105,7 +102,7 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return bindActionCreators(
     {
-      onChangeFilter: changeFilterActionCreator,
+      onChangeFilter: changeFilter,
     },
     dispatch
   );
