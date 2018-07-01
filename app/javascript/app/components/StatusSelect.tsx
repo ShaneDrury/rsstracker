@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
-  changeFilterAction,
+  changeFilterActionCreator,
   EpisodesAction,
 } from "../modules/episodes/actions";
 import { getStatus } from "../modules/episodes/selectors";
@@ -105,7 +105,7 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return bindActionCreators(
     {
-      onChangeFilter: changeFilterAction,
+      onChangeFilter: changeFilterActionCreator,
     },
     dispatch
   );

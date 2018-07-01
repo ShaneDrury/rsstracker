@@ -141,7 +141,7 @@ export const changeSearch = (searchTerm: string): SearchChanged => ({
   payload: { searchTerm },
 });
 
-export const changeFilterAction = (
+export const changeFilterActionCreator = (
   filter: Status
 ): RootThunk<void> => dispatch => {
   dispatch(changeFilter(filter));
