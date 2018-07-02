@@ -9,24 +9,25 @@ class DownloadFeedJob < ApplicationJob
   def perform(feed_id)
     feed = Feed.find(feed_id)
     rss = RSS::Parser.parse(open(feed.url).read, false)
+    if feed.image_url.empty?
+      thumbnail_url = rss.channel.image.url
+      thumbnail_filename = File.basename(URI(thumbnail_url).path)
+      feed_dir = Rails.root.join('public', 'uploads', feed_id.to_s)
+      FileUtils.mkdir_p feed_dir
+      download_path = feed_dir.join(thumbnail_filename)
 
-    thumbnail_url = rss.channel.image.url
-    thumbnail_filename = File.basename(URI(thumbnail_url).path)
-    feed_dir = Rails.root.join('public', 'uploads', feed_id.to_s)
-    FileUtils.mkdir_p feed_dir
-    download_path = feed_dir.join(thumbnail_filename)
-
-    open(thumbnail_url, 'r') do |input|
-      open(download_path, 'wb') do |output|
-        while (buffer = input.read(BUFFER_SIZE))
-          output.write(buffer)
+      open(thumbnail_url, 'r') do |input|
+        open(download_path, 'wb') do |output|
+          while (buffer = input.read(BUFFER_SIZE))
+            output.write(buffer)
+          end
         end
       end
+      feed.update_attributes(
+        image_url: thumbnail_filename,
+        description: rss.channel.description,
+      )
     end
-    feed.update_attributes(
-      image_url: thumbnail_filename,
-      description: rss.channel.description,
-    )
 
     rss.items.each do |result|
       Episode.find_or_create_by(feed: feed, name: result.title, guid: result.guid.content) do |ep|
