@@ -46,7 +46,10 @@ export class AllFeeds extends React.Component<Props> {
     ) {
       this.props.fetchEpisodes(this.props.queryParams);
     }
-    if (prevProps.loadingFeeds !== this.props.loadingFeeds) {
+    if (
+      prevProps.loadingFeeds.length > 0 &&
+      this.props.loadingFeeds.length === 0
+    ) {
       this.props.fetchEpisodes(this.props.queryParams);
     }
   }
