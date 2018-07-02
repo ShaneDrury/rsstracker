@@ -4,8 +4,8 @@ import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
-import { downloadEpisodeAction } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
 import {
   Action as PlayerAction,

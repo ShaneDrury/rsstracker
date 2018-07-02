@@ -2,12 +2,10 @@ import { RemoteEpisode } from "../../types/episode";
 import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
-import { downloadEpisodeStarted } from "../episodeJobs/actions";
 import { Status } from "../filters";
-import { processJobResponse } from "../jobs/sources";
 import { QueryParams } from "../location/queryParams";
 import { getEpisodes as getEpisodesSelector } from "./selectors";
-import { downloadEpisode, getEpisode, getEpisodes } from "./sources";
+import { getEpisode, getEpisodes } from "./sources";
 
 export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
@@ -161,14 +159,6 @@ export const changePage = (currentPage: number): PageChanged => ({
   type: episodeActions.PAGE_CHANGED,
   payload: { currentPage },
 });
-
-export const downloadEpisodeAction = (
-  episodeId: number
-): RootThunk<void> => async dispatch => {
-  const downloadResponse = await downloadEpisode(episodeId);
-  const job = processJobResponse(downloadResponse.job);
-  dispatch(downloadEpisodeStarted(job, episodeId));
-};
 
 export const fetchEpisode = (
   episodeId: number

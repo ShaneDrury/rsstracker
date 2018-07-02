@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { EpisodesAction } from "../modules/episodes/actions";
-import { updateFeedsAction } from "../modules/feeds/actions";
+import { updateFeedsAction } from "../modules/feedJobs/actions";
 import { getSortedFeedIds } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { Dispatch } from "../types/thunk";

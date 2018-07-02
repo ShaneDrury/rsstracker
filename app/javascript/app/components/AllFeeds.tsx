@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
 import { getQueryParams } from "../modules/episodes/selectors";
-import { updateFeedAction } from "../modules/feeds/actions";
+import { updateFeedAction } from "../modules/feedJobs/actions";
 import { getFetchStatus } from "../modules/feeds/selectors";
 import { QueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
