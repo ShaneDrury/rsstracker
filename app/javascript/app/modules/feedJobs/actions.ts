@@ -8,6 +8,8 @@ import { processJobResponse } from "../jobs/sources";
 export enum feedJobsActions {
   UPDATE_FEED_STARTED = "UPDATE_FEED_STARTED",
   UPDATE_FEEDS_STARTED = "UPDATE_FEEDS_STARTED",
+  UPDATE_FEED_REQUESTED = "UPDATE_FEED_REQUESTED",
+  UPDATE_FEEDS_REQUESTED = "UPDATE_FEEDS_REQUESTED",
 }
 
 interface UpdateFeedStarted {
@@ -33,6 +35,32 @@ interface UpdateFeedsStarted {
   };
 }
 
+interface UpdateFeedRequested {
+  type: feedJobsActions.UPDATE_FEED_REQUESTED;
+  payload: {
+    feedId: number;
+  };
+}
+
+export const updateFeedRequested = (feedId: number): UpdateFeedRequested => ({
+  type: feedJobsActions.UPDATE_FEED_REQUESTED,
+  payload: { feedId },
+});
+
+interface UpdateFeedsRequested {
+  type: feedJobsActions.UPDATE_FEEDS_REQUESTED;
+  payload: {
+    feedIds: number[];
+  };
+}
+
+export const updateFeedsRequested = (
+  feedIds: number[]
+): UpdateFeedsRequested => ({
+  type: feedJobsActions.UPDATE_FEEDS_REQUESTED,
+  payload: { feedIds },
+});
+
 export const updateFeedsStarted = (feedsToJobs: {
   [feedId: number]: RemoteJob;
 }): UpdateFeedsStarted => ({
@@ -43,6 +71,7 @@ export const updateFeedsStarted = (feedsToJobs: {
 export const updateFeedAction = (
   feedId: number
 ): RootThunk<void> => async dispatch => {
+  dispatch(updateFeedRequested(feedId));
   const updateResponse: { job: ProviderJob } = camelcaseKeys(
     await updateFeed(feedId),
     {
@@ -56,10 +85,15 @@ export const updateFeedAction = (
 export const updateFeedsAction = (
   feedIds: number[]
 ): RootThunk<void> => async dispatch => {
+  dispatch(updateFeedsRequested(feedIds));
   const updateResponse = await updateFeeds(feedIds);
   const jobs = updateResponse.jobs.map(processJobResponse);
   const feedsToJobs = zipObject(feedIds, jobs);
   dispatch(updateFeedsStarted(feedsToJobs));
 };
 
-export type FeedJobsAction = UpdateFeedStarted | UpdateFeedsStarted;
+export type FeedJobsAction =
+  | UpdateFeedStarted
+  | UpdateFeedsStarted
+  | UpdateFeedRequested
+  | UpdateFeedsRequested;
