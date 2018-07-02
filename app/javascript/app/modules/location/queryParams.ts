@@ -1,4 +1,4 @@
-import { Status } from "../filters";
+import { Status } from "../status";
 
 export interface QueryParams {
   status: Status;

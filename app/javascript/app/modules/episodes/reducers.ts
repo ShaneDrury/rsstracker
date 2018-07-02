@@ -4,8 +4,8 @@ import { RemoteEpisode } from "../../types/episode";
 import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
 import { feedActions, FeedsAction } from "../feeds/actions";
-import { Status } from "../filters";
 import { FetchStatus } from "../remoteData";
+import { Status } from "../status";
 import { episodeActions, EpisodesAction } from "./actions";
 
 export interface State {

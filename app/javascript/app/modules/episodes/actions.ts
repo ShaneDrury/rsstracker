@@ -2,8 +2,8 @@ import { RemoteEpisode } from "../../types/episode";
 import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
-import { Status } from "../filters";
 import { QueryParams } from "../location/queryParams";
+import { Status } from "../status";
 import { getEpisodes as getEpisodesSelector } from "./selectors";
 import { getEpisode, getEpisodes } from "./sources";
 

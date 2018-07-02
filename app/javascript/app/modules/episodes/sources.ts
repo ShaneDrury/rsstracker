@@ -6,7 +6,7 @@ import { StatusCounts } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
 import { PageInfo } from "../../types/page";
 import apiFetch from "../apiFetch";
-import { Status } from "../filters";
+import { Status } from "../status";
 
 interface EpisodesResponse {
   items: ApiEpisode[];

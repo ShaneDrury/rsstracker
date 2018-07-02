@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { changeFilter, EpisodesAction } from "../modules/episodes/actions";
 import { getAllStatusCounts, getStatus } from "../modules/episodes/selectors";
-import { Status } from "../modules/filters";
 import { RootState } from "../modules/reducers";
+import { Status } from "../modules/status";
 import { StatusCounts } from "../types/feed";
 import { Dispatch } from "../types/thunk";
 
