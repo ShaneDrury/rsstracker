@@ -43,10 +43,7 @@ export class Feed extends React.Component<Props> {
   }
 
   public shouldComponentUpdate(nextProps: Props) {
-    return (
-      !isEqual(this.props.queryParams, nextProps.queryParams) ||
-      !isEqual(this.props, nextProps)
-    );
+    return !isEqual(this.props, nextProps);
   }
 
   public componentDidUpdate(prevProps: Props) {

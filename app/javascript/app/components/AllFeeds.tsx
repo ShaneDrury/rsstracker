@@ -16,9 +16,11 @@ import StatusSelect from "./StatusSelect";
 import UpdateFeeds from "./UpdateFeeds";
 
 import { isEqual } from "lodash";
+import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
 interface DataProps {
   fetchStatus: FetchStatus;
   queryParams: QueryParams;
+  loadingFeeds: string[];
 }
 
 interface DispatchProps {
@@ -34,10 +36,7 @@ export class AllFeeds extends React.Component<Props> {
   }
 
   public shouldComponentUpdate(nextProps: Props) {
-    return (
-      !isEqual(this.props.queryParams, nextProps.queryParams) ||
-      nextProps.fetchStatus !== this.props.fetchStatus
-    );
+    return !isEqual(this.props, nextProps);
   }
 
   public componentDidUpdate(prevProps: Props) {
@@ -45,6 +44,9 @@ export class AllFeeds extends React.Component<Props> {
       !isEqual(this.props.queryParams, prevProps.queryParams) &&
       this.props.fetchStatus !== "LOADING"
     ) {
+      this.props.fetchEpisodes(this.props.queryParams);
+    }
+    if (prevProps.loadingFeeds !== this.props.loadingFeeds) {
       this.props.fetchEpisodes(this.props.queryParams);
     }
   }
@@ -90,7 +92,10 @@ export class AllFeeds extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState): DataProps => {
   const fetchStatus = getFetchStatus(state);
+  const loadingFeeds = getUpdatingFeeds(state);
+
   return {
+    loadingFeeds,
     fetchStatus,
     queryParams: getQueryParams(state),
   };
