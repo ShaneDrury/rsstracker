@@ -15,12 +15,12 @@ const episodeJobs = (
   action: EpisodeJobsAction | JobsAction
 ): State => {
   switch (action.type) {
-    case episodeJobsActions.UPDATE_EPISODE_STARTED: {
+    case episodeJobsActions.DOWNLOAD_EPISODE_STARTED: {
       return {
         ...state,
         items: {
           ...state.items,
-          [action.payload.episodeId]: action.payload.jobId,
+          [action.payload.episodeId]: action.payload.job.id,
         },
       };
     }

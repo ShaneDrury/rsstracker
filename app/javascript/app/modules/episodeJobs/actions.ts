@@ -1,21 +1,23 @@
+import { RemoteJob } from "../../types/job";
+
 export enum episodeJobsActions {
-  UPDATE_EPISODE_STARTED = "UPDATE_EPISODE_STARTED",
+  DOWNLOAD_EPISODE_STARTED = "DOWNLOAD_EPISODE_STARTED",
 }
 
-interface UpdateEpisodeStarted {
-  type: episodeJobsActions.UPDATE_EPISODE_STARTED;
+interface DownloadEpisodeStarted {
+  type: episodeJobsActions.DOWNLOAD_EPISODE_STARTED;
   payload: {
-    jobId: string;
+    job: RemoteJob;
     episodeId: number;
   };
 }
 
-export const updateEpisodeStarted = (
-  jobId: string,
+export const downloadEpisodeStarted = (
+  job: RemoteJob,
   episodeId: number
-): UpdateEpisodeStarted => ({
-  type: episodeJobsActions.UPDATE_EPISODE_STARTED,
-  payload: { jobId, episodeId },
+): DownloadEpisodeStarted => ({
+  type: episodeJobsActions.DOWNLOAD_EPISODE_STARTED,
+  payload: { job, episodeId },
 });
 
-export type EpisodeJobsAction = UpdateEpisodeStarted;
+export type EpisodeJobsAction = DownloadEpisodeStarted;

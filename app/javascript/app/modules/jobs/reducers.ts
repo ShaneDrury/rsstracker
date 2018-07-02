@@ -1,5 +1,6 @@
-import { difference, forEach, omit, values, zipObject } from "lodash";
+import { difference, forEach, omit, union, values, zipObject } from "lodash";
 import { RemoteJob } from "../../types/job";
+import { EpisodeJobsAction, episodeJobsActions } from "../episodeJobs/actions";
 import { FeedJobsAction, feedJobsActions } from "../feedJobs/actions";
 import { FetchStatus } from "../remoteData";
 import { jobActions, JobsAction } from "./actions";
@@ -20,7 +21,7 @@ const initialState: JobsState = {
 
 const episodes = (
   state: JobsState = initialState,
-  action: JobsAction | FeedJobsAction
+  action: JobsAction | FeedJobsAction | EpisodeJobsAction
 ): JobsState => {
   switch (action.type) {
     case jobActions.FETCH_JOBS_START: {
@@ -32,7 +33,7 @@ const episodes = (
     case feedJobsActions.UPDATE_FEED_STARTED: {
       return {
         ...state,
-        ids: [...state.ids, action.payload.job.id],
+        ids: union(state.ids, [action.payload.job.id]),
         fetchStatus: "SUCCESS",
         items: {
           ...state.items,
@@ -46,11 +47,23 @@ const episodes = (
       const jobIdsToJob = zipObject(jobIds, jobs);
       return {
         ...state,
-        ids: [...state.ids, ...jobIds],
+        ids: union(state.ids, jobIds),
         fetchStatus: "SUCCESS",
         items: {
           ...state.items,
           ...jobIdsToJob,
+        },
+      };
+    }
+    case episodeJobsActions.DOWNLOAD_EPISODE_STARTED: {
+      const job = action.payload.job;
+      return {
+        ...state,
+        ids: union(state.ids, [job.id]),
+        fetchStatus: "SUCCESS",
+        items: {
+          ...state.items,
+          [job.id]: job,
         },
       };
     }
@@ -83,6 +96,7 @@ const episodes = (
     case jobActions.JOB_ERROR: {
       return {
         ...state,
+        ids: union(state.ids, [action.payload.job.id]),
         items: {
           ...state.items,
           [action.payload.job.id]: action.payload.job,

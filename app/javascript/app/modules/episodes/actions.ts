@@ -2,14 +2,11 @@ import { RemoteEpisode } from "../../types/episode";
 import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
-import { updateEpisodeStarted } from "../episodeJobs/actions";
+import { downloadEpisodeStarted } from "../episodeJobs/actions";
 import { Status } from "../filters";
-import { fetchJobsComplete } from "../jobs/actions";
 import { processJobResponse } from "../jobs/sources";
 import { QueryParams } from "../location/queryParams";
-import {
-  getEpisodes as getEpisodesSelector,
-} from "./selectors";
+import { getEpisodes as getEpisodesSelector } from "./selectors";
 import { downloadEpisode, getEpisode, getEpisodes } from "./sources";
 
 export enum episodeActions {
@@ -170,8 +167,7 @@ export const downloadEpisodeAction = (
 ): RootThunk<void> => async dispatch => {
   const downloadResponse = await downloadEpisode(episodeId);
   const job = processJobResponse(downloadResponse.job);
-  dispatch(updateEpisodeStarted(job.id, episodeId));
-  dispatch(fetchJobsComplete([job]));
+  dispatch(downloadEpisodeStarted(job, episodeId));
 };
 
 export const fetchEpisode = (

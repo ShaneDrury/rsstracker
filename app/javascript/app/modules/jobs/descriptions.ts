@@ -78,7 +78,7 @@ export const mapJobToDescription = (
         id: job.id,
         key,
         description: `Downloading thumbnail`,
-        error: errorMessage,
+        error: `${job.jobData.jobClass}: ${errorMessage}`,
       };
     }
     default: {
