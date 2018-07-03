@@ -3,6 +3,14 @@ require 'fileutils'
 class DownloadYoutubeAudioJob < ApplicationJob
   queue_as :default
 
+  around_perform do |job, block|
+    block.call
+  rescue StandardError => e
+    episode = Episode.find(job.arguments.first)
+    episode.build_fetch_status(status: 'FAILURE').save
+    raise e
+  end
+
   def perform(episode_id)
     unless (ENV.include? 'STORAGE_ROOT') && (ENV.include? 'DOWNLOAD_ROOT') && (ENV.include? 'YOUTUBE_DL_PATH')
       raise 'Must be run with STORAGE_ROOT, DOWNLOAD_ROOT and YOUTUBE_DL_PATH env variables'
