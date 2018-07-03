@@ -37,6 +37,7 @@ const feedJobs = (
         },
       };
     }
+    case jobActions.REMOVE_JOB_COMPLETE:
     case jobActions.JOB_COMPLETE: {
       const jobsByFeedId = invert(state.items);
       return {

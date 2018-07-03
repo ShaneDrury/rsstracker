@@ -24,6 +24,7 @@ const episodeJobs = (
         },
       };
     }
+    case jobActions.REMOVE_JOB_COMPLETE:
     case jobActions.JOB_COMPLETE: {
       const jobsByEpisodeId = invert(state.items);
       return {

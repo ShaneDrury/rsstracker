@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
+import { fetchEpisode } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
 import {
   Action as PlayerAction,
@@ -30,6 +31,7 @@ interface PropsExtended extends RemoteEpisode {
 interface DispatchProps {
   togglePlay: (episodeId: number) => void;
   downloadEpisode: (episodeId: number) => void;
+  fetchEpisode: (episodeId: number) => void;
 }
 
 type Props = DataProps & PropsExtended & DispatchProps;
@@ -50,6 +52,12 @@ const Description: React.SFC<DescriptionProps> = ({ text }) => (
 );
 
 export class Episode extends React.PureComponent<Props> {
+  public componentDidUpdate(prevProps: Props) {
+    if (prevProps.isUpdating && !this.props.isUpdating) {
+      this.props.fetchEpisode(this.props.id);
+    }
+  }
+
   public render() {
     const {
       id,
@@ -174,6 +182,7 @@ const mapDispatchToProps = (
     {
       togglePlay: togglePlayAction,
       downloadEpisode: downloadEpisodeAction,
+      fetchEpisode,
     },
     dispatch
   );
