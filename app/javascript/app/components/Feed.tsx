@@ -11,6 +11,7 @@ import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
 import { getQueryParams } from "../modules/episodes/selectors";
 import { updateFeedAction } from "../modules/feedJobs/actions";
 import { getFeedJobs } from "../modules/feedJobs/selectors";
+import { fetchFeedAction } from "../modules/feeds/actions";
 import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
 import { QueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
@@ -31,6 +32,7 @@ interface DataProps {
 interface DispatchProps {
   fetchEpisodes: (queryParams: QueryParams) => void;
   updateFeed: (feedId: number) => void;
+  fetchFeed: (feedId: string) => void;
 }
 
 interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
@@ -55,6 +57,9 @@ export class Feed extends React.Component<Props> {
     }
     if (prevProps.isUpdating && !this.props.isUpdating) {
       this.props.fetchEpisodes(this.props.queryParams);
+    }
+    if (this.props.remoteFeed && this.props.remoteFeed.stale) {
+      this.props.fetchFeed(this.props.remoteFeed.id.toString());
     }
   }
 
@@ -150,6 +155,7 @@ const mapDispatchToProps = (
     {
       fetchEpisodes: searchEpisodes,
       updateFeed: updateFeedAction,
+      fetchFeed: fetchFeedAction,
     },
     dispatch
   );

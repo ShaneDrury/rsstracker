@@ -25,6 +25,7 @@ interface ProcessedFeeds {
 export const processFeed = (feed: ApiFeed): RemoteFeed => ({
   ...feed,
   key: shortid.generate(),
+  stale: false,
 });
 
 export const fetchFeeds = async (): Promise<ProcessedFeeds> => {

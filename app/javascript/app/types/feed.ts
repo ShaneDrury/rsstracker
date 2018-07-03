@@ -18,4 +18,5 @@ export interface ApiFeed {
 
 export interface RemoteFeed extends ApiFeed {
   key: string;
+  stale: boolean;
 }

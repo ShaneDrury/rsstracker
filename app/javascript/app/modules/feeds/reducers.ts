@@ -1,5 +1,6 @@
 import { forEach } from "lodash";
 import { RemoteFeed } from "../../types/feed";
+import { episodeActions, EpisodesAction } from "../episodes/actions";
 import { FetchStatus } from "../remoteData";
 import { feedActions, FeedsAction } from "./actions";
 
@@ -17,7 +18,10 @@ const initialState: State = {
   ids: [],
 };
 
-const feeds = (state: State = initialState, action: FeedsAction): State => {
+const feeds = (
+  state: State = initialState,
+  action: FeedsAction | EpisodesAction
+): State => {
   switch (action.type) {
     case feedActions.FETCH_FEEDS_START:
       return {
@@ -48,6 +52,17 @@ const feeds = (state: State = initialState, action: FeedsAction): State => {
         items: {
           ...state.items,
           [updatedFeed.id]: updatedFeed,
+        },
+      };
+    }
+    case episodeActions.UPDATE_EPISODE_COMPLETE: {
+      const feedId = action.payload.episode.feedId;
+      const newFeed = { ...state.items[feedId], stale: true };
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          [feedId]: newFeed,
         },
       };
     }
