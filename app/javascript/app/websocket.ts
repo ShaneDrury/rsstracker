@@ -21,14 +21,14 @@ interface Meta extends Element {
 interface UpdateFeed {
   type: "UPDATE_FEED";
   payload: {
-    feed: string;
+    feed: ApiFeed;
   };
 }
 
 interface UpdateEpisode {
   type: "UPDATE_EPISODE";
   payload: {
-    episode: string;
+    episode: ApiEpisode;
   };
 }
 
@@ -52,26 +52,25 @@ const handleCableAction = (
   action: CableAction,
   dispatch: Dispatch<RootAction, RootState>
 ) => {
-  const payload = camelcaseKeys(action.payload, { deep: true });
   switch (action.type) {
     case "UPDATE_FEED": {
-      const feed: ApiFeed = payload.feed;
+      const feed = action.payload.feed;
       dispatch(fetchFeedComplete(processFeed(feed)));
       break;
     }
     case "UPDATE_EPISODE": {
-      const episode: ApiEpisode = payload.episode;
+      const episode = action.payload.episode;
       dispatch(fetchEpisodeComplete(processEpisode(episode)));
       dispatch(fetchFeedAction(episode.feedId));
       break;
     }
     case "JOB_COMPLETE": {
-      const jobId = payload.jobId;
+      const jobId = action.payload.jobId;
       dispatch(jobComplete(jobId.toString()));
       break;
     }
     case "JOB_ERROR": {
-      const job = payload.job;
+      const job = action.payload.job;
       dispatch(jobError(processJobResponse(job)));
       break;
     }
@@ -90,7 +89,10 @@ export const init = (store: Store<RootState>) => {
     {
       connected: () => {},
       received: (action: CableAction) => {
-        handleCableAction(action, store.dispatch);
+        handleCableAction(
+          camelcaseKeys(action, { deep: true }),
+          store.dispatch
+        );
       },
       disconnected: () => {},
     }
