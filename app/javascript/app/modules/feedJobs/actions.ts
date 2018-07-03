@@ -1,5 +1,6 @@
 import camelcaseKeys from "camelcase-keys";
 import { zipObject } from "lodash";
+import { RemoteFeed } from "../../types/feed";
 import { ProviderJob, RemoteJob } from "../../types/job";
 import { RootThunk } from "../../types/thunk";
 import { updateFeed, updateFeeds } from "../feeds/sources";
@@ -10,6 +11,7 @@ export enum feedJobsActions {
   UPDATE_FEEDS_STARTED = "UPDATE_FEEDS_STARTED",
   UPDATE_FEED_REQUESTED = "UPDATE_FEED_REQUESTED",
   UPDATE_FEEDS_REQUESTED = "UPDATE_FEEDS_REQUESTED",
+  UPDATE_FEED_COMPLETE = "UPDATE_FEED_COMPLETE",
 }
 
 interface UpdateFeedStarted {
@@ -26,6 +28,18 @@ export const updateFeedStarted = (
 ): UpdateFeedStarted => ({
   type: feedJobsActions.UPDATE_FEED_STARTED,
   payload: { job, feedId },
+});
+
+interface UpdateFeedComplete {
+  type: feedJobsActions.UPDATE_FEED_COMPLETE;
+  payload: {
+    feed: RemoteFeed;
+  };
+}
+
+export const updateFeedComplete = (feed: RemoteFeed): UpdateFeedComplete => ({
+  type: feedJobsActions.UPDATE_FEED_COMPLETE,
+  payload: { feed },
 });
 
 interface UpdateFeedsStarted {
@@ -96,4 +110,5 @@ export type FeedJobsAction =
   | UpdateFeedStarted
   | UpdateFeedsStarted
   | UpdateFeedRequested
-  | UpdateFeedsRequested;
+  | UpdateFeedsRequested
+  | UpdateFeedComplete;

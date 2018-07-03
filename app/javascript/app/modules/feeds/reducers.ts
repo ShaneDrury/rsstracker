@@ -1,6 +1,7 @@
 import { forEach } from "lodash";
 import { RemoteFeed } from "../../types/feed";
 import { episodeActions, EpisodesAction } from "../episodes/actions";
+import { FeedJobsAction, feedJobsActions } from "../feedJobs/actions";
 import { FetchStatus } from "../remoteData";
 import { feedActions, FeedsAction } from "./actions";
 
@@ -20,7 +21,7 @@ const initialState: State = {
 
 const feeds = (
   state: State = initialState,
-  action: FeedsAction | EpisodesAction
+  action: FeedsAction | EpisodesAction | FeedJobsAction
 ): State => {
   switch (action.type) {
     case feedActions.FETCH_FEEDS_START:
@@ -45,6 +46,7 @@ const feeds = (
         fetchStatus: "SUCCESS",
       };
     }
+    case feedJobsActions.UPDATE_FEED_COMPLETE:
     case feedActions.FETCH_FEED_COMPLETE: {
       const updatedFeed = action.payload.feed;
       return {

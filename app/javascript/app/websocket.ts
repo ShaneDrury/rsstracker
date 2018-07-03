@@ -4,7 +4,7 @@ import { Store } from "redux";
 import { RootAction } from "./modules/actions";
 import { updateEpisodeComplete } from "./modules/episodes/actions";
 import { processEpisode } from "./modules/episodes/sources";
-import { fetchFeedComplete } from "./modules/feeds/actions";
+import { updateFeedComplete } from "./modules/feedJobs/actions";
 import { processFeed } from "./modules/feeds/sources";
 import { jobComplete, jobError } from "./modules/jobs/actions";
 import { processJobResponse } from "./modules/jobs/sources";
@@ -55,7 +55,7 @@ const handleCableAction = (
   switch (action.type) {
     case "UPDATE_FEED": {
       const feed = action.payload.feed;
-      dispatch(fetchFeedComplete(processFeed(feed)));
+      dispatch(updateFeedComplete(processFeed(feed)));
       break;
     }
     case "UPDATE_EPISODE": {
