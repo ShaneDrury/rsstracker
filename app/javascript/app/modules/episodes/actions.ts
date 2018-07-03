@@ -14,6 +14,7 @@ export enum episodeActions {
   FETCH_EPISODE_START = "FETCH_EPISODE_START",
   FETCH_EPISODE_COMPLETE = "FETCH_EPISODE_COMPLETE",
   FETCH_EPISODE_FAILURE = "FETCH_EPISODE_FAILURE",
+  UPDATE_EPISODE_COMPLETE = "UPDATE_EPISODE_COMPLETE",
   PAGE_CHANGED = "PAGE_CHANGED",
   FILTER_CHANGED = "FILTER_CHANGED",
   SEARCH_CHANGED = "SEARCH_CHANGED",
@@ -71,6 +72,13 @@ interface FetchEpisodeComplete {
   };
 }
 
+interface UpdateEpisodeComplete {
+  type: episodeActions.UPDATE_EPISODE_COMPLETE;
+  payload: {
+    episode: RemoteEpisode;
+  };
+}
+
 interface FetchEpisodeFailure {
   type: episodeActions.FETCH_EPISODE_FAILURE;
   payload: {
@@ -108,6 +116,13 @@ export const fetchEpisodeComplete = (
   payload: { episode },
 });
 
+export const updateEpisodeComplete = (
+  episode: RemoteEpisode
+): UpdateEpisodeComplete => ({
+  type: episodeActions.UPDATE_EPISODE_COMPLETE,
+  payload: { episode },
+});
+
 export const fetchEpisodeFailure = (
   error: string,
   episodeId: number
@@ -125,7 +140,8 @@ export type EpisodesAction =
   | SearchChanged
   | FetchEpisodeStart
   | FetchEpisodeComplete
-  | FetchEpisodeFailure;
+  | FetchEpisodeFailure
+  | UpdateEpisodeComplete;
 
 export const changeFilter = (status: Status): FilterChanged => ({
   type: episodeActions.FILTER_CHANGED,

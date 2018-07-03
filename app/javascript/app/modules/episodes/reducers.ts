@@ -79,6 +79,7 @@ const episodes = (
         },
       };
     }
+    case episodeActions.UPDATE_EPISODE_COMPLETE:
     case episodeActions.FETCH_EPISODE_COMPLETE: {
       const episode = action.payload.episode;
       return {

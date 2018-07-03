@@ -2,7 +2,7 @@ import Cable from "actioncable";
 import camelcaseKeys from "camelcase-keys";
 import { Store } from "redux";
 import { RootAction } from "./modules/actions";
-import { fetchEpisodeComplete } from "./modules/episodes/actions";
+import { updateEpisodeComplete } from "./modules/episodes/actions";
 import { processEpisode } from "./modules/episodes/sources";
 import { fetchFeedAction, fetchFeedComplete } from "./modules/feeds/actions";
 import { processFeed } from "./modules/feeds/sources";
@@ -60,7 +60,7 @@ const handleCableAction = (
     }
     case "UPDATE_EPISODE": {
       const episode = action.payload.episode;
-      dispatch(fetchEpisodeComplete(processEpisode(episode)));
+      dispatch(updateEpisodeComplete(processEpisode(episode)));
       dispatch(fetchFeedAction(episode.feedId));
       break;
     }
