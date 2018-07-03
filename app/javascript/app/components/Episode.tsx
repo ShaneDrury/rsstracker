@@ -49,105 +49,108 @@ const Description: React.SFC<DescriptionProps> = ({ text }) => (
   </React.Fragment>
 );
 
-export const Episode: React.SFC<Props> = ({
-  id,
-  name,
-  description,
-  downloadEpisode,
-  duration,
-  fetchStatus,
-  isUpdating,
-  playing,
-  publicationDate,
-  togglePlay,
-  thumbnailUrl,
-  fullUrl,
-}) => {
-  const handleDownload = () => downloadEpisode(id);
-  const handleToggleShow = () => {
-    togglePlay(id);
-  };
-  return (
-    <div>
-      <div className="card">
-        <header className="card-header">
-          <div className="card-header-title">
-            {fetchStatus.status === "SUCCESS" && (
-              <a className="level-item" href={fetchStatus.url}>
-                {name}
+export class Episode extends React.PureComponent<Props> {
+  public render() {
+    const {
+      id,
+      name,
+      description,
+      downloadEpisode,
+      duration,
+      fetchStatus,
+      isUpdating,
+      playing,
+      publicationDate,
+      togglePlay,
+      thumbnailUrl,
+      fullUrl,
+    } = this.props;
+    const handleDownload = () => downloadEpisode(id);
+    const handleToggleShow = () => {
+      togglePlay(id);
+    };
+    return (
+      <div>
+        <div className="card">
+          <header className="card-header">
+            <div className="card-header-title">
+              {fetchStatus.status === "SUCCESS" && (
+                <a className="level-item" href={fetchStatus.url}>
+                  {name}
+                </a>
+              )}
+              {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
+            </div>
+            {publicationDate && (
+              <div className="card-header-icon">
+                <time>{moment(publicationDate).format("lll")}</time>
+              </div>
+            )}
+          </header>
+          <div className="card-content">
+            <div className="media">
+              <div className="media-content">
+                {description && <Description text={description} />}
+              </div>
+              {thumbnailUrl && (
+                <div className="media-right">
+                  <figure className="image is-128x128">
+                    <img src={thumbnailUrl} />
+                  </figure>
+                </div>
+              )}
+            </div>
+            <div className="content">
+              <hr />
+              <PlayingSeconds episodeId={id} />
+              <time>{duration}</time>{" "}
+              <a href={fullUrl}>
+                <Icon icon={faFileAudio} />
               </a>
-            )}
-            {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
-          </div>
-          {publicationDate && (
-            <div className="card-header-icon">
-              <time>{moment(publicationDate).format("lll")}</time>
+              <br />
+              {fetchStatus.status === "SUCCESS" && (
+                <button
+                  className={classNames("button", {
+                    "is-link": !playing,
+                    "is-danger": playing,
+                  })}
+                  onClick={handleToggleShow}
+                >
+                  {playing ? "Stop" : "Play"}
+                </button>
+              )}
             </div>
-          )}
-        </header>
-        <div className="card-content">
-          <div className="media">
-            <div className="media-content">
-              {description && <Description text={description} />}
-            </div>
-            {thumbnailUrl && (
-              <div className="media-right">
-                <figure className="image is-128x128">
-                  <img src={thumbnailUrl} />
-                </figure>
-              </div>
+            {!(fetchStatus.status === "SUCCESS") && (
+              <nav className="level is-mobile">
+                <div className="level-left">
+                  {(fetchStatus.status === "NOT_ASKED" ||
+                    fetchStatus.status === "FAILURE" ||
+                    isUpdating) && (
+                    <button
+                      className="button is-primary"
+                      onClick={handleDownload}
+                      disabled={isUpdating}
+                    >
+                      {isUpdating && (
+                        <div>
+                          <Icon icon={faSync} spin />
+                        </div>
+                      )}
+                      &nbsp;Download
+                    </button>
+                  )}
+                  {fetchStatus.status === "LOADING" && (
+                    <div>Loading {fetchStatus.percentageFetched}%</div>
+                  )}
+                </div>
+              </nav>
             )}
           </div>
-          <div className="content">
-            <hr />
-            <PlayingSeconds episodeId={id} />
-            <time>{duration}</time>{" "}
-            <a href={fullUrl}>
-              <Icon icon={faFileAudio} />
-            </a>
-            <br />
-            {fetchStatus.status === "SUCCESS" && (
-              <button
-                className={classNames("button", {
-                  "is-link": !playing,
-                  "is-danger": playing,
-                })}
-                onClick={handleToggleShow}
-              >
-                {playing ? "Stop" : "Play"}
-              </button>
-            )}
-          </div>
-          {!(fetchStatus.status === "SUCCESS") && (
-            <nav className="level is-mobile">
-              <div className="level-left">
-                {(fetchStatus.status === "NOT_ASKED" ||
-                  fetchStatus.status === "FAILURE" ||
-                  isUpdating) && (
-                  <button
-                    className="button is-primary"
-                    onClick={handleDownload}
-                    disabled={isUpdating}
-                  >
-                    {isUpdating && (
-                      <div>
-                        <Icon icon={faSync} spin />
-                      </div>
-                    )}
-                    &nbsp;Download
-                  </button>
-                )}
-                {fetchStatus.status === "LOADING" && (
-                  <div>Loading {fetchStatus.percentageFetched}%</div>
-                )}
-              </div>
-            </nav>
-          )}
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 const mapStateToProps = (
   state: RootState,
