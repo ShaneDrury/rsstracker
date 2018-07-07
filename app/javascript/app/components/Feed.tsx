@@ -31,8 +31,9 @@ interface DataProps {
 
 interface DispatchProps {
   fetchEpisodes: (queryParams: QueryParams) => void;
+  onUpdateFinished: (queryParams: QueryParams) => void;
   updateFeed: (feedId: number) => void;
-  fetchFeed: (feedId: string) => void;
+  onFeedStale: (feedId: string) => void;
 }
 
 interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
@@ -56,10 +57,10 @@ export class Feed extends React.Component<Props> {
       this.props.fetchEpisodes(this.props.queryParams);
     }
     if (prevProps.isUpdating && !this.props.isUpdating) {
-      this.props.fetchEpisodes(this.props.queryParams);
+      this.props.onUpdateFinished(this.props.queryParams);
     }
     if (this.props.remoteFeed && this.props.remoteFeed.stale) {
-      this.props.fetchFeed(this.props.remoteFeed.id.toString());
+      this.props.onFeedStale(this.props.remoteFeed.id.toString());
     }
   }
 
@@ -155,7 +156,8 @@ const mapDispatchToProps = (
     {
       fetchEpisodes: searchEpisodes,
       updateFeed: updateFeedAction,
-      fetchFeed: fetchFeedAction,
+      onFeedStale: fetchFeedAction,
+      onUpdateFinished: searchEpisodes,
     },
     dispatch
   );
