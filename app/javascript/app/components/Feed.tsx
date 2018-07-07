@@ -27,6 +27,7 @@ interface DataProps {
   remoteFeed?: RemoteFeed;
   fetchStatus: FetchStatus;
   queryParams: QueryParams;
+  shouldUpdate: boolean;
 }
 
 interface DispatchProps {
@@ -59,7 +60,11 @@ export class Feed extends React.Component<Props> {
     if (prevProps.isUpdating && !this.props.isUpdating) {
       this.props.onUpdateFinished(this.props.queryParams);
     }
-    if (this.props.remoteFeed && this.props.remoteFeed.stale) {
+    if (
+      !prevProps.shouldUpdate &&
+      this.props.shouldUpdate &&
+      this.props.remoteFeed
+    ) {
       this.props.onFeedStale(this.props.remoteFeed.id.toString());
     }
   }
@@ -141,11 +146,13 @@ const mapStateToProps = (
   const remoteFeed = getFeedObjects(state)[feedId];
   const fetchStatus = getFetchStatus(state);
   const isUpdating = !!getFeedJobs(state)[feedId];
+  const shouldUpdate = remoteFeed && remoteFeed.stale;
   return {
     isUpdating,
     remoteFeed,
     fetchStatus,
     queryParams: getQueryParams(state),
+    shouldUpdate,
   };
 };
 
