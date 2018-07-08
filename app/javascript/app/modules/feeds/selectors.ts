@@ -23,3 +23,7 @@ export const getFeedId = createSelector(getLocation, location => {
   }
   return parseInt(location.pathname.substring(1), 10);
 });
+
+export const getEnabledFeedIds = createSelector(getFeeds, feeds =>
+  feeds.filter(feed => !feed.disabled).map(feed => feed.id)
+);

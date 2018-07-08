@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { EpisodesAction } from "../modules/episodes/actions";
 import { updateFeedsAction } from "../modules/feedJobs/actions";
-import { getSortedFeedIds } from "../modules/feeds/selectors";
+import { getEnabledFeedIds } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { Dispatch } from "../types/thunk";
 import { Icon } from "./Icon";
@@ -33,8 +33,8 @@ export class UpdateFeeds extends React.PureComponent<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState) => ({
-  feedIds: getSortedFeedIds(state),
+const mapStateToProps = (state: RootState): EnhancedProps => ({
+  feedIds: getEnabledFeedIds(state),
 });
 
 const mapDispatchToProps = (
