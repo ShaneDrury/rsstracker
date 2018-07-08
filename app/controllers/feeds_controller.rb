@@ -61,6 +61,6 @@ class FeedsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def feed_params
-    params.fetch(:feed, {})
+    params.require(:feed).permit(:disabled)
   end
 end

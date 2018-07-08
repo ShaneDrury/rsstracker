@@ -1,12 +1,18 @@
 import { RemoteFeed, StatusCounts } from "../../types/feed";
 import { RootThunk } from "../../types/thunk";
-import { fetchFeed, fetchFeeds } from "./sources";
+import {
+  fetchFeed,
+  fetchFeeds,
+  setFeedDisabled as setFeedDisabledSource,
+} from "./sources";
 
 export enum feedActions {
   FETCH_FEEDS_START = "FETCH_FEEDS_START",
   FETCH_FEEDS_COMPLETE = "FETCH_FEEDS_COMPLETE",
   FETCH_FEEDS_FAILURE = "FETCH_FEEDS_FAILURE",
   FETCH_FEED_COMPLETE = "FETCH_FEED_COMPLETE",
+  SET_FEED_DISABLED_REQUESTED = "SET_FEED_DISABLED_REQUESTED",
+  SET_FEED_DISABLED_COMPLETE = "SET_FEED_DISABLED_COMPLETE",
 }
 
 interface FetchFeedsStart {
@@ -57,12 +63,6 @@ export const fetchFeedComplete = (feed: RemoteFeed): FetchFeedComplete => ({
   payload: { feed },
 });
 
-export type FeedsAction =
-  | FetchFeedsStart
-  | FetchFeedsComplete
-  | FetchFeedsFailure
-  | FetchFeedComplete;
-
 export const fetchFeedsAction = (): RootThunk<void> => async dispatch => {
   dispatch(fetchFeedsStart());
   try {
@@ -79,3 +79,48 @@ export const fetchFeedAction = (
   const feed = await fetchFeed(feedId);
   dispatch(fetchFeedComplete(feed));
 };
+
+interface SetFeedDisabledRequested {
+  type: feedActions.SET_FEED_DISABLED_REQUESTED;
+  payload: {
+    feedId: number;
+    disabled: boolean;
+  };
+}
+
+const setFeedDisabledRequested = (
+  feedId: number,
+  disabled: boolean
+): SetFeedDisabledRequested => ({
+  type: feedActions.SET_FEED_DISABLED_REQUESTED,
+  payload: { feedId, disabled },
+});
+
+interface SetFeedDisabledComplete {
+  type: feedActions.SET_FEED_DISABLED_COMPLETE;
+  payload: {
+    feedId: number;
+  };
+}
+
+const setFeedDisabledComplete = (feedId: number): SetFeedDisabledComplete => ({
+  type: feedActions.SET_FEED_DISABLED_COMPLETE,
+  payload: { feedId },
+});
+
+export const setFeedDisabled = (
+  feedId: number,
+  disabled: boolean
+): RootThunk<void> => async dispatch => {
+  dispatch(setFeedDisabledRequested(feedId, disabled));
+  await setFeedDisabledSource(feedId, disabled);
+  dispatch(setFeedDisabledComplete(feedId));
+};
+
+export type FeedsAction =
+  | FetchFeedsStart
+  | FetchFeedsComplete
+  | FetchFeedsFailure
+  | FetchFeedComplete
+  | SetFeedDisabledRequested
+  | SetFeedDisabledComplete;

@@ -53,3 +53,12 @@ export const updateFeeds = async (
     method: "POST",
     body: JSON.stringify({ feed_ids: feedIds }),
   });
+
+export const setFeedDisabled = async (
+  feedId: number,
+  disabled: boolean
+): Promise<void> =>
+  apiFetch(`/feeds/${feedId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ disabled }),
+  });

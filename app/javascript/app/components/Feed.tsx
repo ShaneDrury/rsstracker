@@ -11,7 +11,7 @@ import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
 import { getQueryParams } from "../modules/episodes/selectors";
 import { updateFeedAction } from "../modules/feedJobs/actions";
 import { getFeedJobs } from "../modules/feedJobs/selectors";
-import { fetchFeedAction } from "../modules/feeds/actions";
+import { fetchFeedAction, setFeedDisabled } from "../modules/feeds/actions";
 import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
 import { QueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
@@ -35,6 +35,7 @@ interface DispatchProps {
   onUpdateFinished: (queryParams: QueryParams) => void;
   updateFeed: (feedId: number) => void;
   onFeedStale: (feedId: string) => void;
+  setFeedDisabled: (feedId: number, value: boolean) => void;
 }
 
 interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
@@ -75,10 +76,20 @@ export class Feed extends React.Component<Props> {
     }
   };
 
+  public handleToggleDisableFeed = () => {
+    if (this.props.remoteFeed) {
+      this.props.setFeedDisabled(
+        this.props.remoteFeed.id,
+        !this.props.remoteFeed.disabled
+      );
+    }
+  };
+
   public render() {
     if (this.props.remoteFeed && this.props.fetchStatus === "SUCCESS") {
       const {
         name,
+        disabled,
         description,
         relativeImageLink,
         updatedAt,
@@ -110,6 +121,14 @@ export class Feed extends React.Component<Props> {
                     </button>
                   </div>
                 </div>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={!disabled}
+                    onChange={this.handleToggleDisableFeed}
+                  />{" "}
+                  Enabled
+                </label>
                 <div className="field">
                   Updated at: <time>{moment(updatedAt).format("lll")}</time>
                 </div>
@@ -165,6 +184,7 @@ const mapDispatchToProps = (
       updateFeed: updateFeedAction,
       onFeedStale: fetchFeedAction,
       onUpdateFinished: searchEpisodes,
+      setFeedDisabled,
     },
     dispatch
   );

@@ -14,6 +14,7 @@ export interface ApiFeed {
   relativeImageLink: string;
   url: string;
   updatedAt: string;
+  disabled: boolean;
 }
 
 export interface RemoteFeed extends ApiFeed {

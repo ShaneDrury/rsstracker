@@ -68,6 +68,20 @@ const feeds = (
         },
       };
     }
+    case feedActions.SET_FEED_DISABLED_REQUESTED: {
+      const feedId = action.payload.feedId;
+      const newFeed = {
+        ...state.items[feedId],
+        disabled: action.payload.disabled,
+      };
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          [feedId]: newFeed,
+        },
+      };
+    }
     default:
       return state;
   }
