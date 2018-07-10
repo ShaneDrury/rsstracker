@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_08_194828) do
+ActiveRecord::Schema.define(version: 2018_07_10_194554) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 2018_07_08_194828) do
     t.text "description"
     t.text "source"
     t.boolean "disabled", default: false
+    t.boolean "autodownload", default: false
   end
 
   create_table "fetch_statuses", force: :cascade do |t|
