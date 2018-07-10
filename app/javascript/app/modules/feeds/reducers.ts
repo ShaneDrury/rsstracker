@@ -82,6 +82,20 @@ const feeds = (
         },
       };
     }
+    case feedActions.SET_FEED_AUTODOWNLOAD_REQUESTED: {
+      const feedId = action.payload.feedId;
+      const newFeed = {
+        ...state.items[feedId],
+        autodownload: action.payload.autodownload,
+      };
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          [feedId]: newFeed,
+        },
+      };
+    }
     default:
       return state;
   }

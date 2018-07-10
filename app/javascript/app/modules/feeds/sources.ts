@@ -62,3 +62,12 @@ export const setFeedDisabled = async (
     method: "PATCH",
     body: JSON.stringify({ disabled }),
   });
+
+export const setFeedAutodownload = async (
+  feedId: number,
+  autodownload: boolean
+): Promise<void> =>
+  apiFetch(`/feeds/${feedId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ autodownload }),
+  });

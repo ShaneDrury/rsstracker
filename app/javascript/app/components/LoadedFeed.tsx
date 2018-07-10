@@ -10,7 +10,11 @@ import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
 import { getQueryParams } from "../modules/episodes/selectors";
 import { updateFeedAction } from "../modules/feedJobs/actions";
 import { getFeedJobs } from "../modules/feedJobs/selectors";
-import { fetchFeedAction, setFeedDisabled } from "../modules/feeds/actions";
+import {
+  fetchFeedAction,
+  setFeedAutodownload,
+  setFeedDisabled,
+} from "../modules/feeds/actions";
 import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
 import { QueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
@@ -34,7 +38,8 @@ interface DispatchProps {
   onUpdateFinished: (queryParams: QueryParams) => void;
   updateFeed: (feedId: number) => void;
   onFeedStale: (feedId: string) => void;
-  setFeedDisabled: (feedId: number, value: boolean) => void;
+  setFeedDisabled: (feedId: number, disabled: boolean) => void;
+  setFeedAutodownload: (feedId: number, autodownload: boolean) => void;
 }
 
 interface PropsExtended {
@@ -78,8 +83,16 @@ export class Feed extends React.Component<Props> {
     );
   };
 
+  public handleToggleAutodownload = () => {
+    this.props.setFeedAutodownload(
+      this.props.remoteFeed.id,
+      !this.props.remoteFeed.autodownload
+    );
+  };
+
   public render() {
     const {
+      autodownload,
       name,
       disabled,
       description,
@@ -120,6 +133,14 @@ export class Feed extends React.Component<Props> {
                   onChange={this.handleToggleDisableFeed}
                 />{" "}
                 Enabled
+              </label>{" "}
+              <label className="checkbox">
+                <input
+                  type="checkbox"
+                  checked={autodownload}
+                  onChange={this.handleToggleAutodownload}
+                />{" "}
+                Auto-download
               </label>
               <div className="field">
                 Updated at: <time>{moment(updatedAt).format("lll")}</time>
@@ -175,6 +196,7 @@ const mapDispatchToProps = (
       onFeedStale: fetchFeedAction,
       onUpdateFinished: searchEpisodes,
       setFeedDisabled,
+      setFeedAutodownload,
     },
     dispatch
   );

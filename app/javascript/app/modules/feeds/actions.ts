@@ -3,6 +3,7 @@ import { RootThunk } from "../../types/thunk";
 import {
   fetchFeed,
   fetchFeeds,
+  setFeedAutodownload as setFeedAutodownloadSource,
   setFeedDisabled as setFeedDisabledSource,
 } from "./sources";
 
@@ -13,6 +14,8 @@ export enum feedActions {
   FETCH_FEED_COMPLETE = "FETCH_FEED_COMPLETE",
   SET_FEED_DISABLED_REQUESTED = "SET_FEED_DISABLED_REQUESTED",
   SET_FEED_DISABLED_COMPLETE = "SET_FEED_DISABLED_COMPLETE",
+  SET_FEED_AUTODOWNLOAD_REQUESTED = "SET_FEED_AUTODOWNLOAD_REQUESTED",
+  SET_FEED_AUTODOWNLOAD_COMPLETE = "SET_FEED_AUTODOWNLOAD_COMPLETE",
 }
 
 interface FetchFeedsStart {
@@ -108,6 +111,36 @@ const setFeedDisabledComplete = (feedId: number): SetFeedDisabledComplete => ({
   payload: { feedId },
 });
 
+interface SetFeedAutodownloadRequested {
+  type: feedActions.SET_FEED_AUTODOWNLOAD_REQUESTED;
+  payload: {
+    feedId: number;
+    autodownload: boolean;
+  };
+}
+
+const setFeedAutodownloadRequested = (
+  feedId: number,
+  autodownload: boolean
+): SetFeedAutodownloadRequested => ({
+  type: feedActions.SET_FEED_AUTODOWNLOAD_REQUESTED,
+  payload: { feedId, autodownload },
+});
+
+interface SetFeedAutodownloadComplete {
+  type: feedActions.SET_FEED_AUTODOWNLOAD_COMPLETE;
+  payload: {
+    feedId: number;
+  };
+}
+
+const setFeedAutodownloadComplete = (
+  feedId: number
+): SetFeedAutodownloadComplete => ({
+  type: feedActions.SET_FEED_AUTODOWNLOAD_COMPLETE,
+  payload: { feedId },
+});
+
 export const setFeedDisabled = (
   feedId: number,
   disabled: boolean
@@ -117,10 +150,21 @@ export const setFeedDisabled = (
   dispatch(setFeedDisabledComplete(feedId));
 };
 
+export const setFeedAutodownload = (
+  feedId: number,
+  autodownload: boolean
+): RootThunk<void> => async dispatch => {
+  dispatch(setFeedAutodownloadRequested(feedId, autodownload));
+  await setFeedAutodownloadSource(feedId, autodownload);
+  dispatch(setFeedAutodownloadComplete(feedId));
+};
+
 export type FeedsAction =
   | FetchFeedsStart
   | FetchFeedsComplete
   | FetchFeedsFailure
   | FetchFeedComplete
   | SetFeedDisabledRequested
-  | SetFeedDisabledComplete;
+  | SetFeedDisabledComplete
+  | SetFeedAutodownloadRequested
+  | SetFeedAutodownloadComplete;

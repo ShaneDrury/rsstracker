@@ -15,6 +15,7 @@ export interface ApiFeed {
   url: string;
   updatedAt: string;
   disabled: boolean;
+  autodownload: boolean;
 }
 
 export interface RemoteFeed extends ApiFeed {
