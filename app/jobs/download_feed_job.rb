@@ -39,6 +39,7 @@ class DownloadFeedJob < ApplicationJob
         ep.url = result.link
         ep.save
         feed.touch
+        DownloadEpisodeJob.perform_later(ep.id) if feed.autodownload
       end
     end
     nil

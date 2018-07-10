@@ -29,6 +29,7 @@ class YoutubePlaylistDownloader
       ep.save
       feed.touch
       DownloadThumbnailJob.perform_later(ep.id)
+      DownloadYoutubeAudioJob.perform_later(ep.id) if feed.autodownload
     end
   end
 
