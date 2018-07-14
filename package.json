@@ -33,6 +33,7 @@
     "@types/react-router-dom": "^4.2.6",
     "@types/react-router-redux": "^5.0.13",
     "@types/shortid": "^0.0.29",
+    "@types/webpack-env": "^1.13.6",
     "actioncable": "^5.2.0",
     "babel-polyfill": "^6.26.0",
     "bulma": "^0.7.1",

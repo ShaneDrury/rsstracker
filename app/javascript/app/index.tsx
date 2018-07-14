@@ -7,18 +7,28 @@ import { Provider } from "react-redux";
 
 import { ConnectedRouter } from "react-router-redux";
 
-import { PrimaryContent } from "./components/PrimaryContent";
-import { history, store } from "./store";
+import PrimaryContent from "./components/PrimaryContent";
+import { configureStore, history } from "./store";
 import { init } from "./websocket";
 
+const store = configureStore();
 init(store);
 
-const root = (
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <PrimaryContent />
-    </ConnectedRouter>
-  </Provider>
-);
+const render = (Component: any) => {
+  return ReactDOM.render(
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <Component />
+      </ConnectedRouter>
+    </Provider>,
+    document.getElementById("root")
+  );
+};
 
-ReactDOM.render(root, document.getElementById("root"));
+render(PrimaryContent);
+
+if (module.hot) {
+  module.hot.accept("./components/PrimaryContent", () => {
+    render(PrimaryContent);
+  });
+}

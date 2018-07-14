@@ -4,7 +4,7 @@ import AllFeeds from "./AllFeeds";
 import Feed from "./Feed";
 import { Navbar } from "./Navbar";
 
-export class PrimaryContent extends React.PureComponent {
+class PrimaryContent extends React.PureComponent {
   public render() {
     return (
       <div>
@@ -21,3 +21,5 @@ export class PrimaryContent extends React.PureComponent {
     );
   }
 }
+
+export default PrimaryContent;
