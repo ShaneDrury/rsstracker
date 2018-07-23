@@ -9,7 +9,7 @@ class JobNotifyPlugin < Delayed::Plugin
           'feeds_channel',
           type: 'JOB_START',
           payload: {
-            job_id: job.id
+            job: job.with_extra
           }
         )
     end

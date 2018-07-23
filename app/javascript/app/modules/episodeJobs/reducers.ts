@@ -24,6 +24,22 @@ const episodeJobs = (
         },
       };
     }
+    case jobActions.NEW_JOB: {
+      const job = action.payload.job;
+      switch (job.jobData.jobClass) {
+        case "DownloadYoutubeAudioJob":
+        case "DownloadEpisodeJob": {
+          return {
+            ...state,
+            items: {
+              ...state.items,
+              [job.jobData.arguments[0]]: job.id,
+            },
+          };
+        }
+      }
+      return state;
+    }
     case jobActions.FETCH_JOBS_COMPLETE: {
       const newJobs = action.payload.jobs.reduce<{ [key: string]: string }>(
         (acc, job) => {
@@ -51,10 +67,10 @@ const episodeJobs = (
     }
     case jobActions.REMOVE_JOB_COMPLETE:
     case jobActions.JOB_COMPLETE: {
-      const jobsByEpisodeId = invert(state.items);
+      const episodesByJobId = invert(state.items);
       return {
         ...state,
-        items: omit(jobsByEpisodeId, [action.payload.jobId]),
+        items: invert(omit(episodesByJobId, [action.payload.jobId])),
       };
     }
     default:

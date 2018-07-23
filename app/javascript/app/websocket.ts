@@ -6,7 +6,7 @@ import { updateEpisodeComplete } from "./modules/episodes/actions";
 import { processEpisode } from "./modules/episodes/sources";
 import { updateFeedComplete } from "./modules/feedJobs/actions";
 import { processFeed } from "./modules/feeds/sources";
-import { jobComplete, jobError } from "./modules/jobs/actions";
+import { jobComplete, jobError, newJob } from "./modules/jobs/actions";
 import { processJobResponse } from "./modules/jobs/sources";
 import { RootState } from "./modules/reducers";
 import { ApiEpisode } from "./types/episode";
@@ -46,7 +46,19 @@ interface JobError {
   };
 }
 
-type CableAction = UpdateFeed | UpdateEpisode | JobComplete | JobError;
+interface JobStart {
+  type: "JOB_START";
+  payload: {
+    job: ProviderJob;
+  };
+}
+
+type CableAction =
+  | UpdateFeed
+  | UpdateEpisode
+  | JobComplete
+  | JobError
+  | JobStart;
 
 const handleCableAction = (
   action: CableAction,
@@ -71,6 +83,11 @@ const handleCableAction = (
     case "JOB_ERROR": {
       const job = action.payload.job;
       dispatch(jobError(processJobResponse(job)));
+      break;
+    }
+    case "JOB_START": {
+      const job = action.payload.job;
+      dispatch(newJob(processJobResponse(job)));
       break;
     }
   }

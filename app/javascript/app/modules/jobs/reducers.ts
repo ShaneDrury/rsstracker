@@ -67,6 +67,17 @@ const episodes = (
         },
       };
     }
+    case jobActions.NEW_JOB: {
+      const job = action.payload.job;
+      return {
+        ...state,
+        ids: union(state.ids, [job.id]),
+        items: {
+          ...state.items,
+          [job.id]: job,
+        },
+      };
+    }
     case jobActions.FETCH_JOBS_COMPLETE: {
       const remoteJobs: { [key: string]: RemoteJob } = {};
       const ids: string[] = [...state.ids];

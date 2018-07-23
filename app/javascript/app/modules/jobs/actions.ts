@@ -9,6 +9,7 @@ export enum jobActions {
   JOB_COMPLETE = "JOB_COMPLETE",
   JOB_ERROR = "JOB_ERROR",
   REMOVE_JOB_COMPLETE = "REMOVE_JOB_COMPLETE",
+  NEW_JOB = "NEW_JOB",
 }
 
 interface FetchJobsStart {
@@ -50,6 +51,13 @@ interface RemoveJobComplete {
   };
 }
 
+interface NewJob {
+  type: jobActions.NEW_JOB;
+  payload: {
+    job: RemoteJob;
+  };
+}
+
 export const fetchJobsStart = (): FetchJobsStart => ({
   type: jobActions.FETCH_JOBS_START,
 });
@@ -79,13 +87,19 @@ export const removeJobComplete = (jobId: string): RemoveJobComplete => ({
   payload: { jobId },
 });
 
+export const newJob = (job: RemoteJob): NewJob => ({
+  type: jobActions.NEW_JOB,
+  payload: { job },
+});
+
 export type JobsAction =
   | FetchJobsStart
   | FetchJobsComplete
   | FetchJobsFailure
   | JobComplete
   | JobError
-  | RemoveJobComplete;
+  | RemoveJobComplete
+  | NewJob;
 
 export const fetchJobs = (): RootThunk<void> => async dispatch => {
   dispatch(fetchJobsStart());
