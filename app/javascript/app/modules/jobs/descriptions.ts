@@ -74,11 +74,12 @@ export const mapJobToDescription = (
     }
     case "DownloadThumbnailJob":
     case "FetchOldThumbnailsJob": {
+      const error = errorMessage && `${job.jobData.jobClass}: ${errorMessage}`;
       return {
         id: job.id,
         key,
         description: `Downloading thumbnail`,
-        error: `${job.jobData.jobClass}: ${errorMessage}`,
+        error,
       };
     }
     default: {
