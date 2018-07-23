@@ -1,4 +1,4 @@
-import { difference, keys } from "lodash";
+import { difference, isEqual, keys } from "lodash";
 import React from "react";
 import Notification from "react-bulma-notification";
 import "react-bulma-notification/build/css/index.css";
@@ -72,10 +72,12 @@ export class ActiveJobs extends React.PureComponent<Props, State> {
     this.props.getJobs();
   }
 
-  public componentDidUpdate() {
-    this.props.relatedEpisodeIds.forEach(episodeId => {
-      this.props.fetchEpisodeIfNeeded(episodeId);
-    });
+  public componentDidUpdate(prevProps: Props) {
+    if (!isEqual(this.props.relatedEpisodeIds, prevProps.relatedEpisodeIds)) {
+      this.props.relatedEpisodeIds.forEach(episodeId => {
+        this.props.fetchEpisodeIfNeeded(episodeId);
+      });
+    }
   }
 
   public render() {
