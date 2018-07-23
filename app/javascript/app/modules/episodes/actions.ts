@@ -83,7 +83,7 @@ interface FetchEpisodeFailure {
   type: episodeActions.FETCH_EPISODE_FAILURE;
   payload: {
     error: string;
-    episodeId: number;
+    episodeId: string;
   };
 }
 
@@ -125,7 +125,7 @@ export const updateEpisodeComplete = (
 
 export const fetchEpisodeFailure = (
   error: string,
-  episodeId: number
+  episodeId: string
 ): FetchEpisodeFailure => ({
   type: episodeActions.FETCH_EPISODE_FAILURE,
   payload: { error, episodeId },
@@ -177,7 +177,7 @@ export const changePage = (currentPage: number): PageChanged => ({
 });
 
 export const fetchEpisode = (
-  episodeId: number
+  episodeId: string
 ): RootThunk<void> => async dispatch => {
   dispatch(fetchEpisodeStart());
   try {
@@ -188,7 +188,7 @@ export const fetchEpisode = (
   }
 };
 
-export const fetchEpisodeIfNeeded = (episodeId: number): RootThunk<void> => (
+export const fetchEpisodeIfNeeded = (episodeId: string): RootThunk<void> => (
   dispatch,
   getState
 ) => {

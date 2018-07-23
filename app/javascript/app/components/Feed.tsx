@@ -13,7 +13,7 @@ interface DataProps {
   fetchStatus: FetchStatus;
 }
 
-interface PropsExtended extends RouteComponentProps<{ feedId: number }> {}
+interface PropsExtended extends RouteComponentProps<{ feedId: string }> {}
 
 type Props = DataProps & PropsExtended;
 

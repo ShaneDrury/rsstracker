@@ -13,13 +13,13 @@ interface DataProps {}
 
 interface PropsExtended {
   episodeName?: string;
-  episodeId?: number;
+  episodeId?: string;
   fetched: boolean;
   playing: boolean;
 }
 
 interface DispatchProps {
-  fetchEpisodeIfNeeded: (episodeId: number) => void;
+  fetchEpisodeIfNeeded: (episodeId: string) => void;
 }
 
 type Props = DataProps & PropsExtended & DispatchProps;

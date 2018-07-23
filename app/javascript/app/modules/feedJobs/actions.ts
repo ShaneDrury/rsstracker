@@ -18,12 +18,12 @@ interface UpdateFeedStarted {
   type: feedJobsActions.UPDATE_FEED_STARTED;
   payload: {
     job: RemoteJob;
-    feedId: number;
+    feedId: string;
   };
 }
 
 export const updateFeedStarted = (
-  feedId: number,
+  feedId: string,
   job: RemoteJob
 ): UpdateFeedStarted => ({
   type: feedJobsActions.UPDATE_FEED_STARTED,
@@ -45,18 +45,18 @@ export const updateFeedComplete = (feed: RemoteFeed): UpdateFeedComplete => ({
 interface UpdateFeedsStarted {
   type: feedJobsActions.UPDATE_FEEDS_STARTED;
   payload: {
-    feedsToJobs: { [feedId: number]: RemoteJob };
+    feedsToJobs: { [feedId: string]: RemoteJob };
   };
 }
 
 interface UpdateFeedRequested {
   type: feedJobsActions.UPDATE_FEED_REQUESTED;
   payload: {
-    feedId: number;
+    feedId: string;
   };
 }
 
-export const updateFeedRequested = (feedId: number): UpdateFeedRequested => ({
+export const updateFeedRequested = (feedId: string): UpdateFeedRequested => ({
   type: feedJobsActions.UPDATE_FEED_REQUESTED,
   payload: { feedId },
 });
@@ -64,26 +64,26 @@ export const updateFeedRequested = (feedId: number): UpdateFeedRequested => ({
 interface UpdateFeedsRequested {
   type: feedJobsActions.UPDATE_FEEDS_REQUESTED;
   payload: {
-    feedIds: number[];
+    feedIds: string[];
   };
 }
 
 export const updateFeedsRequested = (
-  feedIds: number[]
+  feedIds: string[]
 ): UpdateFeedsRequested => ({
   type: feedJobsActions.UPDATE_FEEDS_REQUESTED,
   payload: { feedIds },
 });
 
 export const updateFeedsStarted = (feedsToJobs: {
-  [feedId: number]: RemoteJob;
+  [feedId: string]: RemoteJob;
 }): UpdateFeedsStarted => ({
   type: feedJobsActions.UPDATE_FEEDS_STARTED,
   payload: { feedsToJobs },
 });
 
 export const updateFeedAction = (
-  feedId: number
+  feedId: string
 ): RootThunk<void> => async dispatch => {
   dispatch(updateFeedRequested(feedId));
   const updateResponse: { job: ProviderJob } = camelcaseKeys(
@@ -97,7 +97,7 @@ export const updateFeedAction = (
 };
 
 export const updateFeedsAction = (
-  feedIds: number[]
+  feedIds: string[]
 ): RootThunk<void> => async dispatch => {
   dispatch(updateFeedsRequested(feedIds));
   const updateResponse = await updateFeeds(feedIds);

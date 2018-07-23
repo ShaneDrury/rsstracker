@@ -1,4 +1,5 @@
 import { FetchStatus } from "../modules/fetchStatus";
+import { Omit } from "./util";
 
 export interface ApiEpisode {
   id: number;
@@ -14,6 +15,7 @@ export interface ApiEpisode {
   thumbnailUrl?: string;
 }
 
-export interface RemoteEpisode extends ApiEpisode {
+export interface RemoteEpisode extends Omit<ApiEpisode, "id"> {
   key: string;
+  id: string;
 }

@@ -2,7 +2,7 @@ import { Status } from "../status";
 
 export interface QueryParams {
   status: Status;
-  feedId?: number;
+  feedId?: string;
   searchTerm: string;
   currentPage: number;
 }

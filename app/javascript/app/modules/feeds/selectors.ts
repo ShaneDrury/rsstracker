@@ -3,7 +3,7 @@ import { RemoteFeed } from "../../types/feed";
 import { getLocation } from "../location/selectors";
 import { RootState } from "../reducers";
 
-export const getSortedFeedIds = (state: RootState): number[] => state.feeds.ids;
+export const getSortedFeedIds = (state: RootState): string[] => state.feeds.ids;
 
 export const getFeedObjects = (
   state: RootState
@@ -21,7 +21,7 @@ export const getFeedId = createSelector(getLocation, location => {
   if (!location || location.pathname === "/") {
     return undefined;
   }
-  return parseInt(location.pathname.substring(1), 10);
+  return location.pathname.substring(1);
 });
 
 export const getEnabledFeedIds = createSelector(getFeeds, feeds =>

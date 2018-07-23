@@ -1,3 +1,5 @@
+import { Omit } from "./util";
+
 export type JobClass =
   | "DownloadFeedJob"
   | "DownloadYoutubePlaylistJob"
@@ -19,15 +21,7 @@ export interface ProviderJob {
   };
 }
 
-export interface RemoteJob {
+export interface RemoteJob extends Omit<ProviderJob, "id"> {
   key: string;
   id: string;
-  lastError?: string;
-  priority: number;
-  jobData: {
-    jobClass: JobClass;
-    jobId: string;
-    providerJobId: string;
-    arguments: number[];
-  };
 }

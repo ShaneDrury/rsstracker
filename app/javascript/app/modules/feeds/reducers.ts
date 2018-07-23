@@ -9,7 +9,7 @@ export interface State {
   items: {
     [key: string]: RemoteFeed;
   };
-  ids: number[];
+  ids: string[];
   fetchStatus: FetchStatus;
 }
 
@@ -31,7 +31,7 @@ const feeds = (
       };
     case feedActions.FETCH_FEEDS_COMPLETE: {
       const remoteFeeds: { [key: string]: RemoteFeed } = {};
-      const ids: number[] = [];
+      const ids: string[] = [];
       forEach(action.payload.feeds, feed => {
         remoteFeeds[feed.id] = feed;
         ids.push(feed.id);

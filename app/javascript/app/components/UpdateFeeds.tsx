@@ -10,11 +10,11 @@ import { Dispatch } from "../types/thunk";
 import { Icon } from "./Icon";
 
 interface EnhancedProps {
-  feedIds: number[];
+  feedIds: string[];
 }
 
 interface DispatchProps {
-  updateFeeds: (feedIds: number[]) => void;
+  updateFeeds: (feedIds: string[]) => void;
 }
 
 type Props = DispatchProps & EnhancedProps;

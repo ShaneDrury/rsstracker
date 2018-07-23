@@ -26,6 +26,7 @@ export const processFeed = (feed: ApiFeed): RemoteFeed => ({
   ...feed,
   key: shortid.generate(),
   stale: false,
+  id: feed.id.toString(),
 });
 
 export const fetchFeeds = async (): Promise<ProcessedFeeds> => {
@@ -43,11 +44,11 @@ export const fetchFeed = async (feedId: string): Promise<RemoteFeed> => {
   return processFeed(camel);
 };
 
-export const updateFeed = async (feedId: number): Promise<UpdateFeedResponse> =>
+export const updateFeed = async (feedId: string): Promise<UpdateFeedResponse> =>
   apiFetch(`/feeds/${feedId}/update_feed`, { method: "POST" });
 
 export const updateFeeds = async (
-  feedIds: number[]
+  feedIds: string[]
 ): Promise<UpdateFeedsResponse> =>
   apiFetch(`/feeds/update_feeds`, {
     method: "POST",
@@ -55,7 +56,7 @@ export const updateFeeds = async (
   });
 
 export const setFeedDisabled = async (
-  feedId: number,
+  feedId: string,
   disabled: boolean
 ): Promise<void> =>
   apiFetch(`/feeds/${feedId}`, {
@@ -64,7 +65,7 @@ export const setFeedDisabled = async (
   });
 
 export const setFeedAutodownload = async (
-  feedId: number,
+  feedId: string,
   autodownload: boolean
 ): Promise<void> =>
   apiFetch(`/feeds/${feedId}`, {

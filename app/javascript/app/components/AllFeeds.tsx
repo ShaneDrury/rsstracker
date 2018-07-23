@@ -25,7 +25,7 @@ interface DataProps {
 
 interface DispatchProps {
   fetchEpisodes: (queryParams: QueryParams) => void;
-  updateFeed: (feedId: number) => void;
+  updateFeed: (feedId: string) => void;
 }
 
 type Props = DataProps & DispatchProps;

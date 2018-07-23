@@ -1,3 +1,5 @@
+import { Omit } from "./util";
+
 export interface StatusCounts {
   all: number;
   notAsked?: number;
@@ -18,7 +20,8 @@ export interface ApiFeed {
   autodownload: boolean;
 }
 
-export interface RemoteFeed extends ApiFeed {
+export interface RemoteFeed extends Omit<ApiFeed, "id"> {
   key: string;
+  id: string;
   stale: boolean;
 }

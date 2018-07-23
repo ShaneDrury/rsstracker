@@ -5,25 +5,25 @@ export enum actions {
 
 interface PlayedSecondsUpdated {
   type: actions.PLAYED_SECONDS_UPDATED;
-  payload: { playedSeconds: number; episodeId: number };
+  payload: { playedSeconds: number; episodeId: string };
 }
 
 interface PlayToggled {
   type: actions.PLAY_TOGGLED;
-  payload: { playingEpisodeId: number };
+  payload: { playingEpisodeId: string };
 }
 
 export type Action = PlayedSecondsUpdated | PlayToggled;
 
 export const playedSecondsUpdated = (
-  episodeId: number,
+  episodeId: string,
   playedSeconds: number
 ): PlayedSecondsUpdated => ({
   type: actions.PLAYED_SECONDS_UPDATED,
   payload: { playedSeconds, episodeId },
 });
 
-export const playToggled = (playingEpisodeId: number): PlayToggled => ({
+export const playToggled = (playingEpisodeId: string): PlayToggled => ({
   type: actions.PLAY_TOGGLED,
   payload: { playingEpisodeId },
 });

@@ -18,13 +18,13 @@ import { Dispatch } from "../types/thunk";
 
 interface EnhancedProps {
   jobDescriptions: JobDescription[];
-  relatedEpisodeIds: number[];
+  relatedEpisodeIds: string[];
 }
 
 interface DispatchProps {
   getJobs: () => void;
   onCloseErrorJob: (jobId: string) => void;
-  fetchEpisodeIfNeeded: (episodeId: number) => void;
+  fetchEpisodeIfNeeded: (episodeId: string) => void;
 }
 
 type Props = EnhancedProps & DispatchProps;
@@ -87,7 +87,7 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
   const jobDescriptions = getJobDescriptions(state);
   return {
     jobDescriptions,
-    relatedEpisodeIds: keys(getEpisodeJobs(state)).map(id => parseInt(id, 10)),
+    relatedEpisodeIds: keys(getEpisodeJobs(state)),
   };
 };
 

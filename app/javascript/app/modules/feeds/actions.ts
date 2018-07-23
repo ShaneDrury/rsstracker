@@ -86,13 +86,13 @@ export const fetchFeedAction = (
 interface SetFeedDisabledRequested {
   type: feedActions.SET_FEED_DISABLED_REQUESTED;
   payload: {
-    feedId: number;
+    feedId: string;
     disabled: boolean;
   };
 }
 
 const setFeedDisabledRequested = (
-  feedId: number,
+  feedId: string,
   disabled: boolean
 ): SetFeedDisabledRequested => ({
   type: feedActions.SET_FEED_DISABLED_REQUESTED,
@@ -102,11 +102,11 @@ const setFeedDisabledRequested = (
 interface SetFeedDisabledComplete {
   type: feedActions.SET_FEED_DISABLED_COMPLETE;
   payload: {
-    feedId: number;
+    feedId: string;
   };
 }
 
-const setFeedDisabledComplete = (feedId: number): SetFeedDisabledComplete => ({
+const setFeedDisabledComplete = (feedId: string): SetFeedDisabledComplete => ({
   type: feedActions.SET_FEED_DISABLED_COMPLETE,
   payload: { feedId },
 });
@@ -114,13 +114,13 @@ const setFeedDisabledComplete = (feedId: number): SetFeedDisabledComplete => ({
 interface SetFeedAutodownloadRequested {
   type: feedActions.SET_FEED_AUTODOWNLOAD_REQUESTED;
   payload: {
-    feedId: number;
+    feedId: string;
     autodownload: boolean;
   };
 }
 
 const setFeedAutodownloadRequested = (
-  feedId: number,
+  feedId: string,
   autodownload: boolean
 ): SetFeedAutodownloadRequested => ({
   type: feedActions.SET_FEED_AUTODOWNLOAD_REQUESTED,
@@ -130,19 +130,19 @@ const setFeedAutodownloadRequested = (
 interface SetFeedAutodownloadComplete {
   type: feedActions.SET_FEED_AUTODOWNLOAD_COMPLETE;
   payload: {
-    feedId: number;
+    feedId: string;
   };
 }
 
 const setFeedAutodownloadComplete = (
-  feedId: number
+  feedId: string
 ): SetFeedAutodownloadComplete => ({
   type: feedActions.SET_FEED_AUTODOWNLOAD_COMPLETE,
   payload: { feedId },
 });
 
 export const setFeedDisabled = (
-  feedId: number,
+  feedId: string,
   disabled: boolean
 ): RootThunk<void> => async dispatch => {
   dispatch(setFeedDisabledRequested(feedId, disabled));
@@ -151,7 +151,7 @@ export const setFeedDisabled = (
 };
 
 export const setFeedAutodownload = (
-  feedId: number,
+  feedId: string,
   autodownload: boolean
 ): RootThunk<void> => async dispatch => {
   dispatch(setFeedAutodownloadRequested(feedId, autodownload));

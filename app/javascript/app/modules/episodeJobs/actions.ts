@@ -11,20 +11,20 @@ interface DownloadEpisodeStarted {
   type: episodeJobsActions.DOWNLOAD_EPISODE_STARTED;
   payload: {
     job: RemoteJob;
-    episodeId: number;
+    episodeId: string;
   };
 }
 
 export const downloadEpisodeStarted = (
   job: RemoteJob,
-  episodeId: number
+  episodeId: string
 ): DownloadEpisodeStarted => ({
   type: episodeJobsActions.DOWNLOAD_EPISODE_STARTED,
   payload: { job, episodeId },
 });
 
 export const downloadEpisodeAction = (
-  episodeId: number
+  episodeId: string
 ): RootThunk<void> => async dispatch => {
   const downloadResponse = await downloadEpisode(episodeId);
   const job = processJobResponse(downloadResponse.job);

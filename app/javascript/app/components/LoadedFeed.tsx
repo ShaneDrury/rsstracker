@@ -36,14 +36,14 @@ interface DataProps {
 interface DispatchProps {
   fetchEpisodes: (queryParams: QueryParams) => void;
   onUpdateFinished: (queryParams: QueryParams) => void;
-  updateFeed: (feedId: number) => void;
+  updateFeed: (feedId: string) => void;
   onFeedStale: (feedId: string) => void;
-  setFeedDisabled: (feedId: number, disabled: boolean) => void;
-  setFeedAutodownload: (feedId: number, autodownload: boolean) => void;
+  setFeedDisabled: (feedId: string, disabled: boolean) => void;
+  setFeedAutodownload: (feedId: string, autodownload: boolean) => void;
 }
 
 interface PropsExtended {
-  feedId: number;
+  feedId: string;
 }
 
 type Props = DataProps & DispatchProps & PropsExtended;
@@ -68,7 +68,7 @@ export class Feed extends React.Component<Props> {
       this.props.onUpdateFinished(this.props.queryParams);
     }
     if (!prevProps.shouldUpdate && this.props.shouldUpdate) {
-      this.props.onFeedStale(this.props.remoteFeed.id.toString());
+      this.props.onFeedStale(this.props.remoteFeed.id);
     }
   }
 

@@ -20,7 +20,7 @@ import { Icon } from "./Icon";
 import PlayingSeconds from "./PlayingSeconds";
 
 interface DataProps {
-  episodeId: number;
+  episodeId: string;
 }
 
 interface PropsExtended extends RemoteEpisode {
@@ -29,9 +29,9 @@ interface PropsExtended extends RemoteEpisode {
 }
 
 interface DispatchProps {
-  togglePlay: (episodeId: number) => void;
-  downloadEpisode: (episodeId: number) => void;
-  fetchEpisode: (episodeId: number) => void;
+  togglePlay: (episodeId: string) => void;
+  downloadEpisode: (episodeId: string) => void;
+  fetchEpisode: (episodeId: string) => void;
 }
 
 type Props = DataProps & PropsExtended & DispatchProps;

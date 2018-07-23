@@ -20,12 +20,12 @@ interface ConnectedProps {
 }
 
 interface DispatchProps {
-  onChangePlayedSeconds: (episodeId: number, playedSeconds: number) => void;
-  togglePlay: (episodeId: number) => void;
+  onChangePlayedSeconds: (episodeId: string, playedSeconds: number) => void;
+  togglePlay: (episodeId: string) => void;
 }
 
 interface PropsExtended {
-  episodeId: number;
+  episodeId: string;
   playing: boolean;
 }
 

@@ -5,6 +5,7 @@ import { ApiEpisode, RemoteEpisode } from "../../types/episode";
 import { StatusCounts } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
 import { PageInfo } from "../../types/page";
+import { Omit } from "../../types/util";
 import apiFetch from "../apiFetch";
 import { Status } from "../status";
 
@@ -14,7 +15,7 @@ interface EpisodesResponse {
   statusCounts: StatusCounts;
 }
 
-interface ProcessedResponse extends EpisodesResponse {
+interface ProcessedResponse extends Omit<EpisodesResponse, "items"> {
   items: RemoteEpisode[];
 }
 
@@ -25,6 +26,7 @@ interface DownloadEpisodeResponse {
 export const processEpisode = (episode: ApiEpisode): RemoteEpisode => ({
   ...episode,
   key: shortid.generate(),
+  id: episode.id.toString(),
 });
 
 const processEpisodesResponse = (
@@ -39,7 +41,7 @@ const processEpisodesResponse = (
 
 export const getEpisodes = async (queryParams: {
   status?: Status;
-  feedId?: number;
+  feedId?: string;
   searchTerm?: string;
   currentPage?: number;
 }): Promise<ProcessedResponse> => {
@@ -53,13 +55,13 @@ export const getEpisodes = async (queryParams: {
   return processEpisodesResponse(episodesResponse);
 };
 
-export const getEpisode = async (episodeId: number): Promise<RemoteEpisode> => {
+export const getEpisode = async (episodeId: string): Promise<RemoteEpisode> => {
   const episodeResponse: ApiEpisode = await apiFetch(`/episodes/${episodeId}`);
   const camel: ApiEpisode = camelcaseKeys(episodeResponse, { deep: true });
   return processEpisode(camel);
 };
 
 export const downloadEpisode = async (
-  episodeId: number
+  episodeId: string
 ): Promise<DownloadEpisodeResponse> =>
   apiFetch(`/episodes/${episodeId}/download`, { method: "POST" });

@@ -35,7 +35,7 @@ interface UpdateEpisode {
 interface JobComplete {
   type: "JOB_COMPLETE";
   payload: {
-    jobId: string;
+    jobId: number;
   };
 }
 

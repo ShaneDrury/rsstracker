@@ -5,7 +5,7 @@ import { getPlayedSeconds } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 
 interface DataProps {
-  episodeId: number;
+  episodeId: string;
 }
 
 interface PropsExtended {

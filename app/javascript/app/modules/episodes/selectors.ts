@@ -9,7 +9,7 @@ export const getEpisodes = (
 
 export const getFetchStatus = (state: RootState) => state.episodes.fetchStatus;
 
-export const getSortedEpisodeIds = (state: RootState): number[] =>
+export const getSortedEpisodeIds = (state: RootState): string[] =>
   state.episodes.ids;
 
 export const getLoadedEpisodes = createSelector(

@@ -1,9 +1,9 @@
 import { Action, actions } from "./actions";
 
 export interface State {
-  playingEpisodeId?: number;
+  playingEpisodeId?: string;
   saved: {
-    [key: number]: number;
+    [key: string]: number;
   };
   playing: boolean;
 }

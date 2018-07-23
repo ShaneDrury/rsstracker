@@ -13,7 +13,7 @@ export interface State {
     [key: string]: RemoteEpisode;
   };
   fetchStatus: FetchStatus;
-  ids: number[];
+  ids: string[];
   pageInfo: PageInfo;
   searchTerm: string;
   status: Status;
@@ -53,7 +53,7 @@ const episodes = (
     }
     case episodeActions.FETCH_EPISODES_COMPLETE: {
       const remoteEpisodes: { [key: string]: RemoteEpisode } = {};
-      const ids: number[] = [];
+      const ids: string[] = [];
       forEach(action.payload.episodes, episode => {
         remoteEpisodes[episode.id] = episode;
         ids.push(episode.id);
