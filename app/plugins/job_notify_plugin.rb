@@ -3,13 +3,16 @@ require 'delayed_job'
 class JobNotifyPlugin < Delayed::Plugin
   callbacks do |lifecycle|
     lifecycle.before(:invoke_job) do |job|
+      job_with_extra = job.with_extra
+      job_class = job_with_extra[:job_data]['job_class']
+      next if job_class == ('EpisodeUpdateBroadcastJob' || 'FeedUpdateBroadcastJob')
       ActionCable
         .server
         .broadcast(
           'feeds_channel',
           type: 'JOB_START',
           payload: {
-            job: job.with_extra
+            job: job_with_extra
           }
         )
     end
