@@ -34,15 +34,15 @@ interface State {
 }
 
 export class ActiveJobs extends React.PureComponent<Props, State> {
-  public static getDerivedStateFromProps(props: Props, state: State) {
+  public static getDerivedStateFromProps(props: Props, prevState: State) {
     const newKeys = props.jobDescriptions.map(job => job.key);
-    const keysToRemove = difference(state.keys, newKeys);
+    const keysToRemove = difference(prevState.keys, newKeys);
     keysToRemove.forEach(key => {
       Notification.remove(key);
     });
     props.jobDescriptions.forEach(job => {
       const key = job.key;
-      if (!state.keys.includes(key)) {
+      if (!prevState.keys.includes(key)) {
         if (job.error) {
           Notification.error(job.error, {
             key,
