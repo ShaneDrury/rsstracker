@@ -1,11 +1,13 @@
 require 'delayed_job'
 
 class JobNotifyPlugin < Delayed::Plugin
+  BROADCAST_BLACKLIST = %w[EpisodeUpdateBroadcastJob FeedUpdateBroadcastJob].freeze
+
   callbacks do |lifecycle|
     lifecycle.before(:invoke_job) do |job|
       job_with_extra = job.with_extra
       job_class = job_with_extra[:job_data]['job_class']
-      next if job_class == ('EpisodeUpdateBroadcastJob' || 'FeedUpdateBroadcastJob')
+      next if BROADCAST_BLACKLIST.include?(job_class)
       ActionCable
         .server
         .broadcast(
