@@ -1,5 +1,5 @@
 import "babel-polyfill";
-import "bulma/css/bulma.css";
+import "bulma/bulma";
 
 import React from "react";
 import ReactDOM from "react-dom";
