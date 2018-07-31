@@ -20,6 +20,7 @@ class ThumbnailDownloader
           output.write(input.read)
         end
       end
+      Dir.entries(download_root)
       FileUtils.mkdir_p File.join(download_root, episode_folder)
       FileUtils.mv(tmp_path, File.join(download_root, episode_folder, '/'))
     end
