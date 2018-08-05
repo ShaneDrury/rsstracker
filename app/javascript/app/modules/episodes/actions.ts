@@ -5,7 +5,7 @@ import { RootThunk } from "../../types/thunk";
 import { QueryParams } from "../location/queryParams";
 import { Status } from "../status";
 import { getEpisodes as getEpisodesSelector } from "./selectors";
-import { getEpisode, getEpisodes } from "./sources";
+import { getEpisode, getEpisodes, updateEpisodeDescription } from "./sources";
 
 export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
@@ -18,6 +18,7 @@ export enum episodeActions {
   PAGE_CHANGED = "PAGE_CHANGED",
   FILTER_CHANGED = "FILTER_CHANGED",
   SEARCH_CHANGED = "SEARCH_CHANGED",
+  UPDATE_EPISODE_REQUESTED = "UPDATE_EPISODE_REQUESTED",
 }
 
 interface FetchEpisodesStart {
@@ -131,6 +132,14 @@ export const fetchEpisodeFailure = (
   payload: { error, episodeId },
 });
 
+interface UpdateEpisodeRequested {
+  type: episodeActions.UPDATE_EPISODE_REQUESTED;
+  payload: {
+    episodeId: string;
+    changes: Partial<RemoteEpisode>;
+  };
+}
+
 export type EpisodesAction =
   | FetchEpisodesStart
   | FetchEpisodesComplete
@@ -141,7 +150,8 @@ export type EpisodesAction =
   | FetchEpisodeStart
   | FetchEpisodeComplete
   | FetchEpisodeFailure
-  | UpdateEpisodeComplete;
+  | UpdateEpisodeComplete
+  | UpdateEpisodeRequested;
 
 export const changeFilter = (status: Status): FilterChanged => ({
   type: episodeActions.FILTER_CHANGED,
@@ -196,4 +206,23 @@ export const fetchEpisodeIfNeeded = (episodeId: string): RootThunk<void> => (
   if (!getEpisodesSelector(state)[episodeId]) {
     dispatch(fetchEpisode(episodeId));
   }
+};
+
+export const updateEpisodeRequested = (
+  episodeId: string,
+  changes: Partial<RemoteEpisode>
+): UpdateEpisodeRequested => ({
+  type: episodeActions.UPDATE_EPISODE_REQUESTED,
+  payload: {
+    episodeId,
+    changes,
+  },
+});
+
+export const saveDescription = (
+  episodeId: string,
+  description: string
+): RootThunk<void> => async dispatch => {
+  dispatch(updateEpisodeRequested(episodeId, { description }));
+  await updateEpisodeDescription(episodeId, description);
 };

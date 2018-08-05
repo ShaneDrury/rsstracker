@@ -16,6 +16,7 @@ import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
 import { Dispatch } from "../types/thunk";
+import Description from "./Description";
 import { Icon } from "./Icon";
 import PlayingSeconds from "./PlayingSeconds";
 
@@ -35,21 +36,6 @@ interface DispatchProps {
 }
 
 type Props = DataProps & PropsExtended & DispatchProps;
-
-interface DescriptionProps {
-  text: string;
-}
-
-const Description: React.SFC<DescriptionProps> = ({ text }) => (
-  <React.Fragment>
-    {text.split("\n").map((item, key) => (
-      <span key={key}>
-        {item}
-        <br />
-      </span>
-    ))}
-  </React.Fragment>
-);
 
 export class Episode extends React.PureComponent<Props> {
   public componentDidUpdate(prevProps: Props) {
@@ -98,7 +84,7 @@ export class Episode extends React.PureComponent<Props> {
           <div className="card-content">
             <div className="media">
               <div className="media-content">
-                {description && <Description text={description} />}
+                {description && <Description episodeId={id} />}
               </div>
               {thumbnailUrl && (
                 <div className="media-right">

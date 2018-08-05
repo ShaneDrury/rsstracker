@@ -65,3 +65,12 @@ export const downloadEpisode = async (
   episodeId: string
 ): Promise<DownloadEpisodeResponse> =>
   apiFetch(`/episodes/${episodeId}/download`, { method: "POST" });
+
+export const updateEpisodeDescription = async (
+  episodeId: string,
+  description: string
+): Promise<void> =>
+  apiFetch(`/episodes/${episodeId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ description }),
+  });
