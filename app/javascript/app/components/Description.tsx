@@ -57,25 +57,44 @@ export class Description extends React.PureComponent<Props, State> {
     return (
       <div>
         {!this.state.editMode && (
-          <div>
+          <div onClick={this.editModeOn} style={{ cursor: "pointer" }}>
             {text.split("\n").map((item, key) => (
               <span key={key}>
                 {item}
                 <br />
               </span>
             ))}
-            <button onClick={this.editModeOn}>Edit</button>
           </div>
         )}
         {this.state.editMode && (
           <div>
-            <textarea
-              value={this.state.pendingChanges}
-              onChange={this.handleEdit}
-            />
-            <button onClick={this.handleSave}>Save</button>
-            <button onClick={this.cancelEditing}>Cancel</button>
-            <button onClick={this.clearEdits}>Clear</button>
+            <div className="field">
+              <div className="control">
+                <textarea
+                  className="textarea"
+                  value={this.state.pendingChanges}
+                  onChange={this.handleEdit}
+                  rows={15}
+                />
+              </div>
+            </div>
+            <div className="field is-grouped">
+              <p className="control">
+                <a className="button is-primary" onClick={this.handleSave}>
+                  Save
+                </a>
+              </p>
+              <p className="control">
+                <a className="button is-warning" onClick={this.cancelEditing}>
+                  Cancel
+                </a>
+              </p>
+              <p className="control">
+                <a className="button is-danger" onClick={this.clearEdits}>
+                  Clear
+                </a>
+              </p>
+            </div>
           </div>
         )}
       </div>
