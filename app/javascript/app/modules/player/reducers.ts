@@ -33,6 +33,18 @@ const player = (state: State = initialState, action: Action): State => {
         },
       };
     }
+    case actions.PLAYER_PAUSED: {
+      return {
+        ...state,
+        playing: false,
+      };
+    }
+    case actions.PLAYER_RESUMED: {
+      return {
+        ...state,
+        playing: true,
+      };
+    }
     case actions.PLAY_TOGGLED: {
       if (state.playingEpisodeId === action.payload.playingEpisodeId) {
         return {

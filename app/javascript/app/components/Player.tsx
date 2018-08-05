@@ -6,6 +6,8 @@ import { getEpisodes } from "../modules/episodes/selectors";
 import {
   Action as PlayerAction,
   playedSecondsUpdated,
+  playerPaused,
+  playerResumed,
   playToggled,
 } from "../modules/player/actions";
 import { getPlayedSeconds } from "../modules/player/selectors";
@@ -22,6 +24,8 @@ interface ConnectedProps {
 interface DispatchProps {
   onChangePlayedSeconds: (episodeId: string, playedSeconds: number) => void;
   togglePlay: (episodeId: string) => void;
+  playerPaused: () => void;
+  playerResumed: () => void;
 }
 
 interface PropsExtended {
@@ -81,6 +85,8 @@ export class Player extends React.Component<Props, State> {
             config={{ file: { forceAudio: true } }}
             onProgress={this.handleProgress}
             onReady={this.handleOnReady}
+            onPause={this.props.playerPaused}
+            onStart={this.props.playerResumed}
             progressInterval={1500}
             width="600px"
             height="28px"
@@ -122,6 +128,8 @@ const mapDispatchToProps = (
     {
       onChangePlayedSeconds: playedSecondsUpdated,
       togglePlay: playToggled,
+      playerPaused,
+      playerResumed,
     },
     dispatch
   );
