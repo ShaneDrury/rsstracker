@@ -109,6 +109,20 @@ const episodes = (
         statusCounts: action.payload.statusCounts,
       };
     }
+    case episodeActions.UPDATE_EPISODE_REQUESTED: {
+      const episodeId = action.payload.episodeId;
+      const episode = state.items[episodeId];
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          [episodeId]: {
+            ...episode,
+            updating: true,
+          },
+        },
+      };
+    }
     default:
       return state;
   }

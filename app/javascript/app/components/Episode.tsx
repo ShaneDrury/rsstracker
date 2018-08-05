@@ -1,4 +1,8 @@
-import { faFileAudio, faSync } from "@fortawesome/fontawesome-free-solid";
+import {
+  faFileAudio,
+  faSpinner,
+  faSync,
+} from "@fortawesome/fontawesome-free-solid";
 import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
@@ -44,102 +48,104 @@ export class Episode extends React.PureComponent<Props> {
     }
   }
 
+  public handleDownload = () => {
+    this.props.downloadEpisode(this.props.id);
+  };
+
+  public handleToggleShow = () => {
+    this.props.togglePlay(this.props.id);
+  };
+
   public render() {
     const {
       id,
       name,
       description,
-      downloadEpisode,
       duration,
       fetchStatus,
       isUpdating,
       playing,
       publicationDate,
-      togglePlay,
       thumbnailUrl,
       fullUrl,
+      updating,
     } = this.props;
-    const handleDownload = () => downloadEpisode(id);
-    const handleToggleShow = () => {
-      togglePlay(id);
-    };
     return (
-      <div>
-        <div className="card">
-          <header className="card-header">
-            <div className="card-header-title">
-              {fetchStatus.status === "SUCCESS" && (
-                <a className="level-item" href={fetchStatus.url}>
-                  {name}
-                </a>
-              )}
-              {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
-            </div>
-            {publicationDate && (
-              <div className="card-header-icon">
-                <time>{moment(publicationDate).format("lll")}</time>
-              </div>
-            )}
-          </header>
-          <div className="card-content">
-            <div className="media">
-              <div className="media-content">
-                {description && <Description episodeId={id} />}
-              </div>
-              {thumbnailUrl && (
-                <div className="media-right">
-                  <figure className="image is-128x128">
-                    <img src={thumbnailUrl} />
-                  </figure>
-                </div>
-              )}
-            </div>
-            <div className="content">
-              <hr />
-              <PlayingSeconds episodeId={id} />
-              <time>{duration}</time>{" "}
-              <a href={fullUrl}>
-                <Icon icon={faFileAudio} />
+      <div className="card">
+        {updating && <Icon icon={faSpinner} className="loader" />}
+        <header className="card-header">
+          <div className="card-header-title">
+            {fetchStatus.status === "SUCCESS" && (
+              <a className="level-item" href={fetchStatus.url}>
+                {name}
               </a>
-              <br />
-              {fetchStatus.status === "SUCCESS" && (
-                <button
-                  className={classNames("button", {
-                    "is-link": !playing,
-                    "is-danger": playing,
-                  })}
-                  onClick={handleToggleShow}
-                >
-                  {playing ? "Stop" : "Play"}
-                </button>
-              )}
+            )}
+            {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
+          </div>
+          {publicationDate && (
+            <div className="card-header-icon">
+              <time>{moment(publicationDate).format("lll")}</time>
             </div>
-            {!(fetchStatus.status === "SUCCESS") && (
-              <nav className="level is-mobile">
-                <div className="level-left">
-                  {(fetchStatus.status === "NOT_ASKED" ||
-                    fetchStatus.status === "FAILURE" ||
-                    isUpdating) && (
-                    <button
-                      className="button is-primary"
-                      onClick={handleDownload}
-                      disabled={isUpdating}
-                    >
-                      {isUpdating && (
-                        <div>
-                          <Icon icon={faSync} spin />
-                        </div>
-                      )}
-                      &nbsp;Download
-                    </button>
-                  )}
-                  {fetchStatus.status === "LOADING" && (
-                    <div>Loading {fetchStatus.percentageFetched}%</div>
-                  )}
-                </div>
-              </nav>
+          )}
+        </header>
+        <div className="card-content">
+          <div className="media">
+            <div className="media-content">
+              {description && <Description episodeId={id} />}
+            </div>
+            {thumbnailUrl && (
+              <div className="media-right">
+                <figure className="image is-128x128">
+                  <img src={thumbnailUrl} />
+                </figure>
+              </div>
             )}
           </div>
+          <div className="content">
+            <hr />
+            <PlayingSeconds episodeId={id} />
+            <time>{duration}</time>{" "}
+            <a href={fullUrl}>
+              <Icon icon={faFileAudio} />
+            </a>
+            <br />
+            {fetchStatus.status === "SUCCESS" && (
+              <button
+                className={classNames("button", {
+                  "is-link": !playing,
+                  "is-danger": playing,
+                })}
+                onClick={this.handleToggleShow}
+              >
+                {playing ? "Stop" : "Play"}
+              </button>
+            )}
+          </div>
+          {!(fetchStatus.status === "SUCCESS") && (
+            <nav className="level is-mobile">
+              <div className="level-left">
+                {(fetchStatus.status === "NOT_ASKED" ||
+                  fetchStatus.status === "FAILURE" ||
+                  isUpdating) && (
+                  <button
+                    className="button is-primary"
+                    onClick={this.handleDownload}
+                    disabled={isUpdating}
+                  >
+                    {isUpdating && (
+                      <div>
+                        <Icon icon={faSync} spin />
+                      </div>
+                    )}
+                    &nbsp;Download
+                  </button>
+                )}
+                {fetchStatus.status === "LOADING" && (
+                  <div>Loading {fetchStatus.percentageFetched}%</div>
+                )}
+              </div>
+            </nav>
+          )}
         </div>
       </div>
     );

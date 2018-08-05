@@ -27,6 +27,7 @@ export const processEpisode = (episode: ApiEpisode): RemoteEpisode => ({
   ...episode,
   key: shortid.generate(),
   id: episode.id.toString(),
+  updating: false,
 });
 
 const processEpisodesResponse = (
