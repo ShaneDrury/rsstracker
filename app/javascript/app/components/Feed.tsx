@@ -2,8 +2,8 @@ import React from "react";
 import { RemoteFeed } from "../types/feed";
 
 import { connect } from "react-redux";
-import { RouteComponentProps } from "react-router";
 import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
+import { QueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import LoadedFeed from "./LoadedFeed";
@@ -13,14 +13,22 @@ interface DataProps {
   fetchStatus: FetchStatus;
 }
 
-interface PropsExtended extends RouteComponentProps<{ feedId: string }> {}
+interface PropsExtended {
+  feedId: string;
+  queryParams: QueryParams;
+}
 
 type Props = DataProps & PropsExtended;
 
 export class Feed extends React.Component<Props> {
   public render() {
     if (this.props.remoteFeed && this.props.fetchStatus === "SUCCESS") {
-      return <LoadedFeed feedId={this.props.remoteFeed.id} />;
+      return (
+        <LoadedFeed
+          feedId={this.props.remoteFeed.id}
+          queryParams={this.props.queryParams}
+        />
+      );
     }
     return <div>LOADING</div>;
   }
@@ -30,7 +38,7 @@ const mapStateToProps = (
   state: RootState,
   ownProps: PropsExtended
 ): DataProps => {
-  const feedId = ownProps.match.params.feedId;
+  const feedId = ownProps.feedId;
   const remoteFeed = getFeedObjects(state)[feedId];
   const fetchStatus = getFetchStatus(state);
   return {

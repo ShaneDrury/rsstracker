@@ -3,7 +3,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
-import { getQueryParams } from "../modules/episodes/selectors";
 import { updateFeedAction } from "../modules/feedJobs/actions";
 import { getFetchStatus } from "../modules/feeds/selectors";
 import { QueryParams } from "../modules/location/queryParams";
@@ -17,9 +16,9 @@ import UpdateFeeds from "./UpdateFeeds";
 
 import { isEqual } from "lodash";
 import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
+
 interface DataProps {
   fetchStatus: FetchStatus;
-  queryParams: QueryParams;
   loadingFeeds: string[];
 }
 
@@ -28,7 +27,11 @@ interface DispatchProps {
   updateFeed: (feedId: string) => void;
 }
 
-type Props = DataProps & DispatchProps;
+interface PropsExtended {
+  queryParams: QueryParams;
+}
+
+type Props = DataProps & DispatchProps & PropsExtended;
 
 export class AllFeeds extends React.Component<Props> {
   public componentDidMount() {
@@ -100,7 +103,6 @@ const mapStateToProps = (state: RootState): DataProps => {
   return {
     loadingFeeds,
     fetchStatus,
-    queryParams: getQueryParams(state),
   };
 };
 

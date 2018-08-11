@@ -7,7 +7,6 @@ import * as moment from "moment";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
-import { getQueryParams } from "../modules/episodes/selectors";
 import { updateFeedAction } from "../modules/feedJobs/actions";
 import { getFeedJobs } from "../modules/feedJobs/selectors";
 import {
@@ -29,7 +28,6 @@ interface DataProps {
   isUpdating: boolean;
   remoteFeed: RemoteFeed;
   fetchStatus: FetchStatus;
-  queryParams: QueryParams;
   shouldUpdate: boolean;
 }
 
@@ -44,6 +42,7 @@ interface DispatchProps {
 
 interface PropsExtended {
   feedId: string;
+  queryParams: QueryParams;
 }
 
 type Props = DataProps & DispatchProps & PropsExtended;
@@ -122,7 +121,8 @@ export class Feed extends React.Component<Props> {
                     onClick={this.handleUpdateFeed}
                     disabled={this.props.isUpdating}
                   >
-                    <Icon icon={faSync} spin={this.props.isUpdating} />&nbsp;Update
+                    <Icon icon={faSync} spin={this.props.isUpdating} />
+                    &nbsp;Update
                   </button>
                 </div>
               </div>
@@ -181,7 +181,6 @@ const mapStateToProps = (
     isUpdating,
     remoteFeed,
     fetchStatus,
-    queryParams: getQueryParams(state),
     shouldUpdate,
   };
 };
