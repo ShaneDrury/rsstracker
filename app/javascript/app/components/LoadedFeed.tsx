@@ -15,7 +15,7 @@ import {
   setFeedDisabled,
 } from "../modules/feeds/actions";
 import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
-import { QueryParams } from "../modules/location/queryParams";
+import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { Dispatch } from "../types/thunk";
@@ -32,7 +32,7 @@ interface DataProps {
 }
 
 interface DispatchProps {
-  fetchEpisodes: (queryParams: QueryParams) => void;
+  fetchEpisodes: (queryParams: SearchParams) => void;
   updateFeed: (feedId: string) => void;
   onFeedStale: (feedId: string) => void;
   setFeedDisabled: (feedId: string, disabled: boolean) => void;
@@ -41,7 +41,7 @@ interface DispatchProps {
 
 interface PropsExtended {
   feedId: string;
-  queryParams: QueryParams;
+  queryParams: SearchParams;
 }
 
 type Props = DataProps & DispatchProps & PropsExtended;

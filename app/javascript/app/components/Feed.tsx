@@ -3,7 +3,7 @@ import { RemoteFeed } from "../types/feed";
 
 import { connect } from "react-redux";
 import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
-import { QueryParams } from "../modules/location/queryParams";
+import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import LoadedFeed from "./LoadedFeed";
@@ -15,7 +15,7 @@ interface DataProps {
 
 interface PropsExtended {
   feedId: string;
-  queryParams: QueryParams;
+  queryParams: SearchParams;
 }
 
 type Props = DataProps & PropsExtended;

@@ -5,7 +5,7 @@ import {
   episodeActions as actions,
   EpisodesAction,
 } from "../modules/episodes/actions";
-import { QueryParams } from "../modules/location/queryParams";
+import { SearchParams } from "../modules/location/queryParams";
 import { getRoutingQueryParams } from "../modules/location/selectors";
 import { history } from "../store";
 
@@ -18,7 +18,7 @@ const syncQueryParams: Middleware = store => next => (
   ) {
     const state = store.getState();
     const params = getRoutingQueryParams(state);
-    const newParams: Partial<QueryParams> = {};
+    const newParams: Partial<SearchParams> = {};
     if (action.type === actions.FILTER_CHANGED) {
       newParams.status = action.payload.status;
     }

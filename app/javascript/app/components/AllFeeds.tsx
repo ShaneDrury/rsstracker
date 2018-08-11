@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
 import { updateFeedAction } from "../modules/feedJobs/actions";
 import { getFetchStatus } from "../modules/feeds/selectors";
-import { QueryParams } from "../modules/location/queryParams";
+import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { Dispatch } from "../types/thunk";
@@ -23,12 +23,12 @@ interface DataProps {
 }
 
 interface DispatchProps {
-  fetchEpisodes: (queryParams: QueryParams) => void;
+  fetchEpisodes: (queryParams: SearchParams) => void;
   updateFeed: (feedId: string) => void;
 }
 
 interface PropsExtended {
-  queryParams: QueryParams;
+  queryParams: SearchParams;
 }
 
 type Props = DataProps & DispatchProps & PropsExtended;
