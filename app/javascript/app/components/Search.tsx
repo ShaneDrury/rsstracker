@@ -8,7 +8,7 @@ import { changeSearch, EpisodesAction } from "../modules/episodes/actions";
 import { Dispatch } from "../types/thunk";
 
 interface DataProps {
-  searchTerm: string;
+  searchTerm?: string;
 }
 
 interface DispatchProps {

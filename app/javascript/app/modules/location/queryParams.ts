@@ -1,8 +1,8 @@
 import { Status } from "../status";
 
 export interface QueryParams {
-  status: Status;
-  searchTerm: string;
+  status?: Status;
+  searchTerm?: string;
   currentPage: number;
 }
 

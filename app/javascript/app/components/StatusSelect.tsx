@@ -10,7 +10,7 @@ import { StatusCounts } from "../types/feed";
 import { Dispatch } from "../types/thunk";
 
 interface DataProps {
-  status: Status;
+  status?: Status;
 }
 
 interface EnhancedProps {
