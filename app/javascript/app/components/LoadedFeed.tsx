@@ -32,7 +32,6 @@ interface DataProps {
 interface EnhancedProps {
   isUpdating: boolean;
   remoteFeed: RemoteFeed;
-  fetchStatus: FetchStatus;
   shouldUpdate: boolean;
 }
 
@@ -64,10 +63,7 @@ export class Feed extends React.Component<Props> {
     if (this.props.feedId !== prevProps.feedId) {
       this.fetchEpisodes();
     }
-    if (
-      !isEqual(this.props.queryParams, prevProps.queryParams) &&
-      this.props.fetchStatus !== "LOADING"
-    ) {
+    if (!isEqual(this.props.queryParams, prevProps.queryParams)) {
       this.fetchEpisodes();
     }
     if (prevProps.isUpdating && !this.props.isUpdating) {
@@ -196,13 +192,11 @@ const mapStateToProps = (
 ): EnhancedProps => {
   const feedId = ownProps.feedId;
   const remoteFeed = getFeedObjects(state)[feedId];
-  const fetchStatus = getFetchStatus(state);
   const isUpdating = !!getFeedJobs(state)[feedId];
   const shouldUpdate = remoteFeed.stale;
   return {
     isUpdating,
     remoteFeed,
-    fetchStatus,
     shouldUpdate,
   };
 };
