@@ -33,7 +33,6 @@ interface DataProps {
 
 interface DispatchProps {
   fetchEpisodes: (queryParams: QueryParams) => void;
-  onUpdateFinished: (queryParams: QueryParams) => void;
   updateFeed: (feedId: string) => void;
   onFeedStale: (feedId: string) => void;
   setFeedDisabled: (feedId: string, disabled: boolean) => void;
@@ -49,7 +48,7 @@ type Props = DataProps & DispatchProps & PropsExtended;
 
 export class Feed extends React.Component<Props> {
   public componentDidMount() {
-    this.props.fetchEpisodes(this.props.queryParams);
+    this.fetchEpisodes();
   }
 
   public shouldComponentUpdate(nextProps: Props) {
@@ -57,18 +56,28 @@ export class Feed extends React.Component<Props> {
   }
 
   public componentDidUpdate(prevProps: Props) {
+    if (this.props.feedId !== prevProps.feedId) {
+      this.fetchEpisodes();
+    }
     if (
       !isEqual(this.props.queryParams, prevProps.queryParams) &&
       this.props.fetchStatus !== "LOADING"
     ) {
-      this.props.fetchEpisodes(this.props.queryParams);
+      this.fetchEpisodes();
     }
     if (prevProps.isUpdating && !this.props.isUpdating) {
-      this.props.onUpdateFinished(this.props.queryParams);
+      this.fetchEpisodes();
     }
     if (!prevProps.shouldUpdate && this.props.shouldUpdate) {
       this.props.onFeedStale(this.props.remoteFeed.id);
     }
+  }
+
+  public fetchEpisodes() {
+    this.props.fetchEpisodes({
+      ...this.props.queryParams,
+      feedId: this.props.feedId,
+    });
   }
 
   public handleUpdateFeed = () => {
@@ -193,7 +202,6 @@ const mapDispatchToProps = (
       fetchEpisodes: searchEpisodes,
       updateFeed: updateFeedAction,
       onFeedStale: fetchFeedAction,
-      onUpdateFinished: searchEpisodes,
       setFeedDisabled,
       setFeedAutodownload,
     },
