@@ -1,3 +1,4 @@
+import { History } from "history";
 import React from "react";
 
 import { connect } from "react-redux";
@@ -18,6 +19,10 @@ import { isEqual } from "lodash";
 import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
 
 interface DataProps {
+  history: History;
+}
+
+interface EnhancedProps {
   fetchStatus: FetchStatus;
   loadingFeeds: string[];
 }
@@ -31,7 +36,7 @@ interface PropsExtended {
   queryParams: SearchParams;
 }
 
-type Props = DataProps & DispatchProps & PropsExtended;
+type Props = DataProps & DispatchProps & PropsExtended & EnhancedProps;
 
 export class AllFeeds extends React.Component<Props> {
   public componentDidMount() {
@@ -78,6 +83,7 @@ export class AllFeeds extends React.Component<Props> {
                       <StatusSelect
                         status={this.props.queryParams.status}
                         queryParams={this.props.queryParams}
+                        history={this.props.history}
                       />
                     </div>
                   </div>
@@ -85,6 +91,7 @@ export class AllFeeds extends React.Component<Props> {
                     <Search
                       searchTerm={this.props.queryParams.searchTerm}
                       queryParams={this.props.queryParams}
+                      history={this.props.history}
                     />
                   </div>
                 </div>
@@ -102,7 +109,7 @@ export class AllFeeds extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState): DataProps => {
+const mapStateToProps = (state: RootState): EnhancedProps => {
   const fetchStatus = getFetchStatus(state);
   const loadingFeeds = getUpdatingFeeds(state);
 

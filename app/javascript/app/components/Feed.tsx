@@ -1,3 +1,4 @@
+import { History } from "history";
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
@@ -9,6 +10,10 @@ import { FetchStatus } from "../modules/remoteData";
 import LoadedFeed from "./LoadedFeed";
 
 interface DataProps {
+  history: History;
+}
+
+interface EnhancedProps {
   remoteFeed?: RemoteFeed;
   fetchStatus: FetchStatus;
 }
@@ -18,7 +23,7 @@ interface PropsExtended {
   queryParams: SearchParams;
 }
 
-type Props = DataProps & PropsExtended;
+type Props = DataProps & PropsExtended & EnhancedProps;
 
 export class Feed extends React.Component<Props> {
   public render() {
@@ -27,6 +32,7 @@ export class Feed extends React.Component<Props> {
         <LoadedFeed
           feedId={this.props.remoteFeed.id}
           queryParams={this.props.queryParams}
+          history={this.props.history}
         />
       );
     }
@@ -37,7 +43,7 @@ export class Feed extends React.Component<Props> {
 const mapStateToProps = (
   state: RootState,
   ownProps: PropsExtended
-): DataProps => {
+): EnhancedProps => {
   const feedId = ownProps.feedId;
   const remoteFeed = getFeedObjects(state)[feedId];
   const fetchStatus = getFetchStatus(state);

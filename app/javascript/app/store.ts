@@ -1,9 +1,7 @@
-import createHistory from "history/createBrowserHistory";
 import { applyMiddleware, compose, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
 import rootReducer from "./modules/reducers";
 
-import { routerMiddleware } from "react-router-redux";
 import savePlayedSeconds from "./middleware/savePlayedSeconds";
 import savePlayingEpisode from "./middleware/savePlayingEpisode";
 
@@ -25,19 +23,8 @@ const composeEnhancers =
     ? windowIfDefined.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
-export const history = createHistory();
-
-const historyMiddleware = routerMiddleware(history);
-
 const enhancer = composeEnhancers(
-  applyMiddleware(
-    ...[
-      thunkMiddleware,
-      historyMiddleware,
-      savePlayedSeconds,
-      savePlayingEpisode,
-    ]
-  )
+  applyMiddleware(...[thunkMiddleware, savePlayedSeconds, savePlayingEpisode])
 );
 
 export const configureStore = () => {

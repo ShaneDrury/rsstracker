@@ -1,4 +1,3 @@
-import { routerReducer, RouterState } from "react-router-redux";
 import { combineReducers, Reducer } from "redux";
 import { RootAction } from "./actions";
 import episodeJobs, { State as EpisodeJobsState } from "./episodeJobs/reducers";
@@ -15,7 +14,6 @@ export interface RootState {
   feedJobs: FeedJobsState;
   player: PlayerState;
   jobs: JobsState;
-  routing: RouterState;
 }
 
 const rootReducer: Reducer<RootState, RootAction> = combineReducers({
@@ -25,7 +23,6 @@ const rootReducer: Reducer<RootState, RootAction> = combineReducers({
   feedJobs,
   jobs,
   player,
-  routing: routerReducer,
 });
 
 export default rootReducer;

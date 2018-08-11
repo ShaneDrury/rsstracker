@@ -16,12 +16,17 @@ class PrimaryContent extends React.Component {
   public renderFeed = ({
     location,
     match,
+    history,
   }: RouteComponentProps<{ feedId: string }>) => (
-    <Feed feedId={match.params.feedId} queryParams={parseLocation(location)} />
+    <Feed
+      feedId={match.params.feedId}
+      queryParams={parseLocation(location)}
+      history={history}
+    />
   );
 
-  public renderAllFeeds = ({ location }: RouteComponentProps<{}>) => (
-    <AllFeeds queryParams={parseLocation(location)} />
+  public renderAllFeeds = ({ history, location }: RouteComponentProps<{}>) => (
+    <AllFeeds queryParams={parseLocation(location)} history={history} />
   );
 
   public render() {

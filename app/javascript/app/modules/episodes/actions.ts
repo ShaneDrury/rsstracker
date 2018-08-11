@@ -16,8 +16,6 @@ export enum episodeActions {
   FETCH_EPISODE_FAILURE = "FETCH_EPISODE_FAILURE",
   UPDATE_EPISODE_COMPLETE = "UPDATE_EPISODE_COMPLETE",
   PAGE_CHANGED = "PAGE_CHANGED",
-  FILTER_CHANGED = "FILTER_CHANGED",
-  SEARCH_CHANGED = "SEARCH_CHANGED",
   UPDATE_EPISODE_REQUESTED = "UPDATE_EPISODE_REQUESTED",
 }
 
@@ -45,20 +43,6 @@ interface PageChanged {
   type: episodeActions.PAGE_CHANGED;
   payload: {
     currentPage: number;
-  };
-}
-
-interface FilterChanged {
-  type: episodeActions.FILTER_CHANGED;
-  payload: {
-    status: Status;
-  };
-}
-
-interface SearchChanged {
-  type: episodeActions.SEARCH_CHANGED;
-  payload: {
-    searchTerm: string;
   };
 }
 
@@ -145,23 +129,11 @@ export type EpisodesAction =
   | FetchEpisodesComplete
   | FetchEpisodesFailure
   | PageChanged
-  | FilterChanged
-  | SearchChanged
   | FetchEpisodeStart
   | FetchEpisodeComplete
   | FetchEpisodeFailure
   | UpdateEpisodeComplete
   | UpdateEpisodeRequested;
-
-export const changeFilter = (status: Status): FilterChanged => ({
-  type: episodeActions.FILTER_CHANGED,
-  payload: { status },
-});
-
-export const changeSearch = (searchTerm: string): SearchChanged => ({
-  type: episodeActions.SEARCH_CHANGED,
-  payload: { searchTerm },
-});
 
 export const searchEpisodes = (
   queryParams: SearchParams

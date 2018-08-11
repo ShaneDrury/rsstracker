@@ -1,6 +1,6 @@
+import { History } from "history";
 import { isEqual } from "lodash";
 import * as qs from "qs";
-import { history } from "../../store";
 import { Status } from "../status";
 
 export interface QueryParams {
@@ -20,7 +20,8 @@ interface Changes {
 
 export const syncQueryParams = (
   { status, searchTerm }: Changes,
-  queryParams: QueryParams
+  queryParams: QueryParams,
+  history: History
 ) => {
   const newParams: Partial<QueryParams> = {};
   if (!(typeof status === "undefined")) {

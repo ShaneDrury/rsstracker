@@ -1,3 +1,4 @@
+import { History } from "history";
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
@@ -25,6 +26,10 @@ import Search from "./Search";
 import StatusSelect from "./StatusSelect";
 
 interface DataProps {
+  history: History;
+}
+
+interface EnhancedProps {
   isUpdating: boolean;
   remoteFeed: RemoteFeed;
   fetchStatus: FetchStatus;
@@ -44,7 +49,7 @@ interface PropsExtended {
   queryParams: SearchParams;
 }
 
-type Props = DataProps & DispatchProps & PropsExtended;
+type Props = DataProps & DispatchProps & PropsExtended & EnhancedProps;
 
 export class Feed extends React.Component<Props> {
   public componentDidMount() {
@@ -160,6 +165,7 @@ export class Feed extends React.Component<Props> {
                     <StatusSelect
                       status={this.props.queryParams.status}
                       queryParams={this.props.queryParams}
+                      history={this.props.history}
                     />
                   </div>
                 </div>
@@ -167,6 +173,7 @@ export class Feed extends React.Component<Props> {
                   <Search
                     searchTerm={this.props.queryParams.searchTerm}
                     queryParams={this.props.queryParams}
+                    history={this.props.history}
                   />
                 </div>
               </div>
@@ -186,7 +193,7 @@ export class Feed extends React.Component<Props> {
 const mapStateToProps = (
   state: RootState,
   ownProps: PropsExtended
-): DataProps => {
+): EnhancedProps => {
   const feedId = ownProps.feedId;
   const remoteFeed = getFeedObjects(state)[feedId];
   const fetchStatus = getFetchStatus(state);

@@ -1,11 +1,9 @@
 import { forEach } from "lodash";
-import { LocationChangeAction } from "react-router-redux";
 import { RemoteEpisode } from "../../types/episode";
 import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
 import { feedActions, FeedsAction } from "../feeds/actions";
 import { FetchStatus } from "../remoteData";
-import { Status } from "../status";
 import { episodeActions, EpisodesAction } from "./actions";
 
 export interface State {
@@ -15,8 +13,6 @@ export interface State {
   fetchStatus: FetchStatus;
   ids: string[];
   pageInfo: PageInfo;
-  searchTerm: string;
-  status: Status;
   statusCounts: StatusCounts;
 }
 
@@ -24,8 +20,6 @@ const initialState: State = {
   items: {},
   fetchStatus: "NOT_ASKED",
   ids: [],
-  searchTerm: "",
-  status: Status.ALL,
   pageInfo: {
     count: 0,
     currentPage: 1,
@@ -42,7 +36,7 @@ const initialState: State = {
 
 const episodes = (
   state: State = initialState,
-  action: EpisodesAction | LocationChangeAction | FeedsAction
+  action: EpisodesAction | FeedsAction
 ): State => {
   switch (action.type) {
     case episodeActions.FETCH_EPISODES_START: {
@@ -88,19 +82,6 @@ const episodes = (
           ...state.items,
           [episode.id]: episode,
         },
-      };
-    }
-
-    case episodeActions.FILTER_CHANGED: {
-      return {
-        ...state,
-        status: action.payload.status,
-      };
-    }
-    case episodeActions.SEARCH_CHANGED: {
-      return {
-        ...state,
-        searchTerm: action.payload.searchTerm,
       };
     }
     case feedActions.FETCH_FEEDS_COMPLETE: {

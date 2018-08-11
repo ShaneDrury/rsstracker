@@ -5,10 +5,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
-import { ConnectedRouter } from "react-router-redux";
-
+import { BrowserRouter } from "react-router-dom";
 import PrimaryContent from "./components/PrimaryContent";
-import { configureStore, history } from "./store";
+import { configureStore } from "./store";
 import { init } from "./websocket";
 
 const store = configureStore();
@@ -17,9 +16,9 @@ init(store);
 const render = (Component: any) => {
   return ReactDOM.render(
     <Provider store={store}>
-      <ConnectedRouter history={history}>
+      <BrowserRouter>
         <Component />
-      </ConnectedRouter>
+      </BrowserRouter>
     </Provider>,
     document.getElementById("root")
   );
