@@ -9,8 +9,11 @@ import { Status } from "../modules/status";
 import { StatusCounts } from "../types/feed";
 import { Dispatch } from "../types/thunk";
 
-interface EnhancedProps {
+interface DataProps {
   status: Status;
+}
+
+interface EnhancedProps {
   counts: StatusCounts;
 }
 
@@ -18,7 +21,7 @@ interface DispatchProps {
   onChangeFilter: (status: Status) => void;
 }
 
-type Props = EnhancedProps & DispatchProps;
+type Props = DataProps & EnhancedProps & DispatchProps;
 
 interface OptionProps {
   value: Status;
@@ -53,9 +56,9 @@ export class StatusSelect extends React.PureComponent<Props> {
       <select
         className="select"
         onChange={this.handleFilterChange}
-        value={this.props.status}
+        value={this.props.status || "ALL"}
       >
-        <option value={Status.ALL} key={`all-${counts.all}`}>
+        <option value="ALL" key={`all-${counts.all}`}>
           All ({counts.all})
         </option>
         <StatusSelectOption
@@ -88,10 +91,8 @@ export class StatusSelect extends React.PureComponent<Props> {
 }
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
-  const status = getStatus(state);
   const counts = getAllStatusCounts(state);
   return {
-    status,
     counts,
   };
 };

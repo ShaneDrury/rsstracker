@@ -148,11 +148,11 @@ export class Feed extends React.Component<Props> {
               <div className="field is-grouped">
                 <div className="control">
                   <div className="select">
-                    <StatusSelect />
+                    <StatusSelect status={this.props.queryParams.status} />
                   </div>
                 </div>
                 <div className="control is-expanded">
-                  <Search />
+                  <Search searchTerm={this.props.queryParams.searchTerm} />
                 </div>
               </div>
               <hr />
