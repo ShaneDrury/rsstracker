@@ -30,7 +30,6 @@ export class Feeds extends React.PureComponent<Props> {
       <div className="navbar-dropdown">
         {this.props.fetchStatus === "SUCCESS" &&
           this.props.remoteFeeds.length === 0 && <div>No results.</div>}
-        {this.props.fetchStatus === "LOADING" && <div>Loading...</div>}
         {this.props.remoteFeeds.map(remoteFeed => (
           <Link
             className="navbar-item"
@@ -64,4 +63,7 @@ const mapDispatchToProps = (
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Feeds);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Feeds);

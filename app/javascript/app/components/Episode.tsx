@@ -140,9 +140,6 @@ export class Episode extends React.PureComponent<Props> {
                     &nbsp;Download
                   </button>
                 )}
-                {fetchStatus.status === "LOADING" && (
-                  <div>Loading {fetchStatus.percentageFetched}%</div>
-                )}
               </div>
             </nav>
           )}

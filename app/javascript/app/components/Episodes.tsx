@@ -39,7 +39,6 @@ export class Episodes extends React.PureComponent<Props> {
     const pageInfo = this.props.pageInfo;
     return (
       <div>
-        {this.props.fetchStatus === "LOADING" && <div>Loading...</div>}
         {this.props.fetchStatus === "SUCCESS" &&
           this.props.remoteEpisodes.length === 0 && <div>No results.</div>}
         {this.props.remoteEpisodes.map(remoteEpisode => (
