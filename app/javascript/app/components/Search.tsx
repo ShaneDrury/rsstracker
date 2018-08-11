@@ -1,26 +1,21 @@
 import React from "react";
-import { connect } from "react-redux";
-import { RootState } from "../modules/reducers";
 
 import { DebounceInput } from "react-debounce-input";
-import { bindActionCreators } from "redux";
-import { changeSearch, EpisodesAction } from "../modules/episodes/actions";
-import { Dispatch } from "../types/thunk";
+import { QueryParams, syncQueryParams } from "../modules/location/queryParams";
 
 interface DataProps {
   searchTerm?: string;
+  queryParams: QueryParams;
 }
 
-interface DispatchProps {
-  onChangeSearch: (searchTerm: string) => void;
-}
+interface DispatchProps {}
 
 type Props = DataProps & DispatchProps;
 
 export class Search extends React.PureComponent<Props> {
   public handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value;
-    this.props.onChangeSearch(searchTerm);
+    syncQueryParams({ searchTerm }, this.props.queryParams);
   };
 
   public render() {
@@ -38,17 +33,4 @@ export class Search extends React.PureComponent<Props> {
   }
 }
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<EpisodesAction, RootState>
-): DispatchProps =>
-  bindActionCreators(
-    {
-      onChangeSearch: changeSearch,
-    },
-    dispatch
-  );
-
-export default connect(
-  undefined,
-  mapDispatchToProps
-)(Search);
+export default Search;

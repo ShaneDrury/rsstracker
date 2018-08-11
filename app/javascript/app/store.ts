@@ -6,7 +6,6 @@ import rootReducer from "./modules/reducers";
 import { routerMiddleware } from "react-router-redux";
 import savePlayedSeconds from "./middleware/savePlayedSeconds";
 import savePlayingEpisode from "./middleware/savePlayingEpisode";
-import syncQueryParams from "./middleware/syncQueryParams";
 
 // Fix for redux-devtools-extension not supporting redux 4.0.0 yet
 // tslint:disable-next-line:no-var-requires
@@ -36,7 +35,6 @@ const enhancer = composeEnhancers(
       thunkMiddleware,
       historyMiddleware,
       savePlayedSeconds,
-      syncQueryParams,
       savePlayingEpisode,
     ]
   )

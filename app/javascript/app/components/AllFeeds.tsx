@@ -75,11 +75,17 @@ export class AllFeeds extends React.Component<Props> {
                 <div className="field is-grouped">
                   <div className="control">
                     <div className="select">
-                      <StatusSelect status={this.props.queryParams.status} />
+                      <StatusSelect
+                        status={this.props.queryParams.status}
+                        queryParams={this.props.queryParams}
+                      />
                     </div>
                   </div>
                   <div className="control is-expanded">
-                    <Search searchTerm={this.props.queryParams.searchTerm} />
+                    <Search
+                      searchTerm={this.props.queryParams.searchTerm}
+                      queryParams={this.props.queryParams}
+                    />
                   </div>
                 </div>
                 <hr />

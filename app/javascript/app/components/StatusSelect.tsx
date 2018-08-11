@@ -1,25 +1,22 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { changeFilter, EpisodesAction } from "../modules/episodes/actions";
-import { getAllStatusCounts, getStatus } from "../modules/episodes/selectors";
+import { getAllStatusCounts } from "../modules/episodes/selectors";
+import { QueryParams, syncQueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { Status } from "../modules/status";
 import { StatusCounts } from "../types/feed";
-import { Dispatch } from "../types/thunk";
 
 interface DataProps {
   status?: Status;
+  queryParams: QueryParams;
 }
 
 interface EnhancedProps {
   counts: StatusCounts;
 }
 
-interface DispatchProps {
-  onChangeFilter: (status: Status) => void;
-}
+interface DispatchProps {}
 
 type Props = DataProps & EnhancedProps & DispatchProps;
 
@@ -46,7 +43,7 @@ class StatusSelectOption extends React.PureComponent<OptionProps> {
 export class StatusSelect extends React.PureComponent<Props> {
   public handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const status = event.target.value as Status;
-    this.props.onChangeFilter(status);
+    syncQueryParams({ status }, this.props.queryParams);
   };
 
   public render() {
@@ -97,18 +94,4 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<EpisodesAction, RootState>
-): DispatchProps => {
-  return bindActionCreators(
-    {
-      onChangeFilter: changeFilter,
-    },
-    dispatch
-  );
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(StatusSelect);
+export default connect(mapStateToProps)(StatusSelect);
