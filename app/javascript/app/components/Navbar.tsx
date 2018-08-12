@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import { Link } from "react-router-dom";
 import ActiveJobs from "./ActiveJobs";
-import Feeds from "./Feeds";
+import FeedSelect from "./FeedSelect";
 import GlobalPlayer from "./GlobalPlayer";
 import UpdateFeeds from "./UpdateFeeds";
 
@@ -52,7 +52,7 @@ export class Navbar extends React.PureComponent<Props, State> {
           <div className="navbar-start">
             <div className="navbar-item has-dropdown is-hoverable">
               <div className="navbar-link">Feeds</div>
-              <Feeds />
+              <FeedSelect />
             </div>
             <div className="navbar-item">
               <UpdateFeeds />

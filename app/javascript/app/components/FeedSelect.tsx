@@ -20,7 +20,7 @@ interface DispatchProps {
 
 type Props = DataProps & DispatchProps;
 
-export class Feeds extends React.PureComponent<Props> {
+export class FeedSelect extends React.PureComponent<Props> {
   public componentDidMount() {
     this.props.fetchFeeds();
   }
@@ -66,4 +66,4 @@ const mapDispatchToProps = (
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Feeds);
+)(FeedSelect);
