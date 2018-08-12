@@ -1,8 +1,8 @@
 import { History } from "history";
 import React from "react";
 import { SearchParams } from "../modules/location/queryParams";
-import Episodes from "./Episodes";
 import FeedSidePanel from "./FeedSidePanel";
+import FeedView from "./FeedView";
 
 interface DataProps {
   history: History;
@@ -15,18 +15,15 @@ type Props = DataProps;
 export class LoadedFeed extends React.Component<Props> {
   public render() {
     return (
-      <div className="columns">
-        <div className="column is-one-quarter">
+      <FeedView
+        sidePanel={
           <FeedSidePanel
             history={this.props.history}
             queryParams={this.props.queryParams}
             feedId={this.props.feedId}
           />
-        </div>
-        <div className="column">
-          <Episodes />
-        </div>
-      </div>
+        }
+      />
     );
   }
 }
