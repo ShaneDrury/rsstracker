@@ -1,6 +1,7 @@
 import { History } from "history";
 import React from "react";
-import { SearchParams } from "../modules/location/queryParams";
+import { SearchParams, syncQueryParams } from "../modules/location/queryParams";
+import { Status } from "../modules/status";
 import Episodes from "./Episodes";
 import Search from "./Search";
 import StatusSelect from "./StatusSelect";
@@ -16,6 +17,14 @@ interface DataProps {
 type Props = DataProps;
 
 export class FeedView extends React.Component<Props> {
+  public handleChangeStatus = (status: Status) => {
+    syncQueryParams({ status }, this.props.queryParams, this.props.history);
+  };
+
+  public handleChangeSearch = (searchTerm: string) => {
+    syncQueryParams({ searchTerm }, this.props.queryParams, this.props.history);
+  };
+
   public render() {
     return (
       <div className="columns">
@@ -28,17 +37,15 @@ export class FeedView extends React.Component<Props> {
                 <div className="control">
                   <div className="select">
                     <StatusSelect
+                      onChangeStatus={this.handleChangeStatus}
                       status={this.props.queryParams.status}
-                      queryParams={this.props.queryParams}
-                      history={this.props.history}
                     />
                   </div>
                 </div>
                 <div className="control is-expanded">
                   <Search
+                    onChangeSearch={this.handleChangeSearch}
                     searchTerm={this.props.queryParams.searchTerm}
-                    queryParams={this.props.queryParams}
-                    history={this.props.history}
                   />
                 </div>
               </div>

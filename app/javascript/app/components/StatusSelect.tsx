@@ -1,17 +1,14 @@
-import { History } from "history";
 import React from "react";
 
 import { connect } from "react-redux";
 import { getAllStatusCounts } from "../modules/episodes/selectors";
-import { QueryParams, syncQueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { Status } from "../modules/status";
 import { StatusCounts } from "../types/feed";
 
 interface DataProps {
   status?: Status;
-  queryParams: QueryParams;
-  history: History;
+  onChangeStatus: (status: Status) => void;
 }
 
 interface EnhancedProps {
@@ -45,7 +42,7 @@ class StatusSelectOption extends React.PureComponent<OptionProps> {
 export class StatusSelect extends React.PureComponent<Props> {
   public handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const status = event.target.value as Status;
-    syncQueryParams({ status }, this.props.queryParams, this.props.history);
+    this.props.onChangeStatus(status);
   };
 
   public render() {
