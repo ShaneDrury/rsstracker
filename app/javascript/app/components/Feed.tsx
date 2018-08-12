@@ -7,7 +7,8 @@ import { getFeedObjects, getFetchStatus } from "../modules/feeds/selectors";
 import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
-import LoadedFeed from "./LoadedFeed";
+import FeedSidePanel from "./FeedSidePanel";
+import FeedView from "./FeedView";
 
 interface DataProps {
   history: History;
@@ -29,10 +30,14 @@ export class Feed extends React.Component<Props> {
   public render() {
     if (this.props.remoteFeed && this.props.fetchStatus === "SUCCESS") {
       return (
-        <LoadedFeed
-          feedId={this.props.remoteFeed.id}
-          queryParams={this.props.queryParams}
-          history={this.props.history}
+        <FeedView
+          sidePanel={
+            <FeedSidePanel
+              history={this.props.history}
+              queryParams={this.props.queryParams}
+              feedId={this.props.feedId}
+            />
+          }
         />
       );
     }
