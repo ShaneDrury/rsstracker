@@ -1,6 +1,7 @@
 {
   "resolutions": {
-    "babel-core": "^7.0.0-bridge.0"
+    "babel-core": "^7.0.0-bridge.0",
+    "react-bulma-notification/tsutils": "^2.29.0"
   },
   "scripts": {
     "prettier": "prettier --parser typescript --write",
@@ -57,11 +58,11 @@
   },
   "devDependencies": {
     "prettier": "^1.13.3",
-    "tslint": "^5.9.1",
+    "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.12.0",
     "tslint-eslint-rules": "^5.1.0",
     "tslint-react": "^3.5.1",
-    "typescript": "^2.9.0",
+    "typescript": "^3.0.0",
     "webpack-dev-server": "2.11.2"
   }
 }
