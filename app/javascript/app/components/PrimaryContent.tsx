@@ -3,8 +3,9 @@ import * as qs from "qs";
 import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
 import { QueryParams } from "../modules/location/queryParams";
-import AllFeeds from "./AllFeeds";
-import Feed from "./Feed";
+import AllFeedsSidePanel from "./AllFeedsSidePanel";
+import FeedSidePanel from "./FeedSidePanel";
+import FeedView from "./FeedView";
 import { Navbar } from "./Navbar";
 
 const parseLocation = (location: Location): QueryParams =>
@@ -18,15 +19,26 @@ class PrimaryContent extends React.Component {
     match,
     history,
   }: RouteComponentProps<{ feedId: string }>) => (
-    <Feed
-      feedId={match.params.feedId}
-      queryParams={parseLocation(location)}
-      history={history}
+    <FeedView
+      sidePanel={
+        <FeedSidePanel
+          history={history}
+          queryParams={parseLocation(location)}
+          feedId={match.params.feedId}
+        />
+      }
     />
   );
 
   public renderAllFeeds = ({ history, location }: RouteComponentProps<{}>) => (
-    <AllFeeds queryParams={parseLocation(location)} history={history} />
+    <FeedView
+      sidePanel={
+        <AllFeedsSidePanel
+          history={history}
+          queryParams={parseLocation(location)}
+        />
+      }
+    />
   );
 
   public render() {
