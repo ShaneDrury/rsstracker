@@ -1,20 +1,14 @@
 import { faSync } from "@fortawesome/fontawesome-free-solid";
-import { isEqual } from "lodash";
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
 import * as moment from "moment";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
+import { EpisodesAction } from "../modules/episodes/actions";
 import { updateFeedAction } from "../modules/feedJobs/actions";
 import { getFeedJobs } from "../modules/feedJobs/selectors";
-import {
-  fetchFeedAction,
-  setFeedAutodownload,
-  setFeedDisabled,
-} from "../modules/feeds/actions";
-import { SearchParams } from "../modules/location/queryParams";
+import { setFeedAutodownload, setFeedDisabled } from "../modules/feeds/actions";
 import { RootState } from "../modules/reducers";
 import { Dispatch } from "../types/thunk";
 import { Icon } from "./Icon";
@@ -24,51 +18,18 @@ interface EnhancedProps {
 }
 
 interface DispatchProps {
-  fetchEpisodes: (queryParams: SearchParams) => void;
   updateFeed: (feedId: string) => void;
-  onFeedStale: (feedId: string) => void;
   setFeedDisabled: (feedId: string, disabled: boolean) => void;
   setFeedAutodownload: (feedId: string, autodownload: boolean) => void;
 }
 
 interface PropsExtended {
-  queryParams: SearchParams;
   remoteFeed: RemoteFeed;
 }
 
 type Props = DispatchProps & PropsExtended & EnhancedProps;
 
 class FeedDetails extends React.Component<Props> {
-  public componentDidMount() {
-    this.fetchEpisodes();
-  }
-
-  public shouldComponentUpdate(nextProps: Props) {
-    return !isEqual(this.props, nextProps);
-  }
-
-  public componentDidUpdate(prevProps: Props) {
-    if (this.props.remoteFeed.id !== prevProps.remoteFeed.id) {
-      this.fetchEpisodes();
-    }
-    if (!isEqual(this.props.queryParams, prevProps.queryParams)) {
-      this.fetchEpisodes();
-    }
-    if (prevProps.isUpdating && !this.props.isUpdating) {
-      this.fetchEpisodes();
-    }
-    if (!prevProps.remoteFeed.stale && this.props.remoteFeed.stale) {
-      this.props.onFeedStale(this.props.remoteFeed.id);
-    }
-  }
-
-  public fetchEpisodes() {
-    this.props.fetchEpisodes({
-      ...this.props.queryParams,
-      feedId: this.props.remoteFeed.id,
-    });
-  }
-
   public handleUpdateFeed = () => {
     this.props.updateFeed(this.props.remoteFeed.id);
   };
@@ -143,9 +104,7 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return bindActionCreators(
     {
-      fetchEpisodes: searchEpisodes,
       updateFeed: updateFeedAction,
-      onFeedStale: fetchFeedAction,
       setFeedDisabled,
       setFeedAutodownload,
     },
