@@ -91,7 +91,7 @@ export class Episode extends React.PureComponent<Props> {
         <div className="card-content">
           <div className="media">
             <div className="media-content">
-              {description && <Description episodeId={id} />}
+              {description && <Description episodeId={id} text={description} />}
             </div>
             {thumbnailUrl && (
               <div className="media-right">

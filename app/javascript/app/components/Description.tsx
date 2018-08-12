@@ -8,9 +8,6 @@ import { Dispatch } from "../types/thunk";
 
 interface DataProps {
   episodeId: string;
-}
-
-interface PropsExtended {
   text: string;
 }
 
@@ -18,7 +15,7 @@ interface DispatchProps {
   saveDescription: (episodeId: string, description: string) => void;
 }
 
-type Props = DataProps & PropsExtended & DispatchProps;
+type Props = DataProps & DispatchProps;
 
 interface State {
   editMode: boolean;
@@ -57,13 +54,11 @@ export class Description extends React.PureComponent<Props, State> {
     return (
       <div>
         {!this.state.editMode && (
-          <div onClick={this.editModeOn} style={{ cursor: "pointer" }}>
-            {text.split("\n").map((item, key) => (
-              <span key={key}>
-                {item}
-                <br />
-              </span>
-            ))}
+          <div
+            onClick={this.editModeOn}
+            style={{ cursor: "pointer", whiteSpace: "pre-line" }}
+          >
+            {text}
           </div>
         )}
         {this.state.editMode && (
@@ -102,16 +97,6 @@ export class Description extends React.PureComponent<Props, State> {
   }
 }
 
-const mapStateToProps = (
-  state: RootState,
-  ownProps: DataProps
-): PropsExtended => {
-  const episode = getEpisodes(state)[ownProps.episodeId];
-  return {
-    text: episode.description,
-  };
-};
-
 const mapDispatchToProps = (
   dispatch: Dispatch<EpisodesAction, RootState>
 ): DispatchProps =>
@@ -123,6 +108,6 @@ const mapDispatchToProps = (
   );
 
 export default connect(
-  mapStateToProps,
+  undefined,
   mapDispatchToProps
 )(Description);
