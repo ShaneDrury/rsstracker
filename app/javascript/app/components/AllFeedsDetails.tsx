@@ -1,4 +1,3 @@
-import { History } from "history";
 import React from "react";
 
 import { connect } from "react-redux";
@@ -10,16 +9,10 @@ import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { Dispatch } from "../types/thunk";
-import Search from "./Search";
-import StatusSelect from "./StatusSelect";
 import UpdateFeeds from "./UpdateFeeds";
 
 import { isEqual } from "lodash";
 import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
-
-interface DataProps {
-  history: History;
-}
 
 interface EnhancedProps {
   fetchStatus: FetchStatus;
@@ -35,9 +28,9 @@ interface PropsExtended {
   queryParams: SearchParams;
 }
 
-type Props = DataProps & DispatchProps & PropsExtended & EnhancedProps;
+type Props = DispatchProps & PropsExtended & EnhancedProps;
 
-export class AllFeedsSidePanel extends React.Component<Props> {
+class AllFeedsDetails extends React.Component<Props> {
   public componentDidMount() {
     this.props.fetchEpisodes(this.props.queryParams);
   }
@@ -63,35 +56,9 @@ export class AllFeedsSidePanel extends React.Component<Props> {
 
   public render() {
     return (
-      <div className="card">
-        <header className="card-header">
-          <p className="card-header-title">All Feeds</p>
-        </header>
-        <div className="card-content">
-          <div className="field">
-            <div className="control">
-              <UpdateFeeds />
-            </div>
-          </div>
-          <div className="field is-grouped">
-            <div className="control">
-              <div className="select">
-                <StatusSelect
-                  status={this.props.queryParams.status}
-                  queryParams={this.props.queryParams}
-                  history={this.props.history}
-                />
-              </div>
-            </div>
-            <div className="control is-expanded">
-              <Search
-                searchTerm={this.props.queryParams.searchTerm}
-                queryParams={this.props.queryParams}
-                history={this.props.history}
-              />
-            </div>
-          </div>
-          <hr />
+      <div className="field">
+        <div className="control">
+          <UpdateFeeds />
         </div>
       </div>
     );
@@ -123,4 +90,4 @@ const mapDispatchToProps = (
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AllFeedsSidePanel);
+)(AllFeedsDetails);

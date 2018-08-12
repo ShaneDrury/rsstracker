@@ -1,9 +1,8 @@
-import { History } from "history";
+import { faSync } from "@fortawesome/fontawesome-free-solid";
+import { isEqual } from "lodash";
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
-import { faSync } from "@fortawesome/fontawesome-free-solid";
-import { isEqual } from "lodash";
 import * as moment from "moment";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -19,12 +18,6 @@ import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { Dispatch } from "../types/thunk";
 import { Icon } from "./Icon";
-import Search from "./Search";
-import StatusSelect from "./StatusSelect";
-
-interface DataProps {
-  history: History;
-}
 
 interface EnhancedProps {
   isUpdating: boolean;
@@ -43,9 +36,9 @@ interface PropsExtended {
   remoteFeed: RemoteFeed;
 }
 
-type Props = DataProps & DispatchProps & PropsExtended & EnhancedProps;
+type Props = DispatchProps & PropsExtended & EnhancedProps;
 
-export class FeedSidePanel extends React.Component<Props> {
+class FeedDetails extends React.Component<Props> {
   public componentDidMount() {
     this.fetchEpisodes();
   }
@@ -95,81 +88,41 @@ export class FeedSidePanel extends React.Component<Props> {
   };
 
   public render() {
-    const {
-      autodownload,
-      name,
-      disabled,
-      description,
-      relativeImageLink,
-      updatedAt,
-      url,
-    } = this.props.remoteFeed;
+    const { remoteFeed } = this.props;
     return (
-      <div className="card">
-        <header className="card-header">
-          <p className="card-header-title">
-            <a href={url}>{name}</a>
-          </p>
-        </header>
-        <div className="card-image">
-          <figure className="image is-1by1">
-            <img src={relativeImageLink} />
-          </figure>
+      <React.Fragment>
+        <div className="field">
+          <div className="control">
+            <button
+              className="button is-primary"
+              onClick={this.handleUpdateFeed}
+              disabled={this.props.isUpdating}
+            >
+              <Icon icon={faSync} spin={this.props.isUpdating} />
+              &nbsp;Update
+            </button>
+          </div>
         </div>
-        <div className="card-content">
-          <div className="field">
-            <div className="control">
-              <button
-                className="button is-primary"
-                onClick={this.handleUpdateFeed}
-                disabled={this.props.isUpdating}
-              >
-                <Icon icon={faSync} spin={this.props.isUpdating} />
-                &nbsp;Update
-              </button>
-            </div>
-          </div>
-          <label className="checkbox">
-            <input
-              type="checkbox"
-              checked={!disabled}
-              onChange={this.handleToggleDisableFeed}
-            />{" "}
-            Enabled
-          </label>{" "}
-          <label className="checkbox">
-            <input
-              type="checkbox"
-              checked={autodownload}
-              onChange={this.handleToggleAutodownload}
-            />{" "}
-            Auto-download
-          </label>
-          <div className="field">
-            Updated at: <time>{moment(updatedAt).format("lll")}</time>
-          </div>
-          <div className="field is-grouped">
-            <div className="control">
-              <div className="select">
-                <StatusSelect
-                  status={this.props.queryParams.status}
-                  queryParams={this.props.queryParams}
-                  history={this.props.history}
-                />
-              </div>
-            </div>
-            <div className="control is-expanded">
-              <Search
-                searchTerm={this.props.queryParams.searchTerm}
-                queryParams={this.props.queryParams}
-                history={this.props.history}
-              />
-            </div>
-          </div>
-          <hr />
-          <div className="content">{description}</div>
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={!remoteFeed.disabled}
+            onChange={this.handleToggleDisableFeed}
+          />{" "}
+          Enabled
+        </label>{" "}
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={remoteFeed.autodownload}
+            onChange={this.handleToggleAutodownload}
+          />{" "}
+          Auto-download
+        </label>
+        <div className="field">
+          Updated at: <time>{moment(remoteFeed.updatedAt).format("lll")}</time>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }
@@ -203,4 +156,4 @@ const mapDispatchToProps = (
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FeedSidePanel);
+)(FeedDetails);

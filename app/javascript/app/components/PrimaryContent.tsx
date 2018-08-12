@@ -3,11 +3,13 @@ import * as qs from "qs";
 import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
 import { QueryParams } from "../modules/location/queryParams";
-import AllFeedsSidePanel from "./AllFeedsSidePanel";
 import FeedLoader from "./FeedLoader";
-import FeedSidePanel from "./FeedSidePanel";
 import FeedView from "./FeedView";
 import { Navbar } from "./Navbar";
+
+import AllFeedsDetails from "./AllFeedsDetails";
+import FeedDetails from "./FeedDetails";
+import { FeedHeader } from "./FeedHeader";
 
 const parseLocation = (location: Location): QueryParams =>
   qs.parse(location.search, {
@@ -20,29 +22,30 @@ class PrimaryContent extends React.Component {
     match,
     history,
   }: RouteComponentProps<{ feedId: string }>) => (
-    <FeedView
-      sidePanel={
-        <FeedLoader feedId={match.params.feedId}>
-          {remoteFeed => (
-            <FeedSidePanel
-              history={history}
+    <FeedLoader feedId={match.params.feedId}>
+      {remoteFeed => (
+        <FeedView
+          queryParams={parseLocation(location)}
+          history={history}
+          header={<FeedHeader remoteFeed={remoteFeed} />}
+          details={
+            <FeedDetails
               queryParams={parseLocation(location)}
               remoteFeed={remoteFeed}
             />
-          )}
-        </FeedLoader>
-      }
-    />
+          }
+          description={remoteFeed.description}
+        />
+      )}
+    </FeedLoader>
   );
 
   public renderAllFeeds = ({ history, location }: RouteComponentProps<{}>) => (
     <FeedView
-      sidePanel={
-        <AllFeedsSidePanel
-          history={history}
-          queryParams={parseLocation(location)}
-        />
-      }
+      header={<p className="card-header-title">All Feeds</p>}
+      queryParams={parseLocation(location)}
+      history={history}
+      details={<AllFeedsDetails queryParams={parseLocation(location)} />}
     />
   );
 
