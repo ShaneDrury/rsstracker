@@ -46,6 +46,7 @@ class FeedLoader extends React.Component<Props> {
     if (this.props.remoteFeed && prevProps.remoteFeed) {
       if (this.props.remoteFeed.id !== prevProps.feedId) {
         this.fetchEpisodes();
+        return;
       }
       if (!prevProps.remoteFeed.stale && this.props.remoteFeed.stale) {
         this.props.onFeedStale(this.props.remoteFeed.id);
