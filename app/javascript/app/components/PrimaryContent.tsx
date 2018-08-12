@@ -4,6 +4,7 @@ import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
 import { QueryParams } from "../modules/location/queryParams";
 import AllFeedsSidePanel from "./AllFeedsSidePanel";
+import FeedLoader from "./FeedLoader";
 import FeedSidePanel from "./FeedSidePanel";
 import FeedView from "./FeedView";
 import { Navbar } from "./Navbar";
@@ -21,11 +22,15 @@ class PrimaryContent extends React.Component {
   }: RouteComponentProps<{ feedId: string }>) => (
     <FeedView
       sidePanel={
-        <FeedSidePanel
-          history={history}
-          queryParams={parseLocation(location)}
-          feedId={match.params.feedId}
-        />
+        <FeedLoader feedId={match.params.feedId}>
+          {remoteFeed => (
+            <FeedSidePanel
+              history={history}
+              queryParams={parseLocation(location)}
+              remoteFeed={remoteFeed}
+            />
+          )}
+        </FeedLoader>
       }
     />
   );
