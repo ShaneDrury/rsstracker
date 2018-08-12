@@ -29,27 +29,34 @@ interface DispatchProps {
 
 type Props = EnhancedProps & DispatchProps;
 
-interface State {
-  keys: string[];
-}
+export class ActiveJobs extends React.PureComponent<Props> {
+  public componentDidMount() {
+    this.props.getJobs();
+  }
 
-export class ActiveJobs extends React.PureComponent<Props, State> {
-  public static getDerivedStateFromProps(props: Props, prevState: State) {
-    const newKeys = props.jobDescriptions.map(job => job.key);
-    const keysToRemove = difference(prevState.keys, newKeys);
+  public componentDidUpdate(prevProps: Props) {
+    if (!isEqual(this.props.relatedEpisodeIds, prevProps.relatedEpisodeIds)) {
+      this.props.relatedEpisodeIds.forEach(episodeId => {
+        this.props.fetchEpisodeIfNeeded(episodeId);
+      });
+    }
+
+    const newKeys = this.props.jobDescriptions.map(job => job.key);
+    const prevKeys = prevProps.jobDescriptions.map(job => job.key);
+    const keysToRemove = difference(prevKeys, newKeys);
     keysToRemove.forEach(key => {
       Notification.remove(key);
     });
-    props.jobDescriptions.forEach(job => {
+    this.props.jobDescriptions.forEach(job => {
       const key = job.key;
-      if (!prevState.keys.includes(key)) {
+      if (!prevKeys.includes(key)) {
         if (job.error) {
           Notification.error(job.error, {
             key,
             duration: 0,
             closable: true,
             placement: "bottomLeft",
-            onClose: () => props.onCloseErrorJob(job.id),
+            onClose: () => this.props.onCloseErrorJob(job.id),
           });
         } else {
           Notification.info(job.description, {
@@ -61,23 +68,6 @@ export class ActiveJobs extends React.PureComponent<Props, State> {
         }
       }
     });
-    return { keys: newKeys };
-  }
-
-  public state: State = {
-    keys: [],
-  };
-
-  public componentDidMount() {
-    this.props.getJobs();
-  }
-
-  public componentDidUpdate(prevProps: Props) {
-    if (!isEqual(this.props.relatedEpisodeIds, prevProps.relatedEpisodeIds)) {
-      this.props.relatedEpisodeIds.forEach(episodeId => {
-        this.props.fetchEpisodeIfNeeded(episodeId);
-      });
-    }
   }
 
   public render() {
@@ -95,8 +85,8 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
 
 const mapDispatchToProps = (
   dispatch: Dispatch<JobsAction, RootState>
-): DispatchProps => {
-  return bindActionCreators(
+): DispatchProps =>
+  bindActionCreators(
     {
       getJobs: fetchJobs,
       onCloseErrorJob: deleteJobAction,
@@ -104,7 +94,6 @@ const mapDispatchToProps = (
     },
     dispatch
   );
-};
 
 export default connect(
   mapStateToProps,
