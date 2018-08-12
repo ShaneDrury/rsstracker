@@ -16,7 +16,7 @@ interface DataProps {
 
 type Props = DataProps;
 
-export class FeedView extends React.Component<Props> {
+export class FeedView extends React.PureComponent<Props> {
   public handleChangeStatus = (status: Status) => {
     syncQueryParams({ status }, this.props.queryParams, this.props.history);
   };

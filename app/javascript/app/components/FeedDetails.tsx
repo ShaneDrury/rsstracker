@@ -29,7 +29,7 @@ interface PropsExtended {
 
 type Props = DispatchProps & PropsExtended & EnhancedProps;
 
-class FeedDetails extends React.Component<Props> {
+class FeedDetails extends React.PureComponent<Props> {
   public handleUpdateFeed = () => {
     this.props.updateFeed(this.props.remoteFeed.id);
   };

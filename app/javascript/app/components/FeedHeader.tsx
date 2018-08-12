@@ -1,7 +1,7 @@
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 
-class FeedHeader extends React.Component<{ remoteFeed: RemoteFeed }> {
+class FeedHeader extends React.PureComponent<{ remoteFeed: RemoteFeed }> {
   public render() {
     const { remoteFeed } = this.props;
     return (
