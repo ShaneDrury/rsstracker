@@ -66,10 +66,12 @@ export class Description extends React.PureComponent<Props, State> {
             <div className="field">
               <div className="control">
                 <textarea
+                  autoFocus
                   className="textarea"
                   value={this.state.pendingChanges}
                   onChange={this.handleEdit}
                   rows={15}
+                  onBlur={this.cancelEditing}
                 />
               </div>
             </div>
@@ -77,11 +79,6 @@ export class Description extends React.PureComponent<Props, State> {
               <p className="control">
                 <a className="button is-primary" onClick={this.handleSave}>
                   Save
-                </a>
-              </p>
-              <p className="control">
-                <a className="button is-warning" onClick={this.cancelEditing}>
-                  Cancel
                 </a>
               </p>
               <p className="control">
