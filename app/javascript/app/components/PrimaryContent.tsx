@@ -7,6 +7,7 @@ import FeedLoader from "./FeedLoader";
 import FeedView from "./FeedView";
 import { Navbar } from "./Navbar";
 
+import styled from "styled-components";
 import AllFeedsDetails from "./AllFeedsDetails";
 import AllFeedsLoader from "./AllFeedsLoader";
 import FeedDetails from "./FeedDetails";
@@ -16,6 +17,10 @@ const parseLocation = (location: Location): QueryParams =>
   qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
+
+const Section = styled.section`
+  padding: 0px;
+`;
 
 class PrimaryContent extends React.Component {
   public renderFeed = ({
@@ -54,10 +59,10 @@ class PrimaryContent extends React.Component {
     return (
       <div>
         <Navbar />
-        <section className="section">
+        <Section className="section">
           <Route exact path="/" render={this.renderAllFeeds} />
           <Route path="/:feedId" render={this.renderFeed} />
-        </section>
+        </Section>
       </div>
     );
   }

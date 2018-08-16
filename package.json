@@ -34,6 +34,7 @@
     "@types/shortid": "^0.0.29",
     "@types/webpack-env": "^1.13.6",
     "actioncable": "^5.2.0",
+    "babel-plugin-styled-components": "^1.5.1",
     "babel-polyfill": "^6.26.0",
     "bulma": "^0.7.1",
     "camelcase-keys": "^4.2.0",
@@ -54,7 +55,8 @@
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
     "reselect": "^3.0.1",
-    "shortid": "^2.2.8"
+    "shortid": "^2.2.8",
+    "styled-components": "^3.4.2"
   },
   "devDependencies": {
     "prettier": "^1.13.3",

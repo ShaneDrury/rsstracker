@@ -1,5 +1,6 @@
 import { History } from "history";
 import React from "react";
+import styled from "styled-components";
 import { SearchParams, syncQueryParams } from "../modules/location/queryParams";
 import { Status } from "../modules/status";
 import Episodes from "./Episodes";
@@ -16,6 +17,10 @@ interface DataProps {
 
 type Props = DataProps;
 
+const Card = styled.div`
+  height: 100%;
+`;
+
 export class FeedView extends React.PureComponent<Props> {
   public handleChangeStatus = (status: Status) => {
     syncQueryParams({ status }, this.props.queryParams, this.props.history);
@@ -29,7 +34,7 @@ export class FeedView extends React.PureComponent<Props> {
     return (
       <div className="columns is-gapless">
         <div className="column is-one-quarter">
-          <div className="card">
+          <Card>
             {this.props.header}
             <div className="card-content">
               {this.props.details}
@@ -54,7 +59,7 @@ export class FeedView extends React.PureComponent<Props> {
                 <div className="content">{this.props.description}</div>
               )}
             </div>
-          </div>
+          </Card>
         </div>
         <div className="column">
           <Episodes />
