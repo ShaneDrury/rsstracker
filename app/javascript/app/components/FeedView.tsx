@@ -27,7 +27,7 @@ export class FeedView extends React.PureComponent<Props> {
 
   public render() {
     return (
-      <div className="columns">
+      <div className="columns is-gapless">
         <div className="column is-one-quarter">
           <div className="card">
             {this.props.header}

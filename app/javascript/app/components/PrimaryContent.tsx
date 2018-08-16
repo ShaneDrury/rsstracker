@@ -55,12 +55,8 @@ class PrimaryContent extends React.Component {
       <div>
         <Navbar />
         <section className="section">
-          <div className="columns">
-            <div className="column">
-              <Route exact path="/" render={this.renderAllFeeds} />
-              <Route path="/:feedId" render={this.renderFeed} />
-            </div>
-          </div>
+          <Route exact path="/" render={this.renderAllFeeds} />
+          <Route path="/:feedId" render={this.renderFeed} />
         </section>
       </div>
     );
