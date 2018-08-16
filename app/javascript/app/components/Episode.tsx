@@ -22,7 +22,6 @@ import { RemoteEpisode } from "../types/episode";
 import { Dispatch } from "../types/thunk";
 import Description from "./Description";
 import { Icon } from "./Icon";
-import PlayingSeconds from "./PlayingSeconds";
 
 interface DataProps {
   episodeId: string;
@@ -89,60 +88,61 @@ export class Episode extends React.PureComponent<Props> {
           )}
         </header>
         <div className="card-content">
-          <div className="media">
-            <div className="media-content">
+          <div className="columns">
+            <div className="column is-two-thirds">
               {description && <Description episodeId={id} text={description} />}
             </div>
-            {thumbnailUrl && (
-              <div className="media-right">
-                <figure className="image is-128x128">
-                  <img src={thumbnailUrl} />
-                </figure>
-              </div>
-            )}
-          </div>
-          <div className="content">
-            <hr />
-            <PlayingSeconds episodeId={id} />
-            <time>{duration}</time>{" "}
-            <a href={fullUrl}>
-              <Icon icon={faFileAudio} />
-            </a>
-            <br />
-            {fetchStatus.status === "SUCCESS" && (
-              <button
-                className={classNames("button", {
-                  "is-link": !playing,
-                  "is-danger": playing,
-                })}
-                onClick={this.handleToggleShow}
-              >
-                {playing ? "Stop" : "Play"}
-              </button>
-            )}
-          </div>
-          {!(fetchStatus.status === "SUCCESS") && (
-            <nav className="level is-mobile">
-              <div className="level-left">
-                {(fetchStatus.status === "NOT_ASKED" ||
-                  fetchStatus.status === "FAILURE" ||
-                  isUpdating) && (
-                  <button
-                    className="button is-primary"
-                    onClick={this.handleDownload}
-                    disabled={isUpdating}
-                  >
-                    {isUpdating && (
-                      <div>
-                        <Icon icon={faSync} spin />
+            <div className="column is-one-third">
+              {thumbnailUrl && (
+                <div className="media-right">
+                  <figure className="image is-256x256">
+                    <img src={thumbnailUrl} />
+                  </figure>
+                  <div>
+                    <time>{duration}</time>{" "}
+                  </div>
+                  <div>
+                    <a href={fullUrl}>
+                      Source: <Icon icon={faFileAudio} />
+                    </a>
+                  </div>
+                  {fetchStatus.status === "SUCCESS" && (
+                    <button
+                      className={classNames("button", {
+                        "is-link": !playing,
+                        "is-danger": playing,
+                      })}
+                      onClick={this.handleToggleShow}
+                    >
+                      {playing ? "Stop" : "Play"}
+                    </button>
+                  )}
+                  {!(fetchStatus.status === "SUCCESS") && (
+                    <nav className="level is-mobile">
+                      <div className="level-left">
+                        {(fetchStatus.status === "NOT_ASKED" ||
+                          fetchStatus.status === "FAILURE" ||
+                          isUpdating) && (
+                          <button
+                            className="button is-primary"
+                            onClick={this.handleDownload}
+                            disabled={isUpdating}
+                          >
+                            {isUpdating && (
+                              <div>
+                                <Icon icon={faSync} spin />
+                              </div>
+                            )}
+                            &nbsp;Download
+                          </button>
+                        )}
                       </div>
-                    )}
-                    &nbsp;Download
-                  </button>
-                )}
-              </div>
-            </nav>
-          )}
+                    </nav>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     );

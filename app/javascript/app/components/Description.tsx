@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import styled from "styled-components";
 import { EpisodesAction, saveDescription } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
 import { RootState } from "../modules/reducers";
@@ -21,6 +22,11 @@ interface State {
   editMode: boolean;
   pendingChanges: string;
 }
+
+const TextArea = styled.div`
+  cursor: pointer;
+  white-space: pre-line;
+`;
 
 export class Description extends React.PureComponent<Props, State> {
   public state = {
@@ -54,12 +60,7 @@ export class Description extends React.PureComponent<Props, State> {
     return (
       <div>
         {!this.state.editMode && (
-          <div
-            onClick={this.editModeOn}
-            style={{ cursor: "pointer", whiteSpace: "pre-line" }}
-          >
-            {text}
-          </div>
+          <TextArea onClick={this.editModeOn}>{text}</TextArea>
         )}
         {this.state.editMode && (
           <div>
