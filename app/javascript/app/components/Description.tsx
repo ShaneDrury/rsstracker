@@ -78,12 +78,12 @@ export class Description extends React.PureComponent<Props, State> {
             </div>
             <div className="field is-grouped">
               <p className="control">
-                <a className="button is-primary" onClick={this.handleSave}>
+                <a className="button is-primary" onMouseDown={this.handleSave}>
                   Save
                 </a>
               </p>
               <p className="control">
-                <a className="button is-danger" onClick={this.clearEdits}>
+                <a className="button is-danger" onMouseDown={this.clearEdits}>
                   Clear
                 </a>
               </p>
