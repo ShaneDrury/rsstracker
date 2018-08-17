@@ -30,6 +30,14 @@ export class FeedView extends React.PureComponent<Props> {
     syncQueryParams({ searchTerm }, this.props.queryParams, this.props.history);
   };
 
+  public handleChangePage = (currentPage: number) => {
+    syncQueryParams(
+      { currentPage },
+      this.props.queryParams,
+      this.props.history
+    );
+  };
+
   public render() {
     return (
       <div className="columns is-gapless">
@@ -62,7 +70,7 @@ export class FeedView extends React.PureComponent<Props> {
           </Card>
         </div>
         <div className="column">
-          <Episodes />
+          <Episodes onPageChange={this.handleChangePage} />
         </div>
       </div>
     );

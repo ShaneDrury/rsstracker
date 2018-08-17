@@ -16,10 +16,11 @@ export interface SearchParams extends QueryParams {
 interface Changes {
   status?: Status;
   searchTerm?: string;
+  currentPage?: number;
 }
 
 export const syncQueryParams = (
-  { status, searchTerm }: Changes,
+  { status, searchTerm, currentPage }: Changes,
   queryParams: QueryParams,
   history: History
 ) => {
@@ -29,6 +30,9 @@ export const syncQueryParams = (
   }
   if (!(typeof searchTerm === "undefined")) {
     newParams.searchTerm = searchTerm;
+  }
+  if (!(typeof currentPage === "undefined")) {
+    newParams.currentPage = currentPage;
   }
   const newQueryParams = { ...queryParams, ...newParams };
   if (!isEqual(newQueryParams, queryParams)) {

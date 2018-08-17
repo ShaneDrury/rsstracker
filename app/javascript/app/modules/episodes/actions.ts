@@ -3,7 +3,6 @@ import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
 import { SearchParams } from "../location/queryParams";
-import { Status } from "../status";
 import { getEpisodes as getEpisodesSelector } from "./selectors";
 import { getEpisode, getEpisodes, updateEpisodeDescription } from "./sources";
 
@@ -15,7 +14,6 @@ export enum episodeActions {
   FETCH_EPISODE_COMPLETE = "FETCH_EPISODE_COMPLETE",
   FETCH_EPISODE_FAILURE = "FETCH_EPISODE_FAILURE",
   UPDATE_EPISODE_COMPLETE = "UPDATE_EPISODE_COMPLETE",
-  PAGE_CHANGED = "PAGE_CHANGED",
   UPDATE_EPISODE_REQUESTED = "UPDATE_EPISODE_REQUESTED",
 }
 
@@ -36,13 +34,6 @@ interface FetchEpisodesFailure {
   type: episodeActions.FETCH_EPISODES_FAILURE;
   payload: {
     error: string;
-  };
-}
-
-interface PageChanged {
-  type: episodeActions.PAGE_CHANGED;
-  payload: {
-    currentPage: number;
   };
 }
 
@@ -128,7 +119,6 @@ export type EpisodesAction =
   | FetchEpisodesStart
   | FetchEpisodesComplete
   | FetchEpisodesFailure
-  | PageChanged
   | FetchEpisodeStart
   | FetchEpisodeComplete
   | FetchEpisodeFailure
@@ -152,11 +142,6 @@ export const searchEpisodes = (
     dispatch(fetchEpisodesFailure(err));
   }
 };
-
-export const changePage = (currentPage: number): PageChanged => ({
-  type: episodeActions.PAGE_CHANGED,
-  payload: { currentPage },
-});
 
 export const fetchEpisode = (
   episodeId: string

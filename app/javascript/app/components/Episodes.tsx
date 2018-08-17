@@ -8,11 +8,8 @@ import {
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
 
-import { bindActionCreators } from "redux";
-import { changePage, EpisodesAction } from "../modules/episodes/actions";
 import { FetchStatus } from "../modules/remoteData";
 import { PageInfo } from "../types/page";
-import { Dispatch } from "../types/thunk";
 import Episode from "./Episode";
 import Pagination from "./Pagination";
 
@@ -82,17 +79,4 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<EpisodesAction, RootState>
-): DispatchProps =>
-  bindActionCreators(
-    {
-      onPageChange: changePage,
-    },
-    dispatch
-  );
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Episodes);
+export default connect(mapStateToProps)(Episodes);

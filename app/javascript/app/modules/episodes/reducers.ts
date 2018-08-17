@@ -64,15 +64,6 @@ const episodes = (
         statusCounts: action.payload.statusCounts,
       };
     }
-    case episodeActions.PAGE_CHANGED: {
-      return {
-        ...state,
-        pageInfo: {
-          ...state.pageInfo,
-          currentPage: action.payload.currentPage,
-        },
-      };
-    }
     case episodeActions.UPDATE_EPISODE_COMPLETE:
     case episodeActions.FETCH_EPISODE_COMPLETE: {
       const episode = action.payload.episode;
