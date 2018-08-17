@@ -54,7 +54,7 @@ export class StatusSelect extends React.PureComponent<Props> {
         onChange={this.handleFilterChange}
         value={this.props.status || "ALL"}
       >
-        <option value="ALL" key={`all-${counts.all}`}>
+        <option value={Status.ALL} key={`all-${counts.all}`}>
           All ({counts.all})
         </option>
         <StatusSelectOption
