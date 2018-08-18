@@ -1,7 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchEpisodeIfNeeded } from "../modules/episodes/actions";
+import {
+  detailsOpened,
+  fetchEpisodeIfNeeded,
+} from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
 import { Action as PlayerAction } from "../modules/player/actions";
 import { getPlaying, getPlayingEpisodeId } from "../modules/player/selectors";
@@ -20,6 +23,7 @@ interface PropsExtended {
 
 interface DispatchProps {
   fetchEpisodeIfNeeded: (episodeId: string) => void;
+  handleDetailOpened: (episodeId: string) => void;
 }
 
 type Props = DataProps & PropsExtended & DispatchProps;
@@ -31,15 +35,24 @@ export class GlobalPlayer extends React.PureComponent<Props> {
     }
   }
 
+  public handleDetailOpened = () => {
+    this.props.handleDetailOpened(this.props.episodeId!);
+  };
+
   public render() {
     return (
       <div>
         {this.props.fetched &&
           this.props.episodeId && (
-            <Player
-              episodeId={this.props.episodeId}
-              playing={this.props.playing}
-            />
+            <div>
+              <Player
+                episodeId={this.props.episodeId}
+                playing={this.props.playing}
+              />
+              <button className="button" onClick={this.handleDetailOpened}>
+                Detail
+              </button>
+            </div>
           )}
         {this.props.episodeName && <div>{this.props.episodeName}</div>}
       </div>
@@ -66,6 +79,7 @@ const mapDispatchToProps = (
   bindActionCreators(
     {
       fetchEpisodeIfNeeded,
+      handleDetailOpened: detailsOpened,
     },
     dispatch
   );
