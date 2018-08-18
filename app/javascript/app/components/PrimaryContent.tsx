@@ -21,7 +21,14 @@ const parseLocation = (location: Location): QueryParams =>
   });
 
 const Section = styled.section`
-  padding: 0px;
+  padding: 15px;
+`;
+
+const Scrollable = styled.div`
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 1px;
 `;
 
 interface EnhancedProps {
@@ -36,17 +43,17 @@ class PrimaryContent extends React.Component<Props> {
       <div>
         {this.props.detailEpisodeId && (
           <div className="columns is-paddingless">
-            <div className="column is-one-half">
+            <Scrollable className="column is-one-half">
               <Episodes
                 queryParams={parseLocation(location)}
                 history={history}
               />
-            </div>
-            <div className="column is-one-half">
+            </Scrollable>
+            <Scrollable className="column is-one-half">
               <EpisodeLoader episodeId={this.props.detailEpisodeId}>
                 {remoteEpisode => <EpisodeDetail episode={remoteEpisode} />}
               </EpisodeLoader>
-            </div>
+            </Scrollable>
           </div>
         )}
         {!this.props.detailEpisodeId && (
@@ -58,25 +65,6 @@ class PrimaryContent extends React.Component<Props> {
 
   public renderNavbar = ({ history, location }: RouteComponentProps<{}>) => (
     <Navbar queryParams={parseLocation(location)} history={history} />
-  );
-
-  public renderEpisodeDetail = ({
-    match,
-    history,
-    location,
-  }: RouteComponentProps<{ episodeId: string }>) => (
-    <AllFeedsLoader queryParams={parseLocation(location)}>
-      <div className="columns is-paddingless">
-        <div className="column is-one-half">
-          <Episodes queryParams={parseLocation(location)} history={history} />
-        </div>
-        <div className="column is-one-half">
-          <EpisodeLoader episodeId={match.params.episodeId}>
-            {remoteEpisode => <EpisodeDetail episode={remoteEpisode} />}
-          </EpisodeLoader>
-        </div>
-      </div>
-    </AllFeedsLoader>
   );
 
   public render() {

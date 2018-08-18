@@ -74,26 +74,26 @@ export class Player extends React.Component<Props, State> {
   };
 
   public render() {
-    return (
-      <div>
-        {this.props.url && (
-          <FilePlayer
-            ref={this.playerRef}
-            url={this.props.url}
-            controls
-            playing={this.props.playing}
-            config={{ file: { forceAudio: true } }}
-            onProgress={this.handleProgress}
-            onReady={this.handleOnReady}
-            onPause={this.props.playerPaused}
-            onStart={this.props.playerResumed}
-            progressInterval={1500}
-            width="600px"
-            height="28px"
-          />
-        )}
-      </div>
-    );
+    if (this.props.url) {
+      return (
+        <FilePlayer
+          ref={this.playerRef}
+          url={this.props.url}
+          controls
+          playing={this.props.playing}
+          config={{ file: { forceAudio: true } }}
+          onProgress={this.handleProgress}
+          onReady={this.handleOnReady}
+          onPause={this.props.playerPaused}
+          onStart={this.props.playerResumed}
+          progressInterval={1500}
+          width="600px"
+          height="28px"
+        />
+      );
+    } else {
+      return null;
+    }
   }
 
   private seekToPlayedSeconds() {

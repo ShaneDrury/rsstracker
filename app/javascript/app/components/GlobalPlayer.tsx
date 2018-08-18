@@ -44,17 +44,23 @@ export class GlobalPlayer extends React.PureComponent<Props> {
       <div>
         {this.props.fetched &&
           this.props.episodeId && (
-            <div>
-              <Player
-                episodeId={this.props.episodeId}
-                playing={this.props.playing}
-              />
-              <button className="button" onClick={this.handleDetailOpened}>
-                Detail
-              </button>
+            <div className="columns is-paddingless">
+              {this.props.episodeName && (
+                <div className="column">{this.props.episodeName}</div>
+              )}
+              <div className="column">
+                <button className="button" onClick={this.handleDetailOpened}>
+                  Detail
+                </button>
+              </div>
+              <div className="column">
+                <Player
+                  episodeId={this.props.episodeId}
+                  playing={this.props.playing}
+                />
+              </div>
             </div>
           )}
-        {this.props.episodeName && <div>{this.props.episodeName}</div>}
       </div>
     );
   }
