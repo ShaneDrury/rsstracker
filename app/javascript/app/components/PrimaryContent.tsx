@@ -6,13 +6,10 @@ import { QueryParams } from "../modules/location/queryParams";
 import { Navbar } from "./Navbar";
 
 import styled from "styled-components";
-import AllFeedsDetails from "./AllFeedsDetails";
 import AllFeedsLoader from "./AllFeedsLoader";
 import EpisodeDetail from "./EpisodeDetail";
 import EpisodeLoader from "./EpisodeLoader";
 import Episodes from "./Episodes";
-import FeedDetails from "./FeedDetails";
-import FeedHeader from "./FeedHeader";
 import FeedSelect from "./FeedSelect";
 
 const parseLocation = (location: Location): QueryParams =>

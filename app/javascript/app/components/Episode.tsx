@@ -1,8 +1,4 @@
-import {
-  faFileAudio,
-  faSpinner,
-  faSync,
-} from "@fortawesome/fontawesome-free-solid";
+import { faSpinner, faSync } from "@fortawesome/fontawesome-free-solid";
 import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
@@ -13,7 +9,6 @@ import { bindActionCreators } from "redux";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { fetchEpisode } from "../modules/episodes/actions";
-import { getEpisodes } from "../modules/episodes/selectors";
 import {
   Action as PlayerAction,
   playToggled as togglePlayAction,
@@ -22,7 +17,6 @@ import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
 import { Dispatch } from "../types/thunk";
-import Description from "./Description";
 import { Icon } from "./Icon";
 
 interface DataProps {
