@@ -7,14 +7,9 @@ import { bindActionCreators } from "redux";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import {
   EpisodesAction,
-  fetchEpisode,
-  searchEpisodes,
+  fetchEpisodeIfNeeded,
 } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
-import { getFeedJobs } from "../modules/feedJobs/selectors";
-import { fetchFeedAction } from "../modules/feeds/actions";
-import { getFeedObjects } from "../modules/feeds/selectors";
-import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { Dispatch } from "../types/thunk";
 
@@ -78,7 +73,7 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return bindActionCreators(
     {
-      fetchEpisode,
+      fetchEpisode: fetchEpisodeIfNeeded,
     },
     dispatch
   );
