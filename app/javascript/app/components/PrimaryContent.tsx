@@ -55,10 +55,14 @@ class PrimaryContent extends React.Component {
     </AllFeedsLoader>
   );
 
+  public renderNavbar = ({ history, location }: RouteComponentProps<{}>) => (
+    <Navbar queryParams={parseLocation(location)} history={history} />
+  );
+
   public render() {
     return (
       <div>
-        <Navbar />
+        <Route path="/" render={this.renderNavbar} />
         <Section className="section">
           <Route exact path="/" render={this.renderAllFeeds} />
           <Route path="/:feedId" render={this.renderFeed} />

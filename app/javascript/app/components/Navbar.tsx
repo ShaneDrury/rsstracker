@@ -1,12 +1,18 @@
 import classNames from "classnames";
+import { History } from "history";
 import React from "react";
 import { Link } from "react-router-dom";
+import { QueryParams, syncQueryParams } from "../modules/location/queryParams";
 import ActiveJobs from "./ActiveJobs";
 import FeedSelect from "./FeedSelect";
 import GlobalPlayer from "./GlobalPlayer";
+import Search from "./Search";
 import UpdateFeeds from "./UpdateFeeds";
 
-interface Props {}
+interface Props {
+  queryParams: QueryParams;
+  history: History;
+}
 
 interface State {
   isOpen: boolean;
@@ -19,6 +25,10 @@ export class Navbar extends React.PureComponent<Props, State> {
 
   public handleToggleOpen = () => {
     this.setState({ isOpen: !this.state.isOpen });
+  };
+
+  public handleChangeSearch = (searchTerm: string) => {
+    syncQueryParams({ searchTerm }, this.props.queryParams, this.props.history);
   };
 
   public render() {
@@ -61,9 +71,13 @@ export class Navbar extends React.PureComponent<Props, State> {
               <ActiveJobs />
             </div>
           </div>
+          <GlobalPlayer />
           <div className="navbar-end">
-            <div className="navbar-item is-right is-paddingless">
-              <GlobalPlayer />
+            <div className="navbar-item is-right">
+              <Search
+                onChangeSearch={this.handleChangeSearch}
+                searchTerm={this.props.queryParams.searchTerm}
+              />
             </div>
           </div>
         </div>

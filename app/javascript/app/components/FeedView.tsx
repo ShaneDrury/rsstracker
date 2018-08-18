@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { SearchParams, syncQueryParams } from "../modules/location/queryParams";
 import { Status } from "../modules/status";
 import Episodes from "./Episodes";
-import Search from "./Search";
 import StatusSelect from "./StatusSelect";
 
 interface DataProps {
@@ -24,10 +23,6 @@ const Card = styled.div`
 export class FeedView extends React.PureComponent<Props> {
   public handleChangeStatus = (status: Status) => {
     syncQueryParams({ status }, this.props.queryParams, this.props.history);
-  };
-
-  public handleChangeSearch = (searchTerm: string) => {
-    syncQueryParams({ searchTerm }, this.props.queryParams, this.props.history);
   };
 
   public handleChangePage = (currentPage: number) => {
@@ -54,12 +49,6 @@ export class FeedView extends React.PureComponent<Props> {
                       status={this.props.queryParams.status}
                     />
                   </div>
-                </div>
-                <div className="control is-expanded">
-                  <Search
-                    onChangeSearch={this.handleChangeSearch}
-                    searchTerm={this.props.queryParams.searchTerm}
-                  />
                 </div>
               </div>
               <hr />
