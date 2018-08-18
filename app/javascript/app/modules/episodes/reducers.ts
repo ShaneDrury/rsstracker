@@ -14,6 +14,7 @@ export interface State {
   ids: string[];
   pageInfo: PageInfo;
   statusCounts: StatusCounts;
+  detailEpisodeId?: string;
 }
 
 const initialState: State = {
@@ -93,6 +94,18 @@ const episodes = (
             updating: true,
           },
         },
+      };
+    }
+    case episodeActions.DETAILS_OPENED: {
+      return {
+        ...state,
+        detailEpisodeId: action.payload.episodeId,
+      };
+    }
+    case episodeActions.DETAILS_CLOSED: {
+      return {
+        ...state,
+        detailEpisodeId: undefined,
       };
     }
     default:

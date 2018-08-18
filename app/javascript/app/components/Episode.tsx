@@ -4,11 +4,10 @@ import * as moment from "moment";
 import React from "react";
 import LinesEllipsis from "react-lines-ellipsis";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
-import { fetchEpisode } from "../modules/episodes/actions";
+import { detailsOpened, fetchEpisode } from "../modules/episodes/actions";
 import {
   Action as PlayerAction,
   playToggled as togglePlayAction,
@@ -32,6 +31,7 @@ interface DispatchProps {
   togglePlay: (episodeId: string) => void;
   downloadEpisode: (episodeId: string) => void;
   fetchEpisode: (episodeId: string) => void;
+  handleDetailOpened: (episodeId: string) => void;
 }
 
 type Props = DataProps & PropsExtended & DispatchProps;
@@ -49,6 +49,10 @@ export class Episode extends React.PureComponent<Props> {
 
   public handleToggleShow = () => {
     this.props.togglePlay(this.props.id);
+  };
+
+  public handleDetailOpened = () => {
+    this.props.handleDetailOpened(this.props.id);
   };
 
   public render() {
@@ -131,7 +135,12 @@ export class Episode extends React.PureComponent<Props> {
                     </nav>
                   )}
                   <div>
-                    <Link to={`/episodeDetail/${id}`}>Detail</Link>
+                    <button
+                      className="button"
+                      onClick={this.handleDetailOpened}
+                    >
+                      Detail
+                    </button>
                   </div>
                 </div>
               )}
@@ -166,6 +175,7 @@ const mapDispatchToProps = (
       togglePlay: togglePlayAction,
       downloadEpisode: downloadEpisodeAction,
       fetchEpisode,
+      handleDetailOpened: detailsOpened,
     },
     dispatch
   );

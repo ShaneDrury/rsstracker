@@ -15,6 +15,8 @@ export enum episodeActions {
   FETCH_EPISODE_FAILURE = "FETCH_EPISODE_FAILURE",
   UPDATE_EPISODE_COMPLETE = "UPDATE_EPISODE_COMPLETE",
   UPDATE_EPISODE_REQUESTED = "UPDATE_EPISODE_REQUESTED",
+  DETAILS_OPENED = "DETAILS_OPENED",
+  DETAILS_CLOSED = "DETAILS_CLOSED",
 }
 
 interface FetchEpisodesStart {
@@ -61,6 +63,17 @@ interface FetchEpisodeFailure {
     error: string;
     episodeId: string;
   };
+}
+
+interface DetailsOpened {
+  type: episodeActions.DETAILS_OPENED;
+  payload: {
+    episodeId: string;
+  };
+}
+
+interface DetailsClosed {
+  type: episodeActions.DETAILS_CLOSED;
 }
 
 export const fetchEpisodesStart = (): FetchEpisodesStart => ({
@@ -123,7 +136,9 @@ export type EpisodesAction =
   | FetchEpisodeComplete
   | FetchEpisodeFailure
   | UpdateEpisodeComplete
-  | UpdateEpisodeRequested;
+  | UpdateEpisodeRequested
+  | DetailsOpened
+  | DetailsClosed;
 
 export const searchEpisodes = (
   queryParams: SearchParams
@@ -183,3 +198,12 @@ export const saveDescription = (
   dispatch(updateEpisodeRequested(episodeId, { description }));
   await updateEpisodeDescription(episodeId, description);
 };
+
+export const detailsOpened = (episodeId: string): DetailsOpened => ({
+  type: episodeActions.DETAILS_OPENED,
+  payload: { episodeId },
+});
+
+export const detailsClosed = (): DetailsClosed => ({
+  type: episodeActions.DETAILS_CLOSED,
+});

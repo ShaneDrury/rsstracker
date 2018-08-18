@@ -7,12 +7,10 @@ import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
-import { fetchEpisode } from "../modules/episodes/actions";
-import { getEpisodes } from "../modules/episodes/selectors";
+import { detailsClosed, fetchEpisode } from "../modules/episodes/actions";
 import {
   Action as PlayerAction,
   playToggled as togglePlayAction,
@@ -37,6 +35,7 @@ interface DispatchProps {
   togglePlay: (episodeId: string) => void;
   downloadEpisode: (episodeId: string) => void;
   fetchEpisode: (episodeId: string) => void;
+  onCloseDetail: () => void;
 }
 
 type Props = DataProps & PropsExtended & DispatchProps;
@@ -140,9 +139,9 @@ export class Episode extends React.PureComponent<Props> {
                       </div>
                     </nav>
                   )}
-                  <Link className="navbar-item" to="/">
+                  <button className="button" onClick={this.props.onCloseDetail}>
                     Close
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>
@@ -176,6 +175,7 @@ const mapDispatchToProps = (
       togglePlay: togglePlayAction,
       downloadEpisode: downloadEpisodeAction,
       fetchEpisode,
+      onCloseDetail: detailsClosed,
     },
     dispatch
   );

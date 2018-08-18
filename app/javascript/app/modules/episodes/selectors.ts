@@ -22,3 +22,6 @@ export const getPageInfo = (state: RootState) => state.episodes.pageInfo;
 
 export const getAllStatusCounts = (state: RootState) =>
   state.episodes.statusCounts;
+
+export const getDetailEpisodeId = (state: RootState) =>
+  state.episodes.detailEpisodeId;
