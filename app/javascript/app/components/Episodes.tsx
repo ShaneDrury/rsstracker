@@ -8,12 +8,17 @@ import {
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
 
+import { History } from "history";
+import { QueryParams, syncQueryParams } from "../modules/location/queryParams";
 import { FetchStatus } from "../modules/remoteData";
 import { PageInfo } from "../types/page";
 import Episode from "./Episode";
 import Pagination from "./Pagination";
 
-interface DataProps {}
+interface DataProps {
+  queryParams: QueryParams;
+  history: History;
+}
 
 interface EnhancedProps {
   remoteEpisodes: RemoteEpisode[];
@@ -21,15 +26,15 @@ interface EnhancedProps {
   pageInfo?: PageInfo;
 }
 
-interface DispatchProps {
-  onPageChange: (page: number) => void;
-}
-
-type Props = DataProps & DispatchProps & EnhancedProps;
+type Props = DataProps & EnhancedProps;
 
 export class Episodes extends React.PureComponent<Props> {
-  public handlePageChange = ({ selected }: { selected: number }) => {
-    this.props.onPageChange(selected + 1);
+  public handleChangePage = ({ selected }: { selected: number }) => {
+    syncQueryParams(
+      { currentPage: selected + 1 },
+      this.props.queryParams,
+      this.props.history
+    );
   };
 
   public render() {
@@ -39,7 +44,7 @@ export class Episodes extends React.PureComponent<Props> {
         {this.props.fetchStatus === "SUCCESS" &&
           this.props.remoteEpisodes.length === 0 && <div>No results.</div>}
         {this.props.remoteEpisodes.map(remoteEpisode => (
-          <Episode episodeId={remoteEpisode.id} key={remoteEpisode.key} />
+          <Episode episode={remoteEpisode} key={remoteEpisode.key} />
         ))}
         {pageInfo &&
           pageInfo.totalPages > 1 && (
@@ -59,7 +64,7 @@ export class Episodes extends React.PureComponent<Props> {
                 previousClassName="pagination-previous"
                 nextClassName="pagination-next"
                 breakClassName="pagination-ellipsis"
-                onPageChange={this.handlePageChange}
+                onPageChange={this.handleChangePage}
               />
             </nav>
           )}

@@ -27,7 +27,7 @@ export class FeedSelect extends React.PureComponent<Props> {
 
   public render() {
     return (
-      <div className="navbar-dropdown">
+      <div>
         {this.props.fetchStatus === "SUCCESS" &&
           this.props.remoteFeeds.length === 0 && <div>No results.</div>}
         {this.props.remoteFeeds.map(remoteFeed => (

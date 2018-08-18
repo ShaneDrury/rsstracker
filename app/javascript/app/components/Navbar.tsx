@@ -60,10 +60,6 @@ export class Navbar extends React.PureComponent<Props, State> {
           })}
         >
           <div className="navbar-start">
-            <div className="navbar-item has-dropdown is-hoverable">
-              <div className="navbar-link">Feeds</div>
-              <FeedSelect />
-            </div>
             <div className="navbar-item">
               <UpdateFeeds />
             </div>

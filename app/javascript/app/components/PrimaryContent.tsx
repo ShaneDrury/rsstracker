@@ -3,15 +3,17 @@ import * as qs from "qs";
 import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
 import { QueryParams } from "../modules/location/queryParams";
-import FeedLoader from "./FeedLoader";
-import FeedView from "./FeedView";
 import { Navbar } from "./Navbar";
 
 import styled from "styled-components";
 import AllFeedsDetails from "./AllFeedsDetails";
 import AllFeedsLoader from "./AllFeedsLoader";
+import EpisodeDetail from "./EpisodeDetail";
+import EpisodeLoader from "./EpisodeLoader";
+import Episodes from "./Episodes";
 import FeedDetails from "./FeedDetails";
 import FeedHeader from "./FeedHeader";
+import FeedSelect from "./FeedSelect";
 
 const parseLocation = (location: Location): QueryParams =>
   qs.parse(location.search, {
@@ -23,35 +25,9 @@ const Section = styled.section`
 `;
 
 class PrimaryContent extends React.Component {
-  public renderFeed = ({
-    location,
-    match,
-    history,
-  }: RouteComponentProps<{ feedId: string }>) => (
-    <FeedLoader
-      queryParams={parseLocation(location)}
-      feedId={match.params.feedId}
-    >
-      {remoteFeed => (
-        <FeedView
-          queryParams={parseLocation(location)}
-          history={history}
-          header={<FeedHeader remoteFeed={remoteFeed} />}
-          details={<FeedDetails remoteFeed={remoteFeed} />}
-          description={remoteFeed.description}
-        />
-      )}
-    </FeedLoader>
-  );
-
-  public renderAllFeeds = ({ history, location }: RouteComponentProps<{}>) => (
+  public renderEpisodes = ({ history, location }: RouteComponentProps<{}>) => (
     <AllFeedsLoader queryParams={parseLocation(location)}>
-      <FeedView
-        header={<p className="card-header-title">All Feeds</p>}
-        queryParams={parseLocation(location)}
-        history={history}
-        details={<AllFeedsDetails />}
-      />
+      <Episodes queryParams={parseLocation(location)} history={history} />
     </AllFeedsLoader>
   );
 
@@ -59,13 +35,42 @@ class PrimaryContent extends React.Component {
     <Navbar queryParams={parseLocation(location)} history={history} />
   );
 
+  public renderEpisodeDetail = ({
+    match,
+    history,
+    location,
+  }: RouteComponentProps<{ episodeId: string }>) => (
+    <AllFeedsLoader queryParams={parseLocation(location)}>
+      <div className="columns is-paddingless">
+        <div className="column is-one-half">
+          <Episodes queryParams={parseLocation(location)} history={history} />
+        </div>
+        <div className="column is-one-half">
+          <EpisodeLoader episodeId={match.params.episodeId}>
+            {remoteEpisode => <EpisodeDetail episode={remoteEpisode} />}
+          </EpisodeLoader>
+        </div>
+      </div>
+    </AllFeedsLoader>
+  );
+
   public render() {
     return (
       <div>
         <Route path="/" render={this.renderNavbar} />
         <Section className="section">
-          <Route exact path="/" render={this.renderAllFeeds} />
-          <Route path="/:feedId" render={this.renderFeed} />
+          <div className="columns">
+            <div className="column is-one-quarter">
+              <FeedSelect />
+            </div>
+            <div className="column is-three-quarters">
+              <Route exact path="/" render={this.renderEpisodes} />
+              <Route
+                path="/episodeDetail/:episodeId"
+                render={this.renderEpisodeDetail}
+              />
+            </div>
+          </div>
         </Section>
       </div>
     );

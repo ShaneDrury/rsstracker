@@ -6,7 +6,6 @@ import {
 import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
-import LinesEllipsis from "react-lines-ellipsis";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
@@ -92,7 +91,7 @@ export class Episode extends React.PureComponent<Props> {
         <div className="card-content">
           <div className="columns">
             <div className="column is-two-thirds">
-              <LinesEllipsis text={description} maxLine="3" />
+              {description && <Description episodeId={id} text={description} />}
             </div>
             <div className="column is-one-third">
               {thumbnailUrl && (
@@ -102,6 +101,11 @@ export class Episode extends React.PureComponent<Props> {
                   </figure>
                   <div>
                     <time>{duration}</time>{" "}
+                  </div>
+                  <div>
+                    <a href={fullUrl}>
+                      Source: <Icon icon={faFileAudio} />
+                    </a>
                   </div>
                   {fetchStatus.status === "SUCCESS" && (
                     <button
@@ -136,9 +140,9 @@ export class Episode extends React.PureComponent<Props> {
                       </div>
                     </nav>
                   )}
-                  <div>
-                    <Link to={`/episodeDetail/${id}`}>Detail</Link>
-                  </div>
+                  <Link className="navbar-item" to="/">
+                    Close
+                  </Link>
                 </div>
               )}
             </div>
