@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import styled from "styled-components";
 import {
   detailsOpened,
   fetchEpisodeIfNeeded,
@@ -28,6 +29,28 @@ interface DispatchProps {
 
 type Props = DataProps & PropsExtended & DispatchProps;
 
+const Wrapper = styled.div`
+  display: flex;
+  flex: 1;
+`;
+
+const Name = styled.div`
+  flex: 3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: auto;
+`;
+
+const ButtonWrapper = styled.div`
+  flex: none;
+`;
+
+const PlayerWrapper = styled.div`
+  flex: 1;
+  margin: auto;
+`;
+
 export class GlobalPlayer extends React.PureComponent<Props> {
   public componentDidMount() {
     if (this.props.episodeId) {
@@ -44,22 +67,20 @@ export class GlobalPlayer extends React.PureComponent<Props> {
       <div>
         {this.props.fetched &&
           this.props.episodeId && (
-            <div className="columns is-paddingless">
-              {this.props.episodeName && (
-                <div className="column">{this.props.episodeName}</div>
-              )}
-              <div className="column">
-                <button className="button" onClick={this.handleDetailOpened}>
-                  Detail
-                </button>
-              </div>
-              <div className="column">
+            <Wrapper>
+              {this.props.episodeName && <Name>{this.props.episodeName}</Name>}
+              <PlayerWrapper>
                 <Player
                   episodeId={this.props.episodeId}
                   playing={this.props.playing}
                 />
-              </div>
-            </div>
+              </PlayerWrapper>
+              <ButtonWrapper>
+                <button className="button" onClick={this.handleDetailOpened}>
+                  Detail
+                </button>
+              </ButtonWrapper>
+            </Wrapper>
           )}
       </div>
     );

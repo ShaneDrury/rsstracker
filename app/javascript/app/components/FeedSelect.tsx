@@ -8,6 +8,7 @@ import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { RemoteFeed } from "../types/feed";
 import { Dispatch } from "../types/thunk";
+import UpdateFeeds from "./UpdateFeeds";
 
 interface DataProps {
   remoteFeeds: RemoteFeed[];
@@ -30,6 +31,9 @@ export class FeedSelect extends React.PureComponent<Props> {
       <div>
         {this.props.fetchStatus === "SUCCESS" &&
           this.props.remoteFeeds.length === 0 && <div>No results.</div>}
+        <Link className="navbar-item" to="/">
+          All Feeds
+        </Link>
         {this.props.remoteFeeds.map(remoteFeed => (
           <Link
             className="navbar-item"
@@ -39,6 +43,7 @@ export class FeedSelect extends React.PureComponent<Props> {
             {remoteFeed.name}
           </Link>
         ))}
+        <UpdateFeeds />
       </div>
     );
   }

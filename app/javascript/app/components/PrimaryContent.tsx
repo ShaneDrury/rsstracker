@@ -24,12 +24,15 @@ const Wrapper = styled.div`
   display: flex;
   flex: 1;
 `;
+
 const Sidebar = styled.section`
   flex: none;
 `;
+
 const Content = styled.section`
   flex: 1;
 `;
+
 const Aside = styled.aside`
   flex: 1;
 `;

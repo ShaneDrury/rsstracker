@@ -1,83 +1,53 @@
-import classNames from "classnames";
 import { History } from "history";
 import React from "react";
-import { Link } from "react-router-dom";
+import styled from "styled-components";
 import { QueryParams, syncQueryParams } from "../modules/location/queryParams";
 import ActiveJobs from "./ActiveJobs";
-import FeedSelect from "./FeedSelect";
 import GlobalPlayer from "./GlobalPlayer";
 import Search from "./Search";
-import UpdateFeeds from "./UpdateFeeds";
 
 interface Props {
   queryParams: QueryParams;
   history: History;
 }
 
-interface State {
-  isOpen: boolean;
-}
+const Nav = styled.div`
+  display: flex;
+  flex: 1;
+  padding: 0.75rem;
+`;
 
-export class Navbar extends React.PureComponent<Props, State> {
-  public state = {
-    isOpen: false,
-  };
+const PlayerWrapper = styled.div`
+  flex: 5;
+`;
 
-  public handleToggleOpen = () => {
-    this.setState({ isOpen: !this.state.isOpen });
-  };
+const SearchWrapper = styled.div`
+  flex: 1;
+`;
 
+export class Navbar extends React.PureComponent<Props> {
   public handleChangeSearch = (searchTerm: string) => {
     syncQueryParams({ searchTerm }, this.props.queryParams, this.props.history);
   };
 
   public render() {
     return (
-      <nav
+      <Nav
         className="navbar has-background-light"
         role="navigation"
         aria-label="dropdown navigation"
       >
-        <div className="navbar-brand">
-          <Link className="navbar-item" to="/">
-            Feed Tracker
-          </Link>
-          <a
-            role="button"
-            className="navbar-burger"
-            aria-label="menu"
-            aria-expanded="false"
-            onClick={this.handleToggleOpen}
-          >
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
-          </a>
-        </div>
-        <div
-          className={classNames("navbar-menu", {
-            "is-active": this.state.isOpen,
-          })}
-        >
-          <div className="navbar-start">
-            <div className="navbar-item">
-              <UpdateFeeds />
-            </div>
-            <div className="navbar-item">
-              <ActiveJobs />
-            </div>
-          </div>
+        <ActiveJobs />
+        <PlayerWrapper>
           <GlobalPlayer />
-          <div className="navbar-end">
-            <div className="navbar-item is-right">
-              <Search
-                onChangeSearch={this.handleChangeSearch}
-                searchTerm={this.props.queryParams.searchTerm}
-              />
-            </div>
-          </div>
-        </div>
-      </nav>
+        </PlayerWrapper>
+        <SearchWrapper>
+          <Search
+            onChangeSearch={this.handleChangeSearch}
+            searchTerm={this.props.queryParams.searchTerm}
+          />
+        </SearchWrapper>
+      </Nav>
     );
   }
 }
