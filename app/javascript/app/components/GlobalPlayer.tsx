@@ -1,16 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import styled from "styled-components";
 import {
   detailsOpened,
   fetchEpisodeIfNeeded,
 } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
-import { Action as PlayerAction } from "../modules/player/actions";
 import { getPlaying, getPlayingEpisodeId } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
-import { Dispatch } from "../types/thunk";
 import Player from "./Player";
 
 interface DataProps {}
@@ -100,16 +97,10 @@ const mapStateToProps = (state: RootState): PropsExtended => {
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<PlayerAction, RootState>
-): DispatchProps =>
-  bindActionCreators(
-    {
-      fetchEpisodeIfNeeded,
-      handleDetailOpened: detailsOpened,
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  fetchEpisodeIfNeeded,
+  handleDetailOpened: detailsOpened,
+};
 
 export default connect(
   mapStateToProps,

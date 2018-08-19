@@ -7,18 +7,13 @@ import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { detailsClosed, fetchEpisode } from "../modules/episodes/actions";
-import {
-  Action as PlayerAction,
-  playToggled as togglePlayAction,
-} from "../modules/player/actions";
+import { playToggled as togglePlayAction } from "../modules/player/actions";
 import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
-import { Dispatch } from "../types/thunk";
 import Description from "./Description";
 import { Icon } from "./Icon";
 
@@ -167,18 +162,12 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<PlayerAction, RootState>
-): DispatchProps =>
-  bindActionCreators(
-    {
-      togglePlay: togglePlayAction,
-      downloadEpisode: downloadEpisodeAction,
-      fetchEpisode,
-      onCloseDetail: detailsClosed,
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  togglePlay: togglePlayAction,
+  downloadEpisode: downloadEpisodeAction,
+  fetchEpisode,
+  onCloseDetail: detailsClosed,
+};
 
 export default connect(
   mapStateToProps,

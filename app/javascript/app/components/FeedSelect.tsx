@@ -1,13 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { bindActionCreators } from "redux";
-import { FeedsAction, fetchFeedsAction } from "../modules/feeds/actions";
+import { fetchFeedsAction } from "../modules/feeds/actions";
 import { getFeeds, getFetchStatus } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { RemoteFeed } from "../types/feed";
-import { Dispatch } from "../types/thunk";
 import UpdateFeeds from "./UpdateFeeds";
 
 interface DataProps {
@@ -58,15 +56,9 @@ const mapStateToProps = (state: RootState): DataProps => {
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<FeedsAction, RootState>
-): DispatchProps =>
-  bindActionCreators(
-    {
-      fetchFeeds: fetchFeedsAction,
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  fetchFeeds: fetchFeedsAction,
+};
 
 export default connect(
   mapStateToProps,

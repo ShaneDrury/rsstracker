@@ -4,18 +4,13 @@ import * as moment from "moment";
 import React from "react";
 import Dotdotdot from "react-dotdotdot";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { detailsOpened, fetchEpisode } from "../modules/episodes/actions";
-import {
-  Action as PlayerAction,
-  playToggled as togglePlayAction,
-} from "../modules/player/actions";
+import { playToggled as togglePlayAction } from "../modules/player/actions";
 import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
-import { Dispatch } from "../types/thunk";
 import { Icon } from "./Icon";
 
 interface DataProps {
@@ -167,18 +162,12 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<PlayerAction, RootState>
-): DispatchProps =>
-  bindActionCreators(
-    {
-      togglePlay: togglePlayAction,
-      downloadEpisode: downloadEpisodeAction,
-      fetchEpisode,
-      handleDetailOpened: detailsOpened,
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  togglePlay: togglePlayAction,
+  downloadEpisode: downloadEpisodeAction,
+  fetchEpisode,
+  handleDetailOpened: detailsOpened,
+};
 
 export default connect(
   mapStateToProps,

@@ -1,17 +1,11 @@
-import { isEqual } from "lodash";
 import React from "react";
 import { RemoteEpisode } from "../types/episode";
 
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
-import {
-  EpisodesAction,
-  fetchEpisodeIfNeeded,
-} from "../modules/episodes/actions";
+import { fetchEpisodeIfNeeded } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
 import { RootState } from "../modules/reducers";
-import { Dispatch } from "../types/thunk";
 
 interface DataProps {
   children: (remoteEpisode: RemoteEpisode) => JSX.Element;
@@ -68,15 +62,8 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<EpisodesAction, RootState>
-): DispatchProps => {
-  return bindActionCreators(
-    {
-      fetchEpisode: fetchEpisodeIfNeeded,
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  fetchEpisode: fetchEpisodeIfNeeded,
 };
 
 export default connect(

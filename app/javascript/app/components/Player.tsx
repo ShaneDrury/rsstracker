@@ -1,10 +1,8 @@
 import React from "react";
 import FilePlayer from "react-player/lib/players/FilePlayer";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { getEpisodes } from "../modules/episodes/selectors";
 import {
-  Action as PlayerAction,
   playedSecondsUpdated,
   playerPaused,
   playerResumed,
@@ -12,7 +10,6 @@ import {
 } from "../modules/player/actions";
 import { getPlayedSeconds } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
-import { Dispatch } from "../types/thunk";
 
 interface DataProps {}
 
@@ -121,18 +118,12 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<PlayerAction, RootState>
-): DispatchProps =>
-  bindActionCreators(
-    {
-      onChangePlayedSeconds: playedSecondsUpdated,
-      togglePlay: playToggled,
-      playerPaused,
-      playerResumed,
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  onChangePlayedSeconds: playedSecondsUpdated,
+  togglePlay: playToggled,
+  playerPaused,
+  playerResumed,
+};
 
 export default connect(
   mapStateToProps,

@@ -4,13 +4,10 @@ import { RemoteFeed } from "../types/feed";
 
 import * as moment from "moment";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { EpisodesAction } from "../modules/episodes/actions";
 import { updateFeedAction } from "../modules/feedJobs/actions";
 import { getFeedJobs } from "../modules/feedJobs/selectors";
 import { setFeedAutodownload, setFeedDisabled } from "../modules/feeds/actions";
 import { RootState } from "../modules/reducers";
-import { Dispatch } from "../types/thunk";
 import { Icon } from "./Icon";
 
 interface EnhancedProps {
@@ -99,17 +96,10 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<EpisodesAction, RootState>
-): DispatchProps => {
-  return bindActionCreators(
-    {
-      updateFeed: updateFeedAction,
-      setFeedDisabled,
-      setFeedAutodownload,
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  updateFeed: updateFeedAction,
+  setFeedDisabled,
+  setFeedAutodownload,
 };
 
 export default connect(

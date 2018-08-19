@@ -3,18 +3,12 @@ import React from "react";
 import Notification from "react-bulma-notification";
 import "react-bulma-notification/build/css/index.css";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { fetchEpisodeIfNeeded } from "../modules/episodes/actions";
-import {
-  deleteJobAction,
-  fetchJobs,
-  JobsAction,
-} from "../modules/jobs/actions";
+import { deleteJobAction, fetchJobs } from "../modules/jobs/actions";
 import { JobDescription } from "../modules/jobs/descriptions";
 import { getJobDescriptions } from "../modules/jobs/selectors";
 import { RootState } from "../modules/reducers";
-import { Dispatch } from "../types/thunk";
 
 interface EnhancedProps {
   jobDescriptions: JobDescription[];
@@ -83,17 +77,11 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<JobsAction, RootState>
-): DispatchProps =>
-  bindActionCreators(
-    {
-      getJobs: fetchJobs,
-      onCloseErrorJob: deleteJobAction,
-      fetchEpisodeIfNeeded,
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  getJobs: fetchJobs,
+  onCloseErrorJob: deleteJobAction,
+  fetchEpisodeIfNeeded,
+};
 
 export default connect(
   mapStateToProps,

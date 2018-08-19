@@ -1,11 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import styled from "styled-components";
-import { EpisodesAction, saveDescription } from "../modules/episodes/actions";
-import { getEpisodes } from "../modules/episodes/selectors";
-import { RootState } from "../modules/reducers";
-import { Dispatch } from "../types/thunk";
+import { saveDescription } from "../modules/episodes/actions";
 
 interface DataProps {
   episodeId: string;
@@ -95,15 +91,9 @@ export class Description extends React.PureComponent<Props, State> {
   }
 }
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<EpisodesAction, RootState>
-): DispatchProps =>
-  bindActionCreators(
-    {
-      saveDescription,
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  saveDescription,
+};
 
 export default connect(
   undefined,

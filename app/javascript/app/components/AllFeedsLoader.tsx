@@ -1,14 +1,12 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { EpisodesAction, searchEpisodes } from "../modules/episodes/actions";
+import { searchEpisodes } from "../modules/episodes/actions";
 import { updateFeedAction } from "../modules/feedJobs/actions";
 import { getFetchStatus } from "../modules/feeds/selectors";
 import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
-import { Dispatch } from "../types/thunk";
 
 import { isEqual } from "lodash";
 import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
@@ -84,16 +82,9 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<EpisodesAction, RootState>
-): DispatchProps => {
-  return bindActionCreators(
-    {
-      fetchEpisodes: searchEpisodes,
-      updateFeed: updateFeedAction,
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  fetchEpisodes: searchEpisodes,
+  updateFeed: updateFeedAction,
 };
 
 export default connect(
