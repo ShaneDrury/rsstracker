@@ -16,6 +16,7 @@ import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
 interface DataProps {
   children: JSX.Element;
   queryParams: SearchParams;
+  feedId?: string;
 }
 
 interface EnhancedProps {
@@ -32,7 +33,7 @@ type Props = DataProps & DispatchProps & EnhancedProps;
 
 export class AllFeedsLoader extends React.Component<Props> {
   public componentDidMount() {
-    this.props.fetchEpisodes(this.props.queryParams);
+    this.fetchEpisodes();
   }
 
   public shouldComponentUpdate(nextProps: Props) {
@@ -44,15 +45,29 @@ export class AllFeedsLoader extends React.Component<Props> {
       !isEqual(this.props.queryParams, prevProps.queryParams) &&
       this.props.fetchStatus !== "LOADING"
     ) {
-      this.props.fetchEpisodes(this.props.queryParams);
+      this.fetchEpisodes();
+    }
+    if (this.props.feedId !== prevProps.feedId) {
+      this.fetchEpisodes();
     }
     if (
       prevProps.loadingFeeds.length > 0 &&
       this.props.loadingFeeds.length === 0
     ) {
-      this.props.fetchEpisodes(this.props.queryParams);
+      this.fetchEpisodes();
     }
   }
+
+  public fetchEpisodes = () => {
+    if (this.props.feedId) {
+      this.props.fetchEpisodes({
+        ...this.props.queryParams,
+        feedId: this.props.feedId,
+      });
+    } else {
+      this.props.fetchEpisodes(this.props.queryParams);
+    }
+  };
 
   public render() {
     return this.props.children;

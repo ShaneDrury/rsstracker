@@ -5,7 +5,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import PrimaryContent from "./components/PrimaryContent";
 import { configureStore } from "./store";
 import { init } from "./websocket";
@@ -17,7 +17,7 @@ const render = (Component: any) => {
   return ReactDOM.render(
     <Provider store={store}>
       <BrowserRouter>
-        <Component />
+        <Route component={Component} />
       </BrowserRouter>
     </Provider>,
     document.getElementById("root")

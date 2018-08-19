@@ -51,7 +51,11 @@ interface EnhancedProps {
 type Props = EnhancedProps;
 
 class PrimaryContent extends React.Component<Props> {
-  public renderRoot = ({ history, location }: RouteComponentProps<{}>) => (
+  public renderRoot = ({
+    history,
+    location,
+    match,
+  }: RouteComponentProps<{ feedId?: string }>) => (
     <main>
       <Navbar queryParams={parseLocation(location)} history={history} />
       <Wrapper>
@@ -59,7 +63,10 @@ class PrimaryContent extends React.Component<Props> {
           <FeedSelect />
         </Sidebar>
         <Content>
-          <AllFeedsLoader queryParams={parseLocation(location)}>
+          <AllFeedsLoader
+            queryParams={parseLocation(location)}
+            feedId={match.params.feedId}
+          >
             <Scrollable>
               <Episodes
                 queryParams={parseLocation(location)}
@@ -82,7 +89,7 @@ class PrimaryContent extends React.Component<Props> {
   );
 
   public render() {
-    return <Route path="/" render={this.renderRoot} />;
+    return <Route path="/:feedId?" render={this.renderRoot} />;
   }
 }
 
