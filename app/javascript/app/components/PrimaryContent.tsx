@@ -20,8 +20,18 @@ const parseLocation = (location: Location): QueryParams =>
     ignoreQueryPrefix: true,
   });
 
-const Section = styled.section`
-  padding: 15px;
+const Wrapper = styled.div`
+  display: flex;
+  flex: 1;
+`;
+const Sidebar = styled.section`
+  flex: none;
+`;
+const Content = styled.section`
+  flex: 1;
+`;
+const Aside = styled.aside`
+  flex: 1;
 `;
 
 const Scrollable = styled.div`
@@ -38,51 +48,38 @@ interface EnhancedProps {
 type Props = EnhancedProps;
 
 class PrimaryContent extends React.Component<Props> {
-  public renderEpisodes = ({ history, location }: RouteComponentProps<{}>) => (
-    <AllFeedsLoader queryParams={parseLocation(location)}>
-      <div>
-        {this.props.detailEpisodeId && (
-          <div className="columns is-paddingless">
-            <Scrollable className="column is-one-half">
+  public renderRoot = ({ history, location }: RouteComponentProps<{}>) => (
+    <main>
+      <Navbar queryParams={parseLocation(location)} history={history} />
+      <Wrapper>
+        <Sidebar>
+          <FeedSelect />
+        </Sidebar>
+        <Content>
+          <AllFeedsLoader queryParams={parseLocation(location)}>
+            <Scrollable>
               <Episodes
                 queryParams={parseLocation(location)}
                 history={history}
               />
             </Scrollable>
-            <Scrollable className="column is-one-half">
+          </AllFeedsLoader>
+        </Content>
+        {this.props.detailEpisodeId && (
+          <Aside>
+            <Scrollable>
               <EpisodeLoader episodeId={this.props.detailEpisodeId}>
                 {remoteEpisode => <EpisodeDetail episode={remoteEpisode} />}
               </EpisodeLoader>
             </Scrollable>
-          </div>
+          </Aside>
         )}
-        {!this.props.detailEpisodeId && (
-          <Episodes queryParams={parseLocation(location)} history={history} />
-        )}
-      </div>
-    </AllFeedsLoader>
-  );
-
-  public renderNavbar = ({ history, location }: RouteComponentProps<{}>) => (
-    <Navbar queryParams={parseLocation(location)} history={history} />
+      </Wrapper>
+    </main>
   );
 
   public render() {
-    return (
-      <div>
-        <Route path="/" render={this.renderNavbar} />
-        <Section className="section">
-          <div className="columns">
-            <div className="column is-one-quarter">
-              <FeedSelect />
-            </div>
-            <div className="column is-three-quarters">
-              <Route exact path="/" render={this.renderEpisodes} />
-            </div>
-          </div>
-        </Section>
-      </div>
-    );
+    return <Route path="/" render={this.renderRoot} />;
   }
 }
 

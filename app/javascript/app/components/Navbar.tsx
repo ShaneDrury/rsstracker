@@ -34,7 +34,7 @@ export class Navbar extends React.PureComponent<Props, State> {
   public render() {
     return (
       <nav
-        className="navbar is-fixed-top has-background-light"
+        className="navbar has-background-light"
         role="navigation"
         aria-label="dropdown navigation"
       >
