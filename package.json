@@ -48,7 +48,7 @@
     "react-bulma-notification": "^1.1.0",
     "react-debounce-input": "^3.2.0",
     "react-dom": "^16.3.2",
-    "react-lines-ellipsis": "^0.13.2",
+    "react-dotdotdot": "^1.2.3",
     "react-paginate": "^5.2.3",
     "react-player": "^1.6.2",
     "react-redux": "^5.0.7",

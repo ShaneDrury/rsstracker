@@ -2,7 +2,7 @@ import { faSpinner, faSync } from "@fortawesome/fontawesome-free-solid";
 import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
-import LinesEllipsis from "react-lines-ellipsis";
+import Dotdotdot from "react-dotdotdot";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
@@ -90,12 +90,12 @@ export class Episode extends React.PureComponent<Props> {
         <div className="card-content">
           <div className="columns">
             <div className="column is-two-thirds">
-              <LinesEllipsis text={description} maxLine="3" />
+              <Dotdotdot clamp={3}>{description}</Dotdotdot>
             </div>
             <div className="column is-one-third">
               {thumbnailUrl && (
                 <div className="media-right">
-                  <figure className="image is-256x256">
+                  <figure className="image is-128x128">
                     <img src={thumbnailUrl} />
                   </figure>
                   <div>
