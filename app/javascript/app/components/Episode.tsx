@@ -52,7 +52,6 @@ export class Episode extends React.PureComponent<Props> {
 
   public render() {
     const {
-      id,
       name,
       description,
       duration,
@@ -61,7 +60,6 @@ export class Episode extends React.PureComponent<Props> {
       playing,
       publicationDate,
       thumbnailUrl,
-      fullUrl,
       updating,
     } = this.props;
     return (

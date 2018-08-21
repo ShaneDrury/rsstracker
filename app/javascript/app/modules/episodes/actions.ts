@@ -1,3 +1,4 @@
+import { createStandardAction } from "typesafe-actions";
 import { RemoteEpisode } from "../../types/episode";
 import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
@@ -204,6 +205,6 @@ export const detailsOpened = (episodeId: string): DetailsOpened => ({
   payload: { episodeId },
 });
 
-export const detailsClosed = (): DetailsClosed => ({
-  type: episodeActions.DETAILS_CLOSED,
-});
+export const detailsClosed = createStandardAction(
+  episodeActions.DETAILS_CLOSED
+)();
