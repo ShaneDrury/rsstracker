@@ -1,4 +1,5 @@
 import {
+  faDownload,
   faInfoCircle,
   faSpinner,
   faSync,
@@ -51,10 +52,15 @@ const ContentWrapper = styled.div`
 `;
 
 const InfoWrapper = styled.div`
-  margin-left: 0.75rem;
+  margin-left: auto;
 `;
 
 const EpisodeWrapper = styled.article``;
+
+const FooterWrapper = styled.div`
+  display: flex;
+  flex: 1;
+`;
 
 export class Episode extends React.PureComponent<Props> {
   public componentDidUpdate(prevProps: Props) {
@@ -105,13 +111,6 @@ export class Episode extends React.PureComponent<Props> {
                 {moment(publicationDate).format("lll")}
               </DurationWrapper>
             )}
-            <InfoWrapper>
-              <a href="#" onClick={this.handleDetailOpened}>
-                <span className="icon">
-                  <Icon icon={faInfoCircle} />
-                </span>
-              </a>
-            </InfoWrapper>
           </TitleWrapper>
         </div>
         {updating && <Icon icon={faSpinner} className="loader" />}
@@ -125,43 +124,58 @@ export class Episode extends React.PureComponent<Props> {
                 <figure className="image is-128x128">
                   <img src={thumbnailUrl} />
                 </figure>
-                {fetchStatus.status === "SUCCESS" && (
-                  <button
-                    className={classNames("button", {
-                      "is-link": !playing,
-                      "is-danger": playing,
-                    })}
-                    onClick={this.handleToggleShow}
-                  >
-                    {playing ? "Stop" : "Play"}
-                  </button>
-                )}
-                {!(fetchStatus.status === "SUCCESS") && (
-                  <nav className="level is-mobile">
-                    <div className="level-left">
-                      {(fetchStatus.status === "NOT_ASKED" ||
-                        fetchStatus.status === "FAILURE" ||
-                        isUpdating) && (
-                        <button
-                          className="button is-primary"
-                          onClick={this.handleDownload}
-                          disabled={isUpdating}
-                        >
-                          {isUpdating && (
-                            <div>
-                              <Icon icon={faSync} spin />
-                            </div>
-                          )}
-                          &nbsp;Download
-                        </button>
-                      )}
-                    </div>
-                  </nav>
-                )}
               </div>
             )}
           </div>
         </ContentWrapper>
+        <FooterWrapper>
+          {fetchStatus.status === "SUCCESS" && (
+            <button
+              className={classNames("button", {
+                "is-link": !playing,
+                "is-danger": playing,
+              })}
+              onClick={this.handleToggleShow}
+            >
+              {playing ? "Stop" : "Play"}
+            </button>
+          )}
+          {!(fetchStatus.status === "SUCCESS") && (
+            <div>
+              {(fetchStatus.status === "NOT_ASKED" ||
+                fetchStatus.status === "FAILURE" ||
+                isUpdating) && (
+                <button
+                  className="button is-primary"
+                  onClick={this.handleDownload}
+                  disabled={isUpdating}
+                >
+                  {isUpdating && (
+                    <div>
+                      <Icon icon={faSync} spin />
+                    </div>
+                  )}
+                  {!isUpdating && (
+                    <div>
+                      <Icon icon={faDownload} />
+                    </div>
+                  )}
+                  &nbsp;Download
+                </button>
+              )}
+            </div>
+          )}
+          <InfoWrapper>
+            <button
+              className="button"
+              onClick={this.handleDetailOpened}
+              disabled={isUpdating}
+            >
+              <Icon icon={faInfoCircle} />
+              &nbsp;Info
+            </button>
+          </InfoWrapper>
+        </FooterWrapper>
       </EpisodeWrapper>
     );
   }
