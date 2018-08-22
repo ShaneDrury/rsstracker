@@ -166,7 +166,6 @@ export class Episode extends React.PureComponent<Props> {
                 "is-static": this.props.isDetailOpen,
               })}
               onClick={this.handleDetailOpened}
-              disabled={this.props.isUpdating}
             >
               <span className="icon">
                 <Icon icon={faInfoCircle} />

@@ -1,3 +1,5 @@
+import { faInfoCircle } from "@fortawesome/fontawesome-free-solid";
+import classnames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -5,9 +7,10 @@ import {
   detailsOpened,
   fetchEpisodeIfNeeded,
 } from "../modules/episodes/actions";
-import { getEpisodes } from "../modules/episodes/selectors";
+import { getDetailEpisodeId, getEpisodes } from "../modules/episodes/selectors";
 import { getPlaying, getPlayingEpisodeId } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
+import { Icon } from "./Icon";
 import Player from "./Player";
 
 interface DataProps {}
@@ -17,6 +20,7 @@ interface PropsExtended {
   episodeId?: string;
   fetched: boolean;
   playing: boolean;
+  isDetailOpen: boolean;
 }
 
 interface DispatchProps {
@@ -73,8 +77,16 @@ export class GlobalPlayer extends React.PureComponent<Props> {
                 />
               </PlayerWrapper>
               <ButtonWrapper>
-                <button className="button" onClick={this.handleDetailOpened}>
-                  Detail
+                <button
+                  className={classnames("button", {
+                    "is-static": this.props.isDetailOpen,
+                  })}
+                  onClick={this.handleDetailOpened}
+                >
+                  <span className="icon">
+                    <Icon icon={faInfoCircle} />
+                  </span>
+                  <span>Info</span>
                 </button>
               </ButtonWrapper>
             </Wrapper>
@@ -89,11 +101,13 @@ const mapStateToProps = (state: RootState): PropsExtended => {
   const episode = episodeId ? getEpisodes(state)[episodeId] : undefined;
   const episodeName = episode && episode.name;
   const playing = getPlaying(state);
+  const detailEpisodeId = getDetailEpisodeId(state);
   return {
     episodeName,
     episodeId,
     fetched: !!episode,
     playing,
+    isDetailOpen: detailEpisodeId === episodeId,
   };
 };
 
