@@ -41,7 +41,6 @@ const Scrollable = styled.div`
   height: 100vh;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding: 1px;
 `;
 
 interface EnhancedProps {

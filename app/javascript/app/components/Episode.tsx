@@ -1,9 +1,14 @@
-import { faSpinner, faSync } from "@fortawesome/fontawesome-free-solid";
+import {
+  faInfoCircle,
+  faSpinner,
+  faSync,
+} from "@fortawesome/fontawesome-free-solid";
 import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
 import Dotdotdot from "react-dotdotdot";
 import { connect } from "react-redux";
+import styled from "styled-components";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { detailsOpened, fetchEpisode } from "../modules/episodes/actions";
@@ -31,6 +36,26 @@ interface DispatchProps {
 
 type Props = DataProps & PropsExtended & DispatchProps;
 
+const TitleWrapper = styled.div`
+  display: flex;
+  flex: 1;
+`;
+
+const DurationWrapper = styled.time`
+  margin-left: auto;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  flex: 1;
+`;
+
+const InfoWrapper = styled.div`
+  margin-left: 0.75rem;
+`;
+
+const EpisodeWrapper = styled.article``;
+
 export class Episode extends React.PureComponent<Props> {
   public componentDidUpdate(prevProps: Props) {
     if (prevProps.isUpdating && !this.props.isUpdating) {
@@ -54,7 +79,6 @@ export class Episode extends React.PureComponent<Props> {
     const {
       name,
       description,
-      duration,
       fetchStatus,
       isUpdating,
       playing,
@@ -63,85 +87,82 @@ export class Episode extends React.PureComponent<Props> {
       updating,
     } = this.props;
     return (
-      <div className="card">
-        {updating && <Icon icon={faSpinner} className="loader" />}
-        <header className="card-header">
-          <div className="card-header-title">
-            {fetchStatus.status === "SUCCESS" && (
-              <a className="level-item" href={fetchStatus.url}>
-                {name}
-              </a>
-            )}
-            {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
-          </div>
-          {publicationDate && (
-            <div className="card-header-icon">
-              <time>{moment(publicationDate).format("lll")}</time>
-            </div>
-          )}
-        </header>
-        <div className="card-content">
-          <div className="columns">
-            <div className="column is-two-thirds">
-              <article className="message">
-                <div className="message-body">
-                  <Dotdotdot clamp={3}>{description}</Dotdotdot>
-                </div>
-              </article>
-            </div>
-            <div className="column is-one-third">
-              {thumbnailUrl && (
-                <div className="media-right">
-                  <figure className="image is-128x128">
-                    <img src={thumbnailUrl} />
-                  </figure>
-                  {fetchStatus.status === "SUCCESS" && (
-                    <button
-                      className={classNames("button", {
-                        "is-link": !playing,
-                        "is-danger": playing,
-                      })}
-                      onClick={this.handleToggleShow}
-                    >
-                      {playing ? "Stop" : "Play"}
-                    </button>
-                  )}
-                  {!(fetchStatus.status === "SUCCESS") && (
-                    <nav className="level is-mobile">
-                      <div className="level-left">
-                        {(fetchStatus.status === "NOT_ASKED" ||
-                          fetchStatus.status === "FAILURE" ||
-                          isUpdating) && (
-                          <button
-                            className="button is-primary"
-                            onClick={this.handleDownload}
-                            disabled={isUpdating}
-                          >
-                            {isUpdating && (
-                              <div>
-                                <Icon icon={faSync} spin />
-                              </div>
-                            )}
-                            &nbsp;Download
-                          </button>
-                        )}
-                      </div>
-                    </nav>
-                  )}
-                  <div>
-                    <button
-                      className="button"
-                      onClick={this.handleDetailOpened}
-                    >
-                      Detail
-                    </button>
-                  </div>
-                </div>
+      <EpisodeWrapper className="tile is-child box">
+        <div className="subtitle">
+          <TitleWrapper>
+            <div>
+              {fetchStatus.status === "SUCCESS" && (
+                <a className="level-item" href={fetchStatus.url}>
+                  {name}
+                </a>
+              )}
+              {!(fetchStatus.status === "SUCCESS") && (
+                <div className="">{name}</div>
               )}
             </div>
-          </div>
+            {publicationDate && (
+              <DurationWrapper>
+                {moment(publicationDate).format("lll")}
+              </DurationWrapper>
+            )}
+            <InfoWrapper>
+              <a href="#" onClick={this.handleDetailOpened}>
+                <span className="icon">
+                  <Icon icon={faInfoCircle} />
+                </span>
+              </a>
+            </InfoWrapper>
+          </TitleWrapper>
         </div>
-      </div>
+        {updating && <Icon icon={faSpinner} className="loader" />}
+        <ContentWrapper>
+          <div>
+            <Dotdotdot clamp={3}>{description}</Dotdotdot>
+          </div>
+          <div>
+            {thumbnailUrl && (
+              <div className="media-right">
+                <figure className="image is-128x128">
+                  <img src={thumbnailUrl} />
+                </figure>
+                {fetchStatus.status === "SUCCESS" && (
+                  <button
+                    className={classNames("button", {
+                      "is-link": !playing,
+                      "is-danger": playing,
+                    })}
+                    onClick={this.handleToggleShow}
+                  >
+                    {playing ? "Stop" : "Play"}
+                  </button>
+                )}
+                {!(fetchStatus.status === "SUCCESS") && (
+                  <nav className="level is-mobile">
+                    <div className="level-left">
+                      {(fetchStatus.status === "NOT_ASKED" ||
+                        fetchStatus.status === "FAILURE" ||
+                        isUpdating) && (
+                        <button
+                          className="button is-primary"
+                          onClick={this.handleDownload}
+                          disabled={isUpdating}
+                        >
+                          {isUpdating && (
+                            <div>
+                              <Icon icon={faSync} spin />
+                            </div>
+                          )}
+                          &nbsp;Download
+                        </button>
+                      )}
+                    </div>
+                  </nav>
+                )}
+              </div>
+            )}
+          </div>
+        </ContentWrapper>
+      </EpisodeWrapper>
     );
   }
 }

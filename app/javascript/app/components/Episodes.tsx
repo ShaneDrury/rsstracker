@@ -40,7 +40,7 @@ export class Episodes extends React.PureComponent<Props> {
   public render() {
     const pageInfo = this.props.pageInfo;
     return (
-      <div>
+      <div className="tile is-parent is-vertical">
         {this.props.fetchStatus === "SUCCESS" &&
           this.props.remoteEpisodes.length === 0 && <div>No results.</div>}
         {this.props.remoteEpisodes.map(remoteEpisode => (
