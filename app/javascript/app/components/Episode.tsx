@@ -13,6 +13,7 @@ import styled from "styled-components";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { detailsOpened, fetchEpisode } from "../modules/episodes/actions";
+import { getDetailEpisodeId } from "../modules/episodes/selectors";
 import { playToggled as togglePlayAction } from "../modules/player/actions";
 import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
@@ -23,9 +24,10 @@ interface DataProps {
   episode: RemoteEpisode;
 }
 
-interface PropsExtended extends RemoteEpisode {
+interface PropsExtended {
   playing: boolean;
   isUpdating: boolean;
+  isDetailOpen: boolean;
 }
 
 interface DispatchProps {
@@ -65,20 +67,20 @@ const FooterWrapper = styled.div`
 export class Episode extends React.PureComponent<Props> {
   public componentDidUpdate(prevProps: Props) {
     if (prevProps.isUpdating && !this.props.isUpdating) {
-      this.props.fetchEpisode(this.props.id);
+      this.props.fetchEpisode(this.props.episode.id);
     }
   }
 
   public handleDownload = () => {
-    this.props.downloadEpisode(this.props.id);
+    this.props.downloadEpisode(this.props.episode.id);
   };
 
   public handleToggleShow = () => {
-    this.props.togglePlay(this.props.id);
+    this.props.togglePlay(this.props.episode.id);
   };
 
   public handleDetailOpened = () => {
-    this.props.handleDetailOpened(this.props.id);
+    this.props.handleDetailOpened(this.props.episode.id);
   };
 
   public render() {
@@ -86,12 +88,10 @@ export class Episode extends React.PureComponent<Props> {
       name,
       description,
       fetchStatus,
-      isUpdating,
-      playing,
       publicationDate,
       thumbnailUrl,
       updating,
-    } = this.props;
+    } = this.props.episode;
     return (
       <EpisodeWrapper className="tile is-child box">
         <div className="subtitle">
@@ -102,9 +102,7 @@ export class Episode extends React.PureComponent<Props> {
                   {name}
                 </a>
               )}
-              {!(fetchStatus.status === "SUCCESS") && (
-                <div className="">{name}</div>
-              )}
+              {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
             </div>
             {publicationDate && (
               <DurationWrapper>
@@ -132,47 +130,48 @@ export class Episode extends React.PureComponent<Props> {
           {fetchStatus.status === "SUCCESS" && (
             <button
               className={classNames("button", {
-                "is-link": !playing,
-                "is-danger": playing,
+                "is-link": !this.props.playing,
+                "is-danger": this.props.playing,
               })}
               onClick={this.handleToggleShow}
             >
-              {playing ? "Stop" : "Play"}
+              {this.props.playing ? "Stop" : "Play"}
             </button>
           )}
           {!(fetchStatus.status === "SUCCESS") && (
             <div>
               {(fetchStatus.status === "NOT_ASKED" ||
                 fetchStatus.status === "FAILURE" ||
-                isUpdating) && (
+                this.props.isUpdating) && (
                 <button
                   className="button is-primary"
                   onClick={this.handleDownload}
-                  disabled={isUpdating}
+                  disabled={this.props.isUpdating}
                 >
-                  {isUpdating && (
-                    <div>
+                  <span className="icon">
+                    {this.props.isUpdating ? (
                       <Icon icon={faSync} spin />
-                    </div>
-                  )}
-                  {!isUpdating && (
-                    <div>
+                    ) : (
                       <Icon icon={faDownload} />
-                    </div>
-                  )}
-                  &nbsp;Download
+                    )}
+                  </span>
+                  <span>Download</span>
                 </button>
               )}
             </div>
           )}
           <InfoWrapper>
             <button
-              className="button"
+              className={classNames("button", {
+                "is-static": this.props.isDetailOpen,
+              })}
               onClick={this.handleDetailOpened}
-              disabled={isUpdating}
+              disabled={this.props.isUpdating}
             >
-              <Icon icon={faInfoCircle} />
-              &nbsp;Info
+              <span className="icon">
+                <Icon icon={faInfoCircle} />
+              </span>
+              <span>Info</span>
             </button>
           </InfoWrapper>
         </FooterWrapper>
@@ -185,14 +184,14 @@ const mapStateToProps = (
   state: RootState,
   ownProps: DataProps
 ): PropsExtended => {
-  const episode = ownProps.episode;
   const playingEpisodeId = getPlayingEpisode(state);
   const playing = ownProps.episode.id === playingEpisodeId;
   const isUpdating = !!getEpisodeJobs(state)[ownProps.episode.id];
+  const detailEpisodeId = getDetailEpisodeId(state);
   return {
-    ...episode,
     isUpdating,
     playing,
+    isDetailOpen: ownProps.episode.id === detailEpisodeId,
   };
 };
 
