@@ -83,7 +83,11 @@ export class Episode extends React.PureComponent<Props> {
         <div className="card-content">
           <div className="columns">
             <div className="column is-two-thirds">
-              <Dotdotdot clamp={3}>{description}</Dotdotdot>
+              <article className="message">
+                <div className="message-body">
+                  <Dotdotdot clamp={3}>{description}</Dotdotdot>
+                </div>
+              </article>
             </div>
             <div className="column is-one-third">
               {thumbnailUrl && (
@@ -91,9 +95,6 @@ export class Episode extends React.PureComponent<Props> {
                   <figure className="image is-128x128">
                     <img src={thumbnailUrl} />
                   </figure>
-                  <div>
-                    <time>{duration}</time>{" "}
-                  </div>
                   {fetchStatus.status === "SUCCESS" && (
                     <button
                       className={classNames("button", {

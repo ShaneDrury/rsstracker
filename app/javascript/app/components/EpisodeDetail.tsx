@@ -2,6 +2,7 @@ import {
   faFileAudio,
   faSpinner,
   faSync,
+  faWindowClose,
 } from "@fortawesome/fontawesome-free-solid";
 import classNames from "classnames";
 import * as moment from "moment";
@@ -76,11 +77,16 @@ export class Episode extends React.PureComponent<Props> {
             )}
             {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
           </div>
-          {publicationDate && (
-            <div className="card-header-icon">
-              <time>{moment(publicationDate).format("lll")}</time>
-            </div>
-          )}
+          <a
+            href="#"
+            onClick={this.props.onCloseDetail}
+            className="card-header-icon"
+            aria-label="more options"
+          >
+            <span className="icon">
+              <Icon icon={faWindowClose} aria-hidden="true" />
+            </span>
+          </a>
         </header>
         <div className="card-content">
           <div className="columns">
@@ -93,6 +99,13 @@ export class Episode extends React.PureComponent<Props> {
                   <figure className="image is-256x256">
                     <img src={thumbnailUrl} />
                   </figure>
+                  <div>
+                    {publicationDate && (
+                      <div className="card-header-icon">
+                        <time>{moment(publicationDate).format("lll")}</time>
+                      </div>
+                    )}
+                  </div>
                   <div>
                     <time>{duration}</time>{" "}
                   </div>
@@ -134,9 +147,6 @@ export class Episode extends React.PureComponent<Props> {
                       </div>
                     </nav>
                   )}
-                  <button className="button" onClick={this.props.onCloseDetail}>
-                    Close
-                  </button>
                 </div>
               )}
             </div>

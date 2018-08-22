@@ -56,7 +56,11 @@ export class Description extends React.PureComponent<Props, State> {
     return (
       <div>
         {!this.state.editMode && (
-          <TextArea onClick={this.editModeOn}>{text}</TextArea>
+          <article className="message">
+            <div className="message-body">
+              <TextArea onClick={this.editModeOn}>{text}</TextArea>
+            </div>
+          </article>
         )}
         {this.state.editMode && (
           <div>
