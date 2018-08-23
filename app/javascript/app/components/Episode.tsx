@@ -44,6 +44,10 @@ const TitleWrapper = styled.div`
   flex: 1;
 `;
 
+const NameWrapper = styled.div`
+  flex: 1;
+`;
+
 const DurationWrapper = styled.time`
   margin-left: auto;
 `;
@@ -94,23 +98,19 @@ export class Episode extends React.PureComponent<Props> {
     } = this.props.episode;
     return (
       <EpisodeWrapper className="tile is-child box">
-        <div className="subtitle">
-          <TitleWrapper>
-            <div>
-              {fetchStatus.status === "SUCCESS" && (
-                <a className="level-item" href={fetchStatus.url}>
-                  {name}
-                </a>
-              )}
-              {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
-            </div>
-            {publicationDate && (
-              <DurationWrapper>
-                {moment(publicationDate).format("lll")}
-              </DurationWrapper>
+        <TitleWrapper>
+          <NameWrapper className="title is-5 is-spaced">
+            {fetchStatus.status === "SUCCESS" && (
+              <a href={fetchStatus.url}>{name}</a>
             )}
-          </TitleWrapper>
-        </div>
+            {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
+          </NameWrapper>
+          {publicationDate && (
+            <DurationWrapper className="subtitle is-6">
+              {moment(publicationDate).format("ll")}
+            </DurationWrapper>
+          )}
+        </TitleWrapper>
         {updating && <Icon icon={faSpinner} className="loader" />}
         <ContentWrapper>
           <div>
