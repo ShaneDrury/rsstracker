@@ -1,7 +1,9 @@
 import {
   faDownload,
   faInfoCircle,
+  faPlay,
   faSpinner,
+  faStop,
   faSync,
 } from "@fortawesome/fontawesome-free-solid";
 import classNames from "classnames";
@@ -135,7 +137,14 @@ export class Episode extends React.PureComponent<Props> {
               })}
               onClick={this.handleToggleShow}
             >
-              {this.props.playing ? "Stop" : "Play"}
+              <span className="icon">
+                {this.props.playing ? (
+                  <Icon icon={faStop} />
+                ) : (
+                  <Icon icon={faPlay} />
+                )}
+              </span>
+              <span>{this.props.playing ? "Stop" : "Play"}</span>
             </button>
           )}
           {!(fetchStatus.status === "SUCCESS") && (
