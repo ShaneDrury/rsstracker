@@ -88,85 +88,91 @@ export class Episode extends React.PureComponent<Props> {
       updating,
     } = this.props;
     return (
-      <EpisodeWrapper className="tile is-child box">
-        <TitleWrapper>
-          <NameWrapper className="title is-5 is-spaced">
-            {fetchStatus.status === "SUCCESS" && (
-              <a href={fetchStatus.url}>{name}</a>
-            )}
-            {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
-          </NameWrapper>
-          <CloseButtonWrapper>
-            <button className="button" onClick={this.props.onCloseDetail}>
-              <Icon icon={faWindowClose} />
-            </button>
-          </CloseButtonWrapper>
-        </TitleWrapper>
-        <div>
-          {thumbnailUrl && (
-            <figure className="image">
-              <img src={thumbnailUrl} />
-            </figure>
-          )}
-        </div>
-        {updating && <Icon icon={faSpinner} className="loader" />}
-        {publicationDate && (
-          <time>Publication date: {moment(publicationDate).format("ll")}</time>
-        )}
-        <div>
-          Duration: <time>{duration}</time>
-        </div>
-        <div>
-          <a href={fullUrl}>
-            Source: <Icon icon={faFileAudio} />
-          </a>
-        </div>
-        <div>
-          {description && <Description episodeId={id} text={description} />}
-        </div>
-        <FooterWrapper>
-          {fetchStatus.status === "SUCCESS" && (
-            <button
-              className={classNames("button", {
-                "is-link": !this.props.playing,
-                "is-danger": this.props.playing,
-              })}
-              onClick={this.handleToggleShow}
-            >
-              <span className="icon">
-                {this.props.playing ? (
-                  <Icon icon={faStop} />
-                ) : (
-                  <Icon icon={faPlay} />
-                )}
-              </span>
-              <span>{this.props.playing ? "Stop" : "Play"}</span>
-            </button>
-          )}
-          {!(fetchStatus.status === "SUCCESS") && (
-            <div>
-              {(fetchStatus.status === "NOT_ASKED" ||
-                fetchStatus.status === "FAILURE" ||
-                this.props.isUpdating) && (
-                <button
-                  className="button is-primary"
-                  onClick={this.handleDownload}
-                  disabled={this.props.isUpdating}
-                >
-                  <span className="icon">
-                    {this.props.isUpdating ? (
-                      <Icon icon={faSync} spin />
-                    ) : (
-                      <Icon icon={faDownload} />
-                    )}
-                  </span>
-                  <span>Download</span>
-                </button>
+      <div className="tile is-parent">
+        <EpisodeWrapper className="tile is-child box">
+          <TitleWrapper>
+            <NameWrapper className="title is-5 is-spaced">
+              {fetchStatus.status === "SUCCESS" && (
+                <a href={fetchStatus.url}>{name}</a>
               )}
+              {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
+            </NameWrapper>
+            <CloseButtonWrapper>
+              <button className="button" onClick={this.props.onCloseDetail}>
+                <Icon icon={faWindowClose} />
+              </button>
+            </CloseButtonWrapper>
+          </TitleWrapper>
+          <div>
+            {thumbnailUrl && (
+              <figure className="image">
+                <img src={thumbnailUrl} />
+              </figure>
+            )}
+          </div>
+          <div className="content">
+            {updating && <Icon icon={faSpinner} className="loader" />}
+            {publicationDate && (
+              <time>
+                Publication date: {moment(publicationDate).format("ll")}
+              </time>
+            )}
+            <div>
+              Duration: <time>{duration}</time>
             </div>
-          )}
-        </FooterWrapper>
-      </EpisodeWrapper>
+            <div>
+              <a href={fullUrl}>
+                Source: <Icon icon={faFileAudio} />
+              </a>
+            </div>
+            <div>
+              {description && <Description episodeId={id} text={description} />}
+            </div>
+          </div>
+          <FooterWrapper>
+            {fetchStatus.status === "SUCCESS" && (
+              <button
+                className={classNames("button", {
+                  "is-link": !this.props.playing,
+                  "is-danger": this.props.playing,
+                })}
+                onClick={this.handleToggleShow}
+              >
+                <span className="icon">
+                  {this.props.playing ? (
+                    <Icon icon={faStop} />
+                  ) : (
+                    <Icon icon={faPlay} />
+                  )}
+                </span>
+                <span>{this.props.playing ? "Stop" : "Play"}</span>
+              </button>
+            )}
+            {!(fetchStatus.status === "SUCCESS") && (
+              <div>
+                {(fetchStatus.status === "NOT_ASKED" ||
+                  fetchStatus.status === "FAILURE" ||
+                  this.props.isUpdating) && (
+                  <button
+                    className="button is-primary"
+                    onClick={this.handleDownload}
+                    disabled={this.props.isUpdating}
+                  >
+                    <span className="icon">
+                      {this.props.isUpdating ? (
+                        <Icon icon={faSync} spin />
+                      ) : (
+                        <Icon icon={faDownload} />
+                      )}
+                    </span>
+                    <span>Download</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </FooterWrapper>
+        </EpisodeWrapper>
+      </div>
     );
   }
 }
