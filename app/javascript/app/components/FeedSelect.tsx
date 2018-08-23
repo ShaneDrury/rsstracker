@@ -1,14 +1,24 @@
+import { faPodcast, faRss } from "@fortawesome/fontawesome-free-solid";
+import classNames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 import { fetchFeedsAction } from "../modules/feeds/actions";
 import { getFeeds, getFetchStatus } from "../modules/feeds/selectors";
+import { QueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { RemoteFeed } from "../types/feed";
+import { Icon } from "./Icon";
 import UpdateFeeds from "./UpdateFeeds";
 
 interface DataProps {
+  queryParams: QueryParams;
+  feedId?: string;
+}
+
+interface EnhancedProps {
   remoteFeeds: RemoteFeed[];
   fetchStatus: FetchStatus;
 }
@@ -17,7 +27,20 @@ interface DispatchProps {
   fetchFeeds: () => void;
 }
 
-type Props = DataProps & DispatchProps;
+type Props = DataProps & EnhancedProps & DispatchProps;
+
+const FeedSelectWrapper = styled.nav`
+  margin: 1.5rem;
+`;
+
+const PanelHeadingWrapper = styled.div`
+  display: flex;
+  flex: 1;
+`;
+
+const UpdateFeedsWrapper = styled.span`
+  margin-left: auto;
+`;
 
 export class FeedSelect extends React.PureComponent<Props> {
   public componentDidMount() {
@@ -26,28 +49,47 @@ export class FeedSelect extends React.PureComponent<Props> {
 
   public render() {
     return (
-      <div>
+      <FeedSelectWrapper className="panel">
+        <PanelHeadingWrapper className="panel-heading">
+          <span>Feeds</span>
+          <UpdateFeedsWrapper>
+            <UpdateFeeds />
+          </UpdateFeedsWrapper>
+        </PanelHeadingWrapper>
         {this.props.fetchStatus === "SUCCESS" &&
           this.props.remoteFeeds.length === 0 && <div>No results.</div>}
-        <Link className="navbar-item" to="/">
+        <Link
+          className={classNames("panel-block", {
+            "is-active": !this.props.feedId,
+          })}
+          to="/"
+        >
           All Feeds
         </Link>
         {this.props.remoteFeeds.map(remoteFeed => (
           <Link
-            className="navbar-item"
+            className={classNames("panel-block", {
+              "is-active": this.props.feedId === remoteFeed.id,
+            })}
             key={remoteFeed.key}
             to={`/${remoteFeed.id}`}
           >
-            {remoteFeed.name}
+            <span className="icon">
+              {remoteFeed.source === "youtube" ? (
+                <Icon icon={faPodcast} />
+              ) : (
+                <Icon icon={faRss} />
+              )}
+            </span>
+            <span>{remoteFeed.name}</span>
           </Link>
         ))}
-        <UpdateFeeds />
-      </div>
+      </FeedSelectWrapper>
     );
   }
 }
 
-const mapStateToProps = (state: RootState): DataProps => {
+const mapStateToProps = (state: RootState): EnhancedProps => {
   const remoteFeeds = getFeeds(state);
   const fetchStatus = getFetchStatus(state);
   return {

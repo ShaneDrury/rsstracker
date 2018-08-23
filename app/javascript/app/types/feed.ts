@@ -8,6 +8,8 @@ export interface StatusCounts {
   loading?: number;
 }
 
+export type FeedSource = "youtube" | "rss";
+
 export interface ApiFeed {
   id: number;
   name: string;
@@ -18,6 +20,7 @@ export interface ApiFeed {
   updatedAt: string;
   disabled: boolean;
   autodownload: boolean;
+  source: FeedSource;
 }
 
 export interface RemoteFeed extends Omit<ApiFeed, "id"> {

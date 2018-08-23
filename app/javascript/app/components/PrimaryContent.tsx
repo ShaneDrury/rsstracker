@@ -30,7 +30,7 @@ const Sidebar = styled.section`
 `;
 
 const Content = styled.section`
-  flex: 1;
+  flex: 0 0 1000px;
 `;
 
 const Aside = styled.aside`
@@ -54,38 +54,41 @@ class PrimaryContent extends React.Component<Props> {
     history,
     location,
     match,
-  }: RouteComponentProps<{ feedId?: string }>) => (
-    <main>
-      <Navbar queryParams={parseLocation(location)} history={history} />
-      <Wrapper>
-        <Sidebar>
-          <FeedSelect />
-        </Sidebar>
-        <Content>
-          <AllFeedsLoader
-            queryParams={parseLocation(location)}
-            feedId={match.params.feedId}
-          >
-            <Scrollable>
-              <Episodes
-                queryParams={parseLocation(location)}
-                history={history}
-              />
-            </Scrollable>
-          </AllFeedsLoader>
-        </Content>
-        {this.props.detailEpisodeId && (
-          <Aside>
-            <Scrollable>
-              <EpisodeLoader episodeId={this.props.detailEpisodeId}>
-                {remoteEpisode => <EpisodeDetail episode={remoteEpisode} />}
-              </EpisodeLoader>
-            </Scrollable>
-          </Aside>
-        )}
-      </Wrapper>
-    </main>
-  );
+  }: RouteComponentProps<{ feedId?: string }>) => {
+    const queryParams = parseLocation(location);
+    return (
+      <main>
+        <Navbar queryParams={queryParams} history={history} />
+        <Wrapper>
+          <Sidebar>
+            <FeedSelect
+              queryParams={queryParams}
+              feedId={match.params.feedId}
+            />
+          </Sidebar>
+          <Content>
+            <AllFeedsLoader
+              queryParams={queryParams}
+              feedId={match.params.feedId}
+            >
+              <Scrollable>
+                <Episodes queryParams={queryParams} history={history} />
+              </Scrollable>
+            </AllFeedsLoader>
+          </Content>
+          {this.props.detailEpisodeId && (
+            <Aside>
+              <Scrollable>
+                <EpisodeLoader episodeId={this.props.detailEpisodeId}>
+                  {remoteEpisode => <EpisodeDetail episode={remoteEpisode} />}
+                </EpisodeLoader>
+              </Scrollable>
+            </Aside>
+          )}
+        </Wrapper>
+      </main>
+    );
+  };
 
   public render() {
     return <Route path="/:feedId?" render={this.renderRoot} />;

@@ -24,8 +24,10 @@ export class UpdateFeeds extends React.PureComponent<Props> {
   public render() {
     return (
       <button className="button is-primary" onClick={this.handleUpdateFeeds}>
-        <Icon icon={faSync} />
-        &nbsp;Update all
+        <span className="icon">
+          <Icon icon={faSync} />
+        </span>
+        <span>Update all</span>
       </button>
     );
   }
