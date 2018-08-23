@@ -37,7 +37,7 @@ const Aside = styled.aside`
 `;
 
 const Scrollable = styled.div`
-  height: 100vh;
+  height: calc(100vh - 60px);
   overflow-y: scroll;
   overflow-x: hidden;
 `;
