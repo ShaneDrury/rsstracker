@@ -1,21 +1,28 @@
-import { faPodcast, faRss } from "@fortawesome/fontawesome-free-solid";
+import {
+  faPodcast,
+  faRss,
+  faSearch,
+} from "@fortawesome/fontawesome-free-solid";
 import classNames from "classnames";
+import { History } from "history";
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fetchFeedsAction } from "../modules/feeds/actions";
 import { getFeeds, getFetchStatus } from "../modules/feeds/selectors";
-import { QueryParams } from "../modules/location/queryParams";
+import { QueryParams, syncQueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 import { RemoteFeed } from "../types/feed";
 import { Icon } from "./Icon";
+import Search from "./Search";
 import UpdateFeeds from "./UpdateFeeds";
 
 interface DataProps {
   queryParams: QueryParams;
   feedId?: string;
+  history: History;
 }
 
 interface EnhancedProps {
@@ -46,6 +53,10 @@ export class FeedSelect extends React.PureComponent<Props> {
   public componentDidMount() {
     this.props.fetchFeeds();
   }
+
+  public handleChangeSearch = (searchTerm: string) => {
+    syncQueryParams({ searchTerm }, this.props.queryParams, this.props.history);
+  };
 
   public render() {
     return (
@@ -84,6 +95,17 @@ export class FeedSelect extends React.PureComponent<Props> {
             <span>{remoteFeed.name}</span>
           </Link>
         ))}
+        <div className="panel-block">
+          <p className="control has-icons-left">
+            <Search
+              onChangeSearch={this.handleChangeSearch}
+              searchTerm={this.props.queryParams.searchTerm}
+            />
+            <span className="icon is-small is-left">
+              <Icon icon={faSearch} />
+            </span>
+          </p>
+        </div>
       </FeedSelectWrapper>
     );
   }

@@ -32,19 +32,20 @@ type Props = DataProps & PropsExtended & DispatchProps;
 
 const Wrapper = styled.div`
   display: flex;
-  flex: 1;
+  width: 100%;
 `;
 
-const Name = styled.div`
-  flex: 3;
+const NameWrapper = styled.div`
+  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin: auto;
 `;
 
-const ButtonWrapper = styled.div`
+const InfoButtonWrapper = styled.div`
   flex: none;
+  margin-left: auto;
 `;
 
 const PlayerWrapper = styled.div`
@@ -64,35 +65,35 @@ export class GlobalPlayer extends React.PureComponent<Props> {
   };
 
   public render() {
-    return (
-      <div>
-        {this.props.fetched &&
-          this.props.episodeId && (
-            <Wrapper>
-              {this.props.episodeName && <Name>{this.props.episodeName}</Name>}
-              <PlayerWrapper>
-                <Player
-                  episodeId={this.props.episodeId}
-                  playing={this.props.playing}
-                />
-              </PlayerWrapper>
-              <ButtonWrapper>
-                <button
-                  className={classnames("button", {
-                    "is-static": this.props.isDetailOpen,
-                  })}
-                  onClick={this.handleDetailOpened}
-                >
-                  <span className="icon">
-                    <Icon icon={faInfoCircle} />
-                  </span>
-                  <span>Info</span>
-                </button>
-              </ButtonWrapper>
-            </Wrapper>
+    if (this.props.fetched && this.props.episodeId) {
+      return (
+        <Wrapper>
+          {this.props.episodeName && (
+            <NameWrapper>{this.props.episodeName}</NameWrapper>
           )}
-      </div>
-    );
+          <PlayerWrapper>
+            <Player
+              episodeId={this.props.episodeId}
+              playing={this.props.playing}
+            />
+          </PlayerWrapper>
+          <InfoButtonWrapper>
+            <button
+              className={classnames("button", {
+                "is-static": this.props.isDetailOpen,
+              })}
+              onClick={this.handleDetailOpened}
+            >
+              <span className="icon">
+                <Icon icon={faInfoCircle} />
+              </span>
+              <span>Info</span>
+            </button>
+          </InfoButtonWrapper>
+        </Wrapper>
+      );
+    }
+    return null;
   }
 }
 

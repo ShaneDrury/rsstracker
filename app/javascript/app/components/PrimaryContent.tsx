@@ -57,12 +57,13 @@ class PrimaryContent extends React.Component<Props> {
     const queryParams = parseLocation(location);
     return (
       <main>
-        <Navbar queryParams={queryParams} history={history} />
+        <Navbar />
         <Wrapper>
           <Sidebar>
             <FeedSelect
               queryParams={queryParams}
               feedId={match.params.feedId}
+              history={history}
             />
           </Sidebar>
           <Content>
