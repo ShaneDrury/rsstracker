@@ -22,7 +22,6 @@ const parseLocation = (location: Location): QueryParams =>
 
 const Wrapper = styled.div`
   display: flex;
-  flex: 1;
 `;
 
 const Sidebar = styled.section`
@@ -30,7 +29,7 @@ const Sidebar = styled.section`
 `;
 
 const Content = styled.section`
-  flex: 0 0 1000px;
+  flex: 1;
 `;
 
 const Aside = styled.aside`
@@ -76,15 +75,15 @@ class PrimaryContent extends React.Component<Props> {
               </Scrollable>
             </AllFeedsLoader>
           </Content>
-          {this.props.detailEpisodeId && (
-            <Aside>
+          <Aside>
+            {this.props.detailEpisodeId && (
               <Scrollable>
                 <EpisodeLoader episodeId={this.props.detailEpisodeId}>
                   {remoteEpisode => <EpisodeDetail episode={remoteEpisode} />}
                 </EpisodeLoader>
               </Scrollable>
-            </Aside>
-          )}
+            )}
+          </Aside>
         </Wrapper>
       </main>
     );
