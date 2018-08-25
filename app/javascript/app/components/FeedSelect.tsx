@@ -1,6 +1,6 @@
+import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import {
   faDotCircle,
-  faPodcast,
   faRss,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
@@ -84,7 +84,7 @@ export class FeedSelect extends React.PureComponent<Props> {
           >
             <span className="panel-icon">
               {remoteFeed.source === "youtube" ? (
-                <Icon icon={faPodcast} />
+                <Icon icon={faYoutube} />
               ) : (
                 <Icon icon={faRss} />
               )}
