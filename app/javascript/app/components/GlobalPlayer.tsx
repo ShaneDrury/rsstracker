@@ -1,4 +1,4 @@
-import { faInfoCircle } from "@fortawesome/fontawesome-free-solid";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import classnames from "classnames";
 import React from "react";
 import { connect } from "react-redux";

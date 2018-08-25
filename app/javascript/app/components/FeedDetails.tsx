@@ -1,4 +1,4 @@
-import { faSync } from "@fortawesome/fontawesome-free-solid";
+import { faSync } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { RemoteFeed } from "../types/feed";
 

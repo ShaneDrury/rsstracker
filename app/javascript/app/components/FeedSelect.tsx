@@ -3,7 +3,7 @@ import {
   faPodcast,
   faRss,
   faSearch,
-} from "@fortawesome/fontawesome-free-solid";
+} from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import { History } from "history";
 import React from "react";

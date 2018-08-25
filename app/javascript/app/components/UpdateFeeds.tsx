@@ -1,4 +1,4 @@
-import { faSync } from "@fortawesome/fontawesome-free-solid";
+import { faSync } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import React from "react";
 import { connect } from "react-redux";

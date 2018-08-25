@@ -6,7 +6,7 @@ import {
   faStop,
   faSync,
   faWindowClose,
-} from "@fortawesome/fontawesome-free-solid";
+} from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import * as moment from "moment";
 import React from "react";
