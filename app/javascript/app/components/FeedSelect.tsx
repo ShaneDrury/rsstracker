@@ -1,4 +1,5 @@
 import {
+  faDotCircle,
   faPodcast,
   faRss,
   faSearch,
@@ -68,7 +69,10 @@ export class FeedSelect extends React.PureComponent<Props> {
           })}
           to="/"
         >
-          All Feeds
+          <span className="panel-icon">
+            <Icon icon={faDotCircle} />
+          </span>
+          <span>All Feeds</span>
         </Link>
         {this.props.remoteFeeds.map(remoteFeed => (
           <Link
@@ -78,7 +82,7 @@ export class FeedSelect extends React.PureComponent<Props> {
             key={remoteFeed.key}
             to={`/${remoteFeed.id}`}
           >
-            <span className="icon">
+            <span className="panel-icon">
               {remoteFeed.source === "youtube" ? (
                 <Icon icon={faPodcast} />
               ) : (
