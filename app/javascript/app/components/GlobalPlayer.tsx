@@ -45,12 +45,13 @@ const NameWrapper = styled.div`
 
 const InfoButtonWrapper = styled.div`
   flex: none;
-  margin-left: auto;
+  margin-right: 1.5rem;
 `;
 
 const PlayerWrapper = styled.div`
-  flex: 1;
-  margin: auto;
+  flex: none;
+  margin-left: auto;
+  margin-top: auto;
 `;
 
 export class GlobalPlayer extends React.PureComponent<Props> {
@@ -71,12 +72,6 @@ export class GlobalPlayer extends React.PureComponent<Props> {
           {this.props.episodeName && (
             <NameWrapper>{this.props.episodeName}</NameWrapper>
           )}
-          <PlayerWrapper>
-            <Player
-              episodeId={this.props.episodeId}
-              playing={this.props.playing}
-            />
-          </PlayerWrapper>
           <InfoButtonWrapper>
             <button
               className={classnames("button", {
@@ -90,6 +85,12 @@ export class GlobalPlayer extends React.PureComponent<Props> {
               <span>Info</span>
             </button>
           </InfoButtonWrapper>
+          <PlayerWrapper>
+            <Player
+              episodeId={this.props.episodeId}
+              playing={this.props.playing}
+            />
+          </PlayerWrapper>
         </Wrapper>
       );
     }
