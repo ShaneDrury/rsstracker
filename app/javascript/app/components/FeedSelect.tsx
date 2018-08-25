@@ -37,16 +37,12 @@ interface DispatchProps {
 type Props = DataProps & EnhancedProps & DispatchProps;
 
 const FeedSelectWrapper = styled.nav`
-  margin: 1.5rem;
+  margin: 0.75rem;
 `;
 
 const PanelHeadingWrapper = styled.div`
   display: flex;
   flex: 1;
-`;
-
-const UpdateFeedsWrapper = styled.span`
-  margin-left: auto;
 `;
 
 export class FeedSelect extends React.PureComponent<Props> {
@@ -63,9 +59,6 @@ export class FeedSelect extends React.PureComponent<Props> {
       <FeedSelectWrapper className="panel">
         <PanelHeadingWrapper className="panel-heading">
           <span>Feeds</span>
-          <UpdateFeedsWrapper>
-            <UpdateFeeds />
-          </UpdateFeedsWrapper>
         </PanelHeadingWrapper>
         {this.props.fetchStatus === "SUCCESS" &&
           this.props.remoteFeeds.length === 0 && <div>No results.</div>}
@@ -95,6 +88,9 @@ export class FeedSelect extends React.PureComponent<Props> {
             <span>{remoteFeed.name}</span>
           </Link>
         ))}
+        <div className="panel-block">
+          <UpdateFeeds className="is-fullwidth is-outlined" />
+        </div>
         <div className="panel-block">
           <p className="control has-icons-left">
             <Search

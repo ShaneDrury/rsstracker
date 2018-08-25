@@ -1,10 +1,15 @@
 import { faSync } from "@fortawesome/fontawesome-free-solid";
+import classNames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
 import { updateFeedsAction } from "../modules/feedJobs/actions";
 import { getEnabledFeedIds } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { Icon } from "./Icon";
+
+interface DataProps {
+  className: string;
+}
 
 interface EnhancedProps {
   feedIds: string[];
@@ -14,7 +19,7 @@ interface DispatchProps {
   updateFeeds: (feedIds: string[]) => void;
 }
 
-type Props = DispatchProps & EnhancedProps;
+type Props = DataProps & DispatchProps & EnhancedProps;
 
 export class UpdateFeeds extends React.PureComponent<Props> {
   public handleUpdateFeeds = () => {
@@ -23,7 +28,10 @@ export class UpdateFeeds extends React.PureComponent<Props> {
 
   public render() {
     return (
-      <button className="button is-primary" onClick={this.handleUpdateFeeds}>
+      <button
+        className={classNames("button is-primary", this.props.className)}
+        onClick={this.handleUpdateFeeds}
+      >
         <span className="icon">
           <Icon icon={faSync} />
         </span>
