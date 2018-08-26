@@ -9,10 +9,10 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { getDetailEpisodeId } from "../modules/episodes/selectors";
 import { RootState } from "../modules/reducers";
-import AllFeedsLoader from "./AllFeedsLoader";
 import EpisodeDetail from "./EpisodeDetail";
 import EpisodeLoader from "./EpisodeLoader";
 import Episodes from "./Episodes";
+import EpisodesLoader from "./EpisodesLoader";
 import FeedSelect from "./FeedSelect";
 
 const parseLocation = (location: Location): QueryParams =>
@@ -67,14 +67,14 @@ class PrimaryContent extends React.Component<Props> {
             />
           </Sidebar>
           <Content>
-            <AllFeedsLoader
+            <EpisodesLoader
               queryParams={queryParams}
               feedId={match.params.feedId}
             >
               <Scrollable>
                 <Episodes queryParams={queryParams} history={history} />
               </Scrollable>
-            </AllFeedsLoader>
+            </EpisodesLoader>
           </Content>
           <Aside>
             {this.props.detailEpisodeId && (

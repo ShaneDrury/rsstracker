@@ -29,7 +29,7 @@ interface DispatchProps {
 
 type Props = DataProps & DispatchProps & EnhancedProps;
 
-export class AllFeedsLoader extends React.Component<Props> {
+export class EpisodesLoader extends React.Component<Props> {
   public componentDidMount() {
     this.fetchEpisodes();
   }
@@ -90,4 +90,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AllFeedsLoader);
+)(EpisodesLoader);
