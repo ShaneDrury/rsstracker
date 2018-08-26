@@ -3,6 +3,7 @@ import classNames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
 import { updateFeedsAction } from "../modules/feedJobs/actions";
+import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
 import { getEnabledFeedIds } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
 import { Icon } from "./Icon";
@@ -13,6 +14,7 @@ interface DataProps {
 
 interface EnhancedProps {
   feedIds: string[];
+  updating: boolean;
 }
 
 interface DispatchProps {
@@ -31,9 +33,10 @@ export class UpdateFeeds extends React.PureComponent<Props> {
       <button
         className={classNames("button is-primary", this.props.className)}
         onClick={this.handleUpdateFeeds}
+        disabled={this.props.updating}
       >
         <span className="icon">
-          <Icon icon={faSync} />
+          <Icon icon={faSync} spin={this.props.updating} />
         </span>
         <span>Update all</span>
       </button>
@@ -41,9 +44,13 @@ export class UpdateFeeds extends React.PureComponent<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState): EnhancedProps => ({
-  feedIds: getEnabledFeedIds(state),
-});
+const mapStateToProps = (state: RootState): EnhancedProps => {
+  const updating = getUpdatingFeeds(state).length > 0;
+  return {
+    feedIds: getEnabledFeedIds(state),
+    updating,
+  };
+};
 
 const mapDispatchToProps = {
   updateFeeds: updateFeedsAction,
