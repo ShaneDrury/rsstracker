@@ -17,6 +17,11 @@ export interface State {
   detailEpisodeId?: string;
 }
 
+const detailEpisodeIdJSON = localStorage.getItem("lastPlayedEpisode");
+const detailEpisodeId = detailEpisodeIdJSON
+  ? JSON.parse(detailEpisodeIdJSON)
+  : undefined;
+
 const initialState: State = {
   items: {},
   fetchStatus: "NOT_ASKED",
@@ -33,6 +38,7 @@ const initialState: State = {
   statusCounts: {
     all: 0,
   },
+  detailEpisodeId,
 };
 
 const episodes = (
