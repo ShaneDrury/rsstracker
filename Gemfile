@@ -48,7 +48,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'delayed_job_active_record'
 gem 'daemons'
 
-gem 'webpacker', '~> 3.4'
+gem 'webpacker', '>= 4.0.x'
 
 gem 'db_text_search', '~> 0.2.2'
 

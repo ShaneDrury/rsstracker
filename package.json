@@ -19,7 +19,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.1.0-11",
     "@fortawesome/free-solid-svg-icons": "^5.2.0",
     "@fortawesome/react-fontawesome": "^0.1.0",
-    "@rails/webpacker": "^3.4.0",
+    "@rails/webpacker": "4.0.0-pre.2",
     "@types/actioncable": "^0.0.2",
     "@types/camelcase-keys": "^4.0.0",
     "@types/classnames": "^2.2.3",
@@ -59,7 +59,8 @@
     "reselect": "^3.0.1",
     "shortid": "^2.2.8",
     "styled-components": "^3.4.2",
-    "typesafe-actions": "^2.0.4"
+    "typesafe-actions": "^2.0.4",
+    "webpack": "^4.17.2"
   },
   "devDependencies": {
     "prettier": "^1.13.3",
@@ -68,6 +69,7 @@
     "tslint-eslint-rules": "^5.1.0",
     "tslint-react": "^3.5.1",
     "typescript": "^3.0.0",
-    "webpack-dev-server": "2.11.2"
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.8"
   }
 }
