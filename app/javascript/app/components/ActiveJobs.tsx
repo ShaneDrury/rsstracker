@@ -1,7 +1,6 @@
 import { difference, isEqual, keys } from "lodash";
 import React from "react";
-import Notification from "react-bulma-notification";
-import "react-bulma-notification/build/css/index.css";
+import NotificationSystem from "react-notification-system";
 import { connect } from "react-redux";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { fetchEpisodeIfNeeded } from "../modules/episodes/actions";
@@ -24,6 +23,8 @@ interface DispatchProps {
 type Props = EnhancedProps & DispatchProps;
 
 export class ActiveJobs extends React.PureComponent<Props> {
+  private notificationSystem = React.createRef<NotificationSystem.System>()!;
+
   public componentDidMount() {
     this.props.getJobs();
   }
@@ -38,26 +39,33 @@ export class ActiveJobs extends React.PureComponent<Props> {
     const newKeys = this.props.jobDescriptions.map(job => job.key);
     const prevKeys = prevProps.jobDescriptions.map(job => job.key);
     const keysToRemove = difference(prevKeys, newKeys);
+    const notificationSystem = this.notificationSystem.current;
+    if (!notificationSystem) {
+      return;
+    }
     keysToRemove.forEach(key => {
-      Notification.remove(key);
+      notificationSystem.removeNotification(key);
     });
     this.props.jobDescriptions.forEach(job => {
       const key = job.key;
       if (!prevKeys.includes(key)) {
         if (job.error) {
-          Notification.error(job.error, {
-            key,
-            duration: 0,
-            closable: true,
-            placement: "bottomLeft",
-            onClose: () => this.props.onCloseErrorJob(job.id),
+          notificationSystem.addNotification({
+            message: job.error,
+            level: "error",
+            position: "bl",
+            autoDismiss: 0,
+            uid: key,
+            onRemove: () => this.props.onCloseErrorJob(job.id),
           });
         } else {
-          Notification.info(job.description, {
-            key,
-            duration: 0,
-            closable: false,
-            placement: "bottomLeft",
+          notificationSystem.addNotification({
+            message: job.description,
+            level: "info",
+            position: "bl",
+            autoDismiss: 0,
+            dismissible: false,
+            uid: key,
           });
         }
       }
@@ -65,7 +73,7 @@ export class ActiveJobs extends React.PureComponent<Props> {
   }
 
   public render() {
-    return null;
+    return <NotificationSystem ref={this.notificationSystem} />;
   }
 }
 
