@@ -8,8 +8,10 @@ class DownloadEpisodeJob < ApplicationJob
   queue_as :default
 
   def perform(episode_id)
-    unless (ENV.include? 'STORAGE_ROOT') && (ENV.include? 'DOWNLOAD_ROOT')
-      raise 'Must be run with STORAGE_ROOT and DOWNLOAD_ROOT env variables'
+    storage_root = Rails.application.config.storage_root
+    download_root = Rails.application.config.download_root
+    unless storage_root.present? && download_root.present?
+      raise 'Must be run with :storage_root and :download_root settings'
     end
 
     episode = Episode.find(episode_id)
@@ -21,8 +23,8 @@ class DownloadEpisodeJob < ApplicationJob
     episode_filename = File.basename(URI(url).path)
     episode_folder = episode.feed.name.parameterize
     download_path = File.join(episode_folder, episode_filename)
-    abs_download_path = File.join(ENV['DOWNLOAD_ROOT'], download_path)
-    FileUtils.mkdir_p File.join(ENV['DOWNLOAD_ROOT'], episode_folder)
+    abs_download_path = File.join(download_root, download_path)
+    FileUtils.mkdir_p File.join(download_root, episode_folder)
 
     content_length_proc = lambda do |content_length|
       @bytes_total = content_length
@@ -48,7 +50,7 @@ class DownloadEpisodeJob < ApplicationJob
       tmp_path = File.join(temp_dir, episode_folder, episode_filename)
       FileUtils.mkdir_p File.join(temp_dir, episode_folder)
       pp tmp_path
-      pp File.join(ENV['DOWNLOAD_ROOT'], episode_folder, '/')
+      pp File.join(download_root, episode_folder, '/')
       open(url, 'r', content_length_proc: content_length_proc, progress_proc: progress_proc) do |input|
         open(tmp_path, 'wb') do |output|
           while (buffer = input.read(BUFFER_SIZE))
@@ -57,12 +59,12 @@ class DownloadEpisodeJob < ApplicationJob
         end
       end
 
-      FileUtils.mv(tmp_path, File.join(ENV['DOWNLOAD_ROOT'], episode_folder, '/'))
+      FileUtils.mv(tmp_path, File.join(download_root, episode_folder, '/'))
     end
 
     episode.build_fetch_status(
       status: 'SUCCESS',
-      url: File.join(ENV['STORAGE_ROOT'], download_path),
+      url: File.join(storage_root, download_path),
       bytes_total: @bytes_total.to_d,
     ).save
   end

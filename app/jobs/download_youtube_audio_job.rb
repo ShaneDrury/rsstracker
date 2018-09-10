@@ -12,10 +12,6 @@ class DownloadYoutubeAudioJob < ApplicationJob
   end
 
   def perform(episode_id)
-    unless (ENV.include? 'STORAGE_ROOT') && (ENV.include? 'DOWNLOAD_ROOT') && (ENV.include? 'YOUTUBE_DL_PATH')
-      raise 'Must be run with STORAGE_ROOT, DOWNLOAD_ROOT and YOUTUBE_DL_PATH env variables'
-    end
-
     episode = Episode.find(episode_id)
     fetch_status = episode.fetch_status&.status
     return if fetch_status == "SUCCESS"
@@ -25,22 +21,22 @@ class DownloadYoutubeAudioJob < ApplicationJob
     episode_filename = '%(id)s.%(ext)s'
     episode_folder = episode.feed.name.parameterize
     download_path = File.join(episode_folder, episode_filename)
-    abs_download_path = File.join(ENV['DOWNLOAD_ROOT'], download_path)
-    FileUtils.mkdir_p File.join(ENV['DOWNLOAD_ROOT'], episode_folder)
+    abs_download_path = File.join(Rails.application.config.download_root, download_path)
+    FileUtils.mkdir_p File.join(Rails.application.config.download_root, episode_folder)
 
     Dir.mktmpdir do |temp_dir|
       tmp_path = File.join(temp_dir, episode_folder, episode_filename)
-      result = system "#{ENV['YOUTUBE_DL_PATH']} -f 22 -o \"#{tmp_path}\" -x -- #{url}"
+      result = system "#{Rails.application.config.youtube_dl_path} -f 22 -o \"#{tmp_path}\" -x -- #{url}"
       unless result
         episode.build_fetch_status(status: 'FAILURE').save
         raise "Failed!"
       end
-      out = `#{ENV['YOUTUBE_DL_PATH']} -j -- #{url}`
+      out = `#{Rails.application.config.youtube_dl_path} -j -- #{url}`
       json = JSON.parse(out)
-      Dir.entries(ENV['DOWNLOAD_ROOT'])
-      FileUtils.mv(File.join(temp_dir, episode_folder, "#{json['id']}.m4a"), File.join(ENV['DOWNLOAD_ROOT'], episode_folder, '/'))
+      Dir.entries(Rails.application.config.download_root)
+      FileUtils.mv(File.join(temp_dir, episode_folder, "#{json['id']}.m4a"), File.join(Rails.application.config.download_root, episode_folder, '/'))
       actual_download_path = File.join(episode_folder, "#{json['id']}.m4a")
-      filesize = `gstat --printf="%s" "#{File.join(ENV['DOWNLOAD_ROOT'], actual_download_path)}"`
+      filesize = `gstat --printf="%s" "#{File.join(Rails.application.config.download_root, actual_download_path)}"`
       description = json['description']
       duration = Time.at(json['duration']).utc.strftime('%H:%M:%S')
       publication_date = Date.strptime(json['upload_date'], '%Y%m%d')
@@ -51,7 +47,7 @@ class DownloadYoutubeAudioJob < ApplicationJob
       )
       episode.build_fetch_status(
         status: 'SUCCESS',
-        url: File.join(ENV['STORAGE_ROOT'], actual_download_path),
+        url: File.join(Rails.application.config.storage_root, actual_download_path),
         bytes_total: filesize
       ).save
     end

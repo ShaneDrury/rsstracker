@@ -35,5 +35,10 @@ module Rsstracker
     config.active_job.queue_adapter = :delayed_job
 
     config.autoload_paths << Rails.root.join('lib')
+
+    yml = YAML.load_file(Rails.root.join("config/settings.yml"))
+    config.download_root = yml['download_root']
+    config.storage_root = yml['storage_root']
+    config.youtube_dl_path = yml['youtube_dl_path']
   end
 end
