@@ -1,7 +1,6 @@
 {
   "resolutions": {
-    "babel-core": "^7.0.0-bridge.0",
-    "react-bulma-notification/tsutils": "^2.29.0"
+    "babel-core": "^7.0.0-bridge.0"
   },
   "scripts": {
     "prettier": "prettier --parser typescript --write",
@@ -30,7 +29,7 @@
     "@types/react": "^16.3.12",
     "@types/react-dom": "^16.0.5",
     "@types/react-notification-system": "^0.2.38",
-    "@types/react-paginate": "^4.3.2",
+    "@types/react-paginate": "^5.2.1",
     "@types/react-redux": "^6.0.4",
     "@types/react-router-dom": "^4.2.6",
     "@types/shortid": "^0.0.29",
