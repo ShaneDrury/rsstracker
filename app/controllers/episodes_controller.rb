@@ -68,7 +68,7 @@ class EpisodesController < ApplicationController
     counts = episodes.joins(:fetch_status).group(:status).count
     counts['all'] = counts.values.sum
     episodes = episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
-    paged = episodes.page(params[:page_number] || 1)
+    paged = episodes.page(params[:page_number] || 1).per(10)
 
     render json: {
       items: paged,
