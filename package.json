@@ -1,4 +1,7 @@
 {
+  "resolutions": {
+    "babel-core": "^7.0.0-bridge.0"
+  },
   "scripts": {
     "prettier": "prettier --parser typescript --write",
     "tslint": "tslint --project ./tsconfig.json"
@@ -7,6 +10,7 @@
     "@babel/core": "^7.0.0-beta.49",
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.49",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.49",
+    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0-beta.49",
     "@babel/preset-react": "^7.0.0-beta.49",
     "@babel/preset-typescript": "^7.0.0-beta.49",
@@ -34,7 +38,6 @@
     "actioncable": "^5.2.0",
     "babel-plugin-styled-components": "^1.5.1",
     "babel-plugin-transform-imports": "^1.5.1",
-    "babel-polyfill": "^6.26.0",
     "bulma": "^0.7.1",
     "camelcase-keys": "^4.2.0",
     "classnames": "^2.2.5",

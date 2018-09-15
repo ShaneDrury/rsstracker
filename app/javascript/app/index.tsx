@@ -1,4 +1,4 @@
-import "babel-polyfill";
+import "@babel/polyfill";
 import "bulma/bulma";
 
 import React from "react";
