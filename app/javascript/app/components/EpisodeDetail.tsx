@@ -8,6 +8,7 @@ import {
   faWindowClose,
 } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
+import { isEqual } from "lodash";
 import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
@@ -60,7 +61,11 @@ const FooterWrapper = styled.div`
   flex: 1;
 `;
 
-export class Episode extends React.PureComponent<Props> {
+export class Episode extends React.Component<Props> {
+  public shouldComponentUpdate(nextProps: Props) {
+    return !isEqual(nextProps, this.props);
+  }
+
   public componentDidUpdate(prevProps: Props) {
     if (prevProps.isUpdating && !this.props.isUpdating) {
       this.props.fetchEpisode(this.props.id);

@@ -16,7 +16,6 @@ export interface ApiEpisode {
 }
 
 export interface RemoteEpisode extends Omit<ApiEpisode, "id"> {
-  key: string;
   id: string;
   updating: boolean;
 }

@@ -1,6 +1,5 @@
 import camelcaseKeys from "camelcase-keys";
 import qs from "qs";
-import * as shortid from "shortid";
 import { ApiEpisode, RemoteEpisode } from "../../types/episode";
 import { StatusCounts } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
@@ -25,7 +24,6 @@ interface DownloadEpisodeResponse {
 
 export const processEpisode = (episode: ApiEpisode): RemoteEpisode => ({
   ...episode,
-  key: shortid.generate(),
   id: episode.id.toString(),
   updating: false,
 });
