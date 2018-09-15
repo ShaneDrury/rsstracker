@@ -1,9 +1,11 @@
 import { isEqual } from "lodash";
 import React from "react";
 import { connect } from "react-redux";
-import { getLoadedEpisodes, getPageInfo } from "../modules/episodes/selectors";
+import {
+  getPageInfo,
+  getSortedEpisodeIds,
+} from "../modules/episodes/selectors";
 import { RootState } from "../modules/reducers";
-import { RemoteEpisode } from "../types/episode";
 import { PageInfo } from "../types/page";
 import Episode from "./Episode";
 import Pagination from "./Pagination";
@@ -13,7 +15,7 @@ interface DataProps {
 }
 
 interface EnhancedProps {
-  remoteEpisodes: RemoteEpisode[];
+  remoteEpisodeIds: string[];
   pageInfo: PageInfo;
 }
 
@@ -25,7 +27,7 @@ export class Episodes extends React.Component<Props> {
   };
 
   public shouldComponentUpdate(nextProps: Props) {
-    if (!isEqual(nextProps.remoteEpisodes, this.props.remoteEpisodes)) {
+    if (!isEqual(nextProps.remoteEpisodeIds, this.props.remoteEpisodeIds)) {
       return true;
     }
     return !isEqual(nextProps.pageInfo, this.props.pageInfo);
@@ -35,8 +37,8 @@ export class Episodes extends React.Component<Props> {
     const pageInfo = this.props.pageInfo;
     return (
       <div className="tile is-parent is-vertical">
-        {this.props.remoteEpisodes.map(remoteEpisode => (
-          <Episode episode={remoteEpisode} key={remoteEpisode.key} />
+        {this.props.remoteEpisodeIds.map(remoteEpisodeId => (
+          <Episode episodeId={remoteEpisodeId} key={remoteEpisodeId} />
         ))}
         {pageInfo.totalPages > 1 && (
           <nav className="pagination" role="navigation" aria-label="pagination">
@@ -61,10 +63,10 @@ export class Episodes extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
-  const remoteEpisodes = getLoadedEpisodes(state);
+  const remoteEpisodeIds = getSortedEpisodeIds(state);
   const pageInfo = getPageInfo(state);
   return {
-    remoteEpisodes,
+    remoteEpisodeIds,
     pageInfo,
   };
 };

@@ -15,7 +15,7 @@ import styled from "styled-components";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { detailsOpened, fetchEpisode } from "../modules/episodes/actions";
-import { getDetailEpisodeId } from "../modules/episodes/selectors";
+import { getDetailEpisodeId, getEpisodes } from "../modules/episodes/selectors";
 import { playToggled as togglePlayAction } from "../modules/player/actions";
 import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
@@ -23,10 +23,11 @@ import { RemoteEpisode } from "../types/episode";
 import { Icon } from "./Icon";
 
 interface DataProps {
-  episode: RemoteEpisode;
+  episodeId: string;
 }
 
 interface PropsExtended {
+  episode: RemoteEpisode;
   playing: boolean;
   isUpdating: boolean;
   isDetailOpen: boolean;
@@ -193,13 +194,15 @@ const mapStateToProps = (
   ownProps: DataProps
 ): PropsExtended => {
   const playingEpisodeId = getPlayingEpisode(state);
-  const playing = ownProps.episode.id === playingEpisodeId;
-  const isUpdating = !!getEpisodeJobs(state)[ownProps.episode.id];
+  const playing = ownProps.episodeId === playingEpisodeId;
+  const isUpdating = !!getEpisodeJobs(state)[ownProps.episodeId];
   const detailEpisodeId = getDetailEpisodeId(state);
+  const episode = getEpisodes(state)[ownProps.episodeId];
   return {
+    episode,
     isUpdating,
     playing,
-    isDetailOpen: ownProps.episode.id === detailEpisodeId,
+    isDetailOpen: ownProps.episodeId === detailEpisodeId,
   };
 };
 
