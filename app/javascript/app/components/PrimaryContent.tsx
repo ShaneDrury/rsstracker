@@ -1,19 +1,18 @@
-import { Location } from "history";
+import { History, Location } from "history";
 import * as qs from "qs";
 import React from "react";
-import { Route, RouteComponentProps } from "react-router-dom";
-import { QueryParams } from "../modules/location/queryParams";
-import { Navbar } from "./Navbar";
-
 import { connect } from "react-redux";
+import { Route, RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
 import { getDetailEpisodeId } from "../modules/episodes/selectors";
+import { QueryParams, syncQueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import EpisodeDetail from "./EpisodeDetail";
 import EpisodeLoader from "./EpisodeLoader";
 import Episodes from "./Episodes";
 import EpisodesLoader from "./EpisodesLoader";
 import FeedSelect from "./FeedSelect";
+import { Navbar } from "./Navbar";
 
 const parseLocation = (location: Location): QueryParams =>
   qs.parse(location.search, {
@@ -49,6 +48,12 @@ interface EnhancedProps {
 type Props = EnhancedProps;
 
 class PrimaryContent extends React.Component<Props> {
+  public handleChangePage = (queryParams: QueryParams, history: History) => (
+    selected: number
+  ) => {
+    syncQueryParams({ currentPage: selected }, queryParams, history);
+  };
+
   public renderRoot = ({
     history,
     location,
@@ -72,7 +77,9 @@ class PrimaryContent extends React.Component<Props> {
               feedId={match.params.feedId}
             >
               <Scrollable>
-                <Episodes queryParams={queryParams} history={history} />
+                <Episodes
+                  handleChangePage={this.handleChangePage(queryParams, history)}
+                />
               </Scrollable>
             </EpisodesLoader>
           </Content>
