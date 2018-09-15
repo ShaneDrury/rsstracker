@@ -17,10 +17,10 @@ import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { detailsOpened, fetchEpisode } from "../modules/episodes/actions";
 import { getDetailEpisodeId, getEpisodes } from "../modules/episodes/selectors";
+import { FetchStatus } from "../modules/fetchStatus";
 import { playToggled as togglePlayAction } from "../modules/player/actions";
 import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
-import { RemoteEpisode } from "../types/episode";
 import { Icon } from "./Icon";
 
 interface DataProps {
@@ -28,10 +28,15 @@ interface DataProps {
 }
 
 interface PropsExtended {
-  episode: RemoteEpisode;
+  name: string;
+  description: string;
+  publicationDate: string;
+  thumbnailUrl?: string;
+  updating: boolean;
   playing: boolean;
   isUpdating: boolean;
   isDetailOpen: boolean;
+  fetchStatus: FetchStatus;
 }
 
 interface DispatchProps {
@@ -74,24 +79,29 @@ const FooterWrapper = styled.div`
 
 export class Episode extends React.Component<Props> {
   public shouldComponentUpdate(nextProps: Props) {
-    return !isEqual(nextProps, this.props);
+    const { fetchStatus, ...rest } = this.props;
+    const { fetchStatus: fetchStatusNext, ...restNext } = nextProps;
+    if (fetchStatus.status !== fetchStatusNext.status) {
+      return true;
+    }
+    return !isEqual(rest, restNext);
   }
   public componentDidUpdate(prevProps: Props) {
     if (prevProps.isUpdating && !this.props.isUpdating) {
-      this.props.fetchEpisode(this.props.episode.id);
+      this.props.fetchEpisode(this.props.episodeId);
     }
   }
 
   public handleDownload = () => {
-    this.props.downloadEpisode(this.props.episode.id);
+    this.props.downloadEpisode(this.props.episodeId);
   };
 
   public handleToggleShow = () => {
-    this.props.togglePlay(this.props.episode.id);
+    this.props.togglePlay(this.props.episodeId);
   };
 
   public handleDetailOpened = () => {
-    this.props.handleDetailOpened(this.props.episode.id);
+    this.props.handleDetailOpened(this.props.episodeId);
   };
 
   public render() {
@@ -102,7 +112,7 @@ export class Episode extends React.Component<Props> {
       publicationDate,
       thumbnailUrl,
       updating,
-    } = this.props.episode;
+    } = this.props;
     return (
       <EpisodeWrapper className="tile is-child box">
         <TitleWrapper>
@@ -203,7 +213,12 @@ const mapStateToProps = (
   const detailEpisodeId = getDetailEpisodeId(state);
   const episode = getEpisodes(state)[ownProps.episodeId];
   return {
-    episode,
+    name: episode.name,
+    description: episode.description,
+    publicationDate: episode.publicationDate,
+    thumbnailUrl: episode.thumbnailUrl,
+    updating: episode.updating,
+    fetchStatus: episode.fetchStatus,
     isUpdating,
     playing,
     isDetailOpen: ownProps.episodeId === detailEpisodeId,
