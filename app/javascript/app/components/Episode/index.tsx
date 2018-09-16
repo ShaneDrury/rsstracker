@@ -1,27 +1,23 @@
-import {
-  faDownload,
-  faInfoCircle,
-  faPlay,
-  faSpinner,
-  faStop,
-  faSync,
-} from "@fortawesome/free-solid-svg-icons";
-import classNames from "classnames";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { isEqual } from "lodash";
 import * as moment from "moment";
 import React from "react";
 import Dotdotdot from "react-dotdotdot";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
-import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
-import { detailsOpened, fetchEpisode } from "../modules/episodes/actions";
-import { getDetailEpisodeId, getEpisodes } from "../modules/episodes/selectors";
-import { FetchStatus } from "../modules/fetchStatus";
-import { playToggled as togglePlayAction } from "../modules/player/actions";
-import { getPlayingEpisode } from "../modules/player/selectors";
-import { RootState } from "../modules/reducers";
-import { Icon } from "./Icon";
+import { downloadEpisodeAction } from "../../modules/episodeJobs/actions";
+import { getEpisodeJobs } from "../../modules/episodeJobs/selectors";
+import { detailsOpened, fetchEpisode } from "../../modules/episodes/actions";
+import {
+  getDetailEpisodeId,
+  getEpisodes,
+} from "../../modules/episodes/selectors";
+import { FetchStatus } from "../../modules/fetchStatus";
+import { playToggled as togglePlayAction } from "../../modules/player/actions";
+import { getPlayingEpisode } from "../../modules/player/selectors";
+import { RootState } from "../../modules/reducers";
+import { Icon } from "../Icon";
+import EpisodeFooter from "./EpisodeFooter";
 
 interface DataProps {
   episodeId: string;
@@ -66,10 +62,6 @@ const ContentWrapper = styled.div`
   flex: 1;
 `;
 
-const InfoWrapper = styled.div`
-  margin-left: auto;
-`;
-
 const EpisodeWrapper = styled.article``;
 
 const FooterWrapper = styled.div`
@@ -92,16 +84,16 @@ export class Episode extends React.Component<Props> {
     }
   }
 
-  public handleDownload = () => {
-    this.props.downloadEpisode(this.props.episodeId);
-  };
-
   public handleToggleShow = () => {
     this.props.togglePlay(this.props.episodeId);
   };
 
   public handleDetailOpened = () => {
     this.props.handleDetailOpened(this.props.episodeId);
+  };
+
+  public handleDownload = () => {
+    this.props.downloadEpisode(this.props.episodeId);
   };
 
   public render() {
@@ -144,59 +136,15 @@ export class Episode extends React.Component<Props> {
           </div>
         </ContentWrapper>
         <FooterWrapper>
-          {fetchStatus.status === "SUCCESS" && (
-            <button
-              className={classNames("button", {
-                "is-link": !this.props.playing,
-                "is-danger": this.props.playing,
-              })}
-              onClick={this.handleToggleShow}
-            >
-              <span className="icon">
-                {this.props.playing ? (
-                  <Icon icon={faStop} />
-                ) : (
-                  <Icon icon={faPlay} />
-                )}
-              </span>
-              <span>{this.props.playing ? "Stop" : "Play"}</span>
-            </button>
-          )}
-          {!(fetchStatus.status === "SUCCESS") && (
-            <div>
-              {(fetchStatus.status === "NOT_ASKED" ||
-                fetchStatus.status === "FAILURE" ||
-                this.props.isUpdating) && (
-                <button
-                  className="button is-primary"
-                  onClick={this.handleDownload}
-                  disabled={this.props.isUpdating}
-                >
-                  <span className="icon">
-                    {this.props.isUpdating ? (
-                      <Icon icon={faSync} spin />
-                    ) : (
-                      <Icon icon={faDownload} />
-                    )}
-                  </span>
-                  <span>Download</span>
-                </button>
-              )}
-            </div>
-          )}
-          <InfoWrapper>
-            <button
-              className={classNames("button", {
-                "is-static": this.props.isDetailOpen,
-              })}
-              onClick={this.handleDetailOpened}
-            >
-              <span className="icon">
-                <Icon icon={faInfoCircle} />
-              </span>
-              <span>Info</span>
-            </button>
-          </InfoWrapper>
+          <EpisodeFooter
+            handleDetailOpened={this.handleDetailOpened}
+            handleDownload={this.handleDownload}
+            fetchStatus={this.props.fetchStatus}
+            handleToggleShow={this.handleToggleShow}
+            playing={this.props.playing}
+            isUpdating={this.props.isUpdating}
+            isDetailOpen={this.props.isDetailOpen}
+          />
         </FooterWrapper>
       </EpisodeWrapper>
     );
