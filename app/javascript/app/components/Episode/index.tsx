@@ -1,5 +1,4 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { isEqual } from "lodash";
 import * as moment from "moment";
 import React from "react";
 import Dotdotdot from "react-dotdotdot";
@@ -71,12 +70,22 @@ const FooterWrapper = styled.div`
 
 export class Episode extends React.Component<Props> {
   public shouldComponentUpdate(nextProps: Props) {
-    const { fetchStatus, ...rest } = this.props;
-    const { fetchStatus: fetchStatusNext, ...restNext } = nextProps;
+    const { fetchStatus } = this.props;
+    const { fetchStatus: fetchStatusNext } = nextProps;
     if (fetchStatus.status !== fetchStatusNext.status) {
       return true;
     }
-    return !isEqual(rest, restNext);
+
+    return (
+      this.props.name !== nextProps.name ||
+      this.props.description !== nextProps.description ||
+      this.props.publicationDate !== nextProps.publicationDate ||
+      this.props.thumbnailUrl !== nextProps.thumbnailUrl ||
+      this.props.updating !== nextProps.updating ||
+      this.props.playing !== nextProps.playing ||
+      this.props.isUpdating !== nextProps.isUpdating ||
+      this.props.isDetailOpen !== nextProps.isDetailOpen
+    );
   }
   public componentDidUpdate(prevProps: Props) {
     if (prevProps.isUpdating && !this.props.isUpdating) {
