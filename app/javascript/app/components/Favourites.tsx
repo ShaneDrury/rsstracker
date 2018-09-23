@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { detailsOpened } from "../modules/episodes/actions";
 import { getFavouritesIds } from "../modules/favourites/selectors";
 import { RootState } from "../modules/reducers";
-import { RemoteEpisode } from "../types/episode";
 import EpisodeLoader from "./EpisodeLoader";
+import FavouriteItem from "./FavouriteItem";
 
 interface DataProps {}
 
@@ -13,31 +13,11 @@ interface EnhancedProps {
   favouritesIds: string[];
 }
 
-interface DispatchProps {
-  handleDetailOpened: (episodeId: string) => void;
-}
-
-type Props = DataProps & EnhancedProps & DispatchProps;
+type Props = DataProps & EnhancedProps;
 
 const FavouritesWrapper = styled.nav`
   margin: 0.75rem;
 `;
-
-class FavouriteItem extends React.PureComponent<{
-  episode: RemoteEpisode;
-  handleDetailOpened: (episodeId: string) => void;
-}> {
-  public handleDetailOpened = () => {
-    this.props.handleDetailOpened(this.props.episode.id);
-  };
-  public render() {
-    return (
-      <a className="panel-block is-active" onClick={this.handleDetailOpened}>
-        {this.props.episode.name}
-      </a>
-    );
-  }
-}
 
 export class Favourites extends React.PureComponent<Props> {
   public render() {
@@ -45,12 +25,7 @@ export class Favourites extends React.PureComponent<Props> {
       <FavouritesWrapper className="panel">
         {this.props.favouritesIds.map(episodeId => (
           <EpisodeLoader episodeId={episodeId} key={episodeId}>
-            {episode => (
-              <FavouriteItem
-                episode={episode}
-                handleDetailOpened={this.props.handleDetailOpened}
-              />
-            )}
+            {episode => <FavouriteItem episode={episode} />}
           </EpisodeLoader>
         ))}
       </FavouritesWrapper>
