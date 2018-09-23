@@ -1,6 +1,7 @@
 import {
   faDownload,
   faFileAudio,
+  faHeart,
   faPlay,
   faSpinner,
   faStop,
@@ -16,6 +17,11 @@ import styled from "styled-components";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { detailsClosed, fetchEpisode } from "../modules/episodes/actions";
+import {
+  favouriteAdded,
+  favouriteRemoved,
+} from "../modules/favourites/actions";
+import { getFavouritesIds } from "../modules/favourites/selectors";
 import { playToggled as togglePlayAction } from "../modules/player/actions";
 import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
@@ -30,6 +36,7 @@ interface DataProps {
 interface PropsExtended extends RemoteEpisode {
   playing: boolean;
   isUpdating: boolean;
+  isFavourited: boolean;
 }
 
 interface DispatchProps {
@@ -37,6 +44,8 @@ interface DispatchProps {
   downloadEpisode: (episodeId: string) => void;
   fetchEpisode: (episodeId: string) => void;
   onCloseDetail: () => void;
+  onAddFavourite: (episodeId: string) => void;
+  onRemoveFavourite: (episodeId: string) => void;
 }
 
 type Props = DataProps & PropsExtended & DispatchProps;
@@ -80,6 +89,14 @@ export class Episode extends React.Component<Props> {
     this.props.togglePlay(this.props.id);
   };
 
+  public handleToggleFavourite = () => {
+    if (this.props.isFavourited) {
+      this.props.onRemoveFavourite(this.props.id);
+    } else {
+      this.props.onAddFavourite(this.props.id);
+    }
+  };
+
   public render() {
     const {
       id,
@@ -91,6 +108,7 @@ export class Episode extends React.Component<Props> {
       thumbnailUrl,
       fullUrl,
       updating,
+      isFavourited,
     } = this.props;
     return (
       <div className="tile is-parent">
@@ -102,6 +120,17 @@ export class Episode extends React.Component<Props> {
               )}
               {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
             </NameWrapper>
+            <button
+              className={classNames("button", {
+                "is-link": !isFavourited,
+                "is-danger": isFavourited,
+              })}
+              onClick={this.handleToggleFavourite}
+            >
+              <span className="icon">
+                <Icon icon={faHeart} />
+              </span>
+            </button>
             <CloseButtonWrapper>
               <button className="button" onClick={this.props.onCloseDetail}>
                 <Icon icon={faWindowClose} />
@@ -190,10 +219,12 @@ const mapStateToProps = (
   const playingEpisodeId = getPlayingEpisode(state);
   const playing = ownProps.episode.id === playingEpisodeId;
   const isUpdating = !!getEpisodeJobs(state)[ownProps.episode.id];
+  const isFavourited = getFavouritesIds(state).includes(ownProps.episode.id);
   return {
     ...episode,
     isUpdating,
     playing,
+    isFavourited,
   };
 };
 
@@ -202,6 +233,8 @@ const mapDispatchToProps = {
   downloadEpisode: downloadEpisodeAction,
   fetchEpisode,
   onCloseDetail: detailsClosed,
+  onAddFavourite: favouriteAdded,
+  onRemoveFavourite: favouriteRemoved,
 };
 
 export default connect(

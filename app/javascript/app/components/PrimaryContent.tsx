@@ -11,6 +11,7 @@ import EpisodeDetail from "./EpisodeDetail";
 import EpisodeLoader from "./EpisodeLoader";
 import Episodes from "./Episodes";
 import EpisodesLoader from "./EpisodesLoader";
+import Favourites from "./Favourites";
 import FeedSelect from "./FeedSelect";
 import { Navbar } from "./Navbar";
 
@@ -70,6 +71,7 @@ class PrimaryContent extends React.Component<Props> {
               feedId={match.params.feedId}
               history={history}
             />
+            <Favourites />
           </Sidebar>
           <Content>
             <EpisodesLoader
