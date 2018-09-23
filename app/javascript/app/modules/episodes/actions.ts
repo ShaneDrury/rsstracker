@@ -5,7 +5,12 @@ import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
 import { SearchParams } from "../location/queryParams";
 import { getEpisodes as getEpisodesSelector } from "./selectors";
-import { getEpisode, getEpisodes, updateEpisodeDescription } from "./sources";
+import {
+  getEpisode,
+  getEpisodes,
+  updateEpisodeDate,
+  updateEpisodeDescription,
+} from "./sources";
 
 export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
@@ -208,3 +213,11 @@ export const detailsOpened = (episodeId: string): DetailsOpened => ({
 export const detailsClosed = createStandardAction(
   episodeActions.DETAILS_CLOSED
 )();
+
+export const saveDate = (
+  episodeId: string,
+  date: string
+): RootThunk<void> => async dispatch => {
+  dispatch(updateEpisodeRequested(episodeId, { publicationDate: date }));
+  await updateEpisodeDate(episodeId, date);
+};

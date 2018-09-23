@@ -10,7 +10,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import { isEqual } from "lodash";
-import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -26,6 +25,7 @@ import { playToggled as togglePlayAction } from "../modules/player/actions";
 import { getPlayingEpisode } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 import { RemoteEpisode } from "../types/episode";
+import DateField from "./DateField";
 import Description from "./Description";
 import { Icon } from "./Icon";
 
@@ -148,7 +148,8 @@ export class Episode extends React.Component<Props> {
             {updating && <Icon icon={faSpinner} className="loader" />}
             {publicationDate && (
               <time>
-                Publication date: {moment(publicationDate).format("ll")}
+                Publication date:{" "}
+                <DateField episodeId={id} date={publicationDate} />
               </time>
             )}
             <div>

@@ -73,3 +73,12 @@ export const updateEpisodeDescription = async (
     method: "PATCH",
     body: JSON.stringify({ description }),
   });
+
+export const updateEpisodeDate = async (
+  episodeId: string,
+  publicationDate: string
+): Promise<void> =>
+  apiFetch(`/episodes/${episodeId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ publication_date: publicationDate }),
+  });
