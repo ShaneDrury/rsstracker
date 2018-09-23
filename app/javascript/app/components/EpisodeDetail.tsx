@@ -149,7 +149,7 @@ export class Episode extends React.Component<Props> {
             {publicationDate && (
               <time>
                 Publication date:{" "}
-                <DateField episodeId={id} date={publicationDate} />
+                <DateField key={id} episodeId={id} date={publicationDate} />
               </time>
             )}
             <div>
@@ -161,7 +161,9 @@ export class Episode extends React.Component<Props> {
               </a>
             </div>
             <div>
-              {description && <Description episodeId={id} text={description} />}
+              {description && (
+                <Description key={id} episodeId={id} text={description} />
+              )}
             </div>
           </div>
           <FooterWrapper>
