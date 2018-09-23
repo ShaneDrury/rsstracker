@@ -29,13 +29,9 @@ interface DispatchProps {
 
 type Props = DataProps & DispatchProps & EnhancedProps;
 
-export class EpisodesLoader extends React.Component<Props> {
+export class EpisodesLoader extends React.PureComponent<Props> {
   public componentDidMount() {
     this.fetchEpisodes();
-  }
-
-  public shouldComponentUpdate(nextProps: Props) {
-    return !isEqual(this.props, nextProps);
   }
 
   public componentDidUpdate(prevProps: Props) {
