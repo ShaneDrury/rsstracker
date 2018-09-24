@@ -52,44 +52,41 @@ export class Description extends React.PureComponent<Props, State> {
   };
 
   public render() {
-    const { text } = this.props;
+    if (!this.state.editMode) {
+      return (
+        <article className="message">
+          <div className="message-body">
+            <TextArea onClick={this.editModeOn}>{this.props.text}</TextArea>
+          </div>
+        </article>
+      );
+    }
     return (
       <div>
-        {!this.state.editMode && (
-          <article className="message">
-            <div className="message-body">
-              <TextArea onClick={this.editModeOn}>{text}</TextArea>
-            </div>
-          </article>
-        )}
-        {this.state.editMode && (
-          <div>
-            <div className="field">
-              <div className="control">
-                <textarea
-                  autoFocus
-                  className="textarea"
-                  value={this.state.pendingChanges}
-                  onChange={this.handleEdit}
-                  rows={15}
-                  onBlur={this.cancelEditing}
-                />
-              </div>
-            </div>
-            <div className="field is-grouped">
-              <p className="control">
-                <a className="button is-primary" onMouseDown={this.handleSave}>
-                  Save
-                </a>
-              </p>
-              <p className="control">
-                <a className="button is-danger" onMouseDown={this.clearEdits}>
-                  Clear
-                </a>
-              </p>
-            </div>
+        <div className="field">
+          <div className="control">
+            <textarea
+              autoFocus
+              className="textarea"
+              value={this.state.pendingChanges}
+              onChange={this.handleEdit}
+              rows={15}
+              onBlur={this.cancelEditing}
+            />
           </div>
-        )}
+        </div>
+        <div className="field is-grouped">
+          <p className="control">
+            <a className="button is-primary" onMouseDown={this.handleSave}>
+              Save
+            </a>
+          </p>
+          <p className="control">
+            <a className="button is-danger" onMouseDown={this.clearEdits}>
+              Clear
+            </a>
+          </p>
+        </div>
       </div>
     );
   }
