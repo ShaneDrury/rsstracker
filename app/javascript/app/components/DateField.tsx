@@ -1,7 +1,6 @@
 import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
 import { saveDate } from "../modules/episodes/actions";
 
 interface DataProps {

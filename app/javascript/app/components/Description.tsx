@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { saveDescription } from "../modules/episodes/actions";
+import { EditMode, EditModeOff, EditModeOn } from "./EditMode";
 
 interface DataProps {
   episodeId: string;
@@ -14,80 +15,67 @@ interface DispatchProps {
 
 type Props = DataProps & DispatchProps;
 
-interface State {
-  editMode: boolean;
-  pendingChanges: string;
-}
-
 const TextArea = styled.div`
   cursor: pointer;
   white-space: pre-line;
 `;
 
-export class Description extends React.PureComponent<Props, State> {
-  public state = {
-    editMode: false,
-    pendingChanges: this.props.text,
+export class Description extends React.PureComponent<Props> {
+  public handleSave = (changes: string) => {
+    this.props.saveDescription(this.props.episodeId, changes);
   };
 
-  public editModeOn = () => {
-    this.setState({ editMode: true });
-  };
+  public editModeOff: EditModeOff = ({ value, startEditing }) => (
+    <article className="message">
+      <div className="message-body">
+        <TextArea onClick={startEditing}>{value}</TextArea>
+      </div>
+    </article>
+  );
 
-  public cancelEditing = () => {
-    this.setState({ editMode: false });
-  };
-
-  public handleSave = () => {
-    this.props.saveDescription(this.props.episodeId, this.state.pendingChanges);
-    this.setState({ editMode: false });
-  };
-
-  public handleEdit: React.ChangeEventHandler<HTMLTextAreaElement> = event => {
-    this.setState({ pendingChanges: event.target.value });
-  };
-
-  public clearEdits = () => {
-    this.setState({ pendingChanges: this.props.text });
-  };
-
-  public render() {
-    if (!this.state.editMode) {
-      return (
-        <article className="message">
-          <div className="message-body">
-            <TextArea onClick={this.editModeOn}>{this.props.text}</TextArea>
-          </div>
-        </article>
-      );
-    }
-    return (
-      <div>
-        <div className="field">
-          <div className="control">
-            <textarea
-              autoFocus
-              className="textarea"
-              value={this.state.pendingChanges}
-              onChange={this.handleEdit}
-              rows={15}
-              onBlur={this.cancelEditing}
-            />
-          </div>
-        </div>
-        <div className="field is-grouped">
-          <p className="control">
-            <a className="button is-primary" onMouseDown={this.handleSave}>
-              Save
-            </a>
-          </p>
-          <p className="control">
-            <a className="button is-danger" onMouseDown={this.clearEdits}>
-              Clear
-            </a>
-          </p>
+  public editModeOn: EditModeOn = ({
+    value,
+    onEdit,
+    onCancel,
+    onSave,
+    onClear,
+  }) => (
+    <div>
+      <div className="field">
+        <div className="control">
+          <textarea
+            autoFocus
+            className="textarea"
+            value={value}
+            onChange={onEdit}
+            rows={15}
+            onBlur={onCancel}
+          />
         </div>
       </div>
+      <div className="field is-grouped">
+        <p className="control">
+          <a className="button is-primary" onMouseDown={onSave}>
+            Save
+          </a>
+        </p>
+        <p className="control">
+          <a className="button is-danger" onMouseDown={onClear}>
+            Clear
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+
+  public render() {
+    return (
+      <EditMode
+        initialValue={this.props.text}
+        onSave={this.handleSave}
+        editModeOff={this.editModeOff}
+        editModeOn={this.editModeOn}
+      />
     );
   }
 }
