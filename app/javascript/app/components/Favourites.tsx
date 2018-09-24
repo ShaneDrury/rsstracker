@@ -15,8 +15,14 @@ interface EnhancedProps {
 
 type Props = DataProps & EnhancedProps;
 
-const FavouritesWrapper = styled.nav`
+const FavouritesWrapper = styled.ul`
+  width: 300px;
   margin: 0.75rem;
+`;
+
+const FavouriteItemWrapper = styled.li`
+  display: inline-flex;
+  width: 300px;
 `;
 
 export class Favourites extends React.PureComponent<Props> {
@@ -24,9 +30,11 @@ export class Favourites extends React.PureComponent<Props> {
     return (
       <FavouritesWrapper className="panel">
         {this.props.favouritesIds.map(episodeId => (
-          <EpisodeLoader episodeId={episodeId} key={episodeId}>
-            {episode => <FavouriteItem episode={episode} />}
-          </EpisodeLoader>
+          <FavouriteItemWrapper key={episodeId}>
+            <EpisodeLoader episodeId={episodeId}>
+              {episode => <FavouriteItem episode={episode} />}
+            </EpisodeLoader>
+          </FavouriteItemWrapper>
         ))}
       </FavouritesWrapper>
     );
