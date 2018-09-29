@@ -28,7 +28,8 @@ const FavouriteItemWrapper = styled.li`
 export class Favourites extends React.PureComponent<Props> {
   public render() {
     return (
-      <FavouritesWrapper className="panel">
+      <FavouritesWrapper>
+        <div className="has-text-grey is-4">Favourites</div>
         {this.props.favouritesIds.map(episodeId => (
           <FavouriteItemWrapper key={episodeId}>
             <EpisodeLoader episodeId={episodeId}>
