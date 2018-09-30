@@ -19,7 +19,7 @@ const initialState: JobsState = {
   ids: [],
 };
 
-const episodes = (
+const jobs = (
   state: JobsState = initialState,
   action: JobsAction | FeedJobsAction | EpisodeJobsAction
 ): JobsState => {
@@ -120,4 +120,4 @@ const episodes = (
   }
 };
 
-export default episodes;
+export default jobs;
