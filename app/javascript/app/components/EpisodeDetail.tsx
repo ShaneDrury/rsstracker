@@ -123,7 +123,7 @@ export class Episode extends React.Component<Props> {
             <button
               className={classNames("button", {
                 "is-link": !isFavourited,
-                "is-danger": isFavourited,
+                "is-success": isFavourited,
               })}
               onClick={this.handleToggleFavourite}
             >
