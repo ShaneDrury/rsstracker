@@ -56,7 +56,7 @@ interface FetchEpisodeComplete {
   };
 }
 
-interface UpdateEpisodeComplete {
+export interface UpdateEpisodeComplete {
   type: episodeActions.UPDATE_EPISODE_COMPLETE;
   payload: {
     episode: RemoteEpisode;

@@ -1,7 +1,6 @@
 import { RemoteFeed, StatusCounts } from "../../types/feed";
 import { RootThunk } from "../../types/thunk";
 import {
-  fetchFeed,
   fetchFeeds,
   setFeedAutodownload as setFeedAutodownloadSource,
   setFeedDisabled as setFeedDisabledSource,
@@ -11,6 +10,7 @@ export enum feedActions {
   FETCH_FEEDS_START = "FETCH_FEEDS_START",
   FETCH_FEEDS_COMPLETE = "FETCH_FEEDS_COMPLETE",
   FETCH_FEEDS_FAILURE = "FETCH_FEEDS_FAILURE",
+  FETCH_FEED_START = "FETCH_FEED_START",
   FETCH_FEED_COMPLETE = "FETCH_FEED_COMPLETE",
   SET_FEED_DISABLED_REQUESTED = "SET_FEED_DISABLED_REQUESTED",
   SET_FEED_DISABLED_COMPLETE = "SET_FEED_DISABLED_COMPLETE",
@@ -20,6 +20,11 @@ export enum feedActions {
 
 interface FetchFeedsStart {
   type: feedActions.FETCH_FEEDS_START;
+}
+
+interface FetchFeedStart {
+  type: feedActions.FETCH_FEED_START;
+  payload: { feedId: string };
 }
 
 interface FetchFeedsComplete {
@@ -48,6 +53,11 @@ export const fetchFeedsStart = (): FetchFeedsStart => ({
   type: feedActions.FETCH_FEEDS_START,
 });
 
+export const fetchFeedStart = (feedId: string): FetchFeedStart => ({
+  type: feedActions.FETCH_FEED_START,
+  payload: { feedId },
+});
+
 export const fetchFeedsComplete = (
   feeds: RemoteFeed[],
   statusCounts: StatusCounts
@@ -74,13 +84,6 @@ export const fetchFeedsAction = (): RootThunk<void> => async dispatch => {
   } catch (err) {
     dispatch(fetchFeedsFailure(err));
   }
-};
-
-export const fetchFeedAction = (
-  feedId: string
-): RootThunk<void> => async dispatch => {
-  const feed = await fetchFeed(feedId);
-  dispatch(fetchFeedComplete(feed));
 };
 
 interface SetFeedDisabledRequested {
@@ -161,6 +164,7 @@ export const setFeedAutodownload = (
 
 export type FeedsAction =
   | FetchFeedsStart
+  | FetchFeedStart
   | FetchFeedsComplete
   | FetchFeedsFailure
   | FetchFeedComplete

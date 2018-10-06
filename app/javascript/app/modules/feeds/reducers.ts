@@ -57,17 +57,6 @@ const feeds = (
         },
       };
     }
-    case episodeActions.UPDATE_EPISODE_COMPLETE: {
-      const feedId = action.payload.episode.feedId;
-      const newFeed = { ...state.items[feedId], stale: true };
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          [feedId]: newFeed,
-        },
-      };
-    }
     case feedActions.SET_FEED_DISABLED_REQUESTED: {
       const feedId = action.payload.feedId;
       const newFeed = {

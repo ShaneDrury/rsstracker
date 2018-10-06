@@ -26,5 +26,4 @@ export interface ApiFeed {
 export interface RemoteFeed extends Omit<ApiFeed, "id"> {
   key: string;
   id: string;
-  stale: boolean;
 }

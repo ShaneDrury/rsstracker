@@ -7,11 +7,13 @@ import { Provider } from "react-redux";
 
 import { BrowserRouter, Route } from "react-router-dom";
 import PrimaryContent from "./components/PrimaryContent";
+import sagas from "./modules/sagas";
 import { configureStore } from "./store";
 import { init } from "./websocket";
 
-const store = configureStore();
+const { store, runSaga } = configureStore();
 init(store);
+runSaga(sagas);
 
 const render = (Component: any) => {
   return ReactDOM.render(

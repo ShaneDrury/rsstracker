@@ -25,7 +25,6 @@ interface ProcessedFeeds {
 export const processFeed = (feed: ApiFeed): RemoteFeed => ({
   ...feed,
   key: shortid.generate(),
-  stale: false,
   id: feed.id.toString(),
 });
 
