@@ -1,12 +1,6 @@
 import { all, call, fork, put, take, takeEvery } from "redux-saga/effects";
-import { RemoteEpisode } from "../../types/episode";
 import { RemoteJob } from "../../types/job";
-import {
-  fetchEpisodeComplete,
-  fetchEpisodeFailure,
-  fetchEpisodeStart,
-} from "../episodes/actions";
-import { getEpisode } from "../episodes/sources";
+import { fetchEpisodeSaga } from "../episodes/sagas";
 import {
   FetchJobsComplete,
   fetchJobsComplete,
@@ -33,16 +27,6 @@ function* fetchJobsSaga() {
 
 function* watchJobsRequested() {
   yield takeEvery(jobActions.FETCH_JOBS_REQUESTED, fetchJobsSaga);
-}
-
-function* fetchEpisodeSaga(episodeId: string) {
-  yield put(fetchEpisodeStart(episodeId));
-  try {
-    const episode: RemoteEpisode = yield call(getEpisode, episodeId);
-    yield put(fetchEpisodeComplete(episode));
-  } catch (err) {
-    yield put(fetchEpisodeFailure(err, episodeId));
-  }
 }
 
 export function* watchJobs() {
