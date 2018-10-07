@@ -4,7 +4,7 @@ import React from "react";
 import Dotdotdot from "react-dotdotdot";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { downloadEpisodeAction } from "../../modules/episodeJobs/actions";
+import { downloadEpisodeRequested } from "../../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../../modules/episodeJobs/selectors";
 import { detailsOpened } from "../../modules/episodes/actions";
 import {
@@ -178,7 +178,7 @@ const mapStateToProps = (
 
 const mapDispatchToProps = {
   togglePlay: togglePlayAction,
-  downloadEpisode: downloadEpisodeAction,
+  downloadEpisode: downloadEpisodeRequested,
   handleDetailOpened: detailsOpened,
 };
 

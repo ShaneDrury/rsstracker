@@ -1,10 +1,15 @@
 import { RemoteJob } from "../../types/job";
-import { RootThunk } from "../../types/thunk";
-import { downloadEpisode } from "../episodes/sources";
-import { processJobResponse } from "../jobs/sources";
 
 export enum episodeJobsActions {
+  DOWNLOAD_EPISODE_REQUESTED = "DOWNLOAD_EPISODE_REQUESTED",
   DOWNLOAD_EPISODE_STARTED = "DOWNLOAD_EPISODE_STARTED",
+}
+
+export interface DownloadEpisodeRequested {
+  type: episodeJobsActions.DOWNLOAD_EPISODE_REQUESTED;
+  payload: {
+    episodeId: string;
+  };
 }
 
 interface DownloadEpisodeStarted {
@@ -15,6 +20,13 @@ interface DownloadEpisodeStarted {
   };
 }
 
+export const downloadEpisodeRequested = (
+  episodeId: string
+): DownloadEpisodeRequested => ({
+  type: episodeJobsActions.DOWNLOAD_EPISODE_REQUESTED,
+  payload: { episodeId },
+});
+
 export const downloadEpisodeStarted = (
   job: RemoteJob,
   episodeId: string
@@ -23,12 +35,6 @@ export const downloadEpisodeStarted = (
   payload: { job, episodeId },
 });
 
-export const downloadEpisodeAction = (
-  episodeId: string
-): RootThunk<void> => async dispatch => {
-  const downloadResponse = await downloadEpisode(episodeId);
-  const job = processJobResponse(downloadResponse.job);
-  dispatch(downloadEpisodeStarted(job, episodeId));
-};
-
-export type EpisodeJobsAction = DownloadEpisodeStarted;
+export type EpisodeJobsAction =
+  | DownloadEpisodeStarted
+  | DownloadEpisodeRequested;
