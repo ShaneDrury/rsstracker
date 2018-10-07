@@ -10,7 +10,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { fetchFeedsAction } from "../modules/feeds/actions";
+import { fetchFeedsRequested } from "../modules/feeds/actions";
 import { getFeeds, getFetchStatus } from "../modules/feeds/selectors";
 import { QueryParams, syncQueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
@@ -121,7 +121,7 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
 };
 
 const mapDispatchToProps = {
-  fetchFeeds: fetchFeedsAction,
+  fetchFeeds: fetchFeedsRequested,
 };
 
 export default connect(

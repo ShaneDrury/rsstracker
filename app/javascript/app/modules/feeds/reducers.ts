@@ -23,7 +23,7 @@ const feeds = (
   action: FeedsAction | FeedJobsAction
 ): State => {
   switch (action.type) {
-    case feedActions.FETCH_FEEDS_START:
+    case feedActions.FETCH_FEEDS_REQUESTED:
       return {
         ...state,
         fetchStatus: "LOADING",
