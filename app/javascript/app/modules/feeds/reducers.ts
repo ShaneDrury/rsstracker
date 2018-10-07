@@ -1,6 +1,5 @@
 import { forEach } from "lodash";
 import { RemoteFeed } from "../../types/feed";
-import { episodeActions, EpisodesAction } from "../episodes/actions";
 import { FeedJobsAction, feedJobsActions } from "../feedJobs/actions";
 import { FetchStatus } from "../remoteData";
 import { feedActions, FeedsAction } from "./actions";
@@ -21,7 +20,7 @@ const initialState: State = {
 
 const feeds = (
   state: State = initialState,
-  action: FeedsAction | EpisodesAction | FeedJobsAction
+  action: FeedsAction | FeedJobsAction
 ): State => {
   switch (action.type) {
     case feedActions.FETCH_FEEDS_START:
@@ -54,34 +53,6 @@ const feeds = (
         items: {
           ...state.items,
           [updatedFeed.id]: updatedFeed,
-        },
-      };
-    }
-    case feedActions.SET_FEED_DISABLED_REQUESTED: {
-      const feedId = action.payload.feedId;
-      const newFeed = {
-        ...state.items[feedId],
-        disabled: action.payload.disabled,
-      };
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          [feedId]: newFeed,
-        },
-      };
-    }
-    case feedActions.SET_FEED_AUTODOWNLOAD_REQUESTED: {
-      const feedId = action.payload.feedId;
-      const newFeed = {
-        ...state.items[feedId],
-        autodownload: action.payload.autodownload,
-      };
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          [feedId]: newFeed,
         },
       };
     }

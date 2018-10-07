@@ -53,21 +53,3 @@ export const updateFeeds = async (
     method: "POST",
     body: JSON.stringify({ feed_ids: feedIds }),
   });
-
-export const setFeedDisabled = async (
-  feedId: string,
-  disabled: boolean
-): Promise<void> =>
-  apiFetch(`/feeds/${feedId}`, {
-    method: "PATCH",
-    body: JSON.stringify({ disabled }),
-  });
-
-export const setFeedAutodownload = async (
-  feedId: string,
-  autodownload: boolean
-): Promise<void> =>
-  apiFetch(`/feeds/${feedId}`, {
-    method: "PATCH",
-    body: JSON.stringify({ autodownload }),
-  });
