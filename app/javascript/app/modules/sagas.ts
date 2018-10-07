@@ -1,6 +1,7 @@
 import { all } from "redux-saga/effects";
 import episodeJobsSagas from "./episodeJobs/sagas";
 import episodesSagas from "./episodes/sagas";
+import { favouritesSagas } from "./favourites/sagas";
 import feedJobsSagas from "./feedJobs/sagas";
 import feedsSagas from "./feeds/sagas";
 import jobsSagas from "./jobs/sagas";
@@ -14,5 +15,6 @@ export default function* rootSaga() {
     episodeJobsSagas(),
     playerSagas(),
     feedJobsSagas(),
+    favouritesSagas(),
   ]);
 }

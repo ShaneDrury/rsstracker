@@ -3,12 +3,12 @@ export enum favouritesActions {
   FAVOURITE_REMOVED = "FAVOURITE_REMOVED",
 }
 
-interface FavouriteAdded {
+export interface FavouriteAdded {
   type: favouritesActions.FAVOURITE_ADDED;
   payload: { episodeId: string };
 }
 
-interface FavouriteRemoved {
+export interface FavouriteRemoved {
   type: favouritesActions.FAVOURITE_REMOVED;
   payload: { episodeId: string };
 }
