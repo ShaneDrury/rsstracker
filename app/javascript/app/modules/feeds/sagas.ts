@@ -1,4 +1,4 @@
-import { call, put, take } from "redux-saga/effects";
+import { call, fork, put, take } from "redux-saga/effects";
 import { RemoteFeed } from "../../types/feed";
 import { episodeActions, UpdateEpisodeComplete } from "../episodes/actions";
 import { fetchFeedComplete, fetchFeedStart } from "./actions";
@@ -11,8 +11,11 @@ function* fetchFeedSaga(feedId: string) {
 }
 
 export function* watchUpdateEpisodeComplete() {
-  const { payload }: UpdateEpisodeComplete = yield take(
-    episodeActions.UPDATE_EPISODE_COMPLETE
-  );
-  yield call(fetchFeedSaga, payload.episode.feedId);
+  while (true) {
+    const { payload }: UpdateEpisodeComplete = yield take(
+      // TODO: takeLatest
+      episodeActions.UPDATE_EPISODE_COMPLETE
+    );
+    yield fork(fetchFeedSaga, payload.episode.feedId);
+  }
 }

@@ -4,7 +4,7 @@ import NotificationSystem from "react-notification-system";
 import { connect } from "react-redux";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { fetchEpisodeIfNeeded } from "../modules/episodes/actions";
-import { deleteJobAction, fetchJobs } from "../modules/jobs/actions";
+import { deleteJobAction, fetchJobsRequested } from "../modules/jobs/actions";
 import { JobDescription } from "../modules/jobs/descriptions";
 import { getJobDescriptions } from "../modules/jobs/selectors";
 import { RootState } from "../modules/reducers";
@@ -86,7 +86,7 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
 };
 
 const mapDispatchToProps = {
-  getJobs: fetchJobs,
+  getJobs: fetchJobsRequested,
   onCloseErrorJob: deleteJobAction,
   fetchEpisodeIfNeeded,
 };

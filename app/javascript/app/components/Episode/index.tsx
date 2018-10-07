@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { downloadEpisodeAction } from "../../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../../modules/episodeJobs/selectors";
-import { detailsOpened, fetchEpisode } from "../../modules/episodes/actions";
+import { detailsOpened } from "../../modules/episodes/actions";
 import {
   getDetailEpisodeId,
   getEpisodes,
@@ -37,7 +37,6 @@ interface PropsExtended {
 interface DispatchProps {
   togglePlay: (episodeId: string) => void;
   downloadEpisode: (episodeId: string) => void;
-  fetchEpisode: (episodeId: string) => void;
   handleDetailOpened: (episodeId: string) => void;
 }
 
@@ -86,11 +85,6 @@ export class Episode extends React.Component<Props> {
       this.props.isUpdating !== nextProps.isUpdating ||
       this.props.isDetailOpen !== nextProps.isDetailOpen
     );
-  }
-  public componentDidUpdate(prevProps: Props) {
-    if (prevProps.isUpdating && !this.props.isUpdating) {
-      this.props.fetchEpisode(this.props.episodeId);
-    }
   }
 
   public handleToggleShow = () => {
@@ -185,7 +179,6 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   togglePlay: togglePlayAction,
   downloadEpisode: downloadEpisodeAction,
-  fetchEpisode,
   handleDetailOpened: detailsOpened,
 };
 

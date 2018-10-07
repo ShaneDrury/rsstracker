@@ -3,6 +3,7 @@ import { RootThunk } from "../../types/thunk";
 import { deleteJob, getJobs } from "./sources";
 
 export enum jobActions {
+  FETCH_JOBS_REQUESTED = "FETCH_JOBS_REQUESTED",
   FETCH_JOBS_START = "FETCH_JOBS_START",
   FETCH_JOBS_COMPLETE = "FETCH_JOBS_COMPLETE",
   FETCH_JOBS_FAILURE = "FETCH_JOBS_FAILURE",
@@ -12,11 +13,15 @@ export enum jobActions {
   NEW_JOB = "NEW_JOB",
 }
 
+interface FetchJobsRequested {
+  type: jobActions.FETCH_JOBS_REQUESTED;
+}
+
 interface FetchJobsStart {
   type: jobActions.FETCH_JOBS_START;
 }
 
-interface FetchJobsComplete {
+export interface FetchJobsComplete {
   type: jobActions.FETCH_JOBS_COMPLETE;
   payload: {
     jobs: RemoteJob[];
@@ -30,7 +35,7 @@ interface FetchJobsFailure {
   };
 }
 
-interface JobComplete {
+export interface JobComplete {
   type: jobActions.JOB_COMPLETE;
   payload: {
     jobId: string;
@@ -51,12 +56,16 @@ interface RemoveJobComplete {
   };
 }
 
-interface NewJob {
+export interface NewJob {
   type: jobActions.NEW_JOB;
   payload: {
     job: RemoteJob;
   };
 }
+
+export const fetchJobsRequested = (): FetchJobsRequested => ({
+  type: jobActions.FETCH_JOBS_REQUESTED,
+});
 
 export const fetchJobsStart = (): FetchJobsStart => ({
   type: jobActions.FETCH_JOBS_START,
@@ -100,16 +109,6 @@ export type JobsAction =
   | JobError
   | RemoveJobComplete
   | NewJob;
-
-export const fetchJobs = (): RootThunk<void> => async dispatch => {
-  dispatch(fetchJobsStart());
-  try {
-    const jobs = await getJobs();
-    dispatch(fetchJobsComplete(jobs));
-  } catch (err) {
-    dispatch(fetchJobsFailure(err));
-  }
-};
 
 export const deleteJobAction = (
   jobId: string
