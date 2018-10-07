@@ -30,17 +30,6 @@ const jobs = (
         fetchStatus: "LOADING",
       };
     }
-    case feedJobsActions.UPDATE_FEED_STARTED: {
-      return {
-        ...state,
-        ids: union(state.ids, [action.payload.job.id]),
-        fetchStatus: "SUCCESS",
-        items: {
-          ...state.items,
-          [action.payload.job.id]: action.payload.job,
-        },
-      };
-    }
     case feedJobsActions.UPDATE_FEEDS_STARTED: {
       const feedJobs = values(action.payload.feedsToJobs);
       const jobIds = feedJobs.map(job => job.id);

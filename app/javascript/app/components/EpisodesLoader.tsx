@@ -2,7 +2,6 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { searchEpisodes } from "../modules/episodes/actions";
-import { updateFeedAction } from "../modules/feedJobs/actions";
 import { getFetchStatus } from "../modules/feeds/selectors";
 import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
@@ -24,7 +23,6 @@ interface EnhancedProps {
 
 interface DispatchProps {
   fetchEpisodes: (queryParams: SearchParams) => void;
-  updateFeed: (feedId: string) => void;
 }
 
 type Props = DataProps & DispatchProps & EnhancedProps;
@@ -80,7 +78,6 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
 
 const mapDispatchToProps = {
   fetchEpisodes: searchEpisodes,
-  updateFeed: updateFeedAction,
 };
 
 export default connect(

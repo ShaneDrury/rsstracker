@@ -15,15 +15,6 @@ const feedJobs = (
   action: FeedJobsAction | JobsAction
 ): State => {
   switch (action.type) {
-    case feedJobsActions.UPDATE_FEED_STARTED: {
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          [action.payload.feedId]: action.payload.job.id,
-        },
-      };
-    }
     case feedJobsActions.UPDATE_FEEDS_STARTED: {
       const feedsToJobIds = mapValues(
         action.payload.feedsToJobs,
