@@ -1,4 +1,4 @@
-import { all, call, fork, put, take } from "redux-saga/effects";
+import { all, call, put, take, takeEvery } from "redux-saga/effects";
 import { RemoteEpisode } from "../../types/episode";
 import { fetchFeedRequested } from "../feeds/actions";
 import {
@@ -10,7 +10,9 @@ import {
 } from "./actions";
 import { getEpisode } from "./sources";
 
-export function* fetchEpisode(episodeId: string) {
+export function* fetchEpisode({
+  payload: { episodeId },
+}: FetchEpisodeRequested) {
   try {
     const episode: RemoteEpisode = yield call(getEpisode, episodeId);
     yield put(fetchEpisodeComplete(episode));
@@ -20,12 +22,7 @@ export function* fetchEpisode(episodeId: string) {
 }
 
 export function* fetchEpisodeListener() {
-  while (true) {
-    const { payload }: FetchEpisodeRequested = yield take(
-      episodeActions.FETCH_EPISODE_REQUESTED
-    );
-    yield fork(fetchEpisode, payload.episodeId);
-  }
+  yield takeEvery(episodeActions.FETCH_EPISODE_REQUESTED, fetchEpisode);
 }
 
 export function* watchUpdateEpisodeComplete() {

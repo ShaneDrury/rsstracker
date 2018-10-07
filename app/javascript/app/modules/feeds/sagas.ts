@@ -1,4 +1,4 @@
-import { all, call, fork, put, take, takeEvery } from "redux-saga/effects";
+import { all, call, put, takeEvery } from "redux-saga/effects";
 import { RemoteFeed } from "../../types/feed";
 import {
   feedActions,
@@ -9,18 +9,13 @@ import {
 } from "./actions";
 import { fetchFeed, fetchFeeds } from "./sources";
 
-function* fetchFeedSaga(feedId: string) {
+function* fetchFeedSaga({ payload: { feedId } }: FetchFeedRequested) {
   const feed: RemoteFeed = yield call(fetchFeed, feedId);
   yield put(fetchFeedComplete(feed));
 }
 
 function* watchFetchFeedRequested() {
-  while (true) {
-    const {
-      payload: { feedId },
-    }: FetchFeedRequested = yield take(feedActions.FETCH_FEED_REQUESTED);
-    yield fork(fetchFeedSaga, feedId);
-  }
+  yield takeEvery(feedActions.FETCH_FEED_REQUESTED, fetchFeedSaga);
 }
 
 function* fetchFeedsSaga() {

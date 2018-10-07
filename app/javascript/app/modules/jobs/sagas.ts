@@ -1,6 +1,6 @@
-import { all, call, fork, put, take, takeEvery } from "redux-saga/effects";
+import { all, call, put, take, takeEvery } from "redux-saga/effects";
 import { RemoteJob } from "../../types/job";
-import { fetchEpisode } from "../episodes/sagas";
+import { fetchEpisodeRequested } from "../episodes/actions";
 import {
   FetchJobsComplete,
   fetchJobsComplete,
@@ -51,7 +51,9 @@ export function* watchJobs() {
         switch (job.jobData.jobClass) {
           case "DownloadYoutubeAudioJob":
           case "DownloadEpisodeJob": {
-            yield fork(fetchEpisode, job.jobData.arguments[0].toString(10));
+            yield put(
+              fetchEpisodeRequested(job.jobData.arguments[0].toString(10))
+            );
             break;
           }
           default:
