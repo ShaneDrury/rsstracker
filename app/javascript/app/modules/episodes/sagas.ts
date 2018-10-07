@@ -6,11 +6,15 @@ import {
   fetchEpisodeComplete,
   fetchEpisodeFailure,
   FetchEpisodeRequested,
+  fetchEpisodesComplete,
+  fetchEpisodesFailure,
+  FetchEpisodesRequested,
   UpdateEpisodeComplete,
   UpdateEpisodeRequested,
 } from "./actions";
 import {
   getEpisode,
+  getEpisodes,
   updateEpisodeDate,
   updateEpisodeDescription,
 } from "./sources";
@@ -53,10 +57,32 @@ function* watchUpdateEpisodeRequested() {
   yield takeEvery(episodeActions.UPDATE_EPISODE_REQUESTED, updateEpisodeSaga);
 }
 
+function* fetchEpisodesSaga({
+  payload: { queryParams },
+}: FetchEpisodesRequested) {
+  try {
+    const episodes = yield getEpisodes(queryParams);
+    yield put(
+      fetchEpisodesComplete(
+        episodes.items,
+        episodes.pageInfo,
+        episodes.statusCounts
+      )
+    );
+  } catch (err) {
+    yield put(fetchEpisodesFailure(err));
+  }
+}
+
+function* watchFetchEpisodesRequested() {
+  yield takeEvery(episodeActions.FETCH_EPISODES_REQUESTED, fetchEpisodesSaga);
+}
+
 export default function* episodesSagas() {
   yield all([
     fetchEpisodeListener(),
     watchUpdateEpisodeComplete(),
     watchUpdateEpisodeRequested(),
+    watchFetchEpisodesRequested(),
   ]);
 }

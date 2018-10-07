@@ -1,7 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { searchEpisodes } from "../modules/episodes/actions";
+import { fetchEpisodesRequested } from "../modules/episodes/actions";
 import { getFetchStatus } from "../modules/feeds/selectors";
 import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
@@ -77,7 +77,7 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
 };
 
 const mapDispatchToProps = {
-  fetchEpisodes: searchEpisodes,
+  fetchEpisodes: fetchEpisodesRequested,
 };
 
 export default connect(

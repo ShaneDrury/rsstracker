@@ -46,7 +46,7 @@ const episodes = (
   action: EpisodesAction | FeedsAction
 ): State => {
   switch (action.type) {
-    case episodeActions.FETCH_EPISODES_START: {
+    case episodeActions.FETCH_EPISODES_REQUESTED: {
       return {
         ...state,
         fetchStatus: "LOADING",

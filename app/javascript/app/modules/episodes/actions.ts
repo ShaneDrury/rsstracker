@@ -2,12 +2,10 @@ import { createStandardAction } from "typesafe-actions";
 import { RemoteEpisode } from "../../types/episode";
 import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
-import { RootThunk } from "../../types/thunk";
 import { SearchParams } from "../location/queryParams";
-import { getEpisodes } from "./sources";
 
 export enum episodeActions {
-  FETCH_EPISODES_START = "FETCH_EPISODES_START",
+  FETCH_EPISODES_REQUESTED = "FETCH_EPISODES_REQUESTED",
   FETCH_EPISODES_COMPLETE = "FETCH_EPISODES_COMPLETE",
   FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE",
   FETCH_EPISODE_REQUESTED = "FETCH_EPISODE_REQUESTED",
@@ -20,8 +18,11 @@ export enum episodeActions {
   DETAILS_CLOSED = "DETAILS_CLOSED",
 }
 
-interface FetchEpisodesStart {
-  type: episodeActions.FETCH_EPISODES_START;
+export interface FetchEpisodesRequested {
+  type: episodeActions.FETCH_EPISODES_REQUESTED;
+  payload: {
+    queryParams: SearchParams;
+  };
 }
 
 interface FetchEpisodesComplete {
@@ -80,8 +81,11 @@ interface DetailsClosed {
   type: episodeActions.DETAILS_CLOSED;
 }
 
-export const fetchEpisodesStart = (): FetchEpisodesStart => ({
-  type: episodeActions.FETCH_EPISODES_START,
+export const fetchEpisodesRequested = (
+  queryParams: SearchParams
+): FetchEpisodesRequested => ({
+  type: episodeActions.FETCH_EPISODES_REQUESTED,
+  payload: { queryParams },
 });
 
 export const fetchEpisodesComplete = (
@@ -136,7 +140,7 @@ export interface UpdateEpisodeRequested {
 }
 
 export type EpisodesAction =
-  | FetchEpisodesStart
+  | FetchEpisodesRequested
   | FetchEpisodesComplete
   | FetchEpisodesFailure
   | FetchEpisodeRequested
@@ -146,24 +150,6 @@ export type EpisodesAction =
   | UpdateEpisodeRequested
   | DetailsOpened
   | DetailsClosed;
-
-export const searchEpisodes = (
-  queryParams: SearchParams
-): RootThunk<void> => async dispatch => {
-  dispatch(fetchEpisodesStart());
-  try {
-    const episodes = await getEpisodes(queryParams);
-    dispatch(
-      fetchEpisodesComplete(
-        episodes.items,
-        episodes.pageInfo,
-        episodes.statusCounts
-      )
-    );
-  } catch (err) {
-    dispatch(fetchEpisodesFailure(err));
-  }
-};
 
 export const updateEpisodeRequested = (
   episodeId: string,
