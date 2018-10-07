@@ -4,7 +4,6 @@ import thunkMiddleware from "redux-thunk";
 import rootReducer from "./modules/reducers";
 
 import saveFavouriteEpisodes from "./middleware/saveFavouriteEpisodes";
-import savePlayedSeconds from "./middleware/savePlayedSeconds";
 import savePlayingEpisode from "./middleware/savePlayingEpisode";
 
 // Fix for redux-devtools-extension not supporting redux 4.0.0 yet
@@ -31,7 +30,6 @@ export const configureStore = () => {
     applyMiddleware(
       ...[
         thunkMiddleware,
-        savePlayedSeconds,
         savePlayingEpisode,
         saveFavouriteEpisodes,
         sagaMiddleware,

@@ -5,7 +5,7 @@ export enum actions {
   PLAYER_RESUMED = "PLAYER_RESUMED",
 }
 
-interface PlayedSecondsUpdated {
+export interface PlayedSecondsUpdated {
   type: actions.PLAYED_SECONDS_UPDATED;
   payload: { playedSeconds: number; episodeId: string };
 }

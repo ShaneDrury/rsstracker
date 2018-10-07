@@ -3,7 +3,14 @@ import episodeJobsSagas from "./episodeJobs/sagas";
 import episodesSagas from "./episodes/sagas";
 import feedsSagas from "./feeds/sagas";
 import jobsSagas from "./jobs/sagas";
+import playerSagas from "./player/sagas";
 
 export default function* rootSaga() {
-  yield all([feedsSagas(), jobsSagas(), episodesSagas(), episodeJobsSagas()]);
+  yield all([
+    feedsSagas(),
+    jobsSagas(),
+    episodesSagas(),
+    episodeJobsSagas(),
+    playerSagas(),
+  ]);
 }
