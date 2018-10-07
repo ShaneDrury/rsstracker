@@ -1,21 +1,28 @@
-import { call, fork, put, take } from "redux-saga/effects";
+import { all, call, fork, put, take } from "redux-saga/effects";
 import { RemoteFeed } from "../../types/feed";
 import { episodeActions, UpdateEpisodeComplete } from "../episodes/actions";
-import { fetchFeedComplete, fetchFeedStart } from "./actions";
+import {
+  feedActions,
+  fetchFeedComplete,
+  FetchFeedRequested,
+  fetchFeedRequested,
+} from "./actions";
 import { fetchFeed } from "./sources";
 
 function* fetchFeedSaga(feedId: string) {
-  yield put(fetchFeedStart(feedId));
   const feed: RemoteFeed = yield call(fetchFeed, feedId);
   yield put(fetchFeedComplete(feed));
 }
 
-export function* watchUpdateEpisodeComplete() {
+function* watchFetchFeedRequested() {
   while (true) {
-    const { payload }: UpdateEpisodeComplete = yield take(
-      // TODO: takeLatest
-      episodeActions.UPDATE_EPISODE_COMPLETE
-    );
-    yield fork(fetchFeedSaga, payload.episode.feedId); // TODO: convert to put(fetchFeedRequested)
+    const {
+      payload: { feedId },
+    }: FetchFeedRequested = yield take(feedActions.FETCH_FEED_REQUESTED);
+    yield fork(fetchFeedSaga, feedId);
   }
+}
+
+export default function* feedSagas() {
+  yield all([watchFetchFeedRequested()]);
 }

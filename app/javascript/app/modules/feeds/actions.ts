@@ -10,7 +10,7 @@ export enum feedActions {
   FETCH_FEEDS_START = "FETCH_FEEDS_START",
   FETCH_FEEDS_COMPLETE = "FETCH_FEEDS_COMPLETE",
   FETCH_FEEDS_FAILURE = "FETCH_FEEDS_FAILURE",
-  FETCH_FEED_START = "FETCH_FEED_START",
+  FETCH_FEED_REQUESTED = "FETCH_FEED_REQUESTED",
   FETCH_FEED_COMPLETE = "FETCH_FEED_COMPLETE",
   SET_FEED_DISABLED_REQUESTED = "SET_FEED_DISABLED_REQUESTED",
   SET_FEED_DISABLED_COMPLETE = "SET_FEED_DISABLED_COMPLETE",
@@ -22,8 +22,8 @@ interface FetchFeedsStart {
   type: feedActions.FETCH_FEEDS_START;
 }
 
-interface FetchFeedStart {
-  type: feedActions.FETCH_FEED_START;
+export interface FetchFeedRequested {
+  type: feedActions.FETCH_FEED_REQUESTED;
   payload: { feedId: string };
 }
 
@@ -53,8 +53,8 @@ export const fetchFeedsStart = (): FetchFeedsStart => ({
   type: feedActions.FETCH_FEEDS_START,
 });
 
-export const fetchFeedStart = (feedId: string): FetchFeedStart => ({
-  type: feedActions.FETCH_FEED_START,
+export const fetchFeedRequested = (feedId: string): FetchFeedRequested => ({
+  type: feedActions.FETCH_FEED_REQUESTED,
   payload: { feedId },
 });
 
@@ -164,7 +164,7 @@ export const setFeedAutodownload = (
 
 export type FeedsAction =
   | FetchFeedsStart
-  | FetchFeedStart
+  | FetchFeedRequested
   | FetchFeedsComplete
   | FetchFeedsFailure
   | FetchFeedComplete
