@@ -1,6 +1,4 @@
 import { RemoteJob } from "../../types/job";
-import { RootThunk } from "../../types/thunk";
-import { deleteJob, getJobs } from "./sources";
 
 export enum jobActions {
   FETCH_JOBS_REQUESTED = "FETCH_JOBS_REQUESTED",
@@ -11,6 +9,7 @@ export enum jobActions {
   JOB_ERROR = "JOB_ERROR",
   REMOVE_JOB_COMPLETE = "REMOVE_JOB_COMPLETE",
   NEW_JOB = "NEW_JOB",
+  REMOVE_JOB_REQUESTED = "REMOVE_JOB_REQUESTED",
 }
 
 interface FetchJobsRequested {
@@ -46,6 +45,13 @@ interface JobError {
   type: jobActions.JOB_ERROR;
   payload: {
     job: RemoteJob;
+  };
+}
+
+export interface RemoveJobRequested {
+  type: jobActions.REMOVE_JOB_REQUESTED;
+  payload: {
+    jobId: string;
   };
 }
 
@@ -91,6 +97,11 @@ export const jobError = (job: RemoteJob): JobError => ({
   payload: { job },
 });
 
+export const removeJobRequested = (jobId: string): RemoveJobRequested => ({
+  type: jobActions.REMOVE_JOB_REQUESTED,
+  payload: { jobId },
+});
+
 export const removeJobComplete = (jobId: string): RemoveJobComplete => ({
   type: jobActions.REMOVE_JOB_COMPLETE,
   payload: { jobId },
@@ -107,12 +118,6 @@ export type JobsAction =
   | FetchJobsFailure
   | JobComplete
   | JobError
+  | RemoveJobRequested
   | RemoveJobComplete
   | NewJob;
-
-export const deleteJobAction = (
-  jobId: string
-): RootThunk<void> => async dispatch => {
-  await deleteJob(jobId);
-  dispatch(removeJobComplete(jobId));
-};

@@ -8,8 +8,10 @@ import {
   jobActions,
   JobComplete,
   NewJob,
+  removeJobComplete,
+  RemoveJobRequested,
 } from "./actions";
-import { getJobs } from "./sources";
+import { deleteJob, getJobs } from "./sources";
 
 const jobsToMap = (jobsArray: RemoteJob[]): { [key: string]: RemoteJob } => {
   const jobs: { [key: string]: RemoteJob } = {};
@@ -76,7 +78,15 @@ export function* watchJobs() {
   ]);
 }
 
+function* removeJob({ payload }: RemoveJobRequested) {
+  yield deleteJob(payload.jobId);
+  put(removeJobComplete(payload.jobId));
+}
+
+function* watchRemoveJobRequested() {
+  yield takeEvery(jobActions.REMOVE_JOB_REQUESTED, removeJob);
+}
+
 export default function* jobsSagas() {
-  yield fork(watchJobs);
-  yield fork(watchJobsRequested);
+  yield all([watchJobs(), watchJobsRequested(), watchRemoveJobRequested()]);
 }
