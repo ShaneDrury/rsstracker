@@ -38,9 +38,11 @@ export class EpisodesLoader extends React.PureComponent<Props> {
       this.props.fetchStatus !== "LOADING"
     ) {
       this.fetchEpisodes();
+      return;
     }
     if (this.props.feedId !== prevProps.feedId) {
       this.fetchEpisodes();
+      return;
     }
     if (
       prevProps.loadingFeeds.length > 0 &&
