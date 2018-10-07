@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import {
   detailsOpened,
-  fetchEpisodeIfNeeded,
+  fetchEpisodeRequested,
 } from "../modules/episodes/actions";
 import { getDetailEpisodeId, getEpisodes } from "../modules/episodes/selectors";
 import { getPlaying, getPlayingEpisodeId } from "../modules/player/selectors";
@@ -56,7 +56,7 @@ const PlayerWrapper = styled.div`
 
 export class GlobalPlayer extends React.PureComponent<Props> {
   public componentDidMount() {
-    if (this.props.episodeId) {
+    if (this.props.episodeId && !this.props.fetched) {
       this.props.fetchEpisodeIfNeeded(this.props.episodeId);
     }
   }
@@ -114,7 +114,7 @@ const mapStateToProps = (state: RootState): PropsExtended => {
 };
 
 const mapDispatchToProps = {
-  fetchEpisodeIfNeeded,
+  fetchEpisodeIfNeeded: fetchEpisodeRequested,
   handleDetailOpened: detailsOpened,
 };
 

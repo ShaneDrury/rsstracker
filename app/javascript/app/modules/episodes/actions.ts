@@ -4,9 +4,7 @@ import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
 import { SearchParams } from "../location/queryParams";
-import { getEpisodes as getEpisodesSelector } from "./selectors";
 import {
-  getEpisode,
   getEpisodes,
   updateEpisodeDate,
   updateEpisodeDescription,
@@ -16,6 +14,7 @@ export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
   FETCH_EPISODES_COMPLETE = "FETCH_EPISODES_COMPLETE",
   FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE",
+  FETCH_EPISODE_REQUESTED = "FETCH_EPISODE_REQUESTED",
   FETCH_EPISODE_START = "FETCH_EPISODE_START",
   FETCH_EPISODE_COMPLETE = "FETCH_EPISODE_COMPLETE",
   FETCH_EPISODE_FAILURE = "FETCH_EPISODE_FAILURE",
@@ -45,8 +44,8 @@ interface FetchEpisodesFailure {
   };
 }
 
-interface FetchEpisodeStart {
-  type: episodeActions.FETCH_EPISODE_START;
+export interface FetchEpisodeRequested {
+  type: episodeActions.FETCH_EPISODE_REQUESTED;
   payload: {
     episodeId: string;
   };
@@ -103,8 +102,10 @@ export const fetchEpisodesFailure = (error: string): FetchEpisodesFailure => ({
   payload: { error },
 });
 
-export const fetchEpisodeStart = (episodeId: string): FetchEpisodeStart => ({
-  type: episodeActions.FETCH_EPISODE_START,
+export const fetchEpisodeRequested = (
+  episodeId: string
+): FetchEpisodeRequested => ({
+  type: episodeActions.FETCH_EPISODE_REQUESTED,
   payload: { episodeId },
 });
 
@@ -142,7 +143,7 @@ export type EpisodesAction =
   | FetchEpisodesStart
   | FetchEpisodesComplete
   | FetchEpisodesFailure
-  | FetchEpisodeStart
+  | FetchEpisodeRequested
   | FetchEpisodeComplete
   | FetchEpisodeFailure
   | UpdateEpisodeComplete
@@ -165,28 +166,6 @@ export const searchEpisodes = (
     );
   } catch (err) {
     dispatch(fetchEpisodesFailure(err));
-  }
-};
-
-export const fetchEpisode = (
-  episodeId: string
-): RootThunk<void> => async dispatch => {
-  dispatch(fetchEpisodeStart(episodeId));
-  try {
-    const episode = await getEpisode(episodeId);
-    dispatch(fetchEpisodeComplete(episode));
-  } catch (err) {
-    dispatch(fetchEpisodeFailure(err, episodeId));
-  }
-};
-
-export const fetchEpisodeIfNeeded = (episodeId: string): RootThunk<void> => (
-  dispatch,
-  getState
-) => {
-  const state = getState();
-  if (!getEpisodesSelector(state)[episodeId]) {
-    dispatch(fetchEpisode(episodeId));
   }
 };
 

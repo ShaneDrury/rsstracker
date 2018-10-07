@@ -16,6 +16,6 @@ export function* watchUpdateEpisodeComplete() {
       // TODO: takeLatest
       episodeActions.UPDATE_EPISODE_COMPLETE
     );
-    yield fork(fetchFeedSaga, payload.episode.feedId);
+    yield fork(fetchFeedSaga, payload.episode.feedId); // TODO: convert to put(fetchFeedRequested)
   }
 }

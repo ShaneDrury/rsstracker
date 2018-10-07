@@ -3,7 +3,7 @@ import React from "react";
 import NotificationSystem from "react-notification-system";
 import { connect } from "react-redux";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
-import { fetchEpisodeIfNeeded } from "../modules/episodes/actions";
+import { fetchEpisodeRequested } from "../modules/episodes/actions";
 import { deleteJobAction, fetchJobsRequested } from "../modules/jobs/actions";
 import { JobDescription } from "../modules/jobs/descriptions";
 import { getJobDescriptions } from "../modules/jobs/selectors";
@@ -32,7 +32,7 @@ export class ActiveJobs extends React.PureComponent<Props> {
   public componentDidUpdate(prevProps: Props) {
     if (!isEqual(this.props.relatedEpisodeIds, prevProps.relatedEpisodeIds)) {
       this.props.relatedEpisodeIds.forEach(episodeId => {
-        this.props.fetchEpisodeIfNeeded(episodeId);
+        this.props.fetchEpisodeIfNeeded(episodeId); // TODO: Move this to saga
       });
     }
 
@@ -88,7 +88,7 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
 const mapDispatchToProps = {
   getJobs: fetchJobsRequested,
   onCloseErrorJob: deleteJobAction,
-  fetchEpisodeIfNeeded,
+  fetchEpisodeIfNeeded: fetchEpisodeRequested,
 };
 
 export default connect(

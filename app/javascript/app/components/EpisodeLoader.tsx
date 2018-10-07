@@ -3,7 +3,7 @@ import { RemoteEpisode } from "../types/episode";
 
 import { connect } from "react-redux";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
-import { fetchEpisodeIfNeeded } from "../modules/episodes/actions";
+import { fetchEpisodeRequested } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
 import { RootState } from "../modules/reducers";
 
@@ -38,7 +38,9 @@ class EpisodeLoader extends React.PureComponent<Props> {
   }
 
   public fetchEpisode = () => {
-    this.props.fetchEpisode(this.props.episodeId);
+    if (!this.props.remoteEpisode) {
+      this.props.fetchEpisode(this.props.episodeId);
+    }
   };
 
   public render() {
@@ -63,7 +65,7 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = {
-  fetchEpisode: fetchEpisodeIfNeeded,
+  fetchEpisode: fetchEpisodeRequested,
 };
 
 export default connect(
