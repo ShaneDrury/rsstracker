@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { saveDescription } from "../modules/episodes/actions";
+import { updateEpisodeRequested } from "../modules/episodes/actions";
 import { EditMode, EditModeOff, EditModeOn } from "./EditMode";
 
 interface DataProps {
@@ -10,7 +10,10 @@ interface DataProps {
 }
 
 interface DispatchProps {
-  saveDescription: (episodeId: string, description: string) => void;
+  updateEpisodeRequested: (
+    episodeId: string,
+    changes: { description: string }
+  ) => void;
 }
 
 type Props = DataProps & DispatchProps;
@@ -21,8 +24,8 @@ const TextArea = styled.div`
 `;
 
 export class Description extends React.PureComponent<Props> {
-  public handleSave = (changes: string) => {
-    this.props.saveDescription(this.props.episodeId, changes);
+  public handleSave = (description: string) => {
+    this.props.updateEpisodeRequested(this.props.episodeId, { description });
   };
 
   public editModeOff: EditModeOff = ({ value, startEditing }) => (
@@ -81,7 +84,7 @@ export class Description extends React.PureComponent<Props> {
 }
 
 const mapDispatchToProps = {
-  saveDescription,
+  updateEpisodeRequested,
 };
 
 export default connect(

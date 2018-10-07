@@ -1,7 +1,7 @@
 import * as moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
-import { saveDate } from "../modules/episodes/actions";
+import { updateEpisodeRequested } from "../modules/episodes/actions";
 import { EditMode, EditModeOff, EditModeOn } from "./EditMode";
 
 interface DataProps {
@@ -10,14 +10,19 @@ interface DataProps {
 }
 
 interface DispatchProps {
-  saveDate: (episodeId: string, date: string) => void;
+  updateEpisodeRequested: (
+    episodeId: string,
+    changes: { publicationDate: string }
+  ) => void;
 }
 
 type Props = DataProps & DispatchProps;
 
 export class DateField extends React.PureComponent<Props> {
-  public handleSave = (changes: string) => {
-    this.props.saveDate(this.props.episodeId, changes);
+  public handleSave = (publicationDate: string) => {
+    this.props.updateEpisodeRequested(this.props.episodeId, {
+      publicationDate,
+    });
   };
 
   public editModeOff: EditModeOff = ({ value, startEditing }) => (
@@ -52,7 +57,7 @@ export class DateField extends React.PureComponent<Props> {
 }
 
 const mapDispatchToProps = {
-  saveDate,
+  updateEpisodeRequested,
 };
 
 export default connect(

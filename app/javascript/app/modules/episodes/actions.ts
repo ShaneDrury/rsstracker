@@ -4,11 +4,7 @@ import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
 import { RootThunk } from "../../types/thunk";
 import { SearchParams } from "../location/queryParams";
-import {
-  getEpisodes,
-  updateEpisodeDate,
-  updateEpisodeDescription,
-} from "./sources";
+import { getEpisodes } from "./sources";
 
 export enum episodeActions {
   FETCH_EPISODES_START = "FETCH_EPISODES_START",
@@ -131,7 +127,7 @@ export const fetchEpisodeFailure = (
   payload: { error, episodeId },
 });
 
-interface UpdateEpisodeRequested {
+export interface UpdateEpisodeRequested {
   type: episodeActions.UPDATE_EPISODE_REQUESTED;
   payload: {
     episodeId: string;
@@ -180,14 +176,6 @@ export const updateEpisodeRequested = (
   },
 });
 
-export const saveDescription = (
-  episodeId: string,
-  description: string
-): RootThunk<void> => async dispatch => {
-  dispatch(updateEpisodeRequested(episodeId, { description }));
-  await updateEpisodeDescription(episodeId, description);
-};
-
 export const detailsOpened = (episodeId: string): DetailsOpened => ({
   type: episodeActions.DETAILS_OPENED,
   payload: { episodeId },
@@ -196,11 +184,3 @@ export const detailsOpened = (episodeId: string): DetailsOpened => ({
 export const detailsClosed = createStandardAction(
   episodeActions.DETAILS_CLOSED
 )();
-
-export const saveDate = (
-  episodeId: string,
-  date: string
-): RootThunk<void> => async dispatch => {
-  dispatch(updateEpisodeRequested(episodeId, { publicationDate: date }));
-  await updateEpisodeDate(episodeId, date);
-};

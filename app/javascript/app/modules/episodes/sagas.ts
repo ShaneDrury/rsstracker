@@ -7,12 +7,15 @@ import {
   fetchEpisodeFailure,
   FetchEpisodeRequested,
   UpdateEpisodeComplete,
+  UpdateEpisodeRequested,
 } from "./actions";
-import { getEpisode } from "./sources";
+import {
+  getEpisode,
+  updateEpisodeDate,
+  updateEpisodeDescription,
+} from "./sources";
 
-export function* fetchEpisode({
-  payload: { episodeId },
-}: FetchEpisodeRequested) {
+function* fetchEpisode({ payload: { episodeId } }: FetchEpisodeRequested) {
   try {
     const episode: RemoteEpisode = yield call(getEpisode, episodeId);
     yield put(fetchEpisodeComplete(episode));
@@ -21,11 +24,11 @@ export function* fetchEpisode({
   }
 }
 
-export function* fetchEpisodeListener() {
+function* fetchEpisodeListener() {
   yield takeEvery(episodeActions.FETCH_EPISODE_REQUESTED, fetchEpisode);
 }
 
-export function* watchUpdateEpisodeComplete() {
+function* watchUpdateEpisodeComplete() {
   while (true) {
     const { payload }: UpdateEpisodeComplete = yield take(
       // TODO: takeLatest
@@ -35,6 +38,25 @@ export function* watchUpdateEpisodeComplete() {
   }
 }
 
+function* updateEpisodeSaga({
+  payload: { episodeId, changes },
+}: UpdateEpisodeRequested) {
+  if (changes.description) {
+    yield updateEpisodeDescription(episodeId, changes.description);
+  }
+  if (changes.publicationDate) {
+    yield updateEpisodeDate(episodeId, changes.publicationDate);
+  }
+}
+
+function* watchUpdateEpisodeRequested() {
+  yield takeEvery(episodeActions.UPDATE_EPISODE_REQUESTED, updateEpisodeSaga);
+}
+
 export default function* episodesSagas() {
-  yield all([fetchEpisodeListener(), watchUpdateEpisodeComplete()]);
+  yield all([
+    fetchEpisodeListener(),
+    watchUpdateEpisodeComplete(),
+    watchUpdateEpisodeRequested(),
+  ]);
 }
