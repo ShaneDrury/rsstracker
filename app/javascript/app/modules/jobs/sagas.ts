@@ -36,7 +36,7 @@ function* watchJobsRequested() {
 }
 
 function* fetchEpisodeSaga(episodeId: string) {
-  yield put(fetchEpisodeStart());
+  yield put(fetchEpisodeStart(episodeId));
   try {
     const episode: RemoteEpisode = yield call(getEpisode, episodeId);
     yield put(fetchEpisodeComplete(episode));

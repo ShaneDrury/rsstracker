@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { downloadEpisodeAction } from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
-import { detailsClosed, fetchEpisode } from "../modules/episodes/actions";
+import { detailsClosed } from "../modules/episodes/actions";
 import {
   favouriteAdded,
   favouriteRemoved,
@@ -42,7 +42,6 @@ interface PropsExtended extends RemoteEpisode {
 interface DispatchProps {
   togglePlay: (episodeId: string) => void;
   downloadEpisode: (episodeId: string) => void;
-  fetchEpisode: (episodeId: string) => void;
   onCloseDetail: () => void;
   onAddFavourite: (episodeId: string) => void;
   onRemoveFavourite: (episodeId: string) => void;
@@ -73,12 +72,6 @@ const FooterWrapper = styled.div`
 export class Episode extends React.Component<Props> {
   public shouldComponentUpdate(nextProps: Props) {
     return !isEqual(nextProps, this.props);
-  }
-
-  public componentDidUpdate(prevProps: Props) {
-    if (prevProps.isUpdating && !this.props.isUpdating) {
-      this.props.fetchEpisode(this.props.id);
-    }
   }
 
   public handleDownload = () => {
@@ -234,7 +227,6 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   togglePlay: togglePlayAction,
   downloadEpisode: downloadEpisodeAction,
-  fetchEpisode,
   onCloseDetail: detailsClosed,
   onAddFavourite: favouriteAdded,
   onRemoveFavourite: favouriteRemoved,

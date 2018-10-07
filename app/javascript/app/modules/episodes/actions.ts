@@ -47,6 +47,9 @@ interface FetchEpisodesFailure {
 
 interface FetchEpisodeStart {
   type: episodeActions.FETCH_EPISODE_START;
+  payload: {
+    episodeId: string;
+  };
 }
 
 interface FetchEpisodeComplete {
@@ -100,8 +103,9 @@ export const fetchEpisodesFailure = (error: string): FetchEpisodesFailure => ({
   payload: { error },
 });
 
-export const fetchEpisodeStart = (): FetchEpisodeStart => ({
+export const fetchEpisodeStart = (episodeId: string): FetchEpisodeStart => ({
   type: episodeActions.FETCH_EPISODE_START,
+  payload: { episodeId },
 });
 
 export const fetchEpisodeComplete = (
@@ -167,7 +171,7 @@ export const searchEpisodes = (
 export const fetchEpisode = (
   episodeId: string
 ): RootThunk<void> => async dispatch => {
-  dispatch(fetchEpisodeStart());
+  dispatch(fetchEpisodeStart(episodeId));
   try {
     const episode = await getEpisode(episodeId);
     dispatch(fetchEpisodeComplete(episode));
