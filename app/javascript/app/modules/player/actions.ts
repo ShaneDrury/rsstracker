@@ -10,7 +10,7 @@ export interface PlayedSecondsUpdated {
   payload: { playedSeconds: number; episodeId: string };
 }
 
-interface PlayToggled {
+export interface PlayToggled {
   type: actions.PLAY_TOGGLED;
   payload: { playingEpisodeId: string };
 }

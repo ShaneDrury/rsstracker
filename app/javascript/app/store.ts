@@ -3,7 +3,6 @@ import createSagaMiddleware from "redux-saga";
 import rootReducer from "./modules/reducers";
 
 import saveFavouriteEpisodes from "./middleware/saveFavouriteEpisodes";
-import savePlayingEpisode from "./middleware/savePlayingEpisode";
 
 // Fix for redux-devtools-extension not supporting redux 4.0.0 yet
 // tslint:disable-next-line:no-var-requires
@@ -26,9 +25,7 @@ const composeEnhancers =
 export const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
   const enhancer = composeEnhancers(
-    applyMiddleware(
-      ...[savePlayingEpisode, saveFavouriteEpisodes, sagaMiddleware]
-    )
+    applyMiddleware(...[saveFavouriteEpisodes, sagaMiddleware])
   );
   const store = createStore(rootReducer, enhancer);
 

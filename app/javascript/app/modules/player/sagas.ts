@@ -1,5 +1,5 @@
 import { all, take } from "redux-saga/effects";
-import { actions, PlayedSecondsUpdated } from "./actions";
+import { actions, PlayedSecondsUpdated, PlayToggled } from "./actions";
 
 function savePlayedSeconds(episodeId: string, playedSeconds: number) {
   const savedSecondsJSON = localStorage.getItem("savedSeconds");
@@ -18,6 +18,19 @@ function* watchPlayedSeconds() {
   }
 }
 
+function savePlayingEpisode(playingEpisodeId: string) {
+  localStorage.setItem("lastPlayedEpisode", JSON.stringify(playingEpisodeId));
+}
+
+function* watchPlayToggled() {
+  while (true) {
+    const {
+      payload: { playingEpisodeId },
+    }: PlayToggled = yield take(actions.PLAY_TOGGLED);
+    savePlayingEpisode(playingEpisodeId);
+  }
+}
+
 export default function* playerSagas() {
-  yield all([watchPlayedSeconds()]);
+  yield all([watchPlayedSeconds(), watchPlayToggled()]);
 }
