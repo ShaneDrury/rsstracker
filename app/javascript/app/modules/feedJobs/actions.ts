@@ -1,9 +1,5 @@
-import { zipObject } from "lodash";
 import { RemoteFeed } from "../../types/feed";
 import { RemoteJob } from "../../types/job";
-import { RootThunk } from "../../types/thunk";
-import { updateFeeds } from "../feeds/sources";
-import { processJobResponse } from "../jobs/sources";
 
 export enum feedJobsActions {
   UPDATE_FEEDS_STARTED = "UPDATE_FEEDS_STARTED",
@@ -30,7 +26,7 @@ interface UpdateFeedsStarted {
   };
 }
 
-interface UpdateFeedsRequested {
+export interface UpdateFeedsRequested {
   type: feedJobsActions.UPDATE_FEEDS_REQUESTED;
   payload: {
     feedIds: string[];
@@ -50,16 +46,6 @@ export const updateFeedsStarted = (feedsToJobs: {
   type: feedJobsActions.UPDATE_FEEDS_STARTED,
   payload: { feedsToJobs },
 });
-
-export const updateFeedsAction = (
-  feedIds: string[]
-): RootThunk<void> => async dispatch => {
-  dispatch(updateFeedsRequested(feedIds));
-  const updateResponse = await updateFeeds(feedIds);
-  const jobs = updateResponse.jobs.map(processJobResponse);
-  const feedsToJobs = zipObject(feedIds, jobs);
-  dispatch(updateFeedsStarted(feedsToJobs));
-};
 
 export type FeedJobsAction =
   | UpdateFeedsStarted

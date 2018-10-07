@@ -2,7 +2,7 @@ import { faSync } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
-import { updateFeedsAction } from "../modules/feedJobs/actions";
+import { updateFeedsRequested } from "../modules/feedJobs/actions";
 import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
 import { getEnabledFeedIds } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
@@ -53,7 +53,7 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
 };
 
 const mapDispatchToProps = {
-  updateFeeds: updateFeedsAction,
+  updateFeeds: updateFeedsRequested,
 };
 
 export default connect(

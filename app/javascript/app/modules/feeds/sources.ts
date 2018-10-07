@@ -4,7 +4,7 @@ import { ApiFeed, RemoteFeed, StatusCounts } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
 import apiFetch from "../apiFetch";
 
-interface UpdateFeedsResponse {
+export interface UpdateFeedsResponse {
   jobs: ProviderJob[];
 }
 
