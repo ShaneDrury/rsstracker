@@ -1,6 +1,5 @@
 import { applyMiddleware, compose, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
-import thunkMiddleware from "redux-thunk";
 import rootReducer from "./modules/reducers";
 
 import saveFavouriteEpisodes from "./middleware/saveFavouriteEpisodes";
@@ -28,12 +27,7 @@ export const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
   const enhancer = composeEnhancers(
     applyMiddleware(
-      ...[
-        thunkMiddleware,
-        savePlayingEpisode,
-        saveFavouriteEpisodes,
-        sagaMiddleware,
-      ]
+      ...[savePlayingEpisode, saveFavouriteEpisodes, sagaMiddleware]
     )
   );
   const store = createStore(rootReducer, enhancer);

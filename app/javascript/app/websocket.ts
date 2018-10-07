@@ -1,6 +1,6 @@
 import Cable from "actioncable";
 import camelcaseKeys from "camelcase-keys";
-import { Store } from "redux";
+import { Dispatch, Store } from "redux";
 import { RootAction } from "./modules/actions";
 import { updateEpisodeComplete } from "./modules/episodes/actions";
 import { processEpisode } from "./modules/episodes/sources";
@@ -12,7 +12,6 @@ import { RootState } from "./modules/reducers";
 import { ApiEpisode } from "./types/episode";
 import { ApiFeed } from "./types/feed";
 import { ProviderJob } from "./types/job";
-import { Dispatch } from "./types/thunk";
 
 interface Meta extends Element {
   content: string;
@@ -62,7 +61,7 @@ type CableAction =
 
 const handleCableAction = (
   action: CableAction,
-  dispatch: Dispatch<RootAction, RootState>
+  dispatch: Dispatch<RootAction>
 ) => {
   switch (action.type) {
     case "UPDATE_FEED": {
