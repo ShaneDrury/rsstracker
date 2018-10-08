@@ -1,4 +1,4 @@
-import { forEach } from "lodash";
+import { forEach, union } from "lodash";
 import { RemoteEpisode } from "../../types/episode";
 import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
@@ -80,6 +80,7 @@ const episodes = (
           ...state.items,
           [episode.id]: episode,
         },
+        ids: union(state.ids, episode.id),
       };
     }
     case feedActions.FETCH_FEEDS_COMPLETE: {

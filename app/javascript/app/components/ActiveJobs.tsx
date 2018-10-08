@@ -33,12 +33,6 @@ export class ActiveJobs extends React.PureComponent<Props> {
   }
 
   public componentDidUpdate(prevProps: Props) {
-    if (!isEqual(this.props.relatedEpisodeIds, prevProps.relatedEpisodeIds)) {
-      this.props.relatedEpisodeIds.forEach(episodeId => {
-        this.props.fetchEpisodeIfNeeded(episodeId); // TODO: Move this to saga
-      });
-    }
-
     const newKeys = this.props.jobDescriptions.map(job => job.key);
     const prevKeys = prevProps.jobDescriptions.map(job => job.key);
     const keysToRemove = difference(prevKeys, newKeys);
@@ -54,6 +48,7 @@ export class ActiveJobs extends React.PureComponent<Props> {
       if (!prevKeys.includes(key)) {
         if (job.error) {
           notificationSystem.addNotification({
+            // TODO: Move this to saga
             message: job.error,
             level: "error",
             position: "bl",

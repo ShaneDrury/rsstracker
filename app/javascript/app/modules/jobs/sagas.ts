@@ -1,4 +1,4 @@
-import { all, call, put, take, takeEvery } from "redux-saga/effects";
+import { all, call, fork, put, take, takeEvery } from "redux-saga/effects";
 import { RemoteJob } from "../../types/job";
 import { fetchEpisodeRequested } from "../episodes/actions";
 import {
@@ -29,6 +29,17 @@ function* watchJobsRequested() {
   yield takeEvery(jobActions.FETCH_JOBS_REQUESTED, fetchJobsSaga);
 }
 
+function* fetchRelatedEpisode(job: RemoteJob) {
+  switch (job.jobData.jobClass) {
+    case "DownloadYoutubeAudioJob":
+    case "DownloadEpisodeJob": {
+      yield put(fetchEpisodeRequested(job.jobData.arguments[0].toString(10)));
+      break;
+    }
+    default:
+  }
+}
+
 export function* watchJobs() {
   let jobs: { [key: string]: RemoteJob } = {};
 
@@ -36,6 +47,7 @@ export function* watchJobs() {
     const { payload }: FetchJobsComplete = yield take(
       jobActions.FETCH_JOBS_COMPLETE
     );
+    yield all(payload.jobs.map(job => fork(fetchRelatedEpisode, job)));
     jobs = jobsToMap(payload.jobs);
   }
 
@@ -46,16 +58,7 @@ export function* watchJobs() {
       }: JobComplete = yield take(jobActions.JOB_COMPLETE);
       const job = jobs[jobId];
       if (job) {
-        switch (job.jobData.jobClass) {
-          case "DownloadYoutubeAudioJob":
-          case "DownloadEpisodeJob": {
-            yield put(
-              fetchEpisodeRequested(job.jobData.arguments[0].toString(10))
-            );
-            break;
-          }
-          default:
-        }
+        yield fork(fetchRelatedEpisode, job);
         const { [jobId]: _, ...newJobs } = jobs;
         jobs = newJobs;
       }
@@ -67,6 +70,7 @@ export function* watchJobs() {
       const {
         payload: { job },
       }: NewJob = yield take(jobActions.NEW_JOB);
+      yield fork(fetchRelatedEpisode, job);
       jobs[job.id] = job;
     }
   }

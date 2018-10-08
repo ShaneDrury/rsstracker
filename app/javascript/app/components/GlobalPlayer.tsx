@@ -24,7 +24,7 @@ interface PropsExtended {
 }
 
 interface DispatchProps {
-  fetchEpisodeIfNeeded: (episodeId: string) => void;
+  fetchEpisode: (episodeId: string) => void;
   handleDetailOpened: (episodeId: string) => void;
 }
 
@@ -57,7 +57,7 @@ const PlayerWrapper = styled.div`
 export class GlobalPlayer extends React.PureComponent<Props> {
   public componentDidMount() {
     if (this.props.episodeId && !this.props.fetched) {
-      this.props.fetchEpisodeIfNeeded(this.props.episodeId);
+      this.props.fetchEpisode(this.props.episodeId);
     }
   }
 
@@ -114,7 +114,7 @@ const mapStateToProps = (state: RootState): PropsExtended => {
 };
 
 const mapDispatchToProps = {
-  fetchEpisodeIfNeeded: fetchEpisodeRequested,
+  fetchEpisode: fetchEpisodeRequested,
   handleDetailOpened: detailsOpened,
 };
 
