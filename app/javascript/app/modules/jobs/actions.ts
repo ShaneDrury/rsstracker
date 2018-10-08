@@ -2,7 +2,6 @@ import { RemoteJob } from "../../types/job";
 
 export enum jobActions {
   FETCH_JOBS_REQUESTED = "FETCH_JOBS_REQUESTED",
-  FETCH_JOBS_START = "FETCH_JOBS_START",
   FETCH_JOBS_COMPLETE = "FETCH_JOBS_COMPLETE",
   FETCH_JOBS_FAILURE = "FETCH_JOBS_FAILURE",
   JOB_COMPLETE = "JOB_COMPLETE",
@@ -14,10 +13,6 @@ export enum jobActions {
 
 interface FetchJobsRequested {
   type: jobActions.FETCH_JOBS_REQUESTED;
-}
-
-interface FetchJobsStart {
-  type: jobActions.FETCH_JOBS_START;
 }
 
 export interface FetchJobsComplete {
@@ -73,10 +68,6 @@ export const fetchJobsRequested = (): FetchJobsRequested => ({
   type: jobActions.FETCH_JOBS_REQUESTED,
 });
 
-export const fetchJobsStart = (): FetchJobsStart => ({
-  type: jobActions.FETCH_JOBS_START,
-});
-
 export const fetchJobsComplete = (jobs: RemoteJob[]): FetchJobsComplete => ({
   type: jobActions.FETCH_JOBS_COMPLETE,
   payload: { jobs },
@@ -113,7 +104,7 @@ export const newJob = (job: RemoteJob): NewJob => ({
 });
 
 export type JobsAction =
-  | FetchJobsStart
+  | FetchJobsRequested
   | FetchJobsComplete
   | FetchJobsFailure
   | JobComplete

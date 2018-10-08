@@ -24,7 +24,7 @@ const jobs = (
   action: JobsAction | FeedJobsAction | EpisodeJobsAction
 ): JobsState => {
   switch (action.type) {
-    case jobActions.FETCH_JOBS_START: {
+    case jobActions.FETCH_JOBS_REQUESTED: {
       return {
         ...state,
         fetchStatus: "LOADING",

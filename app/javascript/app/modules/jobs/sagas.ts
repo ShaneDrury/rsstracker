@@ -4,7 +4,6 @@ import { fetchEpisodeRequested } from "../episodes/actions";
 import {
   FetchJobsComplete,
   fetchJobsComplete,
-  fetchJobsStart,
   jobActions,
   JobComplete,
   NewJob,
@@ -22,7 +21,6 @@ const jobsToMap = (jobsArray: RemoteJob[]): { [key: string]: RemoteJob } => {
 };
 
 function* fetchJobsSaga() {
-  yield put(fetchJobsStart());
   const jobs: RemoteJob[] = yield call(getJobs);
   yield put(fetchJobsComplete(jobs));
 }
