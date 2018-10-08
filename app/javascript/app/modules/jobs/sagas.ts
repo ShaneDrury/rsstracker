@@ -84,7 +84,7 @@ export function* watchJobs() {
 
 function* removeJob({ payload }: RemoveJobRequested) {
   yield deleteJob(payload.jobId);
-  put(removeJobComplete(payload.jobId));
+  yield put(removeJobComplete(payload.jobId));
 }
 
 function* watchRemoveJobRequested() {
