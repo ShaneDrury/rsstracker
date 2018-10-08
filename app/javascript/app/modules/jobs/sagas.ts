@@ -58,7 +58,7 @@ export function* watchJobs() {
       }: JobComplete = yield take(jobActions.JOB_COMPLETE);
       const job = jobs[jobId];
       if (job) {
-        yield fork(fetchRelatedEpisode, job);
+        yield fork(fetchRelatedEpisode, job); // TODO: Change to refetch requested
         const { [jobId]: _, ...newJobs } = jobs;
         jobs = newJobs;
       }

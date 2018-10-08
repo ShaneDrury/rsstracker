@@ -1,11 +1,13 @@
-import { all, call, put, take, takeEvery } from "redux-saga/effects";
+import { all, call, fork, put, take, takeEvery } from "redux-saga/effects";
 import { RemoteEpisode } from "../../types/episode";
 import { fetchFeedRequested } from "../feeds/actions";
 import {
   episodeActions,
+  FetchEpisodeComplete,
   fetchEpisodeComplete,
   fetchEpisodeFailure,
   FetchEpisodeRequested,
+  FetchEpisodesComplete,
   fetchEpisodesComplete,
   fetchEpisodesFailure,
   FetchEpisodesRequested,
@@ -26,10 +28,6 @@ function* fetchEpisode({ payload: { episodeId } }: FetchEpisodeRequested) {
   } catch (err) {
     yield put(fetchEpisodeFailure(err, episodeId));
   }
-}
-
-function* fetchEpisodeListener() {
-  yield takeEvery(episodeActions.FETCH_EPISODE_REQUESTED, fetchEpisode);
 }
 
 function* watchUpdateEpisodeComplete() {
@@ -78,11 +76,51 @@ function* watchFetchEpisodesRequested() {
   yield takeEvery(episodeActions.FETCH_EPISODES_REQUESTED, fetchEpisodesSaga);
 }
 
+function* watchEpisodes() {
+  const localEpisodes: { [key: string]: RemoteEpisode } = {};
+
+  function* watchFetchEpisodesComplete() {
+    yield takeEvery(
+      episodeActions.FETCH_EPISODES_COMPLETE,
+      ({ payload: { episodes } }: FetchEpisodesComplete) => {
+        episodes.forEach(episode => {
+          localEpisodes[episode.id] = episode;
+        });
+      }
+    );
+  }
+
+  function* watchFetchEpisodeComplete() {
+    yield takeEvery(
+      episodeActions.FETCH_EPISODE_COMPLETE,
+      ({ payload: { episode } }: FetchEpisodeComplete) => {
+        localEpisodes[episode.id] = episode;
+      }
+    );
+  }
+
+  function* watchFetchEpisodeRequested() {
+    yield takeEvery(episodeActions.FETCH_EPISODE_REQUESTED, function*(
+      action: FetchEpisodeRequested
+    ) {
+      if (!localEpisodes[action.payload.episodeId]) {
+        yield fork(fetchEpisode, action);
+      }
+    });
+  }
+
+  yield all([
+    call(watchFetchEpisodesComplete),
+    call(watchFetchEpisodeComplete),
+    call(watchFetchEpisodeRequested),
+  ]);
+}
+
 export default function* episodesSagas() {
   yield all([
-    fetchEpisodeListener(),
     watchUpdateEpisodeComplete(),
     watchUpdateEpisodeRequested(),
     watchFetchEpisodesRequested(),
+    watchEpisodes(),
   ]);
 }

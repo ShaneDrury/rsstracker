@@ -25,7 +25,7 @@ export interface FetchEpisodesRequested {
   };
 }
 
-interface FetchEpisodesComplete {
+export interface FetchEpisodesComplete {
   type: episodeActions.FETCH_EPISODES_COMPLETE;
   payload: {
     episodes: RemoteEpisode[];
@@ -48,7 +48,7 @@ export interface FetchEpisodeRequested {
   };
 }
 
-interface FetchEpisodeComplete {
+export interface FetchEpisodeComplete {
   type: episodeActions.FETCH_EPISODE_COMPLETE;
   payload: {
     episode: RemoteEpisode;
