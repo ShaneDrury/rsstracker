@@ -1,4 +1,3 @@
-import { createSelector } from "reselect";
 import { RemoteEpisode } from "../../types/episode";
 import { RootState } from "../reducers";
 
@@ -10,13 +9,6 @@ export const getFetchStatus = (state: RootState) => state.episodes.fetchStatus;
 
 export const getSortedEpisodeIds = (state: RootState): string[] =>
   state.episodes.ids;
-
-export const getLoadedEpisodes = createSelector(
-  getEpisodes,
-  getSortedEpisodeIds,
-  (remoteEpisodes, episodeIds): RemoteEpisode[] =>
-    episodeIds.map(episodeId => remoteEpisodes[episodeId])
-);
 
 export const getPageInfo = (state: RootState) => state.episodes.pageInfo;
 

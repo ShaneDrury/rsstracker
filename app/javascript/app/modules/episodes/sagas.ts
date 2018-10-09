@@ -43,6 +43,12 @@ function* watchUpdateEpisodeComplete() {
   while (true) {
     const { payload }: UpdateEpisodeComplete = yield take(
       // TODO: takeLatest
+      // TODO: Either stop dispatching so many UPDATE_EPISODE events
+      // or batch up the resulting events
+      // Only dispatch fetchFeedRequested if what's changed actually affects
+      // the feed.
+      // Might need a local store of episodes to check here
+      // with
       episodeActions.UPDATE_EPISODE_COMPLETE
     );
     yield put(fetchFeedRequested(payload.episode.feedId));
@@ -137,7 +143,9 @@ function* watchEpisodes() {
         return;
       }
       if (!localEpisodes.has(episodeId)) {
-        pending.episodeIds.add(episodeId);
+        pending.episodeIds.add(episodeId); // TODO: split this out to separate watcher
+        // e.g. can have a separate watcher with local pending ids, if we need to communicate
+        // use events
         yield delay(10);
         if (pending.episodeIds.has(episodeId)) {
           yield fork(fetchEpisodesById, Array.from(pending.episodeIds));

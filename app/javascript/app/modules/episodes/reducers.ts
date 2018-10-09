@@ -54,14 +54,11 @@ const episodes = (
     }
     case episodeActions.FETCH_EPISODES_BY_ID_COMPLETE: {
       const remoteEpisodes: { [key: string]: RemoteEpisode } = {};
-      const ids: string[] = [];
       forEach(action.payload.episodes, episode => {
         remoteEpisodes[episode.id] = episode;
-        ids.push(episode.id);
       });
       return {
         ...state,
-        ids,
         items: {
           ...state.items,
           ...remoteEpisodes,
@@ -70,10 +67,9 @@ const episodes = (
     }
     case episodeActions.FETCH_EPISODES_COMPLETE: {
       const remoteEpisodes: { [key: string]: RemoteEpisode } = {};
-      const ids: string[] = [];
+      const ids: string[] = action.payload.episodes.map(episode => episode.id);
       forEach(action.payload.episodes, episode => {
         remoteEpisodes[episode.id] = episode;
-        ids.push(episode.id);
       });
       return {
         ...state,
