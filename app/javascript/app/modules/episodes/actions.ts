@@ -7,6 +7,7 @@ import { SearchParams } from "../location/queryParams";
 export enum episodeActions {
   FETCH_EPISODES_REQUESTED = "FETCH_EPISODES_REQUESTED",
   FETCH_EPISODES_COMPLETE = "FETCH_EPISODES_COMPLETE",
+  FETCH_EPISODES_BY_ID_COMPLETE = "FETCH_EPISODES_BY_ID_COMPLETE",
   FETCH_EPISODES_FAILURE = "FETCH_EPISODES_FAILURE",
   FETCH_EPISODE_REQUESTED = "FETCH_EPISODE_REQUESTED",
   FETCH_EPISODE_START = "FETCH_EPISODE_START",
@@ -31,6 +32,13 @@ export interface FetchEpisodesComplete {
     episodes: RemoteEpisode[];
     pageInfo: PageInfo;
     statusCounts: StatusCounts;
+  };
+}
+
+export interface FetchEpisodesByIdComplete {
+  type: episodeActions.FETCH_EPISODES_BY_ID_COMPLETE;
+  payload: {
+    episodes: RemoteEpisode[];
   };
 }
 
@@ -97,6 +105,13 @@ export const fetchEpisodesComplete = (
   payload: { episodes, pageInfo, statusCounts },
 });
 
+export const fetchEpisodesByIdComplete = (
+  episodes: RemoteEpisode[]
+): FetchEpisodesByIdComplete => ({
+  type: episodeActions.FETCH_EPISODES_BY_ID_COMPLETE,
+  payload: { episodes },
+});
+
 export const fetchEpisodesFailure = (error: string): FetchEpisodesFailure => ({
   type: episodeActions.FETCH_EPISODES_FAILURE,
   payload: { error },
@@ -141,6 +156,7 @@ export interface UpdateEpisodeRequested {
 
 export type EpisodesAction =
   | FetchEpisodesRequested
+  | FetchEpisodesByIdComplete
   | FetchEpisodesComplete
   | FetchEpisodesFailure
   | FetchEpisodeRequested

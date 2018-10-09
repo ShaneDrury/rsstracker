@@ -54,6 +54,18 @@ export const getEpisodes = async (queryParams: {
   return processEpisodesResponse(episodesResponse);
 };
 
+export const getEpisodesById = async (
+  episodeIds: string[]
+): Promise<RemoteEpisode[]> => {
+  const episodesResponse: ApiEpisode[] = await apiFetch(
+    `/episodes?id[]=${episodeIds.join("&id[]=")}`
+  );
+  const camelEpisodes: ApiEpisode[] = camelcaseKeys(episodesResponse, {
+    deep: true,
+  });
+  return camelEpisodes.map(processEpisode);
+};
+
 export const getEpisode = async (episodeId: string): Promise<RemoteEpisode> => {
   const episodeResponse: ApiEpisode = await apiFetch(`/episodes/${episodeId}`);
   const camel: ApiEpisode = camelcaseKeys(episodeResponse, { deep: true });

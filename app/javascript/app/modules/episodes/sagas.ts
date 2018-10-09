@@ -1,3 +1,4 @@
+import { delay } from "redux-saga";
 import { all, call, fork, put, take, takeEvery } from "redux-saga/effects";
 import { RemoteEpisode } from "../../types/episode";
 import { fetchFeedRequested } from "../feeds/actions";
@@ -8,6 +9,7 @@ import {
   fetchEpisodeFailure,
   fetchEpisodeRequested,
   FetchEpisodeRequested,
+  fetchEpisodesByIdComplete,
   FetchEpisodesComplete,
   fetchEpisodesComplete,
   fetchEpisodesFailure,
@@ -18,6 +20,7 @@ import {
 import {
   getEpisode,
   getEpisodes,
+  getEpisodesById,
   updateEpisodeDate,
   updateEpisodeDescription,
 } from "./sources";
@@ -29,6 +32,11 @@ function* fetchEpisode({ payload: { episodeId } }: FetchEpisodeRequested) {
   } catch (err) {
     yield put(fetchEpisodeFailure(err, episodeId));
   }
+}
+
+function* fetchEpisodesById(episodeIds: string[]) {
+  const episodes: RemoteEpisode[] = yield call(getEpisodesById, episodeIds);
+  yield put(fetchEpisodesByIdComplete(episodes));
 }
 
 function* watchUpdateEpisodeComplete() {
@@ -91,19 +99,23 @@ function* watchEpisodes() {
   };
 
   function* watchFetchEpisodesComplete() {
-    yield takeEvery(episodeActions.FETCH_EPISODES_COMPLETE, function*({
-      payload: { episodes },
-    }: FetchEpisodesComplete) {
-      episodes.forEach(episode => {
-        localEpisodes.add(episode.id);
-      });
-      pending.fetchedAll = true;
-      yield all(
-        Array.from(pending.episodeIds).map(episodeId =>
-          put(fetchEpisodeRequested(episodeId))
-        )
-      );
-    });
+    yield takeEvery(
+      [
+        episodeActions.FETCH_EPISODES_COMPLETE,
+        episodeActions.FETCH_EPISODES_BY_ID_COMPLETE,
+      ],
+      function*({ payload: { episodes } }: FetchEpisodesComplete) {
+        episodes.forEach(episode => {
+          localEpisodes.add(episode.id);
+        });
+        pending.fetchedAll = true;
+        yield all(
+          Array.from(pending.episodeIds).map(episodeId =>
+            put(fetchEpisodeRequested(episodeId))
+          )
+        );
+      }
+    );
   }
 
   function* watchFetchEpisodeComplete() {
@@ -125,8 +137,12 @@ function* watchEpisodes() {
         return;
       }
       if (!localEpisodes.has(episodeId)) {
-        yield fork(fetchEpisode, action);
-        pending.episodeIds.delete(episodeId);
+        pending.episodeIds.add(episodeId);
+        yield delay(10);
+        if (pending.episodeIds.has(episodeId)) {
+          yield fork(fetchEpisodesById, Array.from(pending.episodeIds));
+          pending.episodeIds = new Set();
+        }
       }
     });
   }
