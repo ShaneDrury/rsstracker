@@ -6,6 +6,7 @@ import {
   FetchEpisodeComplete,
   fetchEpisodeComplete,
   fetchEpisodeFailure,
+  fetchEpisodeRequested,
   FetchEpisodeRequested,
   FetchEpisodesComplete,
   fetchEpisodesComplete,
@@ -76,18 +77,34 @@ function* watchFetchEpisodesRequested() {
   yield takeEvery(episodeActions.FETCH_EPISODES_REQUESTED, fetchEpisodesSaga);
 }
 
+interface Pending {
+  fetchedAll: boolean;
+  episodeIds: Set<string>;
+}
+
 function* watchEpisodes() {
+  // TODO: This may just need to be a list of ids of fetched eps
   const localEpisodes: { [key: string]: RemoteEpisode } = {};
 
+  const pending: Pending = {
+    fetchedAll: false,
+    episodeIds: new Set(),
+  };
+
   function* watchFetchEpisodesComplete() {
-    yield takeEvery(
-      episodeActions.FETCH_EPISODES_COMPLETE,
-      ({ payload: { episodes } }: FetchEpisodesComplete) => {
-        episodes.forEach(episode => {
-          localEpisodes[episode.id] = episode;
-        });
-      }
-    );
+    yield takeEvery(episodeActions.FETCH_EPISODES_COMPLETE, function*({
+      payload: { episodes },
+    }: FetchEpisodesComplete) {
+      episodes.forEach(episode => {
+        localEpisodes[episode.id] = episode;
+      });
+      pending.fetchedAll = true;
+      yield all(
+        Array.from(pending.episodeIds).map(episodeId =>
+          put(fetchEpisodeRequested(episodeId))
+        )
+      );
+    });
   }
 
   function* watchFetchEpisodeComplete() {
@@ -103,8 +120,13 @@ function* watchEpisodes() {
     yield takeEvery(episodeActions.FETCH_EPISODE_REQUESTED, function*(
       action: FetchEpisodeRequested
     ) {
+      if (!pending.fetchedAll) {
+        pending.episodeIds.add(action.payload.episodeId);
+        return;
+      }
       if (!localEpisodes[action.payload.episodeId]) {
         yield fork(fetchEpisode, action);
+        pending.episodeIds.delete(action.payload.episodeId);
       }
     });
   }
