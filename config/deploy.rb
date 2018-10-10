@@ -76,6 +76,9 @@ namespace :deploy do
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
   after  :finishing,    :restart
+  before :updated, 'yarn:install'
+  before :updated, 'yarn:build'
+
 end
 
 # ps aux | grep puma    # Get puma pid
