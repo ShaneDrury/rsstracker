@@ -58,4 +58,9 @@ Rails.application.configure do
   config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
 
   config.webpacker.check_yarn_integrity = false
+
+  yml = YAML.load_file(Rails.root.join("config/settings.dev.yml"))
+  config.download_root = yml['download_root']
+  config.storage_root = yml['storage_root']
+  config.youtube_dl_path = yml['youtube_dl_path']
 end
