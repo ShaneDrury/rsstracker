@@ -2,7 +2,7 @@
 lock "~> 3.11.0"
 
 # Change these
-server '192.168.1.94', port: 3001, roles: [:web, :app, :db], primary: true
+server '192.168.1.94', roles: [:web, :app, :db], primary: true
 
 set :repo_url,        'git@gitlab.com:ShaneDrury/rsstracker.git'
 set :application,     'rsstracker'
@@ -11,6 +11,7 @@ set :puma_threads,    [4, 16]
 set :puma_workers,    0
 
 # Don't change these unless you know what you're doing
+set :default_shell, "/bin/bash -l"
 set :pty,             true
 set :use_sudo,        false
 set :stage,           :production
