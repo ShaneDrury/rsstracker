@@ -77,8 +77,6 @@ namespace :deploy do
   after  :finishing,    :cleanup
   after  :finishing,    :restart
   before :updated, 'yarn:install'
-  before :updated, 'yarn:build'
-
 end
 
 # ps aux | grep puma    # Get puma pid
