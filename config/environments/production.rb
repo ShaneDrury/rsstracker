@@ -86,7 +86,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_cable.url = 'ws://192.168.1.94:3001/cable'
-  config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
+  config.action_cable.allowed_request_origins = ['http://192.168.1.94:3001']
 
   yml = YAML.load_file(Rails.root.join("config/settings.yml"))
   config.download_root = yml['download_root']
