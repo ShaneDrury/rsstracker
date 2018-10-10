@@ -28,7 +28,6 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 set :linked_files, fetch(:linked_files, []).push("config/master.key")
-set :linked_dirs, fetch(:linked_dirs, []).push('public/packs', 'node_modules')
 
 ## Defaults:
 # set :scm,           :git
