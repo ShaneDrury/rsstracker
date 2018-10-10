@@ -85,7 +85,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.action_cable.url = 'ws://192.168.1.94:3001/cable'
+  config.action_cable.url = 'ws://ubuntu.home:3001/cable'
   config.action_cable.allowed_request_origins = ['http://192.168.1.94:3001', 'http://ubuntu.home:3001']
 
   yml = YAML.load_file(Rails.root.join("config/settings.yml"))
