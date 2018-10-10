@@ -85,6 +85,9 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  config.action_cable.url = 'ws://192.168.1.94:3001/cable'
+  config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
+
   yml = YAML.load_file(Rails.root.join("config/settings.yml"))
   config.download_root = yml['download_root']
   config.storage_root = yml['storage_root']
