@@ -11,6 +11,7 @@ set :puma_threads,    [4, 16]
 set :puma_workers,    0
 
 # Don't change these unless you know what you're doing
+set :default_env, { 'NODE_ENV' => 'production' }
 set :default_shell, "/bin/bash -l"
 set :pty,             true
 set :use_sudo,        false
@@ -27,7 +28,7 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 set :linked_files, fetch(:linked_files, []).push("config/master.key")
-
+set :linked_dirs, fetch(:linked_dirs, []).push('public/packs', 'node_modules')
 
 ## Defaults:
 # set :scm,           :git
