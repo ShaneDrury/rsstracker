@@ -34,6 +34,7 @@ module Rsstracker
 
     config.active_job.queue_adapter = :delayed_job
 
+    config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
   end
 end
