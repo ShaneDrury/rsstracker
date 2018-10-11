@@ -28,6 +28,7 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 set :linked_files, fetch(:linked_files, []).push("config/master.key")
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'public/uploads'
 set :delayed_job_workers, 4
 set :delayed_job_pid_dir, '/tmp'
 
