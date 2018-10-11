@@ -1,3 +1,5 @@
+require "youtube_episode_updater"
+
 class YoutubePlaylistDownloader
   def initialize(feed_id, youtube_dl_path)
     @feed_id = feed_id
