@@ -1,10 +1,12 @@
 require 'open-uri'
 require 'rss'
 
-BUFFER_SIZE = 8 * 1024
+
 
 class DownloadFeedJob < ApplicationJob
   queue_as :default
+
+  BUFFER_SIZE = 8 * 1024
 
   def perform(feed_id)
     feed = Feed.find(feed_id)

@@ -2,10 +2,12 @@
 
 require 'open-uri'
 
-BUFFER_SIZE = 8 * 1024
+
 
 class DownloadEpisodeJob < ApplicationJob
   queue_as :default
+
+  BUFFER_SIZE = 8 * 1024
 
   def perform(episode_id)
     storage_root = Rails.application.config.storage_root
