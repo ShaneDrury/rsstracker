@@ -1,3 +1,5 @@
+require "youtube_episode_details"
+
 class YoutubeEpisodeUpdater
   def initialize(youtube_dl_path)
     @youtube_dl_path = youtube_dl_path
@@ -17,7 +19,7 @@ class YoutubeEpisodeUpdater
   attr_reader :youtube_dl_path
 
   def full_details(url)
-    YoutubeEpisodeDetails.new(url, youtube_dl_path).details
+    ::YoutubeEpisodeDetails.new(url, youtube_dl_path).details
   end
 end
 
