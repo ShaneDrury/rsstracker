@@ -3,8 +3,9 @@ import { actions, PlayedSecondsUpdated, PlayToggled } from "./actions";
 
 function savePlayedSeconds(episodeId: string, playedSeconds: number) {
   const savedSecondsJSON = localStorage.getItem("savedSeconds");
-  const savedSeconds: { [episodeId: string]: number } =
-    savedSecondsJSON && JSON.parse(savedSecondsJSON);
+  const savedSeconds: { [episodeId: string]: number } = savedSecondsJSON
+    ? JSON.parse(savedSecondsJSON)
+    : {};
   savedSeconds[episodeId] = playedSeconds;
   localStorage.setItem("savedSeconds", JSON.stringify(savedSeconds));
 }
