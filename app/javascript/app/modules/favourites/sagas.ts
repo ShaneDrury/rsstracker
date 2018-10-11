@@ -4,7 +4,7 @@ import { FavouriteAdded, favouritesActions } from "./actions";
 
 const getFavourites = (): string[] => {
   const favouritesJSON = localStorage.getItem("favourites");
-  return favouritesJSON && JSON.parse(favouritesJSON);
+  return favouritesJSON ? JSON.parse(favouritesJSON) : [];
 };
 
 function addFavourite(episodeId: string) {
