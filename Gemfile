@@ -60,3 +60,5 @@ gem 'db_text_search', '~> 0.2.2'
 gem 'kaminari'
 
 gem 'whenever'
+
+gem 'yaml_db'
