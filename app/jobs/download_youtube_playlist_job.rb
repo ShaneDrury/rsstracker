@@ -1,4 +1,4 @@
-require "lib/youtube_playlist_downloader"
+require "youtube_playlist_downloader"
 
 class DownloadYoutubePlaylistJob < ApplicationJob
   queue_as :default
