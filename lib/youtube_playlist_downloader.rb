@@ -18,7 +18,7 @@ class YoutubePlaylistDownloader
   def update_or_create_episode(episode)
     description = episode['title']
     url = episode['url']
-    updater = YoutubeEpisodeUpdater.new(youtube_dl_path)
+    updater = ::YoutubeEpisodeUpdater.new(youtube_dl_path)
     Episode.find_or_create_by(feed: feed, name: description, guid: url) do |ep|
       ep.build_fetch_status(status: 'NOT_ASKED')
       begin
