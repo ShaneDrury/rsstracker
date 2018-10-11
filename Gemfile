@@ -62,3 +62,4 @@ gem 'kaminari'
 gem 'whenever'
 
 gem 'yaml_db'
+gem 'pg'
