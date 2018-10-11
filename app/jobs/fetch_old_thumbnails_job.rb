@@ -1,3 +1,5 @@
+require "youtube_episode_updater"
+
 class FetchOldThumbnailsJob < ApplicationJob
   queue_as :default
 

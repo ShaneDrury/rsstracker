@@ -1,3 +1,5 @@
+require "youtube_episode_updater"
+
 class UpdateExistingYoutubeEpisodesJob < ApplicationJob
   queue_as :default
 
