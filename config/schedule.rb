@@ -9,7 +9,7 @@
 #
 set :environment, "production"
 every 1.hour do
-  command '/home/deploy/rsstracker/current/bin/update_feeds.sh'
+  rake 'update:feeds'
 end
 #
 # every 4.days do

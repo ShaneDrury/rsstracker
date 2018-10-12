@@ -1,5 +1,5 @@
 namespace :update do
-  task feeds: :environment do
+  task all_feeds: :environment do
     Feed.all.map(&:update_episodes)
   end
 end
