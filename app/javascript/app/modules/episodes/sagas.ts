@@ -5,8 +5,6 @@ import { fetchFeedRequested } from "../feeds/actions";
 import {
   episodeActions,
   FetchEpisodeComplete,
-  fetchEpisodeComplete,
-  fetchEpisodeFailure,
   fetchEpisodeRequested,
   FetchEpisodeRequested,
   fetchEpisodesByIdComplete,
@@ -18,21 +16,11 @@ import {
   UpdateEpisodeRequested,
 } from "./actions";
 import {
-  getEpisode,
   getEpisodes,
   getEpisodesById,
   updateEpisodeDate,
   updateEpisodeDescription,
 } from "./sources";
-
-function* fetchEpisode({ payload: { episodeId } }: FetchEpisodeRequested) {
-  try {
-    const episode: RemoteEpisode = yield call(getEpisode, episodeId);
-    yield put(fetchEpisodeComplete(episode));
-  } catch (err) {
-    yield put(fetchEpisodeFailure(err, episodeId));
-  }
-}
 
 function* fetchEpisodesById(episodeIds: string[]) {
   const episodes: RemoteEpisode[] = yield call(getEpisodesById, episodeIds);
@@ -75,13 +63,7 @@ function* fetchEpisodesSaga({
 }: FetchEpisodesRequested) {
   try {
     const episodes = yield getEpisodes(queryParams);
-    yield put(
-      fetchEpisodesComplete(
-        episodes.items,
-        episodes.pageInfo,
-        episodes.statusCounts
-      )
-    );
+    yield put(fetchEpisodesComplete(episodes.items, episodes.pageInfo));
   } catch (err) {
     yield put(fetchEpisodesFailure(err));
   }

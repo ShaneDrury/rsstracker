@@ -65,8 +65,6 @@ class EpisodesController < ApplicationController
                else
                  episodes
                end
-    counts = episodes.joins(:fetch_status).group(:status).count
-    counts['all'] = counts.values.sum
     episodes = episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
     paged = episodes.page(params[:page_number] || 1).per(10)
 
@@ -83,7 +81,6 @@ class EpisodesController < ApplicationController
         last_page: paged.last_page?,
         out_of_range: paged.out_of_range?,
       },
-      status_counts: counts,
     }
   end
 

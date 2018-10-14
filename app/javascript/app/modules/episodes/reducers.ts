@@ -1,8 +1,7 @@
 import { forEach, union } from "lodash";
 import { RemoteEpisode } from "../../types/episode";
-import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
-import { feedActions, FeedsAction } from "../feeds/actions";
+import { FeedsAction } from "../feeds/actions";
 import { FetchStatus } from "../remoteData";
 import { episodeActions, EpisodesAction } from "./actions";
 
@@ -13,7 +12,6 @@ export interface State {
   fetchStatus: FetchStatus;
   ids: string[];
   pageInfo: PageInfo;
-  statusCounts: StatusCounts;
   detailEpisodeId?: string;
 }
 
@@ -34,9 +32,6 @@ const initialState: State = {
     firstPage: true,
     lastPage: false,
     outOfRange: false,
-  },
-  statusCounts: {
-    all: 0,
   },
   detailEpisodeId,
 };
@@ -80,7 +75,6 @@ const episodes = (
           ...state.items,
           ...remoteEpisodes,
         },
-        statusCounts: action.payload.statusCounts,
       };
     }
     case episodeActions.UPDATE_EPISODE_COMPLETE:
@@ -93,12 +87,6 @@ const episodes = (
           [episode.id]: episode,
         },
         ids: union(state.ids, episode.id),
-      };
-    }
-    case feedActions.FETCH_FEEDS_COMPLETE: {
-      return {
-        ...state,
-        statusCounts: action.payload.statusCounts,
       };
     }
     case episodeActions.UPDATE_EPISODE_REQUESTED: {

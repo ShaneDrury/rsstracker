@@ -20,8 +20,8 @@ function* watchFetchFeedRequested() {
 
 function* fetchFeedsSaga() {
   try {
-    const { items, statusCounts } = yield fetchFeeds();
-    yield put(fetchFeedsComplete(items, statusCounts));
+    const items: RemoteFeed[] = yield fetchFeeds();
+    yield put(fetchFeedsComplete(items));
   } catch (err) {
     yield put(fetchFeedsFailure(err));
   }
