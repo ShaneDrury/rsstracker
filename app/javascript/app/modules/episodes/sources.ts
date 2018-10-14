@@ -1,7 +1,6 @@
 import camelcaseKeys from "camelcase-keys";
 import qs from "qs";
 import { ApiEpisode, RemoteEpisode } from "../../types/episode";
-import { StatusCounts } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
 import { PageInfo } from "../../types/page";
 import { Omit } from "../../types/util";
@@ -11,7 +10,6 @@ import { Status } from "../status";
 interface EpisodesResponse {
   items: ApiEpisode[];
   pageInfo: PageInfo;
-  statusCounts: StatusCounts;
 }
 
 interface ProcessedResponse extends Omit<EpisodesResponse, "items"> {
@@ -64,12 +62,6 @@ export const getEpisodesById = async (
     deep: true,
   });
   return camelEpisodes.map(processEpisode);
-};
-
-export const getEpisode = async (episodeId: string): Promise<RemoteEpisode> => {
-  const episodeResponse: ApiEpisode = await apiFetch(`/episodes/${episodeId}`);
-  const camel: ApiEpisode = camelcaseKeys(episodeResponse, { deep: true });
-  return processEpisode(camel);
 };
 
 export const downloadEpisode = async (

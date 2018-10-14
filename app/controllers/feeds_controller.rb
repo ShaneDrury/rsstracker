@@ -4,9 +4,7 @@ class FeedsController < ApplicationController
   # GET /feeds
   def index
     @feeds = Feed.all.order(name: :asc)
-    counts = FetchStatus.group(:status).count
-    counts['all'] = counts.values.sum
-    render json: { items: @feeds, status_counts: counts }
+    render json: { items: @feeds }
   end
 
   # GET /feeds/1

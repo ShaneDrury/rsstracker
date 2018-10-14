@@ -1,4 +1,4 @@
-import { RemoteFeed, StatusCounts } from "../../types/feed";
+import { RemoteFeed } from "../../types/feed";
 
 export enum feedActions {
   FETCH_FEEDS_REQUESTED = "FETCH_FEEDS_REQUESTED",
@@ -21,7 +21,6 @@ interface FetchFeedsComplete {
   type: feedActions.FETCH_FEEDS_COMPLETE;
   payload: {
     feeds: RemoteFeed[];
-    statusCounts: StatusCounts;
   };
 }
 
@@ -49,11 +48,10 @@ export const fetchFeedRequested = (feedId: string): FetchFeedRequested => ({
 });
 
 export const fetchFeedsComplete = (
-  feeds: RemoteFeed[],
-  statusCounts: StatusCounts
+  feeds: RemoteFeed[]
 ): FetchFeedsComplete => ({
   type: feedActions.FETCH_FEEDS_COMPLETE,
-  payload: { feeds, statusCounts },
+  payload: { feeds },
 });
 
 export const fetchFeedsFailure = (error: string): FetchFeedsFailure => ({

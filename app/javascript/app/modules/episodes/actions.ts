@@ -1,6 +1,5 @@
 import { createStandardAction } from "typesafe-actions";
 import { RemoteEpisode } from "../../types/episode";
-import { StatusCounts } from "../../types/feed";
 import { PageInfo } from "../../types/page";
 import { SearchParams } from "../location/queryParams";
 
@@ -31,7 +30,6 @@ export interface FetchEpisodesComplete {
   payload: {
     episodes: RemoteEpisode[];
     pageInfo: PageInfo;
-    statusCounts: StatusCounts;
   };
 }
 
@@ -98,11 +96,10 @@ export const fetchEpisodesRequested = (
 
 export const fetchEpisodesComplete = (
   episodes: RemoteEpisode[],
-  pageInfo: PageInfo,
-  statusCounts: StatusCounts
+  pageInfo: PageInfo
 ): FetchEpisodesComplete => ({
   type: episodeActions.FETCH_EPISODES_COMPLETE,
-  payload: { episodes, pageInfo, statusCounts },
+  payload: { episodes, pageInfo },
 });
 
 export const fetchEpisodesByIdComplete = (

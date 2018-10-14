@@ -1,13 +1,5 @@
 import { Omit } from "./util";
 
-export interface StatusCounts {
-  all: number;
-  notAsked?: number;
-  success?: number;
-  failure?: number;
-  loading?: number;
-}
-
 export type FeedSource = "youtube" | "rss";
 
 export interface ApiFeed {
