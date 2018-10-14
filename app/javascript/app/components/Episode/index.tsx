@@ -1,5 +1,5 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import * as moment from "moment";
+import format from "date-fns/format";
 import React from "react";
 import Dotdotdot from "react-dotdotdot";
 import { connect } from "react-redux";
@@ -119,7 +119,7 @@ export class Episode extends React.Component<Props> {
           </NameWrapper>
           {publicationDate && (
             <DurationWrapper className="subtitle is-6">
-              {moment(publicationDate).format("ll")}
+              {format(publicationDate, "MMM Do YYYY")}
             </DurationWrapper>
           )}
         </TitleWrapper>

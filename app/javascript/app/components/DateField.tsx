@@ -1,4 +1,4 @@
-import * as moment from "moment";
+import format from "date-fns/format";
 import React from "react";
 import { connect } from "react-redux";
 import { updateEpisodeRequested } from "../modules/episodes/actions";
@@ -26,7 +26,7 @@ export class DateField extends React.PureComponent<Props> {
   };
 
   public editModeOff: EditModeOff = ({ value, startEditing }) => (
-    <span onClick={startEditing}>{moment(value).format("ll")}</span>
+    <span onClick={startEditing}>{format(value, "MMM Do YYYY")}</span>
   );
 
   public editModeOn: EditModeOn = ({ value, onEdit, onCancel, onSave }) => (
@@ -47,7 +47,7 @@ export class DateField extends React.PureComponent<Props> {
   public render() {
     return (
       <EditMode
-        initialValue={moment(this.props.date).format("YYYY-MM-DD")}
+        initialValue={format(this.props.date, "YYYY-MM-DD")}
         onSave={this.handleSave}
         editModeOff={this.editModeOff}
         editModeOn={this.editModeOn}
