@@ -16,6 +16,8 @@ export enum episodeActions {
   UPDATE_EPISODE_REQUESTED = "UPDATE_EPISODE_REQUESTED",
   DETAILS_OPENED = "DETAILS_OPENED",
   DETAILS_CLOSED = "DETAILS_CLOSED",
+  VISIBILITY_CHANGED = "VISIBILITY_CHANGED",
+  EPISODE_SEEN = "EPISODE_SEEN",
 }
 
 export interface FetchEpisodesRequested {
@@ -135,19 +137,26 @@ export const updateEpisodeComplete = (
   payload: { episode },
 });
 
-export const fetchEpisodeFailure = (
-  error: string,
-  episodeId: string
-): FetchEpisodeFailure => ({
-  type: episodeActions.FETCH_EPISODE_FAILURE,
-  payload: { error, episodeId },
-});
-
 export interface UpdateEpisodeRequested {
   type: episodeActions.UPDATE_EPISODE_REQUESTED;
   payload: {
     episodeId: string;
     changes: Partial<RemoteEpisode>;
+  };
+}
+
+export interface VisibilityChanged {
+  type: episodeActions.VISIBILITY_CHANGED;
+  payload: {
+    isVisible: boolean;
+    episodeId: string;
+  };
+}
+
+export interface EpisodeSeen {
+  type: episodeActions.EPISODE_SEEN;
+  payload: {
+    episodeId: string;
   };
 }
 
@@ -162,7 +171,9 @@ export type EpisodesAction =
   | UpdateEpisodeComplete
   | UpdateEpisodeRequested
   | DetailsOpened
-  | DetailsClosed;
+  | DetailsClosed
+  | VisibilityChanged
+  | EpisodeSeen;
 
 export const updateEpisodeRequested = (
   episodeId: string,
@@ -183,3 +194,16 @@ export const detailsOpened = (episodeId: string): DetailsOpened => ({
 export const detailsClosed = createStandardAction(
   episodeActions.DETAILS_CLOSED
 )();
+
+export const visibilityChanged = (
+  isVisible: boolean,
+  episodeId: string
+): VisibilityChanged => ({
+  type: episodeActions.VISIBILITY_CHANGED,
+  payload: { isVisible, episodeId },
+});
+
+export const episodeSeen = (episodeId: string): EpisodeSeen => ({
+  type: episodeActions.EPISODE_SEEN,
+  payload: { episodeId },
+});

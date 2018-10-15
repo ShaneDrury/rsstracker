@@ -1,9 +1,19 @@
-import { delay } from "redux-saga";
-import { all, call, fork, put, take, takeEvery } from "redux-saga/effects";
+import { delay, Task } from "redux-saga";
+import {
+  all,
+  call,
+  cancel,
+  fork,
+  put,
+  take,
+  takeEvery,
+} from "redux-saga/effects";
 import { RemoteEpisode } from "../../types/episode";
 import { fetchFeedRequested } from "../feeds/actions";
 import {
   episodeActions,
+  EpisodeSeen,
+  episodeSeen,
   FetchEpisodeComplete,
   fetchEpisodeRequested,
   FetchEpisodeRequested,
@@ -14,6 +24,7 @@ import {
   FetchEpisodesRequested,
   UpdateEpisodeComplete,
   UpdateEpisodeRequested,
+  VisibilityChanged,
 } from "./actions";
 import {
   getEpisodes,
@@ -144,11 +155,38 @@ function* watchEpisodes() {
   ]);
 }
 
+function* watchVisibilityChanged() {
+  const episodeTimerTasks = new Map<string, Task>();
+
+  function* episodeIsBeingLookedAt(episodeId: string) {
+    yield delay(5000);
+    yield put(episodeSeen(episodeId));
+    episodeTimerTasks.delete(episodeId);
+  }
+
+  yield takeEvery(episodeActions.VISIBILITY_CHANGED, function*({
+    payload,
+  }: VisibilityChanged) {
+    if (payload.isVisible) {
+      const task = yield fork(episodeIsBeingLookedAt, payload.episodeId);
+      episodeTimerTasks.set(payload.episodeId, task);
+    }
+    if (!payload.isVisible) {
+      const task = episodeTimerTasks.get(payload.episodeId);
+      if (task) {
+        yield cancel(task);
+        episodeTimerTasks.delete(payload.episodeId);
+      }
+    }
+  });
+}
+
 export default function* episodesSagas() {
   yield all([
     watchUpdateEpisodeComplete(),
     watchUpdateEpisodeRequested(),
     watchFetchEpisodesRequested(),
     watchEpisodes(),
+    watchVisibilityChanged(),
   ]);
 }
