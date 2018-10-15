@@ -36,6 +36,7 @@
     "@types/react-router-dom": "^4.2.6",
     "@types/react-visibility-sensor": "^3.11.0",
     "@types/shortid": "^0.0.29",
+    "@types/styled-components": "^4.0.1",
     "@types/webpack-env": "^1.13.6",
     "actioncable": "^5.2.0",
     "babel-plugin-lodash": "^3.3.4",
@@ -64,7 +65,7 @@
     "redux-saga": "^0.16.0",
     "reselect": "^4.0.0",
     "shortid": "^2.2.8",
-    "styled-components": "^3.4.2",
+    "styled-components": "^4.0.0",
     "typesafe-actions": "^2.0.4",
     "webpack": "^4.17.2",
     "webpack-cli": "^3.1.0"
