@@ -119,47 +119,49 @@ export class Episode extends React.Component<Props> {
     } = this.props;
     return (
       <VisibilitySensor onChange={this.onVisibilityChange}>
-        <EpisodeWrapper className="tile is-child box">
-          <TitleWrapper>
-            <NameWrapper className="title is-5 is-spaced">
-              {fetchStatus.status === "SUCCESS" && (
-                <a href={fetchStatus.url}>{name}</a>
+        {() => (
+          <EpisodeWrapper className="tile is-child box">
+            <TitleWrapper>
+              <NameWrapper className="title is-5 is-spaced">
+                {fetchStatus.status === "SUCCESS" && (
+                  <a href={fetchStatus.url}>{name}</a>
+                )}
+                {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
+              </NameWrapper>
+              {publicationDate && (
+                <DurationWrapper className="subtitle is-6">
+                  {format(publicationDate, "MMM Do YYYY")}
+                </DurationWrapper>
               )}
-              {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
-            </NameWrapper>
-            {publicationDate && (
-              <DurationWrapper className="subtitle is-6">
-                {format(publicationDate, "MMM Do YYYY")}
-              </DurationWrapper>
-            )}
-          </TitleWrapper>
-          {updating && <Icon icon={faSpinner} className="loader" />}
-          <ContentWrapper>
-            <div>
-              <Dotdotdot clamp={3}>{description}</Dotdotdot>
-            </div>
-            <div>
-              {thumbnailUrl && (
-                <div className="media-right">
-                  <figure className="image is-128x128">
-                    <img src={thumbnailUrl} />
-                  </figure>
-                </div>
-              )}
-            </div>
-          </ContentWrapper>
-          <FooterWrapper>
-            <EpisodeFooter
-              handleDetailOpened={this.handleDetailOpened}
-              handleDownload={this.handleDownload}
-              fetchStatus={this.props.fetchStatus}
-              handleToggleShow={this.handleToggleShow}
-              playing={this.props.playing}
-              isUpdating={this.props.isUpdating}
-              isDetailOpen={this.props.isDetailOpen}
-            />
-          </FooterWrapper>
-        </EpisodeWrapper>
+            </TitleWrapper>
+            {updating && <Icon icon={faSpinner} className="loader" />}
+            <ContentWrapper>
+              <div>
+                <Dotdotdot clamp={3}>{description}</Dotdotdot>
+              </div>
+              <div>
+                {thumbnailUrl && (
+                  <div className="media-right">
+                    <figure className="image is-128x128">
+                      <img src={thumbnailUrl} />
+                    </figure>
+                  </div>
+                )}
+              </div>
+            </ContentWrapper>
+            <FooterWrapper>
+              <EpisodeFooter
+                handleDetailOpened={this.handleDetailOpened}
+                handleDownload={this.handleDownload}
+                fetchStatus={this.props.fetchStatus}
+                handleToggleShow={this.handleToggleShow}
+                playing={this.props.playing}
+                isUpdating={this.props.isUpdating}
+                isDetailOpen={this.props.isDetailOpen}
+              />
+            </FooterWrapper>
+          </EpisodeWrapper>
+        )}
       </VisibilitySensor>
     );
   }
