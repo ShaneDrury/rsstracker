@@ -19,6 +19,7 @@ interface EpisodeFooterProps {
   playing: boolean;
   isUpdating: boolean;
   isDetailOpen: boolean;
+  seen: boolean;
 }
 
 const InfoWrapper = styled.div`
@@ -70,6 +71,7 @@ class EpisodeFooter extends React.PureComponent<EpisodeFooterProps> {
             )}
           </div>
         )}
+        {!this.props.seen && <span className="tag">NEW</span>}
         <InfoWrapper>
           <button
             className={classNames("button", {

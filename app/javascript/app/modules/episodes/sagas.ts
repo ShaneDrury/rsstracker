@@ -12,6 +12,7 @@ import { RemoteEpisode } from "../../types/episode";
 import { fetchFeedRequested } from "../feeds/actions";
 import {
   episodeActions,
+  EpisodeSeen,
   episodeSeen,
   FetchEpisodeComplete,
   fetchEpisodeRequested,
@@ -28,6 +29,7 @@ import {
 import {
   getEpisodes,
   getEpisodesById,
+  markEpisodeSeen,
   updateEpisodeDate,
   updateEpisodeDescription,
 } from "./sources";
@@ -154,10 +156,21 @@ function* watchEpisodes() {
   ]);
 }
 
+function* watchEpisodeSeen() {
+  yield takeEvery(episodeActions.EPISODE_SEEN, function*({
+    payload,
+  }: EpisodeSeen) {
+    yield fork(markEpisodeSeen, payload.episodeId);
+  });
+}
+
 function* watchVisibilityChanged() {
   const episodeTimerTasks = new Map<string, Task>();
 
   function* episodeIsBeingLookedAt(episodeId: string) {
+    // Race the delay vs a listener for visibility changed to false
+    // take(action => action.type === episodeActions.VISIBILITY_CHANGED && action.payload.episodeId === episodeId)
+    // So this can cancel itself
     yield delay(5000);
     yield put(episodeSeen(episodeId));
     episodeTimerTasks.delete(episodeId);
@@ -187,5 +200,6 @@ export default function* episodesSagas() {
     watchFetchEpisodesRequested(),
     watchEpisodes(),
     watchVisibilityChanged(),
+    watchEpisodeSeen(),
   ]);
 }

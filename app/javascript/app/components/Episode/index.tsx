@@ -36,6 +36,7 @@ interface PropsExtended {
   isUpdating: boolean;
   isDetailOpen: boolean;
   fetchStatus: FetchStatus;
+  seen: boolean;
 }
 
 interface DispatchProps {
@@ -88,7 +89,8 @@ export class Episode extends React.Component<Props> {
       this.props.updating !== nextProps.updating ||
       this.props.playing !== nextProps.playing ||
       this.props.isUpdating !== nextProps.isUpdating ||
-      this.props.isDetailOpen !== nextProps.isDetailOpen
+      this.props.isDetailOpen !== nextProps.isDetailOpen ||
+      this.props.seen !== nextProps.seen
     );
   }
 
@@ -108,7 +110,7 @@ export class Episode extends React.Component<Props> {
     this.props.onVisibilityChange(isVisible, this.props.episodeId);
   };
 
-  public render() {
+  public renderEpisode = () => {
     const {
       name,
       description,
@@ -118,50 +120,57 @@ export class Episode extends React.Component<Props> {
       updating,
     } = this.props;
     return (
+      <EpisodeWrapper className="tile is-child box">
+        <TitleWrapper>
+          <NameWrapper className="title is-5 is-spaced">
+            {fetchStatus.status === "SUCCESS" && (
+              <a href={fetchStatus.url}>{name}</a>
+            )}
+            {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
+          </NameWrapper>
+          {publicationDate && (
+            <DurationWrapper className="subtitle is-6">
+              {format(publicationDate, "MMM Do YYYY")}
+            </DurationWrapper>
+          )}
+        </TitleWrapper>
+        {updating && <Icon icon={faSpinner} className="loader" />}
+        <ContentWrapper>
+          <div>
+            <Dotdotdot clamp={3}>{description}</Dotdotdot>
+          </div>
+          <div>
+            {thumbnailUrl && (
+              <div className="media-right">
+                <figure className="image is-128x128">
+                  <img src={thumbnailUrl} />
+                </figure>
+              </div>
+            )}
+          </div>
+        </ContentWrapper>
+        <FooterWrapper>
+          <EpisodeFooter
+            handleDetailOpened={this.handleDetailOpened}
+            handleDownload={this.handleDownload}
+            fetchStatus={this.props.fetchStatus}
+            handleToggleShow={this.handleToggleShow}
+            playing={this.props.playing}
+            isUpdating={this.props.isUpdating}
+            isDetailOpen={this.props.isDetailOpen}
+            seen={this.props.seen}
+          />
+        </FooterWrapper>
+      </EpisodeWrapper>
+    );
+  };
+
+  public render() {
+    return this.props.seen ? (
+      this.renderEpisode()
+    ) : (
       <VisibilitySensor onChange={this.onVisibilityChange}>
-        {() => (
-          <EpisodeWrapper className="tile is-child box">
-            <TitleWrapper>
-              <NameWrapper className="title is-5 is-spaced">
-                {fetchStatus.status === "SUCCESS" && (
-                  <a href={fetchStatus.url}>{name}</a>
-                )}
-                {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
-              </NameWrapper>
-              {publicationDate && (
-                <DurationWrapper className="subtitle is-6">
-                  {format(publicationDate, "MMM Do YYYY")}
-                </DurationWrapper>
-              )}
-            </TitleWrapper>
-            {updating && <Icon icon={faSpinner} className="loader" />}
-            <ContentWrapper>
-              <div>
-                <Dotdotdot clamp={3}>{description}</Dotdotdot>
-              </div>
-              <div>
-                {thumbnailUrl && (
-                  <div className="media-right">
-                    <figure className="image is-128x128">
-                      <img src={thumbnailUrl} />
-                    </figure>
-                  </div>
-                )}
-              </div>
-            </ContentWrapper>
-            <FooterWrapper>
-              <EpisodeFooter
-                handleDetailOpened={this.handleDetailOpened}
-                handleDownload={this.handleDownload}
-                fetchStatus={this.props.fetchStatus}
-                handleToggleShow={this.handleToggleShow}
-                playing={this.props.playing}
-                isUpdating={this.props.isUpdating}
-                isDetailOpen={this.props.isDetailOpen}
-              />
-            </FooterWrapper>
-          </EpisodeWrapper>
-        )}
+        {() => this.renderEpisode()}
       </VisibilitySensor>
     );
   }
@@ -183,6 +192,7 @@ const mapStateToProps = (
     thumbnailUrl: episode.thumbnailUrl,
     updating: episode.updating,
     fetchStatus: episode.fetchStatus,
+    seen: episode.seen,
     isUpdating,
     playing,
     isDetailOpen: ownProps.episodeId === detailEpisodeId,
