@@ -3,7 +3,7 @@ class EpisodesController < ApplicationController
 
   # GET /episodes
   def index
-    @episodes = Episode.includes(:fetch_status)
+    @episodes = Episode.includes(:fetch_status).order(publication_date: :desc)
     @episodes = @episodes.where(id: params[:id]) if params[:id].present?
     @episodes = @episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     @episodes = @episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
