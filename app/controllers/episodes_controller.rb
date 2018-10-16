@@ -93,6 +93,6 @@ class EpisodesController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def episode_params
-    params.require(:episode).permit(:feed_id, :name, :status, :description, :publication_date, :id)
+    params.require(:episode).permit(:feed_id, :name, :status, :description, :publication_date, :id, :seen)
   end
 end

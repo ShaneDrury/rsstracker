@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_14_160033) do
+ActiveRecord::Schema.define(version: 2018_10_16_215510) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2018_10_14_160033) do
     t.datetime "publication_date"
     t.text "source_thumbnail_url"
     t.text "thumbnail_url"
+    t.boolean "seen", default: true
     t.index ["feed_id"], name: "index_episodes_on_feed_id"
   end
 

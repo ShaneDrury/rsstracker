@@ -13,6 +13,7 @@ export interface ApiEpisode {
   fetchStatus: FetchStatus;
   publicationDate: string;
   thumbnailUrl?: string;
+  seen: boolean;
 }
 
 export interface RemoteEpisode extends Omit<ApiEpisode, "id"> {
