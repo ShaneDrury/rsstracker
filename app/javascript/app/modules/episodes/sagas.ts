@@ -12,7 +12,6 @@ import { RemoteEpisode } from "../../types/episode";
 import { fetchFeedRequested } from "../feeds/actions";
 import {
   episodeActions,
-  EpisodeSeen,
   episodeSeen,
   FetchEpisodeComplete,
   fetchEpisodeRequested,
@@ -149,9 +148,9 @@ function* watchEpisodes() {
   }
 
   yield all([
-    call(watchFetchEpisodesComplete),
-    call(watchFetchEpisodeComplete),
-    call(watchFetchEpisodeRequested),
+    watchFetchEpisodesComplete(),
+    watchFetchEpisodeComplete(),
+    watchFetchEpisodeRequested(),
   ]);
 }
 
