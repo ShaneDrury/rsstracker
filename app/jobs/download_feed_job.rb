@@ -39,6 +39,7 @@ class DownloadFeedJob < ApplicationJob
         ep.file_size = result.enclosure.length
         ep.publication_date = result.pubDate
         ep.url = result.link
+        ep.seen = false
         ep.save
         feed.touch
         DownloadEpisodeJob.perform_later(ep.id) if feed.autodownload

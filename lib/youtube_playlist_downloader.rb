@@ -28,6 +28,7 @@ class YoutubePlaylistDownloader
       rescue IOError
         break
       end
+      ep.seen = false
       ep.save
       feed.touch
       DownloadThumbnailJob.perform_later(ep.id)
