@@ -107,13 +107,16 @@ function* watchEpisodes() {
       function*({ payload: { episodes } }: FetchEpisodesComplete) {
         episodes.forEach(episode => {
           localEpisodes.add(episode.id);
+          pending.episodeIds.delete(episode.id);
         });
-        pending.fetchedAll = true;
-        yield all(
-          Array.from(pending.episodeIds).map(episodeId =>
-            put(fetchEpisodeRequested(episodeId))
-          )
-        );
+        if (!pending.fetchedAll) {
+          pending.fetchedAll = true;
+          yield all(
+            Array.from(pending.episodeIds).map(episodeId =>
+              put(fetchEpisodeRequested(episodeId))
+            )
+          );
+        }
       }
     );
   }
@@ -128,10 +131,9 @@ function* watchEpisodes() {
   }
 
   function* watchFetchEpisodeRequested() {
-    yield takeEvery(episodeActions.FETCH_EPISODE_REQUESTED, function*(
-      action: FetchEpisodeRequested
-    ) {
-      const episodeId = action.payload.episodeId;
+    yield takeEvery(episodeActions.FETCH_EPISODE_REQUESTED, function*({
+      payload: { episodeId },
+    }: FetchEpisodeRequested) {
       if (!pending.fetchedAll) {
         pending.episodeIds.add(episodeId);
         return;
@@ -141,9 +143,12 @@ function* watchEpisodes() {
         // e.g. can have a separate watcher with local pending ids, if we need to communicate
         // use events
         yield delay(10);
-        if (pending.episodeIds.has(episodeId)) {
-          yield fork(fetchEpisodesById, Array.from(pending.episodeIds));
-          pending.episodeIds = new Set();
+        const episodeIds = pending.episodeIds;
+        if (episodeIds.has(episodeId)) {
+          yield fork(fetchEpisodesById, Array.from(episodeIds));
+          episodeIds.forEach(toRemove => {
+            pending.episodeIds.delete(toRemove);
+          });
         }
       }
     });
