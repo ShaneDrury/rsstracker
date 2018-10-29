@@ -85,7 +85,7 @@ export class Player extends React.Component<Props, State> {
           onStart={this.props.playerResumed}
           progressInterval={1500}
           width="600px"
-          height="28px"
+          height="50px"
         />
       );
     } else {

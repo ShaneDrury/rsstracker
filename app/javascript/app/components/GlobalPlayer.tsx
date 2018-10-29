@@ -45,7 +45,7 @@ const NameWrapper = styled.div`
 
 const InfoButtonWrapper = styled.div`
   flex: none;
-  margin-right: 1.5rem;
+  margin: auto 1.5rem auto auto;
 `;
 
 const PlayerWrapper = styled.div`
