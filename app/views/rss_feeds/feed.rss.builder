@@ -20,8 +20,7 @@ xml.rss version: '2.0',
         xml.itunes :duration, episode.duration
         if episode.relative_image_link
           xml.media :thumbnail, url: episode.relative_image_link
-        end
-        else if episode.thumbnail_url
+        elsif episode.thumbnail_url
           xml.media :thumbnail, url: episode.thumbnail_url
         end
         xml.media :content,
