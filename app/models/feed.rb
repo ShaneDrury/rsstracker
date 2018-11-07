@@ -2,7 +2,7 @@ class Feed < ApplicationRecord
   has_many :episodes
 
   def image_link(request)
-    "#{request.host}:#{request.port}#{relative_image_link}"
+    "#{request.protocol}#{request.host}:#{request.port}#{relative_image_link}"
   end
 
   def relative_image_link

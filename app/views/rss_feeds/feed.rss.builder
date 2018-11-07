@@ -1,5 +1,6 @@
-xml.instruct! :xml, version: '1.0'
-xml.rss version: '2.0',
+xml.instruct!
+xml.rss :version => '2.0',
+  'xmlns:atom' => 'http://www.w3.org/2005/Atom',
   'xmlns:itunes' => 'http://www.itunes.com/dtds/podcast-1.0.dtd',
   'xmlns:media' => 'http://search.yahoo.com/mrss/' do
   xml.channel do
@@ -7,6 +8,8 @@ xml.rss version: '2.0',
     xml.description @feed.description
     xml.language 'en'
     xml.itunes :image, href: @feed.image_link(request)
+    xml.link root_url
+    xml.tag! 'atom:link', rel: 'self', type: 'application/rss+xml', href: feed_rss_feed_url(@feed.id, format: "rss")
     @feed.episodes.includes(:fetch_status).each do |episode|
       next unless episode.fetch_status&.status == 'SUCCESS'
       xml.item do
@@ -27,7 +30,7 @@ xml.rss version: '2.0',
           url: episode.fetch_status.url,
           fileSize: episode.file_size.to_s,
           duration: episode.duration
-        xml.guid episode.guid
+        xml.guid({:isPermaLink => "false"}, episode.guid)
       end
     end
   end
