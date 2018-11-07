@@ -1,9 +1,8 @@
 require 'open-uri'
 
 class ThumbnailDownloader
-  def initialize(episode_id, download_root)
+  def initialize(episode_id)
     @episode_id = episode_id
-    @download_root = download_root
   end
 
   def download
@@ -20,7 +19,6 @@ class ThumbnailDownloader
           output.write(input.read)
         end
       end
-      Dir.entries(download_root)
       FileUtils.mkdir_p feed_dir
       FileUtils.mv(tmp_path, feed_dir)
     end
@@ -32,7 +30,7 @@ class ThumbnailDownloader
 
   private
 
-  attr_reader :episode_id, :download_root
+  attr_reader :episode_id
 
   def episode
     Episode.find(episode_id)
