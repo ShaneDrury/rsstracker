@@ -7,6 +7,10 @@ class Episode < ApplicationRecord
     EpisodeUpdateBroadcastJob.perform_later(id)
   end
 
+  def image_link(request)
+    "#{request.host}:#{request.port}#{relative_image_link}"
+  end
+
   def relative_image_link
     "/uploads/#{feed_id}/#{thumbnail_url}"
   end
