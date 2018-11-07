@@ -98,7 +98,7 @@ export class Episode extends React.Component<Props> {
       duration,
       fetchStatus,
       publicationDate,
-      thumbnailUrl,
+      relativeImageLink,
       fullUrl,
       updating,
       isFavourited,
@@ -131,9 +131,9 @@ export class Episode extends React.Component<Props> {
             </CloseButtonWrapper>
           </TitleWrapper>
           <div>
-            {thumbnailUrl && (
+            {relativeImageLink && (
               <figure className="image">
-                <img src={thumbnailUrl} />
+                <img src={relativeImageLink} />
               </figure>
             )}
           </div>

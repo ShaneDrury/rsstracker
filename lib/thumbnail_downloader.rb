@@ -1,10 +1,9 @@
 require 'open-uri'
 
 class ThumbnailDownloader
-  def initialize(episode_id, download_root, storage_root)
+  def initialize(episode_id, download_root)
     @episode_id = episode_id
     @download_root = download_root
-    @storage_root = storage_root
   end
 
   def download
@@ -12,6 +11,7 @@ class ThumbnailDownloader
     thumbnail_extension = File.extname(URI(url).path)
     thumbnail_filename = episode.guid + thumbnail_extension
     episode_folder = episode.feed.name.parameterize
+    feed_dir = Rails.root.join('public', 'uploads', episode.feed_id.to_s)
     Dir.mktmpdir do |temp_dir|
       tmp_path = File.join(temp_dir, episode_folder, thumbnail_filename)
       FileUtils.mkdir_p File.join(temp_dir, episode_folder)
@@ -21,18 +21,18 @@ class ThumbnailDownloader
         end
       end
       Dir.entries(download_root)
-      FileUtils.mkdir_p File.join(download_root, episode_folder)
-      FileUtils.mv(tmp_path, File.join(download_root, episode_folder, '/'))
+      FileUtils.mkdir_p feed_dir
+      FileUtils.mv(tmp_path, feed_dir)
     end
     episode.update_attributes(
-      thumbnail_url: File.join(storage_root, episode_folder, thumbnail_filename)
+      thumbnail_url: thumbnail_filename
     )
     nil
   end
 
   private
 
-  attr_reader :episode_id, :download_root, :storage_root
+  attr_reader :episode_id, :download_root
 
   def episode
     Episode.find(episode_id)

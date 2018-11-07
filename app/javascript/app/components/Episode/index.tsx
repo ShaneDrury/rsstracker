@@ -30,7 +30,7 @@ interface PropsExtended {
   name: string;
   description: string;
   publicationDate: string;
-  thumbnailUrl?: string;
+  relativeImageLink?: string;
   updating: boolean;
   playing: boolean;
   isUpdating: boolean;
@@ -85,7 +85,7 @@ export class Episode extends React.Component<Props> {
       this.props.name !== nextProps.name ||
       this.props.description !== nextProps.description ||
       this.props.publicationDate !== nextProps.publicationDate ||
-      this.props.thumbnailUrl !== nextProps.thumbnailUrl ||
+      this.props.relativeImageLink !== nextProps.relativeImageLink ||
       this.props.updating !== nextProps.updating ||
       this.props.playing !== nextProps.playing ||
       this.props.isUpdating !== nextProps.isUpdating ||
@@ -116,7 +116,7 @@ export class Episode extends React.Component<Props> {
       description,
       fetchStatus,
       publicationDate,
-      thumbnailUrl,
+      relativeImageLink,
       updating,
     } = this.props;
     return (
@@ -140,10 +140,10 @@ export class Episode extends React.Component<Props> {
             <Dotdotdot clamp={3}>{description}</Dotdotdot>
           </div>
           <div>
-            {thumbnailUrl && (
+            {relativeImageLink && (
               <div className="media-right">
                 <figure className="image is-128x128">
-                  <img src={thumbnailUrl} />
+                  <img src={relativeImageLink} />
                 </figure>
               </div>
             )}
@@ -189,7 +189,7 @@ const mapStateToProps = (
     name: episode.name,
     description: episode.description,
     publicationDate: episode.publicationDate,
-    thumbnailUrl: episode.thumbnailUrl,
+    relativeImageLink: episode.relativeImageLink,
     updating: episode.updating,
     fetchStatus: episode.fetchStatus,
     seen: episode.seen,

@@ -12,8 +12,8 @@ export interface ApiEpisode {
   fullUrl: string;
   fetchStatus: FetchStatus;
   publicationDate: string;
-  thumbnailUrl?: string;
   seen: boolean;
+  relativeImageLink?: string;
 }
 
 export interface RemoteEpisode extends Omit<ApiEpisode, "id"> {
