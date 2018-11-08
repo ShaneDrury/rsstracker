@@ -8,11 +8,11 @@ class Episode < ApplicationRecord
   end
 
   def image_link(request)
-    "#{request.protocol}#{request.host}:#{request.port}#{relative_image_link}"
+    "#{request.protocol}#{request.host}:#{request.port}#{relative_image_link}" if thumbnail_url
   end
 
   def relative_image_link
-    "/uploads/#{feed_id}/#{thumbnail_url}"
+    "/uploads/#{feed_id}/#{thumbnail_url}" if thumbnail_url
   end
 
   def full_url
