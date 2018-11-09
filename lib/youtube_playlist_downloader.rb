@@ -1,7 +1,8 @@
 require "youtube_episode_updater"
 
 class YoutubePlaylistDownloader
-  class EpisodeCreateFailure < StandardError; end
+  class EpisodeSaveFailure < StandardError; end
+
   def initialize(feed_id, youtube_dl_path)
     @feed_id = feed_id
     @youtube_dl_path = youtube_dl_path
@@ -29,7 +30,7 @@ class YoutubePlaylistDownloader
         break
       end
       ep.seen = false
-      raise EpisodeCreateFailure, ep.errors unless ep.save
+      raise EpisodeSaveFailure, ep.errors.full_messages unless ep.save
       feed.touch
       DownloadThumbnailJob.perform_later(ep.id)
       DownloadYoutubeAudioJob.perform_later(ep.id) if feed.autodownload
