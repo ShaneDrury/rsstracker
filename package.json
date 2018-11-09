@@ -43,7 +43,7 @@
     "babel-plugin-styled-components": "^1.5.1",
     "babel-plugin-transform-imports": "^1.5.1",
     "bulma": "^0.7.1",
-    "camelcase-keys": "^4.2.0",
+    "camelcase-keys": "^5.0.0",
     "classnames": "^2.2.5",
     "date-fns": "^1.29.0",
     "history": "^4.7.2",
