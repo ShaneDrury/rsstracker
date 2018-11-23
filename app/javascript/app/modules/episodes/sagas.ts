@@ -144,7 +144,7 @@ function* watchEpisodes() {
         // use events
         yield delay(10);
         const episodeIds = pending.episodeIds;
-        if (episodeIds.has(episodeId)) {
+        if (episodeIds.size > 0) {
           yield fork(fetchEpisodesById, Array.from(episodeIds));
           episodeIds.forEach(toRemove => {
             pending.episodeIds.delete(toRemove);
