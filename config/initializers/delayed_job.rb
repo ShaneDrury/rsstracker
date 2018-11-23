@@ -2,7 +2,6 @@ ActiveRecord::Base.logger.level = 1
 
 class Delayed::Job
   def with_extra
-    yaml = YAML.load(handler)
-    attributes.merge(job_data: yaml.job_data)
+    attributes.merge(job_data: payload_object)
   end
 end
