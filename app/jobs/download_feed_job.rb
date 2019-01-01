@@ -8,9 +8,10 @@ class DownloadFeedJob < ApplicationJob
 
   BUFFER_SIZE = 8 * 1024
 
-  def perform(feed_id)
-    feed = Feed.find(feed_id)
-    rss = RSS::Parser.parse(open(feed.url).read, false)
+  def perform(source_id)
+    source = Source.find(source_id)
+    feed = source.feed
+    rss = RSS::Parser.parse(open(source.url).read, false)
     if feed.image_url.empty?
       thumbnail_url = rss.channel.image.url
       thumbnail_filename = File.basename(URI(thumbnail_url).path)
@@ -32,7 +33,7 @@ class DownloadFeedJob < ApplicationJob
     end
 
     rss.items.each do |result|
-      Episode.find_or_create_by(feed: feed, name: result.title, guid: result.guid.content) do |ep|
+      Episode.find_or_create_by(feed: feed, source: source, name: result.title, guid: result.guid.content) do |ep|
         ep.build_fetch_status(status: 'NOT_ASKED')
         ep.description = result.description
         ep.duration = result.itunes_duration.content

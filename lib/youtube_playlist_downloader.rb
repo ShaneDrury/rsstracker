@@ -3,8 +3,8 @@ require "youtube_episode_updater"
 class YoutubePlaylistDownloader
   class EpisodeSaveFailure < StandardError; end
 
-  def initialize(feed_id, youtube_dl_path)
-    @feed_id = feed_id
+  def initialize(source_id, youtube_dl_path)
+    @source_id = source_id
     @youtube_dl_path = youtube_dl_path
   end
 
@@ -17,7 +17,7 @@ class YoutubePlaylistDownloader
 
   private
 
-  attr_reader :feed_id, :youtube_dl_path
+  attr_reader :source_id, :youtube_dl_path
 
   def update_or_create_episode(episode)
     url = episode['url']
@@ -26,6 +26,7 @@ class YoutubePlaylistDownloader
     Episode.find_or_create_by(guid: url) do |ep|
       ep.build_fetch_status(status: 'NOT_ASKED')
       ep.feed = feed
+      ep.source = source
       ep.name = description
       begin
         updater.update(ep, url)
@@ -41,12 +42,16 @@ class YoutubePlaylistDownloader
   end
 
   def short_episode_details
-    out, status = Open3.capture2(youtube_dl_path, '--flat-playlist', '-j', '--', "#{feed.url}")
+    out, status = Open3.capture2(youtube_dl_path, '--flat-playlist', '-j', '--', "#{source.url}")
     raise IOError, 'Error downloading youtube playlist' if status.exitstatus != 0
     out.split("\n").map { |line| JSON.parse(line) }
   end
 
+  def source
+    Source.find(source_id)
+  end
+
   def feed
-    Feed.find(feed_id)
+    source.feed
   end
 end
