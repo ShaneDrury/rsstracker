@@ -2,6 +2,7 @@
 class Episode < ApplicationRecord
   belongs_to :feed
   has_one :fetch_status, as: :fetchable, dependent: :destroy
+  belongs_to :source
 
   after_update_commit do
     EpisodeUpdateBroadcastJob.perform_later(id)
@@ -16,7 +17,7 @@ class Episode < ApplicationRecord
   end
 
   def full_url
-    feed.source == 'youtube' ? "https://www.youtube.com/watch?v=#{url}" : url
+    source.type == 'youtube' ? "https://www.youtube.com/watch?v=#{url}" : url
   end
 
   def as_json(options={})
