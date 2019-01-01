@@ -7,6 +7,7 @@ import { EditMode, EditModeOff, EditModeOn } from "./EditMode";
 interface DataProps {
   episodeId: string;
   text: string;
+  placeholder: string;
 }
 
 interface DispatchProps {
@@ -31,7 +32,9 @@ export class Description extends React.PureComponent<Props> {
   public editModeOff: EditModeOff = ({ value, startEditing }) => (
     <article className="message">
       <div className="message-body">
-        <TextArea onClick={startEditing}>{value}</TextArea>
+        <TextArea onClick={startEditing}>
+          {value || this.props.placeholder}
+        </TextArea>
       </div>
     </article>
   );

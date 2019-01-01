@@ -154,9 +154,12 @@ export class Episode extends React.Component<Props> {
               </a>
             </div>
             <div>
-              {description && (
-                <Description key={id} episodeId={id} text={description} />
-              )}
+              <Description
+                key={id}
+                episodeId={id}
+                text={description}
+                placeholder="No description"
+              />
             </div>
           </div>
           <FooterWrapper>
