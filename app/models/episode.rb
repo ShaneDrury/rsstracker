@@ -17,7 +17,7 @@ class Episode < ApplicationRecord
   end
 
   def full_url
-    source.type == 'youtube' ? "https://www.youtube.com/watch?v=#{url}" : url
+    source.source_type == 'youtube' ? "https://www.youtube.com/watch?v=#{url}" : url
   end
 
   def as_json(options={})

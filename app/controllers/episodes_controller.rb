@@ -19,9 +19,9 @@ class EpisodesController < ApplicationController
   # POST /episodes/1/download
   def download
     source = @episode.source
-    active_job = if source.type == "rss"
+    active_job = if source.source_type == "rss"
             DownloadEpisodeJob.perform_later(@episode.id)
-          elsif source.type == "youtube"
+          elsif source.source_type == "youtube"
             DownloadYoutubeAudioJob.perform_later(@episode.id)
           else
             raise "Unknown source type"

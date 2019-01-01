@@ -18,9 +18,9 @@ class Feed < ApplicationRecord
 
   def update_episodes
     sources.each do |source|
-      if source.type == 'rss'
+      if source.source_type == 'rss'
         DownloadFeedJob.perform_later(id)
-      elsif source.type == 'youtube'
+      elsif source.source_type == 'youtube'
         DownloadYoutubePlaylistJob.perform_later(id)
       else
         raise 'Unknown source type'
