@@ -1,6 +1,12 @@
 import { Omit } from "./util";
 
-export type FeedSource = "youtube" | "rss";
+export type SourceType = "youtube" | "rss";
+
+export interface Source {
+  url: string;
+  sourceType: SourceType;
+  disabled: boolean;
+}
 
 export interface ApiFeed {
   id: number;
@@ -12,7 +18,7 @@ export interface ApiFeed {
   updatedAt: string;
   disabled: boolean;
   autodownload: boolean;
-  source: FeedSource;
+  sources: Source[];
 }
 
 export interface RemoteFeed extends Omit<ApiFeed, "id"> {
