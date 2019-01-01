@@ -1,5 +1,5 @@
 import { RemoteEpisode } from "../../types/episode";
-import { RemoteFeed } from "../../types/feed";
+import { RemoteFeed, Source } from "../../types/feed";
 import { RemoteJob } from "../../types/job";
 
 export interface JobDescription {
@@ -20,6 +20,7 @@ const keyFromJob = (job: RemoteJob): string => {
 export const mapJobToDescription = (
   episodes: { [key: string]: RemoteEpisode },
   feeds: { [key: string]: RemoteFeed },
+  sources: { [key: string]: Source },
   job: RemoteJob
 ): JobDescription => {
   const itemId = job.jobData.arguments[0];
@@ -28,7 +29,8 @@ export const mapJobToDescription = (
   switch (job.jobData.jobClass) {
     case "DownloadFeedJob":
     case "DownloadYoutubePlaylistJob": {
-      const feed = feeds[itemId];
+      const source = sources[itemId];
+      const feed = source && feeds[source.feedId];
       const error = errorMessage
         ? feed
           ? `${errorMessage} during Updating: ${feed.name}`

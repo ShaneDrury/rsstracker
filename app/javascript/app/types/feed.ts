@@ -6,6 +6,8 @@ export interface Source {
   url: string;
   sourceType: SourceType;
   disabled: boolean;
+  id: number;
+  feedId: number;
 }
 
 export interface ApiFeed {
