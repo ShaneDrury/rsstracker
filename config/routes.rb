@@ -28,12 +28,6 @@ Rails.application.routes.draw do
     resources :sources
   end
 
-  resources :rss_feeds do
-    member do
-      get 'feed', format: :rss
-    end
-  end
-
   resources :jobs
 
   get '*path', to: 'operations#index'

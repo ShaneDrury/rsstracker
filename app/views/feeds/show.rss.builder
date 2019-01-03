@@ -9,7 +9,7 @@ xml.rss :version => '2.0',
     xml.language 'en'
     xml.itunes :image, href: @feed.image_link(request)
     xml.link root_url
-    xml.tag! 'atom:link', rel: 'self', type: 'application/rss+xml', href: feed_rss_feed_url(@feed.id, format: "rss")
+    xml.tag! 'atom:link', rel: 'self', type: 'application/rss+xml', href: feed_url(@feed.id, format: "rss")
     @feed.episodes.includes(:fetch_status).each do |episode|
       next unless episode.fetch_status&.status == 'SUCCESS'
       xml.item do
