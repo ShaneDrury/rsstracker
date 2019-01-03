@@ -4,7 +4,10 @@ class FeedsController < ApplicationController
   # GET /feeds
   def index
     @feeds = Feed.all.order(name: :asc)
-    render json: { items: @feeds }
+    respond_to do |format|
+      format.html
+      format.json { render json: { items: @feeds } }
+    end
   end
 
   # GET /feeds/1
@@ -12,6 +15,7 @@ class FeedsController < ApplicationController
     respond_to do |format|
       format.json { render json: @feed }
       format.rss { render layout: false }
+      format.html
     end
   end
 
@@ -42,9 +46,15 @@ class FeedsController < ApplicationController
   # PATCH/PUT /feeds/1
   def update
     if @feed.update(feed_params)
-      render json: @feed
+      respond_to do |format|
+        format.json { render json: @feed }
+        format.html
+      end
     else
-      render json: @feed.errors, status: :unprocessable_entity
+      respond_to do |format|
+        format.json { render json: @feed.errors, status: :unprocessable_entity }
+        format.html
+      end
     end
   end
 

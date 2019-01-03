@@ -1,0 +1,21 @@
+<div class="container">
+  <h1 class="title is-1">Feeds</h1>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+    </tr>
+    </thead>
+    <% @feeds.each do |feed| %>
+      <tr>
+        <td>
+          <%= feed.id %>
+        </td>
+        <td>
+          <%= link_to feed.name, feed_url(feed) %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
