@@ -3,6 +3,7 @@ export default async (url: RequestInfo, options?: RequestInit) => {
     ...options,
     headers: {
       "content-type": "application/json",
+      Accept: "application/json",
     },
   });
   return response.json();
