@@ -27,7 +27,10 @@ class SourcesController < ApplicationController
   # PATCH/PUT /sources/1
   def update
     if @source.update(source_params)
-      render json: @source
+      respond_to do |format|
+        format.json { render json: @source }
+        format.html { redirect_back(fallback_location: root_path) }
+      end
     else
       render json: @source.errors, status: :unprocessable_entity
     end
@@ -46,6 +49,6 @@ class SourcesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def source_params
-      params.fetch(:source, {})
+      params.fetch(:source, {}).permit(:disabled)
     end
 end

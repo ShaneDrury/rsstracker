@@ -28,6 +28,8 @@ Rails.application.routes.draw do
     resources :sources
   end
 
+  resources :sources
+
   resources :jobs
 
   get '*path', to: 'operations#index'
