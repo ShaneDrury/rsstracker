@@ -27,6 +27,7 @@ class DownloadYoutubeAudioJob < ApplicationJob
     Dir.mktmpdir do |temp_dir|
       tmp_path = File.join(temp_dir, episode_folder, episode_filename)
       result = system "#{Rails.application.config.youtube_dl_path} -f 22 -o \"#{tmp_path}\" -x -- #{url}"
+      result ||= system "#{Rails.application.config.youtube_dl_path} -f 18 -o \"#{tmp_path}\" -x -- #{url}"
       unless result
         episode.build_fetch_status(status: 'FAILURE').save
         raise "Failed!"
