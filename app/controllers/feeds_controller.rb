@@ -9,7 +9,10 @@ class FeedsController < ApplicationController
 
   # GET /feeds/1
   def show
-    render json: @feed
+    respond_to do |format|
+      format.json { render json: @feed }
+      format.rss { render layout: false }
+    end
   end
 
   # POST /feeds
