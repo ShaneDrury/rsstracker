@@ -6,6 +6,8 @@
   <%= action_cable_meta_tag %>
   <title><%= content_for?(:title) ? yield(:title) : "RSS Tracker" %></title>
   <%= stylesheet_pack_tag 'application' %>
+  <%= javascript_pack_tag 'style' %>
+  <%= stylesheet_pack_tag 'style' %>
   <style>
     html, body {
       height: 100%;

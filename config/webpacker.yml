@@ -12,6 +12,7 @@ default: &default
 
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
+  extract_css: true
 
   extensions:
     - .js
@@ -68,5 +69,3 @@ production:
 
   # Cache manifest.json for performance
   cache_manifest: true
-
-  extract_css: true
