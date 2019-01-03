@@ -17,7 +17,7 @@ class Feed < ApplicationRecord
   end
 
   def update_episodes
-    sources.map(&:update_episodes)
+    sources.where(disabled: false).map(&:update_episodes)
   end
 
   after_update_commit do
