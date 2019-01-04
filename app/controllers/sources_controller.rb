@@ -15,10 +15,15 @@ class SourcesController < ApplicationController
 
   # POST /sources
   def create
-    @source = Source.new(source_params)
+    @source = Source.new(source_params) do |s|
+      s.feed_id = params[:feed_id]
+    end
 
     if @source.save
-      render json: @source, status: :created, location: @source
+      respond_to do |format|
+        format.json { render json: @source, status: :created, location: @source }
+        format.html { redirect_back(fallback_location: root_path) }
+      end
     else
       render json: @source.errors, status: :unprocessable_entity
     end
@@ -39,6 +44,10 @@ class SourcesController < ApplicationController
   # DELETE /sources/1
   def destroy
     @source.destroy
+    respond_to do |format|
+      format.json { head :no_content }
+      format.html { redirect_back(fallback_location: root_path) }
+    end
   end
 
   private
@@ -49,6 +58,6 @@ class SourcesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def source_params
-      params.fetch(:source, {}).permit(:disabled)
+      params.fetch(:source, {}).permit(:disabled, :feed_id, :source_type, :url)
     end
 end
