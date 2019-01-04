@@ -41,13 +41,10 @@
             <% end %>
           </td>
           <td>
-            <%= form_for source, method: :delete do %>
-              <%= tag.div(
-                    data: {
-                      delete_button: "",
-                      extra_class: "is-small is-danger",
-                      name: "Delete"
-                    },
+            <%= form_for source, method: :delete, builder: ReactFormBuilder do |f| %>
+              <%= f.confirmation_button(
+                    extra_class: "is-small is-danger",
+                    name: "Delete"
                   ) %>
             <% end %>
           </td>
