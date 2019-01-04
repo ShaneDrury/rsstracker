@@ -41,7 +41,15 @@
             <% end %>
           </td>
           <td>
-            <%= button_to "delete", source, method: :delete, class: "button is-small is-danger" %>
+            <%= form_for source, method: :delete do %>
+              <%= tag.div(
+                    data: {
+                      delete_button: "",
+                      extra_class: "is-small is-danger",
+                      name: "Delete"
+                    },
+                  ) %>
+            <% end %>
           </td>
         </tr>
       <% end %>
@@ -53,3 +61,6 @@
     <% end %>
   </div>
 </div>
+<% content_for :react do %>
+  <%= javascript_pack_tag 'feed_form' %>
+<% end %>
