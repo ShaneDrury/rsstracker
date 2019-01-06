@@ -1,6 +1,6 @@
 class Feed < ApplicationRecord
   has_many :episodes
-  has_many :sources
+  has_many :sources, dependent: :destroy
 
   def image_link(request)
     "#{request.protocol}#{request.host}:#{request.port}#{relative_image_link}"
