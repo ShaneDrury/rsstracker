@@ -2,6 +2,7 @@ class BulmaFormBuilder < ActionView::Helpers::FormBuilder
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::ActiveModelInstanceTag
   include ActionView::Context
+  include ReactHelper
 
   def multipart?; end
 
@@ -19,6 +20,13 @@ class BulmaFormBuilder < ActionView::Helpers::FormBuilder
 
   def check_box(attribute, options={})
     wrap_field(super(attribute, options.reverse_merge(class: "checkbox")), attribute)
+  end
+
+  def confirmation_button(name: "", extra_class: nil)
+    react_confirmation_button(
+      extra_class: ["button", "is-danger", extra_class].compact.join(" "),
+      name: name
+    )
   end
 
   def wrap_field(f, attribute=nil)

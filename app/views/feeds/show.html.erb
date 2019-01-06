@@ -7,11 +7,8 @@
       <%= f.check_box :autodownload %>
       <%= f.submit %>
     <% end %>
-    <%= form_for @feed, method: :delete, builder: ReactFormBuilder do |f| %>
-      <%= f.confirmation_button(
-            extra_class: "is-danger",
-            name: "Delete"
-          ) %>
+    <%= form_for @feed, method: :delete, builder: BulmaFormBuilder do |f| %>
+      <%= f.confirmation_button(name: "Delete") %>
     <% end %>
     <h2 class="title is-2">Sources</h2>
     <table class="table">
@@ -47,11 +44,8 @@
             <% end %>
           </td>
           <td>
-            <%= form_for source, method: :delete, builder: ReactFormBuilder do |f| %>
-              <%= f.confirmation_button(
-                    extra_class: "is-small is-danger",
-                    name: "Delete"
-                  ) %>
+            <%= form_for source, method: :delete, builder: BulmaFormBuilder do |f| %>
+              <%= f.confirmation_button(name: "Delete", extra_class: "is-small") %>
             <% end %>
           </td>
         </tr>

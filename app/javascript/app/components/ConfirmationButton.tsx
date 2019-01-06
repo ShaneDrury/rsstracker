@@ -1,4 +1,3 @@
-import * as classNames from "classnames";
 import React from "react";
 
 interface Props {
@@ -16,7 +15,7 @@ class ConfirmationButton extends React.Component<Props> {
   public render() {
     return (
       <input
-        className={classNames("button", this.props.extraClass)}
+        className={this.props.extraClass}
         type="submit"
         value={this.props.name}
         onClick={this.handleClick}

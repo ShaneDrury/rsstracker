@@ -1,4 +1,6 @@
 class FeedsController < ApplicationController
+  helper ReactHelper
+
   before_action :set_feed, only: [:show, :update, :destroy, :update_feed]
 
   # GET /feeds
