@@ -7,6 +7,12 @@
       <%= f.check_box :autodownload %>
       <%= f.submit %>
     <% end %>
+    <%= form_for @feed, method: :delete, builder: ReactFormBuilder do |f| %>
+      <%= f.confirmation_button(
+            extra_class: "is-danger",
+            name: "Delete"
+          ) %>
+    <% end %>
     <h2 class="title is-2">Sources</h2>
     <table class="table">
       <thead>

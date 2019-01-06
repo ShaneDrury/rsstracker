@@ -18,4 +18,10 @@
       </tr>
     <% end %>
   </table>
+  <%= form_for Feed.new, builder: BulmaFormBuilder do |f| %>
+    <%= f.text_field :name %>
+    <%= f.text_area :description %>
+    <%= f.check_box :autodownload %>
+    <%= f.submit %>
+  <% end %>
 </div>

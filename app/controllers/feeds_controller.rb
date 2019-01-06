@@ -24,7 +24,10 @@ class FeedsController < ApplicationController
     @feed = Feed.new(feed_params)
 
     if @feed.save
-      render json: @feed, status: :created, location: @feed
+      respond_to do |format|
+        format.json { render json: @feed, status: :created, location: @feed }
+        format.html { redirect_to feed_url(@feed) }
+      end
     else
       render json: @feed.errors, status: :unprocessable_entity
     end
@@ -61,6 +64,10 @@ class FeedsController < ApplicationController
   # DELETE /feeds/1
   def destroy
     @feed.destroy
+    respond_to do |format|
+      format.html { redirect_to feeds_url }
+      format.json { head :no_content }
+    end
   end
 
   private
@@ -72,6 +79,6 @@ class FeedsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def feed_params
-    params.require(:feed).permit(:disabled, :autodownload)
+    params.require(:feed).permit(:disabled, :autodownload, :name, :description)
   end
 end
