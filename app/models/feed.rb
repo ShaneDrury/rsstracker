@@ -40,6 +40,6 @@ class Feed < ApplicationRecord
   end
 
   def as_json(args)
-    super(methods: [:relative_image_link, :status_counts, :sources])
+    super(methods: [:relative_image_link, :status_counts, :sources], except: [:url, :source, :disabled])
   end
 end
