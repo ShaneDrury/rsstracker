@@ -15,7 +15,3 @@ export const getFeeds = createSelector(
 );
 
 export const getFetchStatus = (state: RootState) => state.feeds.fetchStatus;
-
-export const getEnabledFeedIds = createSelector(getFeeds, feeds =>
-  feeds.filter(feed => !feed.disabled).map(feed => feed.id)
-);

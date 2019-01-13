@@ -1,6 +1,6 @@
 import { invert, mapValues, omit } from "lodash";
 import { jobActions, JobsAction } from "../jobs/actions";
-import { FeedJobsAction, feedJobsActions } from "./actions";
+import { FeedJobsAction, feedJobsActions } from "../feedJobs/actions";
 
 export interface State {
   items: {
@@ -10,14 +10,14 @@ export interface State {
 
 const initialState: State = { items: {} };
 
-const feedJobs = (
+const sourceJobs = (
   state: State = initialState,
   action: FeedJobsAction | JobsAction
 ): State => {
   switch (action.type) {
     case feedJobsActions.UPDATE_FEEDS_STARTED: {
       const feedsToJobIds = mapValues(
-        action.payload.feedsToJobs,
+        action.payload.sourcesToJobs,
         job => job.id
       );
       return {
@@ -82,4 +82,4 @@ const feedJobs = (
   }
 };
 
-export default feedJobs;
+export default sourceJobs;

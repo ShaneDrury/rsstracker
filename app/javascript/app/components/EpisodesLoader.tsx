@@ -8,7 +8,7 @@ import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 
 import { isEqual } from "lodash";
-import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
+import { getUpdatingSources } from "../modules/sourceJobs/selectors";
 
 interface DataProps {
   children: JSX.Element;
@@ -18,7 +18,7 @@ interface DataProps {
 
 interface EnhancedProps {
   fetchStatus: FetchStatus;
-  loadingFeeds: string[];
+  loadingSources: string[];
 }
 
 interface DispatchProps {
@@ -45,8 +45,8 @@ export class EpisodesLoader extends React.PureComponent<Props> {
       return;
     }
     if (
-      prevProps.loadingFeeds.length > 0 &&
-      this.props.loadingFeeds.length === 0
+      prevProps.loadingSources.length > 0 &&
+      this.props.loadingSources.length === 0
     ) {
       this.fetchEpisodes();
     }
@@ -70,10 +70,10 @@ export class EpisodesLoader extends React.PureComponent<Props> {
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
   const fetchStatus = getFetchStatus(state);
-  const loadingFeeds = getUpdatingFeeds(state);
+  const loadingSources = getUpdatingSources(state);
 
   return {
-    loadingFeeds,
+    loadingSources,
     fetchStatus,
   };
 };

@@ -22,29 +22,23 @@ export const updateFeedComplete = (feed: RemoteFeed): UpdateFeedComplete => ({
 interface UpdateFeedsStarted {
   type: feedJobsActions.UPDATE_FEEDS_STARTED;
   payload: {
-    feedsToJobs: { [feedId: string]: RemoteJob };
+    sourcesToJobs: { [sourceId: string]: RemoteJob };
   };
 }
 
 export interface UpdateFeedsRequested {
   type: feedJobsActions.UPDATE_FEEDS_REQUESTED;
-  payload: {
-    feedIds: string[];
-  };
 }
 
-export const updateFeedsRequested = (
-  feedIds: string[]
-): UpdateFeedsRequested => ({
+export const updateFeedsRequested = (): UpdateFeedsRequested => ({
   type: feedJobsActions.UPDATE_FEEDS_REQUESTED,
-  payload: { feedIds },
 });
 
-export const updateFeedsStarted = (feedsToJobs: {
-  [feedId: string]: RemoteJob;
+export const updateFeedsStarted = (sourcesToJobs: {
+  [sourceId: string]: RemoteJob;
 }): UpdateFeedsStarted => ({
   type: feedJobsActions.UPDATE_FEEDS_STARTED,
-  payload: { feedsToJobs },
+  payload: { sourcesToJobs },
 });
 
 export type FeedJobsAction =

@@ -29,10 +29,7 @@ export const fetchFeed = async (feedId: string): Promise<RemoteFeed> => {
   return processFeed(camel);
 };
 
-export const updateFeeds = async (
-  feedIds: string[]
-): Promise<UpdateFeedsResponse> =>
+export const updateFeeds = async (): Promise<UpdateFeedsResponse> =>
   apiFetch(`/feeds/update_feeds`, {
     method: "POST",
-    body: JSON.stringify({ feed_ids: feedIds }),
   });

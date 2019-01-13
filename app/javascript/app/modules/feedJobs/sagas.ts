@@ -8,11 +8,12 @@ import {
   updateFeedsStarted,
 } from "./actions";
 
-function* updateFeedsSaga({ payload: { feedIds } }: UpdateFeedsRequested) {
-  const updateResponse: UpdateFeedsResponse = yield updateFeeds(feedIds);
+function* updateFeedsSaga({  }: UpdateFeedsRequested) {
+  const updateResponse: UpdateFeedsResponse = yield updateFeeds();
   const jobs = updateResponse.jobs.map(processJobResponse);
-  const feedsToJobs = zipObject(feedIds, jobs);
-  yield put(updateFeedsStarted(feedsToJobs));
+  const sourceIds = jobs.map(job => job.jobData.arguments[0]);
+  const sourcesToJobs = zipObject(sourceIds, jobs);
+  yield put(updateFeedsStarted(sourcesToJobs));
 }
 
 function* watchUpdateFeedsRequested() {

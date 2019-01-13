@@ -16,9 +16,7 @@ export interface ApiFeed {
   description: string;
   imageUrl: string;
   relativeImageLink: string;
-  url: string;
   updatedAt: string;
-  disabled: boolean;
   autodownload: boolean;
   sources: Source[];
 }

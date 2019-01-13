@@ -3,21 +3,21 @@ import { RootAction } from "./actions";
 import episodeJobs, { State as EpisodeJobsState } from "./episodeJobs/reducers";
 import episodes, { State as EpisodesState } from "./episodes/reducers";
 import favourites, { State as FavouritesState } from "./favourites/reducers";
-import feedJobs, { State as FeedJobsState } from "./feedJobs/reducers";
 import feeds, { State as FeedsState } from "./feeds/reducers";
 import jobs, { JobsState } from "./jobs/reducers";
 import player, { State as PlayerState } from "./player/reducers";
+import sourceJobs, { State as SourceJobsState } from "./sourceJobs/reducers";
 import sources, { State as SourcesState } from "./sources/reducers";
 
 export interface RootState {
   episodeJobs: EpisodeJobsState;
   episodes: EpisodesState;
   feeds: FeedsState;
-  feedJobs: FeedJobsState;
   player: PlayerState;
   jobs: JobsState;
   favourites: FavouritesState;
   sources: SourcesState;
+  sourceJobs: SourceJobsState;
 }
 
 const rootReducer: Reducer<RootState, RootAction> = combineReducers({
@@ -25,10 +25,10 @@ const rootReducer: Reducer<RootState, RootAction> = combineReducers({
   episodes,
   favourites,
   feeds,
-  feedJobs,
   jobs,
   player,
   sources,
+  sourceJobs,
 });
 
 export default rootReducer;

@@ -3,9 +3,8 @@ import classNames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
 import { updateFeedsRequested } from "../modules/feedJobs/actions";
-import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
-import { getEnabledFeedIds } from "../modules/feeds/selectors";
 import { RootState } from "../modules/reducers";
+import { getUpdatingSources } from "../modules/sourceJobs/selectors";
 import { Icon } from "./Icon";
 
 interface DataProps {
@@ -13,19 +12,18 @@ interface DataProps {
 }
 
 interface EnhancedProps {
-  feedIds: string[];
   updating: boolean;
 }
 
 interface DispatchProps {
-  updateFeeds: (feedIds: string[]) => void;
+  updateFeeds: () => void;
 }
 
 type Props = DataProps & DispatchProps & EnhancedProps;
 
 export class UpdateFeeds extends React.PureComponent<Props> {
   public handleUpdateFeeds = () => {
-    return this.props.updateFeeds(this.props.feedIds);
+    return this.props.updateFeeds();
   };
 
   public render() {
@@ -45,9 +43,8 @@ export class UpdateFeeds extends React.PureComponent<Props> {
 }
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
-  const updating = getUpdatingFeeds(state).length > 0;
+  const updating = getUpdatingSources(state).length > 0;
   return {
-    feedIds: getEnabledFeedIds(state),
     updating,
   };
 };
