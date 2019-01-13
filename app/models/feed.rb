@@ -2,6 +2,21 @@ class Feed < ApplicationRecord
   has_many :episodes
   has_many :sources, dependent: :destroy
 
+  class DeprecatedError < StandardError
+  end
+
+  def url
+    raise DeprecatedError, "This column is deprecated"
+  end
+
+  def source
+    raise DeprecatedError, "This column is deprecated"
+  end
+
+  def disabled
+    raise DeprecatedError, "This column is deprecated"
+  end
+
   def image_link(request)
     "#{request.protocol}#{request.host}:#{request.port}#{relative_image_link}"
   end
