@@ -7,8 +7,7 @@
   <title><%= content_for?(:title) ? yield(:title) : "RSS Tracker" %></title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
-  <%= javascript_pack_tag 'style' %>
-  <%= stylesheet_pack_tag 'style' %>
+  <%= stylesheet_pack_tag 'application' %>
   <style>
     html, body {
       height: 100%;

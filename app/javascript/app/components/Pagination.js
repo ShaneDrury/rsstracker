@@ -3,6 +3,8 @@ import React from "react";
 import BreakView from "react-paginate/dist/BreakView";
 import PageView from "react-paginate/dist/PageView";
 
+const noOp = () => {};
+
 export default class Pagination extends React.Component {
   static propTypes = {
     pageCount: PropTypes.number.isRequired,
@@ -207,6 +209,7 @@ export default class Pagination extends React.Component {
               key={index}
               breakLabel={breakLabel}
               breakClassName={breakClassName}
+              onClick={noOp}
             />
           );
           items.push(breakView);
