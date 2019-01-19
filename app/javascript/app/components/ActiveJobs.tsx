@@ -29,32 +29,8 @@ export class ActiveJobs extends React.PureComponent<Props> {
   private notificationSystem = React.createRef<NotificationSystem.System>()!;
 
   public componentDidMount() {
-    const notificationSystem = this.notificationSystem.current;
-    if (!notificationSystem) {
-      return;
-    }
     this.props.jobDescriptions.forEach(job => {
-      const key = job.key;
-      if (job.error) {
-        notificationSystem.addNotification({
-          // TODO: Move this to saga
-          message: job.error,
-          level: "error",
-          position: "bl",
-          autoDismiss: 0,
-          uid: key,
-          onRemove: () => this.props.onCloseErrorJob(job.id),
-        });
-      } else {
-        notificationSystem.addNotification({
-          message: job.description,
-          level: "info",
-          position: "bl",
-          autoDismiss: 0,
-          dismissible: false,
-          uid: key,
-        });
-      }
+      this.notifyJob(job);
     });
   }
 
@@ -62,42 +38,53 @@ export class ActiveJobs extends React.PureComponent<Props> {
     const newKeys = this.props.jobDescriptions.map(job => job.key);
     const prevKeys = prevProps.jobDescriptions.map(job => job.key);
     const keysToRemove = difference(prevKeys, newKeys);
-    const notificationSystem = this.notificationSystem.current;
-    if (!notificationSystem) {
-      return;
-    }
     keysToRemove.forEach(key => {
-      notificationSystem.removeNotification(key);
+      this.withNotifier(n => n.removeNotification(key));
     });
     this.props.jobDescriptions.forEach(job => {
-      const key = job.key;
-      if (!prevKeys.includes(key)) {
-        if (job.error) {
-          notificationSystem.addNotification({
-            // TODO: Move this to saga
-            message: job.error,
-            level: "error",
-            position: "bl",
-            autoDismiss: 0,
-            uid: key,
-            onRemove: () => this.props.onCloseErrorJob(job.id),
-          });
-        } else {
-          notificationSystem.addNotification({
-            message: job.description,
-            level: "info",
-            position: "bl",
-            autoDismiss: 0,
-            dismissible: false,
-            uid: key,
-          });
-        }
+      if (!prevKeys.includes(job.key)) {
+        this.notifyJob(job);
       }
     });
   }
 
   public render() {
     return <NotificationSystem ref={this.notificationSystem} />;
+  }
+
+  private withNotifier(callback: (n: NotificationSystem.System) => void) {
+    const notificationSystem = this.notificationSystem.current;
+    if (!notificationSystem) {
+      return;
+    }
+    callback(notificationSystem);
+  }
+
+  private notifyJob(job: JobDescription) {
+    if (job.error) {
+      this.withNotifier(n => {
+        n.addNotification({
+          // TODO: Move this to saga
+          message: job.error,
+          level: "error",
+          position: "bl",
+          autoDismiss: 0,
+          uid: job.key,
+          onRemove: () => this.props.onCloseErrorJob(job.id),
+        });
+      });
+    } else {
+      this.withNotifier(n => {
+        n.addNotification({
+          message: job.description,
+          level: "info",
+          position: "bl",
+          autoDismiss: 0,
+          dismissible: false,
+          uid: job.key,
+        });
+      });
+    }
   }
 }
 
