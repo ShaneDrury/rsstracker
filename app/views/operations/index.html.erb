@@ -1,2 +1,7 @@
-<div id="root"></div>
+<%= tag.div(id: "root", data: {
+  preload: {
+    feeds: Feed.all.order(name: :asc),
+    jobs: Delayed::Job.all.map(&:with_extra)
+  }
+}) %>
 <%= javascript_pack_tag 'application' %>

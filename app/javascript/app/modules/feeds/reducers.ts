@@ -1,7 +1,6 @@
-import { forEach } from "lodash";
 import { RemoteFeed } from "../../types/feed";
 import { FeedJobsAction, feedJobsActions } from "../feedJobs/actions";
-import { FetchStatus } from "../remoteData";
+import { FetchStatus, normalize } from "../remoteData";
 import { feedActions, FeedsAction } from "./actions";
 
 export interface State {
@@ -29,18 +28,13 @@ const feeds = (
         fetchStatus: "LOADING",
       };
     case feedActions.FETCH_FEEDS_COMPLETE: {
-      const remoteFeeds: { [key: string]: RemoteFeed } = {};
-      const ids: string[] = [];
-      forEach(action.payload.feeds, feed => {
-        remoteFeeds[feed.id] = feed;
-        ids.push(feed.id);
-      });
+      const { ids, items } = normalize(action.payload.feeds);
       return {
         ...state,
         ids,
         items: {
           ...state.items,
-          ...remoteFeeds,
+          ...items,
         },
         fetchStatus: "SUCCESS",
       };

@@ -10,7 +10,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { fetchFeedsRequested } from "../modules/feeds/actions";
 import { getFeeds, getFetchStatus } from "../modules/feeds/selectors";
 import { QueryParams, syncQueryParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
@@ -31,11 +30,7 @@ interface EnhancedProps {
   fetchStatus: FetchStatus;
 }
 
-interface DispatchProps {
-  fetchFeeds: () => void;
-}
-
-type Props = DataProps & EnhancedProps & DispatchProps;
+type Props = DataProps & EnhancedProps;
 
 const FeedSelectWrapper = styled.nav`
   margin: 0.75rem;
@@ -47,10 +42,6 @@ const PanelHeadingWrapper = styled.div`
 `;
 
 export class FeedSelect extends React.PureComponent<Props> {
-  public componentDidMount() {
-    this.props.fetchFeeds();
-  }
-
   public handleChangeSearch = (searchTerm: string) => {
     syncQueryParams({ searchTerm }, this.props.queryParams, this.props.history);
   };
@@ -122,11 +113,4 @@ const mapStateToProps = (state: RootState): EnhancedProps => {
   };
 };
 
-const mapDispatchToProps = {
-  fetchFeeds: fetchFeedsRequested,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FeedSelect);
+export default connect(mapStateToProps)(FeedSelect);

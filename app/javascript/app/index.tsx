@@ -2,15 +2,28 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
+import camelcaseKeys from "camelcase-keys";
 import { BrowserRouter, Route } from "react-router-dom";
 import PrimaryContent from "./components/PrimaryContent";
+import { fetchFeedsComplete } from "./modules/feeds/actions";
+import { processFeed } from "./modules/feeds/sources";
+import { getPreloaded } from "./modules/getInitialState";
+import { fetchJobsComplete } from "./modules/jobs/actions";
+import { processJobResponse } from "./modules/jobs/sources";
 import sagas from "./modules/sagas";
 import { configureStore } from "./store";
 import { init } from "./websocket";
 
 const { store, runSaga } = configureStore();
-init(store);
 runSaga(sagas);
+init(store);
+const preloaded = getPreloaded();
+store.dispatch(
+  fetchFeedsComplete(
+    camelcaseKeys(preloaded.feeds.map(processFeed), { deep: true })
+  )
+);
+store.dispatch(fetchJobsComplete(preloaded.jobs.map(processJobResponse)));
 
 const render = (Component: any) => {
   return ReactDOM.render(

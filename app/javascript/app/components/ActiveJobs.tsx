@@ -29,7 +29,33 @@ export class ActiveJobs extends React.PureComponent<Props> {
   private notificationSystem = React.createRef<NotificationSystem.System>()!;
 
   public componentDidMount() {
-    this.props.getJobs();
+    const notificationSystem = this.notificationSystem.current;
+    if (!notificationSystem) {
+      return;
+    }
+    this.props.jobDescriptions.forEach(job => {
+      const key = job.key;
+      if (job.error) {
+        notificationSystem.addNotification({
+          // TODO: Move this to saga
+          message: job.error,
+          level: "error",
+          position: "bl",
+          autoDismiss: 0,
+          uid: key,
+          onRemove: () => this.props.onCloseErrorJob(job.id),
+        });
+      } else {
+        notificationSystem.addNotification({
+          message: job.description,
+          level: "info",
+          position: "bl",
+          autoDismiss: 0,
+          dismissible: false,
+          uid: key,
+        });
+      }
+    });
   }
 
   public componentDidUpdate(prevProps: Props) {
