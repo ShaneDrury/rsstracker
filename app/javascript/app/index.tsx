@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
-import camelcaseKeys from "camelcase-keys";
 import { BrowserRouter, Route } from "react-router-dom";
 import PrimaryContent from "./components/PrimaryContent";
 import { fetchFeedsComplete } from "./modules/feeds/actions";
@@ -18,11 +17,7 @@ const { store, runSaga } = configureStore();
 runSaga(sagas);
 init(store);
 const preloaded = getPreloaded();
-store.dispatch(
-  fetchFeedsComplete(
-    camelcaseKeys(preloaded.feeds.map(processFeed), { deep: true })
-  )
-);
+store.dispatch(fetchFeedsComplete(preloaded.feeds.map(processFeed)));
 store.dispatch(fetchJobsComplete(preloaded.jobs.map(processJobResponse)));
 
 const render = (Component: any) => {
