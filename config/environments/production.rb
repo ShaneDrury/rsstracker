@@ -1,6 +1,6 @@
 Rails.application.configure do
   # Verifies that versions and hashed value of the package contents in the project's package.json
-    config.webpacker.check_yarn_integrity = false
+  config.webpacker.check_yarn_integrity = false
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -91,4 +91,8 @@ Rails.application.configure do
   config.download_root = yml['download_root']
   config.storage_root = yml['storage_root']
   config.youtube_dl_path = yml['youtube_dl_path']
+
+  Raven.configure do |cfg|
+    cfg.dsn = 'http://d88d154936bc4afc924191fb2d4fee84:b4cff010960b4ea79617d8c37baebee1@ubuntu.home:9001/1'
+  end
 end
