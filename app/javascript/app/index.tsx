@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/browser";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
@@ -12,6 +13,12 @@ import { processJobResponse } from "./modules/jobs/sources";
 import sagas from "./modules/sagas";
 import { configureStore } from "./store";
 import { init } from "./websocket";
+
+if (process.env.NODE_ENV === "production") {
+  Sentry.init({
+    dsn: "http://d88d154936bc4afc924191fb2d4fee84@ubuntu.home:9001/1",
+  });
+}
 
 const { store, runSaga } = configureStore();
 runSaga(sagas);
