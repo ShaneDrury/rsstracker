@@ -95,4 +95,10 @@ Rails.application.configure do
   Raven.configure do |cfg|
     cfg.dsn = 'http://d88d154936bc4afc924191fb2d4fee84:b4cff010960b4ea79617d8c37baebee1@ubuntu.home:9001/1'
   end
+
+  config.lograge.enabled = true
+  config.lograge.formatter = Lograge::Formatters::Logstash.new
+  config.logstash.host = "ubuntu.home"
+  config.logstash.port = 5000
+  config.logstash.type = :tcp
 end

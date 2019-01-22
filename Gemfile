@@ -65,3 +65,6 @@ gem 'whenever'
 gem 'yaml_db'
 gem 'pg'
 gem "sentry-raven"
+gem "lograge"
+gem "logstash-event"
+gem "logstash-logger"
