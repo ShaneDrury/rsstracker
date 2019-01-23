@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_01_160129) do
+ActiveRecord::Schema.define(version: 2019_01_23_201310) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -70,6 +70,15 @@ ActiveRecord::Schema.define(version: 2019_01_01_160129) do
     t.float "bytes_transferred"
     t.float "bytes_total"
     t.index ["fetchable_type", "fetchable_id"], name: "index_fetch_statuses_on_fetchable_type_and_fetchable_id"
+  end
+
+  create_table "single_feed_sources", force: :cascade do |t|
+    t.integer "feed_id"
+    t.integer "source_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feed_id"], name: "index_single_feed_sources_on_feed_id"
+    t.index ["source_id"], name: "index_single_feed_sources_on_source_id"
   end
 
   create_table "sources", force: :cascade do |t|

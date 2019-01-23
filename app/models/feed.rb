@@ -1,6 +1,7 @@
 class Feed < ApplicationRecord
   has_many :episodes
-  has_many :sources, dependent: :destroy
+  has_many :single_feed_sources
+  has_many :sources, through: :single_feed_sources, dependent: :destroy
 
   class DeprecatedError < StandardError
   end
