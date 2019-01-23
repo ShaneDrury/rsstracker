@@ -87,7 +87,6 @@ ActiveRecord::Schema.define(version: 2019_01_23_211305) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "source_type", default: ""
-    t.integer "feed_id"
   end
 
 end

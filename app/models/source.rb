@@ -2,8 +2,6 @@ class Source < ApplicationRecord
   has_one :single_feed_source
   has_one :feed, through: :single_feed_source
 
-  # todo: drop feed_id column
-
   def update_episodes
     if source_type == 'rss'
       DownloadFeedJob.perform_later(id)
