@@ -1,8 +1,6 @@
 require 'open-uri'
 require 'rss'
 
-
-
 class DownloadFeedJob < ApplicationJob
   queue_as :default
 
