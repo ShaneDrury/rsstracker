@@ -12,7 +12,7 @@ class Source < ApplicationRecord
     end
   end
 
-  def as_json(args)
+  def as_json(*args)
     super(include: { feed: { only: [:id] } })
   end
 end

@@ -25,7 +25,7 @@ class Feed < ApplicationRecord
     FeedUpdateBroadcastJob.perform_later(id)
   end
 
-  def as_json(args)
+  def as_json(*args)
     super(methods: [:relative_image_link, :status_counts, :sources])
   end
 end
