@@ -30,7 +30,7 @@ export const mapJobToDescription = (
     case "DownloadFeedJob":
     case "DownloadYoutubePlaylistJob": {
       const source = sources[itemId];
-      const feed = source && feeds[source.feedId];
+      const feed = source && feeds[source.feed.id];
       const error = errorMessage
         ? feed
           ? `${errorMessage} during Updating: ${feed.name}`

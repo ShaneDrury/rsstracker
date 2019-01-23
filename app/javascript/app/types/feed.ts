@@ -7,7 +7,9 @@ export interface Source {
   sourceType: SourceType;
   disabled: boolean;
   id: number;
-  feedId: number;
+  feed: {
+    id: number;
+  };
 }
 
 export interface ApiFeed {
