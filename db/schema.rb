@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_23_211439) do
+ActiveRecord::Schema.define(version: 2019_01_23_213641) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -50,12 +50,9 @@ ActiveRecord::Schema.define(version: 2019_01_23_211439) do
   create_table "feeds", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "url"
     t.text "name"
     t.text "image_url"
     t.text "description"
-    t.text "source"
-    t.boolean "disabled", default: false
     t.boolean "autodownload", default: false
   end
 
