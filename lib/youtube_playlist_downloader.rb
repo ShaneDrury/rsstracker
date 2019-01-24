@@ -48,6 +48,7 @@ class YoutubePlaylistDownloader
       ep.seen = false
       unless ep.save
         Raven.capture_message("Could not save episode because: #{ep.errors.full_messages}")
+        break
       end
       ep.feed.touch
       DownloadThumbnailJob.perform_later(ep.id)
