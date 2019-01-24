@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_23_213641) do
+ActiveRecord::Schema.define(version: 2019_01_24_181054) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -45,6 +45,16 @@ ActiveRecord::Schema.define(version: 2019_01_23_213641) do
     t.index ["feed_id"], name: "index_episodes_on_feed_id"
     t.index ["guid"], name: "index_episodes_on_guid", unique: true
     t.index ["source_id"], name: "index_episodes_on_source_id"
+  end
+
+  create_table "feed_guesses", force: :cascade do |t|
+    t.integer "feed_id"
+    t.integer "source_id"
+    t.text "pattern"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feed_id"], name: "index_feed_guesses_on_feed_id"
+    t.index ["source_id"], name: "index_feed_guesses_on_source_id"
   end
 
   create_table "feeds", force: :cascade do |t|

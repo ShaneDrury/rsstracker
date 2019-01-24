@@ -1,6 +1,8 @@
 class Source < ApplicationRecord
   has_one :single_feed_source
   has_one :feed, through: :single_feed_source
+  has_many :feed_guesses
+  has_many :feeds, through: :feed_guesses
 
   def update_episodes
     if source_type == 'rss'
