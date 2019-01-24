@@ -19,6 +19,10 @@ class Feed < ApplicationRecord
     counts
   end
 
+  def self.all_unique_sources
+    all.map(&:all_sources).flatten.uniq
+  end
+
   def update_episodes
     all_sources.map(&:update_episodes)
   end

@@ -47,7 +47,7 @@ class FeedsController < ApplicationController
             else
               Feed.all
             end
-    active_jobs = feeds.map(&:update_episodes).flatten.uniq
+    active_jobs = feeds.all_unique_sources.map(&:update_episodes).flatten.uniq
     jobs = Delayed::Job.find(active_jobs.map(&:provider_job_id))
     jobs_with_extra = jobs.map(&:with_extra)
     render json: { jobs: jobs_with_extra }, status: :accepted
