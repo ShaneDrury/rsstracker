@@ -26,7 +26,7 @@ class YoutubePlaylistDownloader
     feed = if source.feed.present?
              source.feed
            elsif guesses.present?
-             guesses.detect { |guess| guess.matches_text?(description) }
+             guesses.detect { |guess| guess.matches_text?(description) }&.feed
            end
     return unless feed
     Episode.find_or_create_by(guid: url) do |ep|
