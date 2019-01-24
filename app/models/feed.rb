@@ -20,7 +20,7 @@ class Feed < ApplicationRecord
   end
 
   def update_episodes
-    sources.where(disabled: false).map(&:update_episodes)
+    all_sources.map(&:update_episodes)
   end
 
   after_update_commit do
@@ -29,5 +29,9 @@ class Feed < ApplicationRecord
 
   def as_json(*args)
     super(methods: [:relative_image_link, :status_counts, :sources])
+  end
+
+  def all_sources
+    sources.where(disabled: false) | guessing_sources.where(disabled: false)
   end
 end
