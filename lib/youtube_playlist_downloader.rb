@@ -52,7 +52,7 @@ class YoutubePlaylistDownloader
       end
       ep.feed.touch
       DownloadThumbnailJob.perform_later(ep.id)
-      DownloadYoutubeAudioJob.perform_later(ep.id) if feed.autodownload
+      DownloadYoutubeAudioJob.perform_later(ep.id) if ep.feed.autodownload
     end
   end
 
