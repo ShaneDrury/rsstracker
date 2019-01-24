@@ -28,7 +28,11 @@ Rails.application.routes.draw do
     resources :sources
   end
 
-  resources :sources
+  resources :sources do
+    resources :feed_guesses
+  end
+
+  resources :feed_guesses
 
   resources :jobs
 

@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="content">
+    <h1 class="title is-1"><%= @source.id %></h1>
+    <%= form_for @source, builder: BulmaFormBuilder do |f| %>
+      <%= f.text_field :url %>
+      <%= f.text_field :source_type %>
+      <%= f.submit %>
+    <% end %>
+    <%= form_for @source, method: :delete, builder: BulmaFormBuilder do |f| %>
+      <%= f.confirmation_button(name: "Delete") %>
+    <% end %>
+    <h2 class="title is-2">Guesses</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Feed</th>
+        <th>Pattern</th>
+        <th></th>
+      </tr>
+      </thead>
+      <% @source.feed_guesses.each do |feed_guess| %>
+        <tr>
+          <td>
+            <%= feed_guess.id %>
+          </td>
+          <td>
+            <%= feed_guess.feed.name %>
+          </td>
+          <td>
+            <%= feed_guess.pattern %>
+          </td>
+          <td>
+            <%= form_for feed_guess, method: :delete, builder: BulmaFormBuilder do |f| %>
+              <%= f.confirmation_button(name: "Delete", extra_class: "is-small") %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+    <%= form_for [@source, @source.feed_guesses.build], builder: BulmaFormBuilder do |f| %>
+      <%= f.collection_select :feed_id, Feed.all, :id, :name %>
+      <%= f.text_field :pattern %>
+      <%= f.submit %>
+    <% end %>
+  </div>
+</div>
+<% content_for :react do %>
+  <%= javascript_pack_tag 'feed_form' %>
+<% end %>

@@ -4,13 +4,18 @@ class SourcesController < ApplicationController
   # GET /sources
   def index
     @sources = Source.all
-
-    render json: @sources
+    respond_to do |format|
+      format.html
+      format.json { render json: @sources }
+    end
   end
 
   # GET /sources/1
   def show
-    render json: @source
+    respond_to do |format|
+      format.json { render json: @source }
+      format.html
+    end
   end
 
   # POST /sources

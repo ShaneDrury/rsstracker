@@ -1,0 +1,26 @@
+<div class="container">
+  <h1 class="title is-1">Feeds</h1>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>URL</th>
+    </tr>
+    </thead>
+    <% @sources.each do |source| %>
+      <tr>
+        <td>
+          <%= source.id %>
+        </td>
+        <td>
+          <%= link_to source.url, source_url(source) %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <%= form_for Source.new, builder: BulmaFormBuilder do |f| %>
+    <%= f.text_field :url %>
+    <%= f.text_field :source_type %>
+    <%= f.submit %>
+  <% end %>
+</div>

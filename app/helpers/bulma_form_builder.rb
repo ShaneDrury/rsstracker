@@ -14,6 +14,10 @@ class BulmaFormBuilder < ActionView::Helpers::FormBuilder
     wrap_field(super(attribute, options.reverse_merge(class: "input")), attribute)
   end
 
+  def collection_select(attribute, collection, value_method, text_method, options = {}, html_options = {})
+    wrap_field(super(attribute, collection, value_method, text_method, options, html_options.reverse_merge(class: "select")), attribute)
+  end
+
   def text_area(attribute, options={})
     wrap_field(super(attribute, options.reverse_merge(class: "textarea")), attribute)
   end
