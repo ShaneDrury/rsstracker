@@ -25,7 +25,19 @@ class YoutubePlaylistDownloader
     updater = ::YoutubeEpisodeUpdater.new(youtube_dl_path)
     Episode.find_or_create_by(guid: url) do |ep|
       ep.build_fetch_status(status: 'NOT_ASKED')
-      ep.feed = feed
+      if feed.present?
+        ep.feed = feed
+      elsif guesses.present?
+        guesses.each do |guess|
+          if guess.matches_text?(description)
+            ep.feed = guess.feed
+            break
+          end
+        end
+      else
+        raise StandardError, "Source didn't have a feed or guesses"
+      end
+
       ep.source = source
       ep.name = description
       begin
@@ -53,5 +65,9 @@ class YoutubePlaylistDownloader
 
   def feed
     source.feed
+  end
+
+  def guesses
+    source.feed_guesses
   end
 end
