@@ -3,7 +3,7 @@ class EpisodesController < ApplicationController
 
   # GET /episodes
   def index
-    @episodes = Episode.includes(:fetch_status).order(publication_date: :desc, created_at: :desc)
+    @episodes = Episode.includes(:fetch_status)
     @episodes = @episodes.where(id: params[:id]) if params[:id].present?
     @episodes = @episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     @episodes = @episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
@@ -15,7 +15,7 @@ class EpisodesController < ApplicationController
   end
 
   def duplicates
-    dup_names = Episode.select(:name, "count(*)").group(:name).having("count(*) > 1").pluck(:name)
+    dup_names = Episode.unscope.select(:name, "count(*)").group(:name).having("count(*) > 1").pluck(:name)
     @episodes = Episode.where(name: dup_names)
     respond_to do |format|
       format.html
@@ -68,7 +68,7 @@ class EpisodesController < ApplicationController
   end
 
   def search
-    episodes = Episode.includes(:fetch_status, :feed).order(publication_date: :desc, created_at: :desc)
+    episodes = Episode.includes(:fetch_status, :feed)
     episodes = episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     episodes = if params[:search_term].present?
                  description = DbTextSearch::FullText.new(episodes, :description).search(params[:search_term])
