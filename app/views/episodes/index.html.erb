@@ -1,0 +1,25 @@
+<div class="container">
+  <h1 class="title is-1">Episodes</h1>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+    </tr>
+    </thead>
+    <% @episodes.each do |episode| %>
+      <tr>
+        <td>
+          <%= episode.id %>
+        </td>
+        <td>
+          <%= link_to episode.name, episode_url(episode) %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <%= form_for Episode.new, builder: BulmaFormBuilder do |f| %>
+    <%= f.text_field :name %>
+    <%= f.submit %>
+  <% end %>
+</div>

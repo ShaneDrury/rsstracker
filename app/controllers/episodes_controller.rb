@@ -8,7 +8,12 @@ class EpisodesController < ApplicationController
     @episodes = @episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     @episodes = @episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
 
-    render json: @episodes
+    respond_to do |format|
+      format.html
+      format.json { render json: @episodes }
+    end
+  end
+
   end
 
   # GET /episodes/1
