@@ -39,6 +39,7 @@ class LogstashPlugin < Delayed::Plugin
         queue: job.queue,
         runtime: runtime,
         name: job.name,
+        job_class: job.payload_object.job_data["job_class"],
         created_at: job.created_at,
         started_at: start,
         queued: queued)
