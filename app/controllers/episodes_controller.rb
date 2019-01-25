@@ -14,6 +14,13 @@ class EpisodesController < ApplicationController
     end
   end
 
+  def duplicates
+    dup_names = Episode.select(:name, "count(*)").group(:name).having("count(*) > 1").pluck(:name)
+    @episodes = Episode.where(name: dup_names)
+    respond_to do |format|
+      format.html
+      format.json { render json: @episodes }
+    end
   end
 
   # GET /episodes/1

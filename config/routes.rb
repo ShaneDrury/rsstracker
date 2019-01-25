@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :episodes do
     collection do
       get 'search'
+      get 'duplicates'
     end
     member do
       post 'download'
