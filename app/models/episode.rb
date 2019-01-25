@@ -4,6 +4,8 @@ class Episode < ApplicationRecord
   has_one :fetch_status, as: :fetchable, dependent: :destroy
   belongs_to :source
 
+  default_scope { order(publication_date: :desc, created_at: :desc) }
+
   after_update_commit do
     EpisodeUpdateBroadcastJob.perform_later(id)
   end
