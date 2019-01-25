@@ -15,7 +15,7 @@ class EpisodesController < ApplicationController
   end
 
   def duplicates
-    dup_names = Episode.unscope.select(:name, "count(*)").group(:name).having("count(*) > 1").pluck(:name)
+    dup_names = Episode.unscoped.select(:name, "count(*)").group(:name).having("count(*) > 1").pluck(:name)
     @episodes = Episode.where(name: dup_names)
     respond_to do |format|
       format.html
