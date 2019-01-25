@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="content">
+    <h1 class="title is-1"><%= @episode.name %> <span class="subtitle is-3"><%= @episode.id %></span></h1>
+    <%= form_for @episode, builder: BulmaFormBuilder do |f| %>
+      <%= f.text_field :name %>
+      <%= f.text_area :description %>
+      <%= f.collection_select :feed_id, Feed.all, :id, :name %>
+      <%= f.text_field :url %>
+      <%= f.text_field :guid %>
+      <%= f.text_field :duration %>
+      <%= f.text_field :source_thumbnail_url %>
+      <%= f.text_field :thumbnail_url %>
+      <%= f.check_box :seen %>
+      <%= f.submit %>
+    <% end %>
+    <%= form_for @episode, method: :delete, builder: BulmaFormBuilder do |f| %>
+      <%= f.confirmation_button(name: "Delete") %>
+    <% end %>
+  </div>
+</div>
+
+<% content_for :react do %>
+  <%= javascript_pack_tag 'feed_form' %>
+<% end %>

@@ -1,4 +1,5 @@
 class EpisodesController < ApplicationController
+  helper ReactHelper
   before_action :set_episode, only: [:show, :update, :destroy, :download]
 
   # GET /episodes
@@ -25,7 +26,10 @@ class EpisodesController < ApplicationController
 
   # GET /episodes/1
   def show
-    render json: @episode
+    respond_to do |format|
+      format.json { render json: @episode }
+      format.html
+    end
   end
 
   # POST /episodes/1/download
@@ -65,6 +69,10 @@ class EpisodesController < ApplicationController
   # DELETE /episodes/1
   def destroy
     @episode.destroy
+    respond_to do |format|
+      format.json { head :no_content }
+      format.html { redirect_to episodes_url }
+    end
   end
 
   def search
