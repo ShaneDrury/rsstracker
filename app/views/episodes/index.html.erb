@@ -7,6 +7,7 @@
     <tr>
       <th>ID</th>
       <th>Name</th>
+      <th>Date</th>
     </tr>
     </thead>
     <% @episodes.each do |episode| %>
@@ -16,6 +17,9 @@
         </td>
         <td>
           <%= link_to episode.name, episode_url(episode) %>
+        </td>
+        <td>
+          <%= episode.publication_date.strftime("%D") %>
         </td>
       </tr>
     <% end %>
