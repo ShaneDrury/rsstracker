@@ -21,7 +21,7 @@ class SourcesController < ApplicationController
   # POST /sources
   def create
     @source = Source.new(source_params) do |s|
-      s.feed_id = params[:feed_id]
+      s.feed = Feed.find(params[:feed_id]) if params[:feed_id]
     end
 
     if @source.save
