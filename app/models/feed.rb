@@ -23,6 +23,10 @@ class Feed < ApplicationRecord
     all.map(&:all_sources).flatten.uniq
   end
 
+  def self.update_all
+    all_unique_sources.map(&:update_episodes)
+  end
+
   def update_episodes
     all_sources.map(&:update_episodes)
   end

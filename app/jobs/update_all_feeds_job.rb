@@ -2,6 +2,6 @@ class UpdateAllFeedsJob < ApplicationJob
   queue_as :default
 
   def perform
-    Feed.all.map(&:update_episodes)
+    Feed.update_all.flatten.uniq
   end
 end
