@@ -13,9 +13,9 @@ class YoutubePlaylistDownloader
     short_episode_details.each do |episode|
       url = episode['url']
       description = episode['title']
-      feed = if source.feed.present?
+      feed = if source.feed.exists?
                source.feed
-             elsif guesses.present?
+             elsif guesses.exists?
                guesses.detect { |guess| guess.matches_text?(description) }&.feed
              end
       if !Episode.exists?(guid: url) && feed.exists?
