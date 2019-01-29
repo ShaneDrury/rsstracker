@@ -23,4 +23,8 @@ class YoutubePlaylistDownloader
   def short_episode_details
     Youtube.new(youtube_dl_path).short_details(source.url)
   end
+
+  def source
+    Source.find(source_id)
+  end
 end
