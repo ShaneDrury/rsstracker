@@ -10,7 +10,7 @@ class YoutubePlaylistDownloader
 
   def download_playlist
     short_episode_details.each do |episode|
-      update_or_create_episode(episode)
+      CreateEpisodeFromYoutubeJob.perform_later(source_id, episode, youtube_dl_path)
     end
     nil
   end
@@ -19,48 +19,7 @@ class YoutubePlaylistDownloader
 
   attr_reader :source_id, :youtube_dl_path
 
-  def update_or_create_episode(episode)
-    url = episode['url']
-    description = episode['title']
-    updater = ::YoutubeEpisodeUpdater.new(youtube_dl_path)
-    feed = if source.feed.present?
-             source.feed
-           elsif guesses.present?
-             guesses.detect { |guess| guess.matches_text?(description) }&.feed
-           end
-    return unless feed
-    Episode.find_or_create_by(guid: url) do |ep|
-      ep.build_fetch_status(status: 'NOT_ASKED')
-      ep.feed = feed
-      ep.source = source
-      ep.name = description
-      begin
-        updater.update(ep, url)
-      rescue IOError
-        break
-      end
-      ep.seen = false
-      unless ep.save
-        Raven.capture_message("Could not save episode because: #{ep.errors.full_messages}")
-        break
-      end
-      ep.feed.touch
-      DownloadThumbnailJob.perform_later(ep.id)
-      DownloadYoutubeAudioJob.perform_later(ep.id) if ep.feed.autodownload
-    end
-  end
-
   def short_episode_details
-    out, status = Open3.capture2(youtube_dl_path, '--flat-playlist', '-j', '--', "#{source.url}")
-    raise IOError, 'Error downloading youtube playlist' if status.exitstatus != 0
-    out.split("\n").map { |line| JSON.parse(line) }
-  end
-
-  def source
-    Source.find(source_id)
-  end
-
-  def guesses
-    source.feed_guesses
+    Youtube.new(youtube_dl_path).short_details(source.url)
   end
 end
