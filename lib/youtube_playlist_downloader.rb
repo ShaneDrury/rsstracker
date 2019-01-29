@@ -44,6 +44,6 @@ class YoutubePlaylistDownloader
   end
 
   def guesses
-    source.guesses
+    source.feed_guesses
   end
 end
