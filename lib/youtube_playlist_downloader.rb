@@ -1,4 +1,5 @@
 require "youtube_episode_updater"
+require "youtube"
 
 class YoutubePlaylistDownloader
   class EpisodeSaveFailure < StandardError; end

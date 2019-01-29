@@ -1,3 +1,5 @@
+require "youtube"
+
 class YoutubeEpisodeDetails
   def initialize(url, youtube_dl_path)
     @url = url
