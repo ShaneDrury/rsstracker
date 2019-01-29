@@ -18,7 +18,7 @@ class YoutubePlaylistDownloader
              elsif guesses.exists?
                guesses.detect { |guess| guess.matches_text?(description) }&.feed
              end
-      if !Episode.exists?(guid: url) && feed.exists?
+      if !Episode.exists?(guid: url) && feed.present?
         CreateEpisodeFromYoutubeJob.perform_later(
           source_id,
           feed.id,
