@@ -3,18 +3,11 @@ require 'fileutils'
 class CreateEpisodeFromYoutubeJob < ApplicationJob
   queue_as :default
 
-  def perform(source_id, episode, youtube_dl_path)
-    source = Source.find(source_id)
-    guesses = source.feed_guesses
-    url = episode['url']
-    description = episode['title']
-    updater = ::YoutubeEpisodeUpdater.new(youtube_dl_path)
-    feed = if source.feed.present?
-             source.feed
-           elsif guesses.present?
-             guesses.detect { |guess| guess.matches_text?(description) }&.feed
-           end
+  def perform(source_id, feed_id, url, description, youtube_dl_path)
+    feed = Feed.find(feed_id)
     return unless feed
+    source = Source.find(source_id)
+    updater = ::YoutubeEpisodeUpdater.new(youtube_dl_path)
     Episode.find_or_create_by(guid: url) do |ep|
       ep.build_fetch_status(status: 'NOT_ASKED')
       ep.feed = feed

@@ -11,7 +11,22 @@ class YoutubePlaylistDownloader
 
   def download_playlist
     short_episode_details.each do |episode|
-      CreateEpisodeFromYoutubeJob.perform_later(source_id, episode, youtube_dl_path)
+      url = episode['url']
+      description = episode['title']
+      feed = if source.feed.present?
+               source.feed
+             elsif guesses.present?
+               guesses.detect { |guess| guess.matches_text?(description) }&.feed
+             end
+      if feed.present?
+        CreateEpisodeFromYoutubeJob.perform_later(
+          source_id,
+          feed.id,
+          url,
+          description,
+          youtube_dl_path
+        )
+      end
     end
     nil
   end
@@ -25,6 +40,10 @@ class YoutubePlaylistDownloader
   end
 
   def source
-    Source.find(source_id)
+    @source ||= Source.find(source_id)
+  end
+
+  def guesses
+    source.guesses
   end
 end
