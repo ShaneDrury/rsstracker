@@ -7,6 +7,7 @@ export interface Source {
   sourceType: SourceType;
   disabled: boolean;
   id: number;
+  name: string;
   feed: {
     id: number;
   };

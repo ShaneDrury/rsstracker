@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_24_181054) do
+ActiveRecord::Schema.define(version: 2019_01_30_093049) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2019_01_24_181054) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "source_type", default: ""
+    t.text "name"
   end
 
 end

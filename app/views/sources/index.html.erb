@@ -4,6 +4,7 @@
     <thead>
     <tr>
       <th>ID</th>
+      <th>Name</th>
       <th>URL</th>
     </tr>
     </thead>
@@ -11,6 +12,9 @@
       <tr>
         <td>
           <%= source.id %>
+        </td>
+        <td>
+          <%= source.name %>
         </td>
         <td>
           <%= link_to source.url, source_url(source) %>

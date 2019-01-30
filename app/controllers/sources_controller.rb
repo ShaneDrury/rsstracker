@@ -63,6 +63,6 @@ class SourcesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def source_params
-      params.fetch(:source, {}).permit(:disabled, :feed_id, :source_type, :url)
+      params.fetch(:source, {}).permit(:disabled, :feed_id, :source_type, :url, :name)
     end
 end

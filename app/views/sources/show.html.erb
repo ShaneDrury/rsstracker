@@ -2,6 +2,7 @@
   <div class="content">
     <h1 class="title is-1"><%= @source.id %></h1>
     <%= form_for @source, builder: BulmaFormBuilder do |f| %>
+      <%= f.text_field :name %>
       <%= f.text_field :url %>
       <%= f.text_field :source_type %>
       <%= f.check_box :disabled %>
