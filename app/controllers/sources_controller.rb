@@ -3,7 +3,7 @@ class SourcesController < ApplicationController
 
   # GET /sources
   def index
-    @sources = Source.all
+    @sources = Source.all.order(id: :asc)
     respond_to do |format|
       format.html
       format.json { render json: @sources }
