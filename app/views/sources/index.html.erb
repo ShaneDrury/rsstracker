@@ -6,6 +6,7 @@
       <th>ID</th>
       <th>Name</th>
       <th>URL</th>
+      <th>Active</th>
     </tr>
     </thead>
     <% @sources.each do |source| %>
@@ -18,6 +19,9 @@
         </td>
         <td>
           <%= link_to source.url, source_url(source) %>
+        </td>
+        <td>
+          <%= source.disabled ? "No" : "Yes" %>
         </td>
       </tr>
     <% end %>
