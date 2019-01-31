@@ -134,10 +134,6 @@ function* watchEpisodes() {
     yield takeEvery(episodeActions.FETCH_EPISODE_REQUESTED, function*({
       payload: { episodeId },
     }: FetchEpisodeRequested) {
-      if (!pending.fetchedAll) {
-        pending.episodeIds.add(episodeId);
-        return;
-      }
       if (!localEpisodes.has(episodeId)) {
         pending.episodeIds.add(episodeId); // TODO: split this out to separate watcher
         // e.g. can have a separate watcher with local pending ids, if we need to communicate
