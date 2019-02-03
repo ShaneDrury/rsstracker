@@ -1,4 +1,4 @@
-<%= tag.div(id: "root", data: {
+<%= tag.div(id: "root", style: "height:100%", data: {
   preload: {
     feeds: Feed.all.order(name: :asc),
     jobs: Delayed::Job.all.map(&:with_extra)

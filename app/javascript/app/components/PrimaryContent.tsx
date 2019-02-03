@@ -22,6 +22,7 @@ const parseLocation = (location: Location): QueryParams =>
 
 const Wrapper = styled.div`
   display: flex;
+  height: calc(100vh - 74px);
 `;
 
 const Sidebar = styled.section`
@@ -37,9 +38,12 @@ const Aside = styled.aside`
 `;
 
 const Scrollable = styled.div`
-  height: calc(100vh - 60px);
-  overflow-y: scroll;
-  overflow-x: hidden;
+  height: 100%;
+  overflow: auto;
+`;
+
+const Main = styled.main`
+  height: 100%;
 `;
 
 interface EnhancedProps {
@@ -62,7 +66,7 @@ class PrimaryContent extends React.Component<Props> {
   }: RouteComponentProps<{ feedId?: string }>) => {
     const queryParams = parseLocation(location);
     return (
-      <main>
+      <Main>
         <Navbar />
         <Wrapper>
           <Sidebar>
@@ -95,7 +99,7 @@ class PrimaryContent extends React.Component<Props> {
             )}
           </Aside>
         </Wrapper>
-      </main>
+      </Main>
     );
   };
 
