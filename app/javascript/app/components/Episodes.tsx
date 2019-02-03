@@ -45,7 +45,7 @@ export class Episodes extends React.Component<Props> {
             <Pagination
               pageCount={pageInfo.totalPages}
               forcePage={pageInfo.currentPage - 1}
-              pageRangeDisplayed={5}
+              pageRangeDisplayed={3}
               marginPagesDisplayed={2}
               activePageLinkClassName="pagination-link is-current"
               pageLinkClassName="pagination-link"
