@@ -8,7 +8,7 @@ export interface Source {
   disabled: boolean;
   id: number;
   name: string;
-  feed: {
+  feed?: {
     id: number;
   };
 }

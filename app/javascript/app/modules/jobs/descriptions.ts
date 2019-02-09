@@ -30,13 +30,13 @@ export const mapJobToDescription = (
     case "DownloadFeedJob":
     case "DownloadYoutubePlaylistJob": {
       const source = sources[itemId];
-      const feed = source && feeds[source.feed.id];
+      const sourceName = source.name || source.id;
       const error = errorMessage
-        ? feed
-          ? `${errorMessage} during Updating: ${feed.name}`
+        ? source
+          ? `${errorMessage} during Updating: ${sourceName}`
           : `${errorMessage} during Updating: ${itemId}`
         : undefined;
-      if (!feed) {
+      if (!source) {
         return {
           id: job.id,
           key: `${key}-notfetched`,
@@ -47,7 +47,7 @@ export const mapJobToDescription = (
       return {
         id: job.id,
         key,
-        description: `Updating: ${feed.name}`,
+        description: `Updating: ${sourceName}`,
         error,
       };
     }

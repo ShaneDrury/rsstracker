@@ -36,7 +36,9 @@ class Feed < ApplicationRecord
   end
 
   def as_json(*args)
-    super(methods: [:relative_image_link, :status_counts, :sources])
+    super(methods: [:relative_image_link, :status_counts]).tap do |hsh|
+      hsh["sources"] = all_sources
+    end
   end
 
   def all_sources
