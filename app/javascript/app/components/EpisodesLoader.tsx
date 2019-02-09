@@ -7,7 +7,6 @@ import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 
-import { isEqual } from "lodash";
 import { getUpdatingSources } from "../modules/sourceJobs/selectors";
 
 interface DataProps {
@@ -27,46 +26,29 @@ interface DispatchProps {
 
 type Props = DataProps & DispatchProps & EnhancedProps;
 
-export class EpisodesLoader extends React.PureComponent<Props> {
-  public componentDidMount() {
-    this.fetchEpisodes();
-  }
-
-  public componentDidUpdate(prevProps: Props) {
-    if (
-      !isEqual(this.props.queryParams, prevProps.queryParams) &&
-      this.props.fetchStatus !== "LOADING"
-    ) {
-      this.fetchEpisodes();
+const EpisodesLoader: React.FunctionComponent<Props> = ({
+  queryParams,
+  feedId,
+  fetchEpisodes,
+  fetchStatus,
+  loadingSources,
+  children,
+}) => {
+  React.useEffect(() => {
+    if (fetchStatus === "LOADING") {
       return;
     }
-    if (this.props.feedId !== prevProps.feedId) {
-      this.fetchEpisodes();
-      return;
-    }
-    if (
-      prevProps.loadingSources.length > 0 &&
-      this.props.loadingSources.length === 0
-    ) {
-      this.fetchEpisodes();
-    }
-  }
-
-  public fetchEpisodes = () => {
-    if (this.props.feedId) {
-      this.props.fetchEpisodes({
-        ...this.props.queryParams,
-        feedId: this.props.feedId,
+    if (feedId) {
+      fetchEpisodes({
+        ...queryParams,
+        feedId,
       });
     } else {
-      this.props.fetchEpisodes(this.props.queryParams);
+      fetchEpisodes(queryParams);
     }
-  };
-
-  public render() {
-    return this.props.children;
-  }
-}
+  }, [queryParams, feedId, loadingSources.length === 0]);
+  return children;
+};
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
   const fetchStatus = getFetchStatus(state);
