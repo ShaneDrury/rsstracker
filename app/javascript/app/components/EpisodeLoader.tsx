@@ -2,7 +2,6 @@ import React from "react";
 import { RemoteEpisode } from "../types/episode";
 
 import { connect } from "react-redux";
-import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { fetchEpisodeRequested } from "../modules/episodes/actions";
 import { getEpisodes } from "../modules/episodes/selectors";
 import { RootState } from "../modules/reducers";
@@ -12,7 +11,6 @@ interface DataProps {
 }
 
 interface EnhancedProps {
-  isUpdating: boolean;
   remoteEpisode?: RemoteEpisode;
 }
 
@@ -26,40 +24,31 @@ interface PropsExtended {
 
 type Props = DataProps & DispatchProps & PropsExtended & EnhancedProps;
 
-class EpisodeLoader extends React.PureComponent<Props> {
-  public componentDidMount() {
-    this.fetchEpisode();
-  }
-
-  public componentDidUpdate(prevProps: Props) {
-    if (this.props.episodeId !== prevProps.episodeId) {
-      this.fetchEpisode();
+const EpisodeLoader: React.FunctionComponent<Props> = ({
+  remoteEpisode,
+  fetchEpisode,
+  episodeId,
+  children,
+}) => {
+  React.useEffect(() => {
+    if (!remoteEpisode) {
+      fetchEpisode(episodeId);
     }
-  }
+  }, [episodeId]);
 
-  public fetchEpisode = () => {
-    if (!this.props.remoteEpisode) {
-      this.props.fetchEpisode(this.props.episodeId);
-    }
-  };
-
-  public render() {
-    if (this.props.remoteEpisode) {
-      return this.props.children(this.props.remoteEpisode);
-    }
-    return <div>LOADING</div>;
+  if (remoteEpisode) {
+    return children(remoteEpisode);
   }
-}
+  return <div>LOADING</div>;
+};
 
 const mapStateToProps = (
   state: RootState,
   ownProps: PropsExtended
 ): EnhancedProps => {
   const episodeId = ownProps.episodeId;
-  const isUpdating = !!getEpisodeJobs(state)[episodeId];
   const remoteEpisode = getEpisodes(state)[episodeId];
   return {
-    isUpdating,
     remoteEpisode,
   };
 };
