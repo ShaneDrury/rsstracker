@@ -1,4 +1,5 @@
 import { RemoteFeed } from "../../types/feed";
+import { RemoteJob } from "../../types/job";
 
 export enum feedActions {
   FETCH_FEEDS_REQUESTED = "FETCH_FEEDS_REQUESTED",
@@ -6,6 +7,15 @@ export enum feedActions {
   FETCH_FEEDS_FAILURE = "FETCH_FEEDS_FAILURE",
   FETCH_FEED_REQUESTED = "FETCH_FEED_REQUESTED",
   FETCH_FEED_COMPLETE = "FETCH_FEED_COMPLETE",
+  FEEDS_UPDATING = "FEEDS_UPDATING",
+}
+
+export interface FeedsUpdating {
+  type: feedActions.FEEDS_UPDATING;
+  payload: {
+    feeds: RemoteFeed[];
+    job: RemoteJob;
+  };
 }
 
 export interface FetchFeedsRequested {
@@ -17,7 +27,7 @@ export interface FetchFeedRequested {
   payload: { feedId: string };
 }
 
-interface FetchFeedsComplete {
+export interface FetchFeedsComplete {
   type: feedActions.FETCH_FEEDS_COMPLETE;
   payload: {
     feeds: RemoteFeed[];
@@ -64,9 +74,18 @@ export const fetchFeedComplete = (feed: RemoteFeed): FetchFeedComplete => ({
   payload: { feed },
 });
 
+export const feedsUpdating = (
+  feeds: RemoteFeed[],
+  job: RemoteJob
+): FeedsUpdating => ({
+  type: feedActions.FEEDS_UPDATING,
+  payload: { feeds, job },
+});
+
 export type FeedsAction =
   | FetchFeedsRequested
   | FetchFeedRequested
   | FetchFeedsComplete
   | FetchFeedsFailure
-  | FetchFeedComplete;
+  | FetchFeedComplete
+  | FeedsUpdating;

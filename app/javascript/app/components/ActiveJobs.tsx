@@ -1,4 +1,4 @@
-import { difference, isEqual, keys } from "lodash";
+import { difference, keys } from "lodash";
 import React from "react";
 import NotificationSystem from "react-notification-system";
 import { connect } from "react-redux";
