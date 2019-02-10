@@ -59,18 +59,13 @@ export function* watchJobs() {
       yield all(jobs.map(job => fork(fetchRelatedEpisode, job)));
       localJobs = normalize(jobs).items;
       const feedJobs = jobs.filter(isFeedJob);
-      const updatingFeeds = feedJobs.map(job => {
-        const sourceId = job.jobData.arguments[0];
-        return {
-          job,
-          feeds: feedsForSource(Object.values(localFeeds), sourceId),
-        };
-      });
 
       yield all(
-        updatingFeeds.map(updating =>
-          put(feedsUpdating(updating.feeds, updating.job))
-        )
+        feedJobs.map(job => {
+          const sourceId = job.jobData.arguments[0];
+          const feeds = feedsForSource(Object.values(localFeeds), sourceId);
+          return put(feedsUpdating(feeds, job));
+        })
       );
     }
   }
@@ -95,6 +90,15 @@ export function* watchJobs() {
         payload: { job },
       }: NewJob = yield take(jobActions.NEW_JOB);
       yield fork(fetchRelatedEpisode, job);
+      if (isFeedJob(job)) {
+        const sourceId = job.jobData.arguments[0];
+        yield put(
+          feedsUpdating(
+            feedsForSource(Object.values(localFeeds), sourceId),
+            job
+          )
+        );
+      }
       localJobs[job.id] = job;
     }
   }
