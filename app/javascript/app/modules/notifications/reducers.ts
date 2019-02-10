@@ -1,20 +1,17 @@
+import { difference, omit, union } from "lodash";
 import { RemoteJob } from "../../types/job";
+import { NotificationInfo } from "../../types/notification";
 import { feedActions, FeedsAction } from "../feeds/actions";
-
-interface NotificationInfo {
-  id: string;
-  key: string;
-  description: string;
-  error?: string;
-}
+import { jobActions, JobsAction } from "../jobs/actions";
 
 export interface State {
   items: {
     [key: string]: NotificationInfo;
   };
+  ids: string[];
 }
 
-const initialState: State = { items: {} };
+const initialState: State = { items: {}, ids: [] };
 
 const keyFromJob = (job: RemoteJob): string => {
   const parts = [job.id];
@@ -24,7 +21,10 @@ const keyFromJob = (job: RemoteJob): string => {
   return parts.join("-");
 };
 
-export default (state: State = initialState, action: FeedsAction): State => {
+export default (
+  state: State = initialState,
+  action: FeedsAction | JobsAction
+): State => {
   switch (action.type) {
     case feedActions.FEEDS_UPDATING: {
       const feeds = action.payload.feeds;
@@ -32,6 +32,7 @@ export default (state: State = initialState, action: FeedsAction): State => {
       const notifications: {
         [key: string]: NotificationInfo;
       } = {};
+      const ids: string[] = [];
       feeds.forEach(feed => {
         const name = feed.name;
         const errorMessage = job.lastError && job.lastError.split("\n")[0];
@@ -44,9 +45,23 @@ export default (state: State = initialState, action: FeedsAction): State => {
           description: `Updating: ${name}`,
           error,
         };
+        ids.push(job.id);
         // TODO: Can get rid of key, as id will stay the same
       });
-      return { items: { ...state.items, ...notifications } };
+      return {
+        items: { ...state.items, ...notifications },
+        ids: union(state.ids, ids),
+      };
+    }
+    case jobActions.REMOVE_JOB_COMPLETE:
+    case jobActions.JOB_COMPLETE: {
+      const newIds = difference(state.ids, [action.payload.jobId]);
+      const newItems = omit(state.items, [action.payload.jobId]);
+      return {
+        ...state,
+        ids: newIds,
+        items: newItems,
+      };
     }
     default:
       return state;

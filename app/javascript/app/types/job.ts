@@ -24,3 +24,8 @@ export interface RemoteJob extends Omit<ProviderJob, "id"> {
   key: string;
   id: string;
 }
+
+export const isFeedJob = (job: RemoteJob) =>
+  ["DownloadFeedJob", "DownloadYoutubePlaylistJob"].includes(
+    job.jobData.jobClass
+  );

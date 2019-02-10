@@ -1,7 +1,7 @@
 import { uniq } from "lodash";
 import { all, call, fork, put, take, takeEvery } from "redux-saga/effects";
 import { RemoteFeed } from "../../types/feed";
-import { RemoteJob } from "../../types/job";
+import { isFeedJob, RemoteJob } from "../../types/job";
 import { fetchEpisodeRequested } from "../episodes/actions";
 import {
   feedActions,
@@ -39,11 +39,6 @@ function* fetchRelatedEpisode(job: RemoteJob) {
     default:
   }
 }
-
-const isFeedJob = (job: RemoteJob) =>
-  ["DownloadFeedJob", "DownloadYoutubePlaylistJob"].includes(
-    job.jobData.jobClass
-  );
 
 const feedsForSource = (feeds: RemoteFeed[], sourceId: number) =>
   uniq(
@@ -111,11 +106,6 @@ export function* watchJobs() {
       }: FetchFeedsComplete = yield take(feedActions.FETCH_FEEDS_COMPLETE);
       const { items } = normalize(feeds);
       localFeeds = items;
-      // feeds.forEach(feed => {
-      //   feed.sources.forEach(source => {
-      //     localSources[source.id] = source;
-      //   });
-      // });
     }
   }
 

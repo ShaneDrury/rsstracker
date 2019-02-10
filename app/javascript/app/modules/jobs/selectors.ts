@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
+import { isFeedJob } from "../../types/job";
 import { getEpisodes } from "../episodes/selectors";
-import { getFeedObjects } from "../feeds/selectors";
+import { getNotifications } from "../notifications/selectors";
 import { RootState } from "../reducers";
 import { getSourceObjects } from "../sources/selectors";
 import { mapJobToDescription } from "./descriptions";
@@ -17,9 +18,13 @@ export const getJobs = createSelector(
 
 export const getJobDescriptions = createSelector(
   getEpisodes,
-  getFeedObjects,
   getSourceObjects,
+  getNotifications,
   getJobs,
-  (episodes, feeds, sources, jobs) =>
-    jobs.map(job => mapJobToDescription(episodes, feeds, sources, job))
+  (episodes, sources, notifications, jobs) => [
+    ...jobs
+      .filter(job => !isFeedJob(job))
+      .map(job => mapJobToDescription(episodes, sources, job)),
+    ...notifications,
+  ]
 );
