@@ -137,7 +137,7 @@ export class Episode extends React.Component<Props> {
         {updating && <Icon icon={faSpinner} className="loader" />}
         <ContentWrapper>
           <div>
-            <Dotdotdot clamp={3}>{description}</Dotdotdot>
+            <Dotdotdot clamp={3}>{description || "No description"}</Dotdotdot>
           </div>
           <div>
             {relativeImageLink && (
