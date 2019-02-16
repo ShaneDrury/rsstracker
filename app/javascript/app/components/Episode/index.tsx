@@ -143,15 +143,15 @@ export class Episode extends React.Component<Props> {
           <div>
             <Dotdotdot clamp={3}>{description || "No description"}</Dotdotdot>
           </div>
-          <div>
+          <Thumbnail>
             {relativeImageLink && (
-              <Thumbnail className="media-right">
+              <div className="media-right">
                 <figure className="image is-128x128">
                   <img src={relativeImageLink} />
                 </figure>
-              </Thumbnail>
+              </div>
             )}
-          </div>
+          </Thumbnail>
         </Content>
         <Footer>
           <EpisodeFooter
