@@ -73,9 +73,9 @@ export class FeedSelect extends React.PureComponent<Props> {
             key={remoteFeed.key}
             to={`/${remoteFeed.id}`}
           >
-            {remoteFeed.sources[0] && (
+            {remoteFeed.sourceType && (
               <span className="panel-icon">
-                {remoteFeed.sources[0].sourceType === "youtube" ? (
+                {remoteFeed.sourceType === "youtube" ? (
                   <Icon icon={faYoutube} />
                 ) : (
                   <Icon icon={faRss} />

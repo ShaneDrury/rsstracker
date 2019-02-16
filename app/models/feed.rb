@@ -1,6 +1,8 @@
 class Feed < ApplicationRecord
   has_many :episodes
   has_many :single_feed_sources
+  # TODO: Rename this :single_feed_sources and let sources be the union of that and guessing
+  # Are they polymorphic? Both have disabled field which would be useful to merge
   has_many :sources, through: :single_feed_sources, dependent: :destroy
   has_many :feed_guesses
   has_many :guessing_sources, through: :feed_guesses, dependent: :destroy, source: :source
@@ -36,12 +38,21 @@ class Feed < ApplicationRecord
   end
 
   def as_json(*args)
-    super(methods: [:relative_image_link, :status_counts]).tap do |hsh|
+    super(methods: [:relative_image_link, :status_counts, :source_type]).tap do |hsh|
       hsh["sources"] = all_sources
     end
   end
 
   def all_sources
     sources.where(disabled: false) | guessing_sources.where(disabled: false)
+  end
+
+  def source_type
+    source_types = (sources | guessing_sources).map(&:source_type).uniq
+    if source_types.length == 1
+      source_types[0]
+    elsif source_types.length > 1
+      "mixed"
+    end
   end
 end
