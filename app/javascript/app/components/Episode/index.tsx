@@ -48,27 +48,31 @@ interface DispatchProps {
 
 type Props = DataProps & PropsExtended & DispatchProps;
 
-const TitleWrapper = styled.div`
+const Title = styled.div`
   display: flex;
   flex: 1;
 `;
 
-const NameWrapper = styled.div`
+const Name = styled.div`
   flex: 1;
 `;
 
-const DurationWrapper = styled.time`
+const Date = styled.time`
   margin-left: auto;
 `;
 
-const ContentWrapper = styled.div`
+const Thumbnail = styled.div`
+  margin-left: auto;
+`;
+
+const Content = styled.div`
   display: flex;
   flex: 1;
 `;
 
 const EpisodeWrapper = styled.article``;
 
-const FooterWrapper = styled.div`
+const Footer = styled.div`
   display: flex;
   flex: 1;
 `;
@@ -121,35 +125,35 @@ export class Episode extends React.Component<Props> {
     } = this.props;
     return (
       <EpisodeWrapper className="tile is-child box">
-        <TitleWrapper>
-          <NameWrapper className="title is-5 is-spaced">
+        <Title>
+          <Name className="title is-5 is-spaced">
             {fetchStatus.status === "SUCCESS" && (
               <a href={fetchStatus.url}>{name}</a>
             )}
             {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
-          </NameWrapper>
+          </Name>
           {publicationDate && (
-            <DurationWrapper className="subtitle is-6">
+            <Date className="subtitle is-6">
               {format(publicationDate, "MMM Do YYYY")}
-            </DurationWrapper>
+            </Date>
           )}
-        </TitleWrapper>
+        </Title>
         {updating && <Icon icon={faSpinner} className="loader" />}
-        <ContentWrapper>
+        <Content>
           <div>
             <Dotdotdot clamp={3}>{description || "No description"}</Dotdotdot>
           </div>
           <div>
             {relativeImageLink && (
-              <div className="media-right">
+              <Thumbnail className="media-right">
                 <figure className="image is-128x128">
                   <img src={relativeImageLink} />
                 </figure>
-              </div>
+              </Thumbnail>
             )}
           </div>
-        </ContentWrapper>
-        <FooterWrapper>
+        </Content>
+        <Footer>
           <EpisodeFooter
             handleDetailOpened={this.handleDetailOpened}
             handleDownload={this.handleDownload}
@@ -160,7 +164,7 @@ export class Episode extends React.Component<Props> {
             isDetailOpen={this.props.isDetailOpen}
             seen={this.props.seen}
           />
-        </FooterWrapper>
+        </Footer>
       </EpisodeWrapper>
     );
   };
