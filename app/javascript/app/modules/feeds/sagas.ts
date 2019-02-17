@@ -1,7 +1,7 @@
 import { uniq } from "lodash";
 import { all, call, put, take, takeEvery } from "redux-saga/effects";
 import { RemoteFeed } from "../../types/feed";
-import { isFeedJob } from "../../types/job";
+import { isFeedJob, RemoteJob } from "../../types/job";
 import { FetchJobsComplete, jobActions, NewJob } from "../jobs/actions";
 import { normalize } from "../remoteData";
 import {
@@ -44,6 +44,22 @@ const feedsForSource = (feeds: RemoteFeed[], sourceId: number) =>
     )
   );
 
+function* processNewJob(feeds: { [key: string]: RemoteFeed }, job: RemoteJob) {
+  if (isFeedJob(job)) {
+    const sourceId = job.jobData.arguments[0];
+    yield put(
+      feedsUpdating(feedsForSource(Object.values(feeds), sourceId), job)
+    );
+  }
+}
+
+function* processNewJobs(
+  feeds: { [key: string]: RemoteFeed },
+  jobs: RemoteJob[]
+) {
+  yield all(jobs.map(job => call(processNewJob, feeds, job)));
+}
+
 function* watchFeeds() {
   let localFeeds: { [key: string]: RemoteFeed } = {};
 
@@ -62,15 +78,7 @@ function* watchFeeds() {
       const {
         payload: { job },
       }: NewJob = yield take(jobActions.NEW_JOB);
-      if (isFeedJob(job)) {
-        const sourceId = job.jobData.arguments[0];
-        yield put(
-          feedsUpdating(
-            feedsForSource(Object.values(localFeeds), sourceId),
-            job
-          )
-        );
-      }
+      yield call(processNewJob, localFeeds, job);
     }
   }
 
@@ -79,14 +87,7 @@ function* watchFeeds() {
       const {
         payload: { jobs },
       }: FetchJobsComplete = yield take(jobActions.FETCH_JOBS_COMPLETE);
-      const feedJobs = jobs.filter(isFeedJob);
-      yield all(
-        feedJobs.map(job => {
-          const sourceId = job.jobData.arguments[0];
-          const feeds = feedsForSource(Object.values(localFeeds), sourceId);
-          return put(feedsUpdating(feeds, job));
-        })
-      );
+      yield call(processNewJobs, localFeeds, jobs);
     }
   }
 
