@@ -31,3 +31,7 @@ export interface RemoteFeed extends Omit<ApiFeed, "id"> {
   key: string;
   id: string;
 }
+
+export interface RemoteFeeds {
+  [key: string]: RemoteFeed;
+}

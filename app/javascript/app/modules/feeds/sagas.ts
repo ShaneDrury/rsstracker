@@ -1,6 +1,6 @@
 import { uniq } from "lodash";
 import { all, call, put, take, takeEvery } from "redux-saga/effects";
-import { RemoteFeed } from "../../types/feed";
+import { RemoteFeed, RemoteFeeds } from "../../types/feed";
 import { isFeedJob, RemoteJob } from "../../types/job";
 import { FetchJobsComplete, jobActions, NewJob } from "../jobs/actions";
 import { normalize } from "../remoteData";
@@ -44,7 +44,7 @@ const feedsForSource = (feeds: RemoteFeed[], sourceId: number) =>
     )
   );
 
-function* processNewJob(feeds: { [key: string]: RemoteFeed }, job: RemoteJob) {
+function* processNewJob(feeds: RemoteFeeds, job: RemoteJob) {
   if (isFeedJob(job)) {
     const sourceId = job.jobData.arguments[0];
     yield put(
@@ -53,15 +53,33 @@ function* processNewJob(feeds: { [key: string]: RemoteFeed }, job: RemoteJob) {
   }
 }
 
-function* processNewJobs(
-  feeds: { [key: string]: RemoteFeed },
-  jobs: RemoteJob[]
-) {
+function* processNewJobs(feeds: RemoteFeeds, jobs: RemoteJob[]) {
   yield all(jobs.map(job => call(processNewJob, feeds, job)));
 }
 
+function* watchNewJob(getFeeds: () => RemoteFeeds) {
+  while (true) {
+    const {
+      payload: { job },
+    }: NewJob = yield take(jobActions.NEW_JOB);
+    const feeds = getFeeds();
+    yield call(processNewJob, feeds, job);
+  }
+}
+
+function* watchFetchJobsComplete(getFeeds: () => RemoteFeeds) {
+  while (true) {
+    const {
+      payload: { jobs },
+    }: FetchJobsComplete = yield take(jobActions.FETCH_JOBS_COMPLETE);
+    const feeds = getFeeds();
+    yield call(processNewJobs, feeds, jobs);
+  }
+}
+
 function* watchFeeds() {
-  let localFeeds: { [key: string]: RemoteFeed } = {};
+  let localFeeds: RemoteFeeds = {};
+  const getLocalFeeds = () => localFeeds;
 
   function* watchFetchFeedsComplete() {
     while (true) {
@@ -73,28 +91,10 @@ function* watchFeeds() {
     }
   }
 
-  function* watchNewJob() {
-    while (true) {
-      const {
-        payload: { job },
-      }: NewJob = yield take(jobActions.NEW_JOB);
-      yield call(processNewJob, localFeeds, job);
-    }
-  }
-
-  function* watchFetchJobsComplete() {
-    while (true) {
-      const {
-        payload: { jobs },
-      }: FetchJobsComplete = yield take(jobActions.FETCH_JOBS_COMPLETE);
-      yield call(processNewJobs, localFeeds, jobs);
-    }
-  }
-
   yield all([
     call(watchFetchFeedsComplete),
-    call(watchNewJob),
-    call(watchFetchJobsComplete),
+    call(watchNewJob, getLocalFeeds),
+    call(watchFetchJobsComplete, getLocalFeeds),
   ]);
 }
 
