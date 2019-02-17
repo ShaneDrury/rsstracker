@@ -60,9 +60,15 @@ class EpisodesController < ApplicationController
   # PATCH/PUT /episodes/1
   def update
     if @episode.update(episode_params)
-      render json: @episode
+      respond_to do |format|
+        format.json { render json: @episode }
+        format.html
+      end
     else
-      render json: @episode.errors, status: :unprocessable_entity
+      respond_to do |format|
+        format.json { render json: @episode.errors, status: :unprocessable_entity }
+        format.html
+      end
     end
   end
 
