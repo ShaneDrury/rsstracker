@@ -29,3 +29,11 @@ export const isFeedJob = (job: RemoteJob) =>
   ["DownloadFeedJob", "DownloadYoutubePlaylistJob"].includes(
     job.jobData.jobClass
   );
+
+export const isEpisodeJob = (job: RemoteJob) =>
+  ["DownloadEpisodeJob", "DownloadYoutubeAudioJob"].includes(
+    job.jobData.jobClass
+  );
+
+export const isThumbnailJob = (job: RemoteJob) =>
+  ["DownloadThumbnailJob"].includes(job.jobData.jobClass);

@@ -1,12 +1,12 @@
 import { difference, omit, union } from "lodash";
 import { RemoteJob } from "../../types/job";
-import { NotificationInfo } from "../../types/notification";
 import { feedActions, FeedsAction } from "../feeds/actions";
 import { jobActions, JobsAction } from "../jobs/actions";
+import { JobDescription } from "../jobs/descriptions";
 
 export interface State {
   items: {
-    [key: string]: NotificationInfo;
+    [key: string]: JobDescription;
   };
   ids: string[];
 }
@@ -30,7 +30,7 @@ export default (
       const feeds = action.payload.feeds;
       const job = action.payload.job;
       const notifications: {
-        [key: string]: NotificationInfo;
+        [key: string]: JobDescription;
       } = {};
       const ids: string[] = [];
       feeds.forEach(feed => {
