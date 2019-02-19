@@ -1,4 +1,4 @@
-import { flatten } from "lodash";
+import { flatten, uniqBy } from "lodash";
 import { createSelector } from "reselect";
 import { isEpisodeJob, isFeedJob, isThumbnailJob } from "../../types/job";
 import { getEpisodes } from "../episodes/selectors";
@@ -47,10 +47,12 @@ export const getFeedNotifications = createSelector(
   getFeedObjects,
   getSourceObjects,
   getFeedJobs,
-  (feeds, sources, feedJobs) =>
-    flatten(
+  (feeds, sources, feedJobs) => {
+    const notifications = flatten(
       feedJobs.map(feedJob => feedToJobDescription(feeds, sources, feedJob))
-    )
+    );
+    return uniqBy(notifications, notification => notification.description);
+  }
 );
 
 export const getThumbnailNotifications = createSelector(
