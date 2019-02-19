@@ -1,6 +1,6 @@
 import { invert, mapValues, omit } from "lodash";
-import { jobActions, JobsAction } from "../jobs/actions";
 import { FeedJobsAction, feedJobsActions } from "../feedJobs/actions";
+import { jobActions, JobsAction } from "../jobs/actions";
 
 export interface State {
   items: {
