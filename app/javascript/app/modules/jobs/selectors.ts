@@ -8,6 +8,7 @@ import { getSourceObjects } from "../sources/selectors";
 import {
   episodeToJobDescription,
   feedToJobDescription,
+  processJob,
   thumbnailJobToDescription,
 } from "./descriptions";
 
@@ -40,7 +41,9 @@ export const getEpisodeNotifications = createSelector(
   getEpisodes,
   getEpisodeJobs,
   (episodes, episodeJobs) =>
-    episodeJobs.map(episodeJob => episodeToJobDescription(episodes, episodeJob))
+    episodeJobs.map(episodeJob =>
+      episodeToJobDescription(episodes, processJob(episodeJob))
+    )
 );
 
 export const getFeedNotifications = createSelector(
@@ -49,7 +52,9 @@ export const getFeedNotifications = createSelector(
   getFeedJobs,
   (feeds, sources, feedJobs) => {
     const notifications = flatten(
-      feedJobs.map(feedJob => feedToJobDescription(feeds, sources, feedJob))
+      feedJobs.map(feedJob =>
+        feedToJobDescription(feeds, sources, processJob(feedJob))
+      )
     );
     return uniqBy(notifications, notification => notification.description);
   }
@@ -57,7 +62,8 @@ export const getFeedNotifications = createSelector(
 
 export const getThumbnailNotifications = createSelector(
   getThumbnailJobs,
-  thumbnailJobs => thumbnailJobs.map(thumbnailJobToDescription)
+  thumbnailJobs =>
+    thumbnailJobs.map(job => thumbnailJobToDescription(processJob(job)))
 );
 
 export const getJobDescriptions = createSelector(

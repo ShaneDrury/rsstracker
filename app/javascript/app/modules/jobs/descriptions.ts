@@ -1,7 +1,7 @@
 import { uniq } from "lodash";
 import { RemoteEpisode } from "../../types/episode";
 import { RemoteFeed, Source } from "../../types/feed";
-import { RemoteJob } from "../../types/job";
+import { JobClass, RemoteJob } from "../../types/job";
 
 export interface JobDescription {
   id: string;
@@ -18,13 +18,29 @@ const keyFromJob = (job: RemoteJob): string => {
   return parts.join("-");
 };
 
+interface ProcessedJob {
+  id: string;
+  itemId: number;
+  errorMessage?: string;
+  key: string;
+  jobClass: JobClass;
+}
+
+export const processJob = (job: RemoteJob): ProcessedJob => ({
+  id: job.id,
+  itemId: job.jobData.arguments[0],
+  errorMessage: job.lastError && job.lastError.split("\n")[0],
+  key: keyFromJob(job),
+  jobClass: job.jobData.jobClass,
+});
+
+// TODO: Maybe move id out of this, add it to notification later
+// as its common to all
+
 export const episodeToJobDescription = (
   episodes: { [key: string]: RemoteEpisode },
-  job: RemoteJob
+  { itemId, key, errorMessage, id }: ProcessedJob
 ): JobDescription => {
-  const itemId = job.jobData.arguments[0];
-  const errorMessage = job.lastError && job.lastError.split("\n")[0];
-  const key = keyFromJob(job);
   const episode = episodes[itemId];
   const error = errorMessage
     ? episode
@@ -33,14 +49,14 @@ export const episodeToJobDescription = (
     : undefined;
   if (!episode) {
     return {
-      id: job.id,
+      id,
       key: `${key}-notfetched`,
       description: `Downloading ${itemId}`,
       error,
     };
   }
   return {
-    id: job.id,
+    id,
     key,
     description: `Downloading: ${episode.name}`,
     error,
@@ -57,20 +73,18 @@ const feedsForSource = (feeds: RemoteFeed[], sourceId: number) =>
 export const feedToJobDescription = (
   feeds: { [key: string]: RemoteFeed },
   sources: { [key: string]: Source },
-  job: RemoteJob
+  { itemId, key, errorMessage, id }: ProcessedJob
 ): JobDescription[] => {
-  const sourceId = job.jobData.arguments[0];
-  const sourceFeeds = feedsForSource(Object.values(feeds), sourceId);
+  const sourceFeeds = feedsForSource(Object.values(feeds), itemId);
   const notifications: JobDescription[] = [];
   sourceFeeds.forEach(feed => {
     const name = feed.name;
-    const errorMessage = job.lastError && job.lastError.split("\n")[0];
     const error = errorMessage
       ? `${errorMessage} during Updating: ${name}`
       : undefined;
     notifications.push({
-      id: job.id,
-      key: keyFromJob(job),
+      id,
+      key,
       description: `Updating: ${name}`,
       error,
     });
@@ -78,14 +92,17 @@ export const feedToJobDescription = (
   return notifications;
 };
 
-export const thumbnailJobToDescription = (job: RemoteJob): JobDescription => {
-  const errorMessage = job.lastError && job.lastError.split("\n")[0];
-  const key = keyFromJob(job);
-  const error = errorMessage && `${job.jobData.jobClass}: ${errorMessage}`;
+export const thumbnailJobToDescription = ({
+  key,
+  errorMessage,
+  id,
+  jobClass,
+}: ProcessedJob): JobDescription => {
+  const error = errorMessage && `${jobClass}: ${errorMessage}`;
   return {
-    id: job.id,
+    id,
     key,
-    description: `Downloading thumbnail`,
+    description: "Downloading thumbnail",
     error,
   };
 };
