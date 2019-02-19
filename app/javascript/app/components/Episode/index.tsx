@@ -174,7 +174,7 @@ export class Episode extends React.Component<Props> {
       this.renderEpisode()
     ) : (
       <VisibilitySensor onChange={this.onVisibilityChange}>
-        {() => this.renderEpisode()}
+        {this.renderEpisode()}
       </VisibilitySensor>
     );
   }
