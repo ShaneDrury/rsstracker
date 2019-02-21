@@ -2,8 +2,6 @@
 
 require 'open-uri'
 
-
-
 class DownloadEpisodeJob < ApplicationJob
   queue_as :default
 
@@ -22,7 +20,13 @@ class DownloadEpisodeJob < ApplicationJob
     episode.build_fetch_status(status: 'LOADING').save
     url = episode.url
 
-    episode_filename = File.basename(URI(url).path)
+    begin
+      open(url, redirect: false)
+      episode_filename = File.basename(URI(url).path)
+    rescue OpenURI::HTTPRedirect => e
+      episode_filename = File.basename(URI(e.uri).path)
+    end
+
     episode_folder = episode.feed.name.parameterize
     download_path = File.join(episode_folder, episode_filename)
     abs_download_path = File.join(download_root, download_path)
