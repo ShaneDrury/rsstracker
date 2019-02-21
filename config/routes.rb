@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     member do
       post 'download'
     end
+    resources :fetch_statuses
   end
 
   resources :feeds do
@@ -36,6 +37,8 @@ Rails.application.routes.draw do
   resources :feed_guesses
 
   resources :jobs
+
+  resources :fetch_statuses
 
   get '*path', to: 'operations#index'
 end

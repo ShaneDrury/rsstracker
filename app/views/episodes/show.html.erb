@@ -17,6 +17,14 @@
     <%= form_for @episode, method: :delete, builder: BulmaFormBuilder do |f| %>
       <%= f.confirmation_button(name: "Delete") %>
     <% end %>
+    <h3 class="title is-3">Fetch Status</h3>
+    <%= form_for @episode.fetch_status, builder: BulmaFormBuilder do |f| %>
+      <%= f.text_field :status %>
+      <%= f.text_field :error_reason %>
+      <%= f.text_field :url %>
+      <%= f.number_field :bytes_transferred %>
+      <%= f.number_field :bytes_total %>
+    <% end %>
   </div>
 </div>
 

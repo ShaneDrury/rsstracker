@@ -26,6 +26,10 @@ class BulmaFormBuilder < ActionView::Helpers::FormBuilder
     wrap_field(super(attribute, options.reverse_merge(class: "checkbox")), attribute)
   end
 
+  def number_field(attribute, options={})
+    wrap_field(super(attribute, options.reverse_merge(class: "input")), attribute)
+  end
+
   def confirmation_button(name: "", extra_class: nil)
     react_confirmation_button(
       extra_class: ["button", "is-danger", extra_class].compact.join(" "),
