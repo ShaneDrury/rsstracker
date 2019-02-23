@@ -2,6 +2,7 @@ require 'open-uri'
 require 'rss'
 
 class DownloadFeedJob < ApplicationJob
+  class RssError < StandardError; end
   queue_as :default
 
   BUFFER_SIZE = 8 * 1024
@@ -10,6 +11,9 @@ class DownloadFeedJob < ApplicationJob
     source = Source.find(source_id)
     feed = source.feed
     rss = RSS::Parser.parse(open(source.url).read, false)
+    if rss.nil?
+      raise RssError.new("RSS Feed was nil. Source id: #{source_id}")
+    end
     if feed.image_url.empty?
       thumbnail_url = rss.channel.image.url
       thumbnail_filename = File.basename(URI(thumbnail_url).path)
