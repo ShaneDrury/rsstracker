@@ -39,8 +39,7 @@ const EpisodesLoader: React.FunctionComponent<Props> = ({
   const previousLoadingSources = usePrevious(loadingSources);
   const noLongerLoading =
     sourcesLoading === 0 &&
-    (previousLoadingSources && previousLoadingSources.length > 0);
-
+    (previousLoadingSources ? previousLoadingSources.length > 0 : false);
   React.useEffect(() => {
     if (fetchStatus !== "LOADING" || noLongerLoading) {
       if (feedId) {
