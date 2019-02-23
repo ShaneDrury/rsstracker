@@ -3,7 +3,8 @@
     "tslint:latest",
     "tslint-react",
     "tslint-eslint-rules",
-    "tslint-config-prettier"
+    "tslint-config-prettier",
+    "tslint-react-hooks"
   ],
   "rules": {
     "interface-name": false,
@@ -13,6 +14,7 @@
     "jsx-boolean-value": false,
     "no-empty-interface": false,
     "no-empty": false,
-    "max-classes-per-file": false
+    "max-classes-per-file": false,
+    "react-hooks-nesting": "error"
   }
 }
