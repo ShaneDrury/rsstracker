@@ -27,7 +27,7 @@ const preloaded = getPreloaded();
 store.dispatch(fetchFeedsComplete(preloaded.feeds.map(processFeed)));
 store.dispatch(fetchJobsComplete(preloaded.jobs.map(processJobResponse)));
 
-const render = (Component: any) => {
+const render = (Component: React.ComponentType) => {
   return ReactDOM.render(
     <Provider store={store}>
       <BrowserRouter>

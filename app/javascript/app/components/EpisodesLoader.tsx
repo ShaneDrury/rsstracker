@@ -8,6 +8,7 @@ import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 
 import { getUpdatingSources } from "../modules/sourceJobs/selectors";
+import { usePrevious } from "../modules/hooks";
 
 interface DataProps {
   children: JSX.Element;
@@ -34,19 +35,24 @@ const EpisodesLoader: React.FunctionComponent<Props> = ({
   loadingSources,
   children,
 }) => {
+  const sourcesLoading = loadingSources.length;
+  const previousLoadingSources = usePrevious(loadingSources);
+  const noLongerLoading =
+    sourcesLoading === 0 &&
+    (previousLoadingSources && previousLoadingSources.length > 0);
+
   React.useEffect(() => {
-    if (fetchStatus === "LOADING") {
-      return;
+    if (fetchStatus !== "LOADING" || noLongerLoading) {
+      if (feedId) {
+        fetchEpisodes({
+          ...queryParams,
+          feedId,
+        });
+      } else {
+        fetchEpisodes(queryParams);
+      }
     }
-    if (feedId) {
-      fetchEpisodes({
-        ...queryParams,
-        feedId,
-      });
-    } else {
-      fetchEpisodes(queryParams);
-    }
-  }, [queryParams, feedId, loadingSources.length === 0]);
+  }, [queryParams, feedId, fetchEpisodes, fetchStatus, noLongerLoading]);
   return children;
 };
 

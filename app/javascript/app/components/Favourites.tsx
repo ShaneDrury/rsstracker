@@ -7,13 +7,11 @@ import { RootState } from "../modules/reducers";
 import EpisodeLoader from "./EpisodeLoader";
 import FavouriteItem from "./FavouriteItem";
 
-interface DataProps {}
-
 interface EnhancedProps {
   favouritesIds: string[];
 }
 
-type Props = DataProps & EnhancedProps;
+type Props = EnhancedProps;
 
 const FavouritesWrapper = styled.ul`
   width: 300px;

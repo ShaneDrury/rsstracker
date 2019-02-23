@@ -6,7 +6,7 @@
   },
   "scripts": {
     "prettier": "prettier --parser typescript --write",
-    "tslint": "tslint --project ./tsconfig.json"
+    "eslint": "eslint --ext .ts --ext .tsx app/javascript"
   },
   "dependencies": {
     "@babel/core": "^7.0.0-beta.49",
@@ -74,13 +74,15 @@
     "webpack-cli": "^3.1.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.4.0",
+    "@typescript-eslint/parser": "^1.4.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.14.1",
+    "eslint-config-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-react-hooks": "^1.2.0",
     "prettier": "^1.13.3",
     "prettier-eslint-cli": "^4.7.1",
-    "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.12.0",
-    "tslint-eslint-rules": "^5.1.0",
-    "tslint-react": "^3.5.1",
-    "tslint-react-hooks": "^1.1.0",
     "typescript": "^3.0.0",
     "webpack-dev-server": "^3.1.8"
   }

@@ -13,8 +13,6 @@ import { RootState } from "../modules/reducers";
 import { Icon } from "./Icon";
 import Player from "./Player";
 
-interface DataProps {}
-
 interface PropsExtended {
   episodeName?: string;
   episodeId?: string;
@@ -28,7 +26,7 @@ interface DispatchProps {
   handleDetailOpened: (episodeId: string) => void;
 }
 
-type Props = DataProps & PropsExtended & DispatchProps;
+type Props = PropsExtended & DispatchProps;
 
 const Wrapper = styled.div`
   display: flex;
@@ -62,7 +60,10 @@ export class GlobalPlayer extends React.PureComponent<Props> {
   }
 
   public handleDetailOpened = () => {
-    this.props.handleDetailOpened(this.props.episodeId!);
+    if (!this.props.episodeId) {
+      return;
+    }
+    this.props.handleDetailOpened(this.props.episodeId);
   };
 
   public render() {

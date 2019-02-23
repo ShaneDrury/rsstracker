@@ -26,7 +26,7 @@ interface DispatchProps {
 type Props = EnhancedProps & DispatchProps;
 
 export class ActiveJobs extends React.PureComponent<Props> {
-  private notificationSystem = React.createRef<NotificationSystem.System>()!;
+  private notificationSystem = React.createRef<NotificationSystem.System>();
 
   public componentDidMount() {
     this.props.jobDescriptions.forEach(job => {

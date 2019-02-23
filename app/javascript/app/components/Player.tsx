@@ -10,8 +10,7 @@ import {
 } from "../modules/player/actions";
 import { getPlayedSeconds } from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
-
-interface DataProps {}
+import ReactPlayer from "react-player/lib/players/FilePlayer";
 
 interface ConnectedProps {
   playedSeconds: number;
@@ -30,7 +29,7 @@ interface PropsExtended {
   playing: boolean;
 }
 
-type Props = DataProps & DispatchProps & PropsExtended & ConnectedProps;
+type Props = DispatchProps & PropsExtended & ConnectedProps;
 
 interface State {
   shouldSeek: boolean;
@@ -41,7 +40,7 @@ export class Player extends React.Component<Props, State> {
     shouldSeek: true,
   };
 
-  private player: any = undefined;
+  private player = React.createRef<ReactPlayer>();
 
   public shouldComponentUpdate(nextProps: Props) {
     return nextProps.episodeId !== this.props.episodeId;
@@ -74,7 +73,7 @@ export class Player extends React.Component<Props, State> {
     if (this.props.url) {
       return (
         <FilePlayer
-          ref={this.playerRef}
+          ref={this.player}
           url={this.props.url}
           controls
           playing={this.props.playing}
@@ -94,13 +93,15 @@ export class Player extends React.Component<Props, State> {
   }
 
   private seekToPlayedSeconds() {
-    this.player.seekTo(this.props.playedSeconds);
+    this.withPlayer(p => p.seekTo(this.props.playedSeconds));
     this.setState({ shouldSeek: false });
   }
 
-  private playerRef = (player: Element) => {
-    this.player = player;
-  };
+  private withPlayer(callback: (p: ReactPlayer) => void) {
+    if (this.player.current) {
+      callback(this.player.current);
+    }
+  }
 }
 
 const mapStateToProps = (

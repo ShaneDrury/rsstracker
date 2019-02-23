@@ -3,14 +3,12 @@ import styled from "styled-components";
 import ActiveJobs from "./ActiveJobs";
 import GlobalPlayer from "./GlobalPlayer";
 
-interface Props {}
-
 const Nav = styled.div`
   display: flex;
   padding: 0.75rem;
 `;
 
-export class Navbar extends React.PureComponent<Props> {
+export class Navbar extends React.PureComponent {
   public render() {
     return (
       <Nav

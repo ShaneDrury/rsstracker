@@ -1,0 +1,37 @@
+{
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "react-hooks"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "useJSXTextNode": true,
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "react/jsx-uses-vars": 2,
+    "react/jsx-uses-react": 1,
+    "indent": "off",
+    "@typescript-eslint/indent": ["error", 2],
+    "interface-name": 0,
+    "object-curly-spacing": 0,
+    "no-submodule-imports": 0,
+    "object-literal-sort-keys": 0,
+    "jsx-boolean-value": 0,
+    "no-empty-interface": 0,
+    "no-empty": 0,
+    "max-classes-per-file": 0,
+    "react-hooks/rules-of-hooks": 2,
+    "react-hooks/exhaustive-deps": 1,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }]
+  }
+}

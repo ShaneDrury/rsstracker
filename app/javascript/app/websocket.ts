@@ -93,7 +93,7 @@ const handleCableAction = (
 };
 
 export const init = (store: Store<RootState>) => {
-  const meta = document.head!.querySelector("[name=action-cable-url]") as Meta;
+  const meta = document.head.querySelector("[name=action-cable-url]") as Meta;
   const url = meta ? meta.content : "";
 
   const cable = Cable.createConsumer(url);

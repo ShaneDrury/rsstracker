@@ -2,13 +2,8 @@ import { applyMiddleware, compose, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
 import rootReducer from "./modules/reducers";
 
-// Fix for redux-devtools-extension not supporting redux 4.0.0 yet
-// tslint:disable-next-line:no-var-requires
-const reduxModule = require("redux");
-(reduxModule as any).__DO_NOT_USE__ActionTypes.INIT = "@@redux/INIT";
-(reduxModule as any).__DO_NOT_USE__ActionTypes.REPLACE = "@@redux/REPLACE";
-
 interface ReduxWindow extends Window {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: (a: object) => (b: object) => any;
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import camelcaseKeys from "camelcase-keys";
 import qs from "qs";
 import { ApiEpisode, RemoteEpisode } from "../../types/episode";

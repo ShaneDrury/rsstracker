@@ -34,7 +34,7 @@ const EpisodeLoader: React.FunctionComponent<Props> = ({
     if (!remoteEpisode) {
       fetchEpisode(episodeId);
     }
-  }, [episodeId]);
+  }, [episodeId, fetchEpisode, remoteEpisode]);
 
   if (remoteEpisode) {
     return children(remoteEpisode);

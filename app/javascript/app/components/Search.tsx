@@ -7,9 +7,7 @@ interface DataProps {
   onChangeSearch: (searchTerm: string) => void;
 }
 
-interface DispatchProps {}
-
-type Props = DataProps & DispatchProps;
+type Props = DataProps;
 
 export class Search extends React.PureComponent<Props> {
   public handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
