@@ -103,9 +103,9 @@ export const init = (store: Store<RootState>) => {
     },
     {
       connected: () => {},
-      received: (action: CableAction) => {
+      received: action => {
         handleCableAction(
-          camelcaseKeys(action, { deep: true }),
+          camelcaseKeys(action, { deep: true }) as CableAction,
           store.dispatch
         );
       },

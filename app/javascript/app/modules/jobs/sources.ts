@@ -5,7 +5,7 @@ import { ProviderJob, RemoteJob } from "../../types/job";
 import apiFetch from "../apiFetch";
 
 export const processJobResponse = (response: ProviderJob): RemoteJob => {
-  const camel: ProviderJob = camelcaseKeys(response, { deep: true });
+  const camel = camelcaseKeys(response, { deep: true }) as ProviderJob;
   const { id, ...rest } = camel;
   return {
     ...rest,

@@ -30,7 +30,7 @@ export const processEpisode = (episode: ApiEpisode): RemoteEpisode => ({
 const processEpisodesResponse = (
   response: EpisodesResponse
 ): ProcessedResponse => {
-  const camel: EpisodesResponse = camelcaseKeys(response, { deep: true });
+  const camel = camelcaseKeys(response, { deep: true }) as EpisodesResponse;
   return {
     ...camel,
     items: camel.items.map(processEpisode),
@@ -59,9 +59,9 @@ export const getEpisodesById = async (
   const episodesResponse: ApiEpisode[] = await apiFetch(
     `/episodes?id[]=${episodeIds.join("&id[]=")}`
   );
-  const camelEpisodes: ApiEpisode[] = camelcaseKeys(episodesResponse, {
+  const camelEpisodes = camelcaseKeys(episodesResponse, {
     deep: true,
-  });
+  }) as ApiEpisode[];
   return camelEpisodes.map(processEpisode);
 };
 

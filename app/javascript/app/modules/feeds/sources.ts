@@ -9,7 +9,7 @@ export interface UpdateFeedsResponse {
 }
 
 export const processFeed = (feed: ApiFeed): RemoteFeed => ({
-  ...camelcaseKeys(feed, { deep: true }),
+  ...(camelcaseKeys(feed, { deep: true }) as ApiFeed),
   key: shortid.generate(),
   id: feed.id.toString(),
 });
@@ -21,7 +21,7 @@ export const fetchFeeds = async (): Promise<RemoteFeed[]> => {
 
 export const fetchFeed = async (feedId: string): Promise<RemoteFeed> => {
   const feedsResponse = await apiFetch(`/feeds/${feedId}`);
-  const camel: ApiFeed = camelcaseKeys(feedsResponse, { deep: true });
+  const camel = camelcaseKeys(feedsResponse, { deep: true }) as ApiFeed;
   return processFeed(camel);
 };
 
