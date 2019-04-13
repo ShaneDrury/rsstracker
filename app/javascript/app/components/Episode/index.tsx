@@ -3,7 +3,7 @@ import format from "date-fns/format";
 import React from "react";
 import Dotdotdot from "react-dotdotdot";
 import { connect } from "react-redux";
-import VisibilitySensor from "react-visibility-sensor";
+import VisibilitySensor from "react-visibility-sensor/visibility-sensor";
 import styled from "styled-components";
 import { downloadEpisodeRequested } from "../../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../../modules/episodeJobs/selectors";
