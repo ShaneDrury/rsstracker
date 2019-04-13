@@ -8,8 +8,6 @@
 declare module "react-visibility-sensor/visibility-sensor" {
   import * as React from "react";
 
-  export as namespace ReactVisibilitySensor;
-
   interface Shape {
     top?: number;
     left?: number;
@@ -46,4 +44,5 @@ declare module "react-visibility-sensor/visibility-sensor" {
   declare const ReactVisibilitySensor: React.FunctionComponent<Props>;
 
   export = ReactVisibilitySensor;
+  export as namespace ReactVisibilitySensor;
 }
