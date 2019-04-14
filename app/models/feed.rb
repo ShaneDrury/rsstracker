@@ -6,6 +6,7 @@ class Feed < ApplicationRecord
   has_many :sources, through: :single_feed_sources, dependent: :destroy
   has_many :feed_guesses
   has_many :guessing_sources, through: :feed_guesses, dependent: :destroy, source: :source
+  has_one_attached :thumbnail
 
   def image_link(request)
     "#{request.protocol}#{request.host}:#{request.port}#{relative_image_link}"
