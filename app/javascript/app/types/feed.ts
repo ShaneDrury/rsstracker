@@ -20,7 +20,6 @@ export interface ApiFeed {
   name: string;
   description: string;
   imageUrl: string;
-  relativeImageLink: string;
   updatedAt: string;
   autodownload: boolean;
   sources: Source[];
@@ -30,8 +29,4 @@ export interface ApiFeed {
 export interface RemoteFeed extends Omit<ApiFeed, "id"> {
   key: string;
   id: string;
-}
-
-export interface RemoteFeeds {
-  [key: string]: RemoteFeed;
 }
