@@ -17,19 +17,10 @@ class DownloadFeedJob < ApplicationJob
     if feed.image_url.empty?
       thumbnail_url = rss.channel.image.url
       thumbnail_filename = File.basename(URI(thumbnail_url).path)
-      feed_dir = Rails.root.join('public', 'uploads', feed_id.to_s)
-      FileUtils.mkdir_p feed_dir
-      download_path = feed_dir.join(thumbnail_filename)
-
       open(thumbnail_url, 'r') do |input|
-        open(download_path, 'wb') do |output|
-          while (buffer = input.read(BUFFER_SIZE))
-            output.write(buffer)
-          end
-        end
+        feed.thumbnail.attach(io: input, filename: thumbnail_filename, content_type: "image/jpeg")
       end
       feed.update_attributes(
-        image_url: thumbnail_filename,
         description: rss.channel.description,
       )
     end

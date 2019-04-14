@@ -10,21 +10,12 @@ class ThumbnailDownloader
     thumbnail_extension = File.extname(URI(url).path)
     thumbnail_filename = episode.guid + thumbnail_extension
     episode_folder = episode.feed.name.parameterize
-    feed_dir = Rails.root.join('public', 'uploads', episode.feed_id.to_s)
     Dir.mktmpdir do |temp_dir|
-      tmp_path = File.join(temp_dir, episode_folder, thumbnail_filename)
       FileUtils.mkdir_p File.join(temp_dir, episode_folder)
       open(url, 'r') do |input|
-        open(tmp_path, 'wb') do |output|
-          output.write(input.read)
-        end
+        episode.thumbnail.attach(io: input, filename: thumbnail_filename, content_type: "image/jpeg")
       end
-      FileUtils.mkdir_p feed_dir
-      FileUtils.mv(tmp_path, feed_dir)
     end
-    episode.update_attributes(
-      thumbnail_url: thumbnail_filename
-    )
     nil
   end
 
