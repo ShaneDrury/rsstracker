@@ -33,7 +33,12 @@ class EpisodesController < ApplicationController
   # GET /episodes/1
   def show
     respond_to do |format|
-      format.json { render json: @episode }
+      format.json do
+        j = @episode.as_json
+        j.merge!("small_thumbnail" => url_for(ep.small_thumbnail)) if ep.small_thumbnail
+        j.merge!("large_thumbnail" => url_for(ep.thumbnail)) if ep.thumbnail.attached?
+        render json: j
+      end
       format.html
     end
   end
