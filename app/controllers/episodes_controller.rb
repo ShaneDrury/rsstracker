@@ -8,10 +8,16 @@ class EpisodesController < ApplicationController
     @episodes = @episodes.where(id: params[:id]) if params[:id].present?
     @episodes = @episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     @episodes = @episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
+    json = @episodes.map do |ep|
+      j = ep.as_json
+      j.merge!("small_thumbnail" => url_for(ep.small_thumbnail)) if ep.small_thumbnail
+      j.merge!("large_thumbnail" => url_for(ep.thumbnail)) if ep.thumbnail.attached?
+      j
+    end
 
     respond_to do |format|
       format.html
-      format.json { render json: @episodes }
+      format.json { render json: json }
     end
   end
 
@@ -93,9 +99,15 @@ class EpisodesController < ApplicationController
                end
     episodes = episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
     paged = episodes.page(params[:page_number] || 1).per(10)
+    json = paged.map do |ep|
+      j = ep.as_json
+      j.merge!("small_thumbnail" => url_for(ep.small_thumbnail)) if ep.small_thumbnail
+      j.merge!("large_thumbnail" => url_for(ep.thumbnail)) if ep.thumbnail.attached?
+      j
+    end
 
     render json: {
-      items: paged,
+      items: json,
       page_info: {
         count: paged.count,
         current_page: paged.current_page,

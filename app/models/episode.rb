@@ -23,6 +23,10 @@ class Episode < ApplicationRecord
     source.source_type == 'youtube' ? "https://www.youtube.com/watch?v=#{url}" : url
   end
 
+  def small_thumbnail
+    thumbnail.variant(resize: "128x128") if thumbnail.attached?
+  end
+
   def as_json(options={})
     super(include: { fetch_status: { methods: :percentage_fetched } }, methods: [:full_url, :relative_image_link])
   end

@@ -13,7 +13,8 @@ export interface ApiEpisode {
   fetchStatus: FetchStatus;
   publicationDate: string;
   seen: boolean;
-  relativeImageLink?: string;
+  smallThumbnail?: string;
+  largeThumbnail?: string;
 }
 
 export interface RemoteEpisode extends Omit<ApiEpisode, "id"> {
