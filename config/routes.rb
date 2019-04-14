@@ -40,5 +40,7 @@ Rails.application.routes.draw do
 
   resources :fetch_statuses
 
-  get '*path', to: 'operations#index'
+  get '*path', to: 'operations#index', constraints: ->(request) do
+    !request.xhr? && request.format.html?
+  end
 end

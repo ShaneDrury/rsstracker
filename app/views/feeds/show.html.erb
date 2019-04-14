@@ -7,6 +7,7 @@
       <%= f.check_box :autodownload %>
       <%= f.submit %>
     <% end %>
+    <%= image_tag @feed.thumbnail.variant(resize: "250x250") if @feed.thumbnail.attached? %>
     <%= form_for @feed, method: :delete, builder: BulmaFormBuilder do |f| %>
       <%= f.confirmation_button(name: "Delete") %>
     <% end %>
