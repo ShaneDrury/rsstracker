@@ -1,5 +1,3 @@
-import { Omit } from "./util";
-
 export type SourceType = "youtube" | "rss";
 
 export type FeedSourceType = SourceType | "mixed" | undefined;
@@ -15,18 +13,36 @@ export interface Source {
   };
 }
 
-export interface ApiFeed {
-  id: number;
+interface FeedAttributes {
   name: string;
   description: string;
   imageUrl: string;
   updatedAt: string;
   autodownload: boolean;
-  sources: Source[];
   sourceType: FeedSourceType;
 }
 
-export interface RemoteFeed extends Omit<ApiFeed, "id"> {
+export interface FeedData {
+  id: number;
+  type: "feeds";
+  attributes: FeedAttributes;
+  relationships: {
+    allSources: {
+      data: Source[];
+    };
+  };
+}
+
+export interface ApiFeed {
+  data: FeedData;
+}
+
+export interface ApiFeeds {
+  data: FeedData[];
+}
+
+export interface RemoteFeed extends FeedAttributes {
   key: string;
   id: string;
+  sources: Source[];
 }

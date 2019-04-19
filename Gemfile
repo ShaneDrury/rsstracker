@@ -69,3 +69,4 @@ gem "lograge"
 gem "logstash-event"
 gem "logstash-logger"
 gem 'mini_magick'
+gem "active_model_serializers"

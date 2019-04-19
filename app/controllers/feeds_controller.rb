@@ -8,7 +8,7 @@ class FeedsController < ApplicationController
     @feeds = Feed.all.order(name: :asc)
     respond_to do |format|
       format.html
-      format.json { render json: { items: @feeds } }
+      format.json { render json: @feeds }
     end
   end
 

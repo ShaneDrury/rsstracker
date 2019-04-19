@@ -1,8 +1,8 @@
-import { ApiFeed } from "../types/feed";
+import { ApiFeeds } from "../types/feed";
 import { ProviderJob } from "../types/job";
 
 interface Preloaded {
-  feeds: ApiFeed[];
+  feeds: ApiFeeds;
   jobs: ProviderJob[];
 }
 

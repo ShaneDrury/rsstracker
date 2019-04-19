@@ -96,6 +96,9 @@ Rails.application.configure do
     cfg.dsn = 'http://d88d154936bc4afc924191fb2d4fee84:b4cff010960b4ea79617d8c37baebee1@ubuntu.home:9001/1'
   end
 
+  ActiveModelSerializers.config.adapter = :json_api
+  ActiveModelSerializers.config.key_transform = :camel_lower
+
   config.lograge.enabled = true
   config.lograge.formatter = Lograge::Formatters::Logstash.new
   config.logstash.host = "ubuntu.home"

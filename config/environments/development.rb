@@ -57,6 +57,9 @@ Rails.application.configure do
   config.action_cable.url = 'ws://192.168.1.172:3001/cable'
   config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
 
+  ActiveModelSerializers.config.adapter = :json_api
+  ActiveModelSerializers.config.key_transform = :camel_lower
+
   config.webpacker.check_yarn_integrity = false
 
   yml = YAML.load_file(Rails.root.join("config/settings.dev.yml"))

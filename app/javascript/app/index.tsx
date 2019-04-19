@@ -24,7 +24,7 @@ const { store, runSaga } = configureStore();
 runSaga(sagas);
 init(store);
 const preloaded = getPreloaded();
-store.dispatch(fetchFeedsComplete(preloaded.feeds.map(processFeed)));
+store.dispatch(fetchFeedsComplete(preloaded.feeds.data.map(processFeed)));
 store.dispatch(fetchJobsComplete(preloaded.jobs.map(processJobResponse)));
 
 const render = (Component: React.ComponentType) => {

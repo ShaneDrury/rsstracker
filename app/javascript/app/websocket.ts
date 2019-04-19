@@ -66,7 +66,7 @@ const handleCableAction = (
   switch (action.type) {
     case "UPDATE_FEED": {
       const feed = action.payload.feed;
-      dispatch(updateFeedComplete(processFeed(feed)));
+      dispatch(updateFeedComplete(processFeed(feed.data)));
       break;
     }
     case "UPDATE_EPISODE": {

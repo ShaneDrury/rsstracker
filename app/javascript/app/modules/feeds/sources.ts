@@ -1,6 +1,5 @@
-import camelcaseKeys from "camelcase-keys";
 import * as shortid from "shortid";
-import { ApiFeed, RemoteFeed } from "../../types/feed";
+import { ApiFeed, FeedData, RemoteFeed } from "../../types/feed";
 import { ProviderJob } from "../../types/job";
 import apiFetch from "../apiFetch";
 
@@ -8,10 +7,11 @@ export interface UpdateFeedsResponse {
   jobs: ProviderJob[];
 }
 
-export const processFeed = (feed: ApiFeed): RemoteFeed => ({
-  ...(camelcaseKeys(feed, { deep: true }) as ApiFeed),
+export const processFeed = (feed: FeedData): RemoteFeed => ({
+  ...feed.attributes,
   key: shortid.generate(),
   id: feed.id.toString(),
+  sources: feed.relationships.allSources.data,
 });
 
 export const fetchFeeds = async (): Promise<RemoteFeed[]> => {
@@ -21,8 +21,8 @@ export const fetchFeeds = async (): Promise<RemoteFeed[]> => {
 
 export const fetchFeed = async (feedId: string): Promise<RemoteFeed> => {
   const feedsResponse = await apiFetch(`/feeds/${feedId}`);
-  const camel = camelcaseKeys(feedsResponse, { deep: true }) as ApiFeed;
-  return processFeed(camel);
+  const camel = feedsResponse as ApiFeed;
+  return processFeed(camel.data);
 };
 
 export const updateFeeds = async (): Promise<UpdateFeedsResponse> =>
