@@ -14,7 +14,7 @@ export interface JobAttributes {
   arguments: number[];
 }
 
-interface JobData {
+export interface JobData {
   id: number;
   type: "delayedBackendActiveRecordJobs";
   attributes: JobAttributes;
@@ -25,7 +25,7 @@ export interface ProviderJob {
 }
 
 export interface ProviderJobs {
-  data: ProviderJob[];
+  data: JobData[];
 }
 
 export interface RemoteJob extends JobAttributes {

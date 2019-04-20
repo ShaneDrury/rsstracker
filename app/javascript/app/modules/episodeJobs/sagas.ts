@@ -13,7 +13,7 @@ function* downloadEpisodeSaga({
   const downloadResponse: DownloadEpisodeResponse = yield downloadEpisode(
     episodeId
   );
-  const job = processJobResponse(downloadResponse);
+  const job = processJobResponse(downloadResponse.data);
   yield put(downloadEpisodeStarted(job, episodeId));
 }
 

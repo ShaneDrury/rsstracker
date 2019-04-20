@@ -1,9 +1,9 @@
 import * as shortid from "shortid";
-import { ProviderJob, ProviderJobs, RemoteJob } from "../../types/job";
+import { JobData, ProviderJobs, RemoteJob } from "../../types/job";
 import apiFetch from "../apiFetch";
 
-export const processJobResponse = (response: ProviderJob): RemoteJob => {
-  const { id, attributes, ...rest } = response.data;
+export const processJobResponse = (response: JobData): RemoteJob => {
+  const { id, attributes, ...rest } = response;
   return {
     ...rest,
     ...attributes,

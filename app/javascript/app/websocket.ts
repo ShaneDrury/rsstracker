@@ -81,12 +81,12 @@ const handleCableAction = (
     }
     case "JOB_ERROR": {
       const job = action.payload.job;
-      dispatch(jobError(processJobResponse(job)));
+      dispatch(jobError(processJobResponse(job.data)));
       break;
     }
     case "JOB_START": {
       const job = action.payload.job;
-      dispatch(newJob(processJobResponse(job)));
+      dispatch(newJob(processJobResponse(job.data)));
       break;
     }
   }
