@@ -9,7 +9,7 @@ class EpisodeUpdateBroadcastJob < ApplicationJob
         'feeds_channel',
         type: 'UPDATE_EPISODE',
         payload: {
-          episode: episode
+          episode: ActiveModelSerializers::SerializableResource.new(episode).as_json
         }
       )
   end

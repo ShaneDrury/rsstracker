@@ -77,7 +77,7 @@ function* fetchEpisodesSaga({
 }: FetchEpisodesRequested) {
   try {
     const episodes: ProcessedResponse = yield getEpisodes(queryParams);
-    yield put(fetchEpisodesComplete(episodes.items, episodes.pageInfo));
+    yield put(fetchEpisodesComplete(episodes.data, episodes.meta));
   } catch (err) {
     yield put(fetchEpisodesFailure(err));
   }

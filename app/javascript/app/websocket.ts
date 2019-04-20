@@ -71,7 +71,7 @@ const handleCableAction = (
     }
     case "UPDATE_EPISODE": {
       const episode = action.payload.episode;
-      dispatch(updateEpisodeComplete(processEpisode(episode)));
+      dispatch(updateEpisodeComplete(processEpisode(episode.data)));
       break;
     }
     case "JOB_COMPLETE": {

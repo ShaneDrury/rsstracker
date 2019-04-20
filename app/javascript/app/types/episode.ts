@@ -1,23 +1,41 @@
 import { FetchStatus } from "../modules/fetchStatus";
-import { Omit } from "./util";
 
-export interface ApiEpisode {
-  id: number;
+export interface EpisodeAttributes {
   description: string;
   duration: string;
-  feedId: string;
   guid: string;
   name: string;
   url: string;
   fullUrl: string;
-  fetchStatus: FetchStatus;
   publicationDate: string;
   seen: boolean;
   smallThumbnail?: string;
   largeThumbnail?: string;
 }
 
-export interface RemoteEpisode extends Omit<ApiEpisode, "id"> {
+export interface EpisodeData {
+  id: number;
+  type: "episodes";
+  attributes: EpisodeAttributes;
+  relationships: {
+    fetchStatus: { data: FetchStatus };
+    feed: {
+      data: { id: string; type: "feeds" };
+    };
+  };
+}
+
+export interface ApiEpisode {
+  data: EpisodeData;
+}
+
+export interface ApiEpisodes {
+  data: EpisodeData[];
+}
+
+export interface RemoteEpisode extends EpisodeAttributes {
   id: string;
   updating: boolean;
+  fetchStatus: FetchStatus;
+  feedId: string;
 }

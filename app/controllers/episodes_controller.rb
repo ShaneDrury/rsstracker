@@ -8,16 +8,10 @@ class EpisodesController < ApplicationController
     @episodes = @episodes.where(id: params[:id]) if params[:id].present?
     @episodes = @episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     @episodes = @episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
-    json = @episodes.map do |ep|
-      j = ep.as_json
-      j.merge!("small_thumbnail" => url_for(ep.small_thumbnail)) if ep.small_thumbnail
-      j.merge!("large_thumbnail" => url_for(ep.thumbnail)) if ep.thumbnail.attached?
-      j
-    end
 
     respond_to do |format|
       format.html
-      format.json { render json: json }
+      format.json { render json: @episodes }
     end
   end
 
@@ -33,12 +27,7 @@ class EpisodesController < ApplicationController
   # GET /episodes/1
   def show
     respond_to do |format|
-      format.json do
-        j = @episode.as_json
-        j.merge!("small_thumbnail" => url_for(ep.small_thumbnail)) if ep.small_thumbnail
-        j.merge!("large_thumbnail" => url_for(ep.thumbnail)) if ep.thumbnail.attached?
-        render json: j
-      end
+      format.json { render json: @episode }
       format.html
     end
   end
@@ -104,27 +93,8 @@ class EpisodesController < ApplicationController
                end
     episodes = episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
     paged = episodes.page(params[:page_number] || 1).per(10)
-    json = paged.map do |ep|
-      j = ep.as_json
-      j.merge!("small_thumbnail" => url_for(ep.small_thumbnail)) if ep.small_thumbnail
-      j.merge!("large_thumbnail" => url_for(ep.thumbnail)) if ep.thumbnail.attached?
-      j
-    end
 
-    render json: {
-      items: json,
-      page_info: {
-        count: paged.count,
-        current_page: paged.current_page,
-        limit_value: paged.limit_value,
-        total_pages: paged.total_pages,
-        next_page: paged.next_page,
-        prev_page: paged.prev_page,
-        first_page: paged.first_page?,
-        last_page: paged.last_page?,
-        out_of_range: paged.out_of_range?,
-      },
-    }
+    render json: paged, meta: pagination_dict(paged)
   end
 
   private
@@ -137,5 +107,19 @@ class EpisodesController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def episode_params
     params.require(:episode).permit(:feed_id, :name, :status, :description, :publication_date, :id, :seen)
+  end
+
+  def pagination_dict(paged)
+    {
+      count: paged.count,
+      current_page: paged.current_page,
+      limit_value: paged.limit_value,
+      total_pages: paged.total_pages,
+      next_page: paged.next_page,
+      prev_page: paged.prev_page,
+      first_page: paged.first_page?,
+      last_page: paged.last_page?,
+      out_of_range: paged.out_of_range?,
+    }
   end
 end

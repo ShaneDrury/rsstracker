@@ -6,7 +6,7 @@ class FeedGuessesController < ApplicationController
     @feed_guesss = FeedGuess.all.order(name: :asc)
     respond_to do |format|
       format.html
-      format.json { render json: { items: @feed_guesses } }
+      format.json { render json: @feed_guesses }
     end
   end
 

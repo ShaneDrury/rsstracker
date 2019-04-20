@@ -1,37 +1,36 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import camelcaseKeys from "camelcase-keys";
 import qs from "qs";
-import { ApiEpisode, RemoteEpisode } from "../../types/episode";
+import { ApiEpisodes, EpisodeData, RemoteEpisode } from "../../types/episode";
 import { ProviderJob } from "../../types/job";
 import { PageInfo } from "../../types/page";
 import { Omit } from "../../types/util";
 import apiFetch from "../apiFetch";
 import { Status } from "../status";
 
-interface EpisodesResponse {
-  items: ApiEpisode[];
-  pageInfo: PageInfo;
+interface EpisodesResponse extends ApiEpisodes {
+  meta: PageInfo;
 }
 
-export interface ProcessedResponse extends Omit<EpisodesResponse, "items"> {
-  items: RemoteEpisode[];
+export interface ProcessedResponse extends Omit<EpisodesResponse, "data"> {
+  data: RemoteEpisode[];
 }
 
 export type DownloadEpisodeResponse = ProviderJob;
 
-export const processEpisode = (episode: ApiEpisode): RemoteEpisode => ({
-  ...episode,
+export const processEpisode = (episode: EpisodeData): RemoteEpisode => ({
+  ...episode.attributes,
   id: episode.id.toString(),
   updating: false,
+  fetchStatus: episode.relationships.fetchStatus.data,
+  feedId: episode.relationships.feed.data.id,
 });
 
 const processEpisodesResponse = (
   response: EpisodesResponse
 ): ProcessedResponse => {
-  const camel = camelcaseKeys(response, { deep: true }) as EpisodesResponse;
   return {
-    ...camel,
-    items: camel.items.map(processEpisode),
+    ...response,
+    data: response.data.map(processEpisode),
   };
 };
 
@@ -47,20 +46,19 @@ export const getEpisodes = async (queryParams: {
     search_term: queryParams.searchTerm,
     page_number: queryParams.currentPage,
   });
-  const episodesResponse = await apiFetch(`/episodes/search?${stringified}`);
+  const episodesResponse: EpisodesResponse = await apiFetch(
+    `/episodes/search?${stringified}`
+  );
   return processEpisodesResponse(episodesResponse);
 };
 
 export const getEpisodesById = async (
   episodeIds: string[]
 ): Promise<RemoteEpisode[]> => {
-  const episodesResponse: ApiEpisode[] = await apiFetch(
+  const episodesResponse: ApiEpisodes = await apiFetch(
     `/episodes?id[]=${episodeIds.join("&id[]=")}`
   );
-  const camelEpisodes = camelcaseKeys(episodesResponse, {
-    deep: true,
-  }) as ApiEpisode[];
-  return camelEpisodes.map(processEpisode);
+  return episodesResponse.data.map(processEpisode);
 };
 
 export const downloadEpisode = async (
