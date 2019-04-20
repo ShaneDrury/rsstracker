@@ -35,7 +35,7 @@ set :delayed_job_pid_dir, '/tmp'
 set :sentry_host, "http://ubuntu.home:9001/"
 set :sentry_api_token, "5b2c05ef96f7465885b195a9a338a56b940725763ae0414e8d3975c51b392212"
 set :sentry_organization, "sentry"
-set :sentry_repo, 'rsstracker/rsstracker' # computed from repo_url by default
+set :sentry_repo, "RSSTracker / rsstracker"
 
 after 'deploy:published', 'sentry:notice_deployment'
 
