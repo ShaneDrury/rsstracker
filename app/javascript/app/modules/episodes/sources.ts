@@ -19,6 +19,7 @@ export type DownloadEpisodeResponse = ProviderJob;
 
 export const processEpisode = (episode: EpisodeData): RemoteEpisode => ({
   ...episode.attributes,
+  ...episode.links,
   id: episode.id.toString(),
   updating: false,
   fetchStatus: episode.relationships.fetchStatus.data,

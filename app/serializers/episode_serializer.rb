@@ -6,18 +6,11 @@ class EpisodeSerializer < ActiveModel::Serializer
     :url,
     :full_url,
     :publication_date,
-    :seen,
-    :small_thumbnail,
-    :large_thumbnail
+    :seen
 
   has_one :feed
   has_one :fetch_status
 
-  def small_thumbnail
-    url_for(object.small_thumbnail) if object.thumbnail.attached?
-  end
-
-  def large_thumbnail
-    url_for(object.thumbnail) if object.thumbnail.attached?
-  end
+  link(:small_thumbnail) { polymorphic_url(object.small_thumbnail, only_path: true) if object.thumbnail.attached? }
+  link(:large_thumbnail) { polymorphic_url(object.thumbnail, only_path: true) if object.thumbnail.attached? }
 end

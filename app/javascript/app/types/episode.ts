@@ -9,8 +9,6 @@ export interface EpisodeAttributes {
   fullUrl: string;
   publicationDate: string;
   seen: boolean;
-  smallThumbnail?: string;
-  largeThumbnail?: string;
 }
 
 export interface EpisodeData {
@@ -22,6 +20,10 @@ export interface EpisodeData {
     feed: {
       data: { id: string; type: "feeds" };
     };
+  };
+  links: {
+    smallThumbnail: string | undefined;
+    largeThumbnail: string | undefined;
   };
 }
 
@@ -38,4 +40,6 @@ export interface RemoteEpisode extends EpisodeAttributes {
   updating: boolean;
   fetchStatus: FetchStatus;
   feedId: string;
+  smallThumbnail: string | undefined;
+  largeThumbnail: string | undefined;
 }
