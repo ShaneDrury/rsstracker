@@ -3,7 +3,7 @@ import { ProviderJob, ProviderJobs, RemoteJob } from "../../types/job";
 import apiFetch from "../apiFetch";
 
 export const processJobResponse = (response: ProviderJob): RemoteJob => {
-  const { id, attributes, ...rest } = response;
+  const { id, attributes, ...rest } = response.data;
   return {
     ...rest,
     ...attributes,

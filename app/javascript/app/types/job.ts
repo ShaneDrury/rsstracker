@@ -14,10 +14,14 @@ export interface JobAttributes {
   arguments: number[];
 }
 
-export interface ProviderJob {
+interface JobData {
   id: number;
   type: "delayedBackendActiveRecordJobs";
   attributes: JobAttributes;
+}
+
+export interface ProviderJob {
+  data: JobData;
 }
 
 export interface ProviderJobs {
