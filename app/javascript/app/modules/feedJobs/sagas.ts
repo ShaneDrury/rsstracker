@@ -10,7 +10,7 @@ import {
 
 function* updateFeedsSaga({  }: UpdateFeedsRequested) {
   const updateResponse: UpdateFeedsResponse = yield updateFeeds();
-  const jobs = updateResponse.jobs.data.map(processJobResponse);
+  const jobs = updateResponse.data.map(processJobResponse);
   const sourceIds = jobs.map(job => job.arguments[0]);
   const sourcesToJobs = zipObject(sourceIds, jobs);
   yield put(updateFeedsStarted(sourcesToJobs));

@@ -31,6 +31,7 @@ import {
   getEpisodes,
   getEpisodesById,
   markEpisodeSeen,
+  ProcessedResponse,
   updateEpisodeDate,
   updateEpisodeDescription,
 } from "./sources";
@@ -75,7 +76,7 @@ function* fetchEpisodesSaga({
   payload: { queryParams },
 }: FetchEpisodesRequested) {
   try {
-    const episodes = yield getEpisodes(queryParams);
+    const episodes: ProcessedResponse = yield getEpisodes(queryParams);
     yield put(fetchEpisodesComplete(episodes.items, episodes.pageInfo));
   } catch (err) {
     yield put(fetchEpisodesFailure(err));

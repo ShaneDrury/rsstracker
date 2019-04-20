@@ -13,13 +13,11 @@ interface EpisodesResponse {
   pageInfo: PageInfo;
 }
 
-interface ProcessedResponse extends Omit<EpisodesResponse, "items"> {
+export interface ProcessedResponse extends Omit<EpisodesResponse, "items"> {
   items: RemoteEpisode[];
 }
 
-interface DownloadEpisodeResponse {
-  job: ProviderJob;
-}
+export type DownloadEpisodeResponse = ProviderJob;
 
 export const processEpisode = (episode: ApiEpisode): RemoteEpisode => ({
   ...episode,

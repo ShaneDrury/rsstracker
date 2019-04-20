@@ -1,5 +1,5 @@
 import * as shortid from "shortid";
-import { ProviderJob, RemoteJob } from "../../types/job";
+import { ProviderJob, ProviderJobs, RemoteJob } from "../../types/job";
 import apiFetch from "../apiFetch";
 
 export const processJobResponse = (response: ProviderJob): RemoteJob => {
@@ -13,8 +13,8 @@ export const processJobResponse = (response: ProviderJob): RemoteJob => {
 };
 
 export const getJobs = async (): Promise<RemoteJob[]> => {
-  const response = await apiFetch(`/jobs`);
-  return response.map(processJobResponse);
+  const response: ProviderJobs = await apiFetch(`/jobs`);
+  return response.data.map(processJobResponse);
 };
 
 export const deleteJob = async (jobId: string): Promise<void> => {

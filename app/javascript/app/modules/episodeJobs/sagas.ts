@@ -1,5 +1,5 @@
 import { put, takeEvery } from "redux-saga/effects";
-import { downloadEpisode } from "../episodes/sources";
+import { downloadEpisode, DownloadEpisodeResponse } from "../episodes/sources";
 import { processJobResponse } from "../jobs/sources";
 import {
   DownloadEpisodeRequested,
@@ -10,8 +10,10 @@ import {
 function* downloadEpisodeSaga({
   payload: { episodeId },
 }: DownloadEpisodeRequested) {
-  const downloadResponse = yield downloadEpisode(episodeId);
-  const job = processJobResponse(downloadResponse.job);
+  const downloadResponse: DownloadEpisodeResponse = yield downloadEpisode(
+    episodeId
+  );
+  const job = processJobResponse(downloadResponse);
   yield put(downloadEpisodeStarted(job, episodeId));
 }
 

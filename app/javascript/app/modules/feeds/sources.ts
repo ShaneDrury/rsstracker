@@ -3,9 +3,7 @@ import { ApiFeed, FeedData, RemoteFeed } from "../../types/feed";
 import { ProviderJobs } from "../../types/job";
 import apiFetch from "../apiFetch";
 
-export interface UpdateFeedsResponse {
-  jobs: ProviderJobs;
-}
+export type UpdateFeedsResponse = ProviderJobs;
 
 export const processFeed = (feed: FeedData): RemoteFeed => ({
   ...feed.attributes,
