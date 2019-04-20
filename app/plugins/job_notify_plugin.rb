@@ -24,7 +24,7 @@ class JobNotifyPlugin < Delayed::Plugin
           'feeds_channel',
           type: 'JOB_COMPLETE',
           payload: {
-            job_id: job.id
+            jobId: job.id
           }
         )
     end
