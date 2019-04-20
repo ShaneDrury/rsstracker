@@ -3,9 +3,8 @@ class JobsController < ApplicationController
 
   def index
     @jobs = Delayed::Job.all
-    jobs_with_extra = @jobs.map(&:with_extra)
     respond_to do |format|
-      format.json { render json: jobs_with_extra }
+      format.json { render json: @jobs }
       format.html
     end
   end

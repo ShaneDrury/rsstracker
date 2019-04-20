@@ -1,14 +1,12 @@
-import camelcaseKeys from "camelcase-keys";
-
 import * as shortid from "shortid";
 import { ProviderJob, RemoteJob } from "../../types/job";
 import apiFetch from "../apiFetch";
 
 export const processJobResponse = (response: ProviderJob): RemoteJob => {
-  const camel = camelcaseKeys(response, { deep: true }) as ProviderJob;
-  const { id, ...rest } = camel;
+  const { id, attributes, ...rest } = response;
   return {
     ...rest,
+    ...attributes,
     key: shortid.generate(),
     id: id.toString(),
   };

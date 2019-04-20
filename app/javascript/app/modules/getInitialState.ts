@@ -1,9 +1,9 @@
 import { ApiFeeds } from "../types/feed";
-import { ProviderJob } from "../types/job";
+import { ProviderJobs } from "../types/job";
 
 interface Preloaded {
   feeds: ApiFeeds;
-  jobs: ProviderJob[];
+  jobs: ProviderJobs;
 }
 
 export const getPreloaded = (): Preloaded => {

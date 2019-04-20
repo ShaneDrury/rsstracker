@@ -1,7 +1,7 @@
 <%= tag.div(id: "root", style: "height:100%", data: {
   preload: {
     feeds: @feeds,
-    jobs: Delayed::Job.all.map(&:with_extra)
+    jobs: @jobs,
   }
 }) %>
 <%= javascript_pack_tag 'application' %>

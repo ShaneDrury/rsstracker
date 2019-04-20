@@ -28,10 +28,10 @@ interface ProcessedJob {
 
 export const processJob = (job: RemoteJob): ProcessedJob => ({
   id: job.id,
-  itemId: job.jobData.arguments[0],
+  itemId: job.arguments[0],
   errorMessage: job.lastError && job.lastError.split("\n")[0],
   key: keyFromJob(job),
-  jobClass: job.jobData.jobClass,
+  jobClass: job.jobClass,
 });
 
 // TODO: Maybe move id out of this, add it to notification later

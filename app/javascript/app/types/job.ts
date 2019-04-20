@@ -1,5 +1,3 @@
-import { Omit } from "./util";
-
 export type JobClass =
   | "DownloadFeedJob"
   | "DownloadYoutubePlaylistJob"
@@ -8,32 +6,34 @@ export type JobClass =
   | "FetchOldThumbnailsJob"
   | "DownloadThumbnailJob";
 
-export interface ProviderJob {
-  id: number;
+export interface JobAttributes {
   lastError?: string;
-  priority: number;
-  jobData: {
-    jobClass: JobClass;
-    jobId: string;
-    providerJobId: string;
-    arguments: number[];
-  };
+  jobClass: JobClass;
+  jobId: string;
+  providerJobId: string;
+  arguments: number[];
 }
 
-export interface RemoteJob extends Omit<ProviderJob, "id"> {
+export interface ProviderJob {
+  id: number;
+  type: "delayedBackendActiveRecordJobs";
+  attributes: JobAttributes;
+}
+
+export interface ProviderJobs {
+  data: ProviderJob[];
+}
+
+export interface RemoteJob extends JobAttributes {
   key: string;
   id: string;
 }
 
 export const isFeedJob = (job: RemoteJob) =>
-  ["DownloadFeedJob", "DownloadYoutubePlaylistJob"].includes(
-    job.jobData.jobClass
-  );
+  ["DownloadFeedJob", "DownloadYoutubePlaylistJob"].includes(job.jobClass);
 
 export const isEpisodeJob = (job: RemoteJob) =>
-  ["DownloadEpisodeJob", "DownloadYoutubeAudioJob"].includes(
-    job.jobData.jobClass
-  );
+  ["DownloadEpisodeJob", "DownloadYoutubeAudioJob"].includes(job.jobClass);
 
 export const isThumbnailJob = (job: RemoteJob) =>
-  ["DownloadThumbnailJob"].includes(job.jobData.jobClass);
+  ["DownloadThumbnailJob"].includes(job.jobClass);

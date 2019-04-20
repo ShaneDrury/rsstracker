@@ -5,8 +5,7 @@ class JobNotifyPlugin < Delayed::Plugin
 
   callbacks do |lifecycle|
     lifecycle.before(:invoke_job) do |job|
-      job_with_extra = job.with_extra
-      job_class = job_with_extra[:job_data]['job_class']
+      job_class = job.payload_object.job_data["job_class"]
       next if BROADCAST_BLACKLIST.include?(job_class)
       ActionCable
         .server
@@ -14,7 +13,7 @@ class JobNotifyPlugin < Delayed::Plugin
           'feeds_channel',
           type: 'JOB_START',
           payload: {
-            job: job_with_extra
+            job: ActiveModelSerializers::SerializableResource.new(job).as_json
           }
         )
     end
@@ -36,7 +35,7 @@ class JobNotifyPlugin < Delayed::Plugin
           'feeds_channel',
           type: 'JOB_ERROR',
           payload: {
-            job: job.with_extra
+            job: ActiveModelSerializers::SerializableResource.new(job).as_json
           }
         )
     end
