@@ -1,5 +1,4 @@
 import Cable from "actioncable";
-import camelcaseKeys from "camelcase-keys";
 import { Dispatch, Store } from "redux";
 import { RootAction } from "./modules/actions";
 import { updateEpisodeComplete } from "./modules/episodes/actions";
@@ -103,11 +102,8 @@ export const init = (store: Store<RootState>) => {
     },
     {
       connected: () => {},
-      received: action => {
-        handleCableAction(
-          camelcaseKeys(action, { deep: true }) as CableAction,
-          store.dispatch
-        );
+      received: (action: CableAction) => {
+        handleCableAction(action, store.dispatch);
       },
       disconnected: () => {},
     }

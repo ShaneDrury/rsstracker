@@ -18,9 +18,8 @@ export const fetchFeeds = async (): Promise<RemoteFeed[]> => {
 };
 
 export const fetchFeed = async (feedId: string): Promise<RemoteFeed> => {
-  const feedsResponse = await apiFetch(`/feeds/${feedId}`);
-  const camel = feedsResponse as ApiFeed;
-  return processFeed(camel.data);
+  const feedsResponse: ApiFeed = await apiFetch(`/feeds/${feedId}`);
+  return processFeed(feedsResponse.data);
 };
 
 export const updateFeeds = async (): Promise<UpdateFeedsResponse> =>
