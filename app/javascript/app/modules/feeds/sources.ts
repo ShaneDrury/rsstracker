@@ -1,10 +1,10 @@
 import * as shortid from "shortid";
 import { ApiFeed, FeedData, RemoteFeed } from "../../types/feed";
-import { ProviderJob } from "../../types/job";
+import { ProviderJobs } from "../../types/job";
 import apiFetch from "../apiFetch";
 
 export interface UpdateFeedsResponse {
-  jobs: ProviderJob[];
+  jobs: ProviderJobs;
 }
 
 export const processFeed = (feed: FeedData): RemoteFeed => ({
