@@ -54,7 +54,7 @@ class EpisodesController < ApplicationController
             raise "Unknown source type"
           end
     job = Delayed::Job.find(active_job.provider_job_id)
-    render json: { job: job }, status: :accepted
+    render json: job, status: :accepted
   end
 
   # POST /episodes

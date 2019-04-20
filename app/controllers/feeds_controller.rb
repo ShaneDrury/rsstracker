@@ -38,13 +38,13 @@ class FeedsController < ApplicationController
   def update_feed
     active_job = @feed.update_episodes
     job = Delayed::Job.find(active_job.provider_job_id)
-    render json: { job: job }, status: :accepted
+    render json: job, status: :accepted
   end
 
   def update_feeds
     active_jobs = Feed.update_all.flatten.uniq
     jobs = Delayed::Job.find(active_jobs.map(&:provider_job_id))
-    render json: { jobs: jobs }, status: :accepted
+    render json: jobs, status: :accepted
   end
 
   # PATCH/PUT /feeds/1
