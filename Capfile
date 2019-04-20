@@ -9,7 +9,6 @@ require 'capistrano/puma'
 require "capistrano/scm/git"
 require 'capistrano/delayed_job'
 require "whenever/capistrano"
-require "capistrano/sentry"
 
 install_plugin Capistrano::Puma
 install_plugin Capistrano::SCM::Git
