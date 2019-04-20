@@ -33,7 +33,7 @@ set :delayed_job_workers, 4
 set :delayed_job_pid_dir, '/tmp'
 
 set :sentry_host, "http://ubuntu.home:9001/"
-set :sentry_api_token, "http://d88d154936bc4afc924191fb2d4fee84@ubuntu.home:9001/1"
+set :sentry_api_token, "5b2c05ef96f7465885b195a9a338a56b940725763ae0414e8d3975c51b392212"
 set :sentry_organization, "sentry"
 
 after 'deploy:published', 'sentry:notice_deployment'
