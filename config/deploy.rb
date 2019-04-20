@@ -4,7 +4,7 @@ lock "~> 3.11.0"
 # Change these
 server '192.168.1.94', roles: [:web, :app, :db], primary: true
 
-set :repo_url,        'git@gitlab.com:ShaneDrury/rsstracker.git'
+set :repo_url,        'git@gitlab.com:rsstracker/rsstracker.git'
 set :application,     'rsstracker'
 set :user,            'deploy'
 set :puma_threads,    [4, 16]
@@ -31,6 +31,12 @@ set :linked_files, fetch(:linked_files, []).push("config/master.key")
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'public/uploads', 'storage'
 set :delayed_job_workers, 4
 set :delayed_job_pid_dir, '/tmp'
+
+set :sentry_host, "http://ubuntu.home:9001/"
+set :sentry_api_token, "http://d88d154936bc4afc924191fb2d4fee84@ubuntu.home:9001/1"
+set :sentry_organization, "sentry"
+
+after 'deploy:published', 'sentry:notice_deployment'
 
 ## Defaults:
 # set :scm,           :git
