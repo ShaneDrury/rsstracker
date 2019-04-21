@@ -23,7 +23,7 @@ interface PropsExtended {
 
 interface DispatchProps {
   fetchEpisode: (episodeId: string) => void;
-  handleDetailOpened: (episodeId: string) => void;
+  onDetailOpened: (episodeId: string) => void;
 }
 
 type Props = PropsExtended & DispatchProps;
@@ -52,70 +52,65 @@ const PlayerWrapper = styled.div`
   margin-top: auto;
 `;
 
-interface State {
-  active: boolean;
-}
+const GlobalPlayer: React.FunctionComponent<Props> = ({
+  episodeId,
+  fetched,
+  episodeName,
+  fetchEpisode,
+  onDetailOpened,
+  isDetailOpen,
+  playing,
+}) => {
+  const [active, setActive] = React.useState(false);
 
-export class GlobalPlayer extends React.Component<Props, State> {
-  public state = {
-    active: false,
-  };
-
-  public componentDidMount() {
-    if (this.props.episodeId && !this.props.fetched) {
-      this.props.fetchEpisode(this.props.episodeId);
-    }
-  }
-
-  public handleDetailOpened = () => {
-    if (!this.props.episodeId) {
+  const handleDetailOpened = () => {
+    if (!episodeId) {
       return;
     }
-    this.props.handleDetailOpened(this.props.episodeId);
+    onDetailOpened(episodeId);
   };
 
-  public handleShow = () => {
-    this.setState({ active: true });
+  const handleShow = () => {
+    setActive(true);
   };
 
-  public render() {
-    if (this.props.fetched && this.props.episodeId) {
-      return (
-        <Wrapper>
-          {this.props.episodeName && (
-            <NameWrapper>{this.props.episodeName}</NameWrapper>
-          )}
-          <InfoButtonWrapper>
-            <button
-              className={classnames("button", {
-                "is-static": this.props.isDetailOpen,
-              })}
-              onClick={this.handleDetailOpened}
-            >
-              <span className="icon">
-                <Icon icon={faInfoCircle} />
-              </span>
-              <span>Info</span>
-            </button>
-          </InfoButtonWrapper>
-          <PlayerWrapper>
-            {this.state.active ? (
-              <Player
-                episodeId={this.props.episodeId}
-                playing={this.props.playing}
-              />
-            ) : (
-              <button className="button" onClick={this.handleShow}>
-                <Icon icon={faPlay} />
-              </button>
-            )}
-          </PlayerWrapper>
-        </Wrapper>
-      );
+  React.useEffect(() => {
+    if (episodeId && !fetched) {
+      fetchEpisode(episodeId);
     }
-    return null;
+  });
+
+  if (fetched && episodeId) {
+    return (
+      <Wrapper>
+        {episodeName && <NameWrapper>{episodeName}</NameWrapper>}
+        <InfoButtonWrapper>
+          <button
+            className={classnames("button", {
+              "is-static": isDetailOpen,
+            })}
+            onClick={handleDetailOpened}
+          >
+            <span className="icon">
+              <Icon icon={faInfoCircle} />
+            </span>
+            <span>Info</span>
+          </button>
+        </InfoButtonWrapper>
+        <PlayerWrapper>
+          {active ? (
+            <Player episodeId={episodeId} playing={playing} />
+          ) : (
+            <button className="button" onClick={handleShow}>
+              <Icon icon={faPlay} />
+            </button>
+          )}
+        </PlayerWrapper>
+      </Wrapper>
+    );
   }
-}
+  return null;
+};
 
 const mapStateToProps = (state: RootState): PropsExtended => {
   const episodeId = getPlayingEpisodeId(state);
@@ -134,7 +129,7 @@ const mapStateToProps = (state: RootState): PropsExtended => {
 
 const mapDispatchToProps = {
   fetchEpisode: fetchEpisodeRequested,
-  handleDetailOpened: detailsOpened,
+  onDetailOpened: detailsOpened,
 };
 
 export default connect(
