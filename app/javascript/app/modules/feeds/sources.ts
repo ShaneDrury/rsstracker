@@ -12,11 +12,6 @@ export const processFeed = (feed: FeedData): RemoteFeed => ({
   sources: feed.relationships.allSources.data,
 });
 
-export const fetchFeeds = async (): Promise<RemoteFeed[]> => {
-  const feedsResponse = await apiFetch("/feeds");
-  return feedsResponse.items.map(processFeed);
-};
-
 export const fetchFeed = async (feedId: string): Promise<RemoteFeed> => {
   const feedsResponse: ApiFeed = await apiFetch(`/feeds/${feedId}`);
   return processFeed(feedsResponse.data);

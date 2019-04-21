@@ -1,4 +1,7 @@
-export default async (url: RequestInfo, options?: RequestInit) => {
+export default async <R = unknown>(
+  url: RequestInfo,
+  options?: RequestInit
+): Promise<R> => {
   const response = await fetch(url, {
     ...options,
     headers: {
