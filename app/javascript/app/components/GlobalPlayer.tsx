@@ -1,4 +1,4 @@
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle, faPlay } from "@fortawesome/free-solid-svg-icons";
 import classnames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
@@ -52,7 +52,15 @@ const PlayerWrapper = styled.div`
   margin-top: auto;
 `;
 
-export class GlobalPlayer extends React.PureComponent<Props> {
+interface State {
+  active: boolean;
+}
+
+export class GlobalPlayer extends React.Component<Props, State> {
+  public state = {
+    active: false,
+  };
+
   public componentDidMount() {
     if (this.props.episodeId && !this.props.fetched) {
       this.props.fetchEpisode(this.props.episodeId);
@@ -64,6 +72,10 @@ export class GlobalPlayer extends React.PureComponent<Props> {
       return;
     }
     this.props.handleDetailOpened(this.props.episodeId);
+  };
+
+  public handleShow = () => {
+    this.setState({ active: true });
   };
 
   public render() {
@@ -87,10 +99,16 @@ export class GlobalPlayer extends React.PureComponent<Props> {
             </button>
           </InfoButtonWrapper>
           <PlayerWrapper>
-            <Player
-              episodeId={this.props.episodeId}
-              playing={this.props.playing}
-            />
+            {this.state.active ? (
+              <Player
+                episodeId={this.props.episodeId}
+                playing={this.props.playing}
+              />
+            ) : (
+              <button className="button" onClick={this.handleShow}>
+                <Icon icon={faPlay} />
+              </button>
+            )}
           </PlayerWrapper>
         </Wrapper>
       );
