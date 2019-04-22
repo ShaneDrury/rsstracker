@@ -6,6 +6,7 @@ export interface State {
     [key: string]: number;
   };
   playing: boolean;
+  enabled: boolean;
 }
 
 const savedSecondsJSON = localStorage.getItem("savedSeconds");
@@ -20,6 +21,7 @@ const initialState: State = {
   saved: savedSeconds,
   playingEpisodeId,
   playing: false,
+  enabled: false,
 };
 
 const player = (state: State = initialState, action: Action): State => {
@@ -57,6 +59,13 @@ const player = (state: State = initialState, action: Action): State => {
         ...state,
         playingEpisodeId: action.payload.playingEpisodeId,
         playing: true,
+        enabled: true,
+      };
+    }
+    case actions.PLAYER_ENABLED: {
+      return {
+        ...state,
+        enabled: true,
       };
     }
     default:

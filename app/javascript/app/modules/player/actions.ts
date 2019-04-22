@@ -3,6 +3,7 @@ export enum actions {
   PLAY_TOGGLED = "PLAY_TOGGLED",
   PLAYER_PAUSED = "PLAYER_PAUSED",
   PLAYER_RESUMED = "PLAYER_RESUMED",
+  PLAYER_ENABLED = "PLAYER_ENABLED",
 }
 
 export interface PlayedSecondsUpdated {
@@ -23,11 +24,16 @@ interface PlayerResumed {
   type: actions.PLAYER_RESUMED;
 }
 
+interface PlayerEnabled {
+  type: actions.PLAYER_ENABLED;
+}
+
 export type Action =
   | PlayedSecondsUpdated
   | PlayToggled
   | PlayerPaused
-  | PlayerResumed;
+  | PlayerResumed
+  | PlayerEnabled;
 
 export const playedSecondsUpdated = (
   episodeId: string,
@@ -48,4 +54,8 @@ export const playerPaused = () => ({
 
 export const playerResumed = () => ({
   type: actions.PLAYER_RESUMED,
+});
+
+export const playerEnabled = () => ({
+  type: actions.PLAYER_ENABLED,
 });

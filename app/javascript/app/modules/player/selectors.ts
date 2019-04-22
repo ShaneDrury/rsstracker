@@ -17,3 +17,6 @@ export const getPlayingEpisode = createSelector(
 export const getPlayedSeconds = (state: RootState) => state.player.saved;
 
 export const getPlaying = (state: RootState): boolean => state.player.playing;
+
+export const getPlayerEnabled = (state: RootState): boolean =>
+  state.player.enabled;

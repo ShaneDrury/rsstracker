@@ -8,10 +8,15 @@ import {
   fetchEpisodeRequested,
 } from "../modules/episodes/actions";
 import { getDetailEpisodeId, getEpisodes } from "../modules/episodes/selectors";
-import { getPlaying, getPlayingEpisodeId } from "../modules/player/selectors";
+import {
+  getPlayerEnabled,
+  getPlaying,
+  getPlayingEpisodeId,
+} from "../modules/player/selectors";
 import { RootState } from "../modules/reducers";
 import { Icon } from "./Icon";
 import Player from "./Player";
+import { playerEnabled } from "../modules/player/actions";
 
 interface PropsExtended {
   episodeName?: string;
@@ -19,11 +24,13 @@ interface PropsExtended {
   fetched: boolean;
   playing: boolean;
   isDetailOpen: boolean;
+  playerEnabled: boolean;
 }
 
 interface DispatchProps {
   fetchEpisode: (episodeId: string) => void;
   onDetailOpened: (episodeId: string) => void;
+  onPlayerEnabled: () => void;
 }
 
 type Props = PropsExtended & DispatchProps;
@@ -60,18 +67,14 @@ const GlobalPlayer: React.FunctionComponent<Props> = ({
   onDetailOpened,
   isDetailOpen,
   playing,
+  playerEnabled,
+  onPlayerEnabled,
 }) => {
-  const [active, setActive] = React.useState(false);
-
   const handleDetailOpened = () => {
     if (!episodeId) {
       return;
     }
     onDetailOpened(episodeId);
-  };
-
-  const handleShow = () => {
-    setActive(true);
   };
 
   React.useEffect(() => {
@@ -98,10 +101,10 @@ const GlobalPlayer: React.FunctionComponent<Props> = ({
           </button>
         </InfoButtonWrapper>
         <PlayerWrapper>
-          {active ? (
+          {playerEnabled ? (
             <Player episodeId={episodeId} playing={playing} />
           ) : (
-            <button className="button" onClick={handleShow}>
+            <button className="button" onClick={onPlayerEnabled}>
               <Icon icon={faPlay} />
             </button>
           )}
@@ -118,18 +121,21 @@ const mapStateToProps = (state: RootState): PropsExtended => {
   const episodeName = episode && episode.name;
   const playing = getPlaying(state);
   const detailEpisodeId = getDetailEpisodeId(state);
+  const playerEnabled = getPlayerEnabled(state);
   return {
     episodeName,
     episodeId,
     fetched: !!episode,
     playing,
     isDetailOpen: detailEpisodeId === episodeId,
+    playerEnabled,
   };
 };
 
 const mapDispatchToProps = {
   fetchEpisode: fetchEpisodeRequested,
   onDetailOpened: detailsOpened,
+  onPlayerEnabled: playerEnabled,
 };
 
 export default connect(
