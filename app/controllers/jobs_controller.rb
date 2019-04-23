@@ -11,7 +11,10 @@ class JobsController < ApplicationController
 
   def destroy
     @job.destroy
-    render json: { message: 'OK' }, status: 202
+    respond_to do |format|
+      format.json { head :no_content }
+      format.html { redirect_to jobs_url }
+    end
   end
 
   private

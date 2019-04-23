@@ -9,6 +9,7 @@
       <th>Last error</th>
       <th>Created at</th>
       <th>Run at</th>
+      <th></th>
     </tr>
     </thead>
     <% @jobs.each do |job| %>
@@ -37,7 +38,16 @@
         <td>
           <%= job.run_at %>
         </td>
+        <td>
+          <%= form_for job, method: :delete, builder: BulmaFormBuilder, url: job_path(job) do |f| %>
+            <%= f.confirmation_button(name: "Delete") %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </table>
 </div>
+
+<% content_for :react do %>
+  <%= javascript_pack_tag 'feed_form' %>
+<% end %>
