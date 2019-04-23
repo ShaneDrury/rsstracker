@@ -36,7 +36,11 @@ Rails.application.routes.draw do
 
   resources :feed_guesses
 
-  resources :jobs
+  resources :jobs do
+    member do
+      post :retry
+    end
+  end
 
   resources :fetch_statuses
 

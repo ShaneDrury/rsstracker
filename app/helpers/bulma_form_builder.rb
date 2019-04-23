@@ -6,8 +6,8 @@ class BulmaFormBuilder < ActionView::Helpers::FormBuilder
 
   def multipart?; end
 
-  def submit(options={})
-    wrap_field(super(options.reverse_merge(class: "button is-primary")))
+  def submit(label = nil, options={})
+    wrap_field(super(label, options.reverse_merge(class: "button is-primary")))
   end
 
   def text_field(attribute, options={})

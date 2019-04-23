@@ -10,6 +10,7 @@
       <th>Created at</th>
       <th>Run at</th>
       <th></th>
+      <th></th>
     </tr>
     </thead>
     <% @jobs.each do |job| %>
@@ -37,6 +38,11 @@
         </td>
         <td>
           <%= job.run_at %>
+        </td>
+        <td>
+          <%= form_for job, builder: BulmaFormBuilder, method: "POST", url: retry_job_path(job) do |f| %>
+            <%= f.submit "Retry" %>
+          <% end %>
         </td>
         <td>
           <%= form_for job, method: :delete, builder: BulmaFormBuilder, url: job_path(job) do |f| %>
