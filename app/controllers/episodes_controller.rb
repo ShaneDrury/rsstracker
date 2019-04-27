@@ -17,7 +17,7 @@ class EpisodesController < ApplicationController
 
   def duplicates
     dup_names = Episode.unscoped.select(:name, "count(*)").group(:name).having("count(*) > 1").pluck(:name)
-    @episodes = Episode.where(name: dup_names)
+    @episodes = Episode.where(name: dup_names).order(name: :asc, id: :asc )
     respond_to do |format|
       format.html
       format.json { render json: @episodes }
