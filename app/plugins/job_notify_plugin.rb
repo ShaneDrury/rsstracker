@@ -1,7 +1,7 @@
 require 'delayed_job'
 
 class JobNotifyPlugin < Delayed::Plugin
-  BROADCAST_BLACKLIST = %w[EpisodeUpdateBroadcastJob FeedUpdateBroadcastJob ActiveStorage::AnalyzeJob].freeze
+  BROADCAST_BLACKLIST = %w[EpisodeUpdateBroadcastJob FeedUpdateBroadcastJob ActiveStorage::AnalyzeJob ActiveStorage::PurgeJob].freeze
 
   callbacks do |lifecycle|
     lifecycle.before(:invoke_job) do |job|
