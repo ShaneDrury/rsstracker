@@ -77,7 +77,7 @@ class EpisodesController < ApplicationController
     @episode.destroy
     respond_to do |format|
       format.json { head :no_content }
-      format.html { redirect_to episodes_url }
+      format.html { redirect_back(fallback_location: episodes_url) }
     end
   end
 
