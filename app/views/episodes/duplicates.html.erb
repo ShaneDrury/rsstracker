@@ -5,6 +5,7 @@
     <tr>
       <th>ID</th>
       <th>Name</th>
+      <th>Status</th>
       <th></th>
     </tr>
     </thead>
@@ -15,6 +16,9 @@
         </td>
         <td>
           <%= link_to episode.name, episode_url(episode) %>
+        </td>
+        <td>
+          <%= episode.fetch_status.status %>
         </td>
         <td>
           <%= form_for episode, method: :delete, builder: BulmaFormBuilder do |f| %>
