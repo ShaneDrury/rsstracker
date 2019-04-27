@@ -5,6 +5,7 @@
     <tr>
       <th>ID</th>
       <th>Name</th>
+      <th></th>
     </tr>
     </thead>
     <% @episodes.each do |episode| %>
@@ -15,7 +16,16 @@
         <td>
           <%= link_to episode.name, episode_url(episode) %>
         </td>
+        <td>
+          <%= form_for episode, method: :delete, builder: BulmaFormBuilder do |f| %>
+            <%= f.confirmation_button(name: "Delete") %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </table>
 </div>
+
+<% content_for :react do %>
+  <%= javascript_pack_tag 'feed_form' %>
+<% end %>
