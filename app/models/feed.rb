@@ -23,6 +23,7 @@ class Feed < ApplicationRecord
   end
 
   def self.all_unique_sources
+    # TODO: Non disabled sources?
     all.map(&:all_sources).flatten.uniq
   end
 
@@ -38,18 +39,12 @@ class Feed < ApplicationRecord
     FeedUpdateBroadcastJob.perform_later(id)
   end
 
-  def as_json(*args)
-    super(methods: [:relative_image_link, :status_counts, :source_type]).tap do |hsh|
-      hsh["sources"] = all_sources
-    end
-  end
-
   def all_sources
-    sources.where(disabled: false) | guessing_sources.where(disabled: false)
+    Source.for_feed(id).where(disabled: false)
   end
 
   def source_type
-    source_types = (sources | guessing_sources).map(&:source_type).uniq
+    source_types = Source.for_feed(id).distinct.pluck(:source_type)
     if source_types.length == 1
       source_types[0]
     elsif source_types.length > 1
