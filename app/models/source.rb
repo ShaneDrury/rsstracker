@@ -18,8 +18,4 @@ class Source < ApplicationRecord
       raise 'Unknown source type'
     end
   end
-
-  def as_json(*args)
-    super(include: { feed: { only: [:id] } })
-  end
 end

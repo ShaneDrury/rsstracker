@@ -15,19 +15,11 @@ class Episode < ApplicationRecord
     "#{request.protocol}#{request.host}:#{request.port}#{relative_image_link}" if thumbnail_url
   end
 
-  def relative_image_link
-    "/uploads/#{feed_id}/#{thumbnail_url}" if thumbnail_url
-  end
-
   def full_url
     source.source_type == 'youtube' ? "https://www.youtube.com/watch?v=#{url}" : url
   end
 
   def small_thumbnail
     thumbnail.variant(resize: "128x128") if thumbnail.attached?
-  end
-
-  def as_json(options={})
-    super(include: { fetch_status: { methods: :percentage_fetched } }, methods: [:full_url, :relative_image_link])
   end
 end
