@@ -44,6 +44,10 @@ class Feed < ApplicationRecord
     Source.for_feed(id).where(disabled: false)
   end
 
+  def all_sources_with_disabled
+    Source.for_feed(id)
+  end
+
   def source_type
     source_types = Source.for_feed(id).distinct.pluck(:source_type)
     if source_types.length == 1

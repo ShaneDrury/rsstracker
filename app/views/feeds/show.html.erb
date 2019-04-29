@@ -5,6 +5,7 @@
       <%= f.text_field :name %>
       <%= f.text_area :description %>
       <%= f.check_box :autodownload %>
+      <%= f.collection_select :preferred_source_id, @feed.all_sources_with_disabled, :id, :url, include_blank: true %>
       <%= f.submit %>
     <% end %>
     <%= image_tag @feed.thumbnail.variant(resize: "250x250") if @feed.thumbnail.attached? %>
@@ -22,7 +23,7 @@
         <th></th>
       </tr>
       </thead>
-      <% @feed.sources.each do |source| %>
+      <% @feed.all_sources_with_disabled.each do |source| %>
         <tr>
           <td>
             <%= source.id %>
