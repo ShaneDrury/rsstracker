@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_14_131305) do
+ActiveRecord::Schema.define(version: 2019_04_29_202042) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -85,6 +85,8 @@ ActiveRecord::Schema.define(version: 2019_04_14_131305) do
     t.text "image_url"
     t.text "description"
     t.boolean "autodownload", default: false
+    t.integer "preferred_source_id"
+    t.index ["preferred_source_id"], name: "index_feeds_on_preferred_source_id"
   end
 
   create_table "fetch_statuses", force: :cascade do |t|
