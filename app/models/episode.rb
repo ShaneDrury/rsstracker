@@ -7,6 +7,10 @@ class Episode < ApplicationRecord
 
   default_scope { order(publication_date: :desc, created_at: :desc) }
 
+  scope :duplicates_for, ->(episode) do
+    where(name: episode.name, feed: episode.feed).where.not(id: episode.id)
+  end
+
   after_update_commit do
     EpisodeUpdateBroadcastJob.perform_later(id)
   end
