@@ -29,7 +29,6 @@ class DownloadEpisodeJob < ApplicationJob
 
     episode_folder = episode.feed.name.parameterize
     download_path = File.join(episode_folder, episode_filename)
-    abs_download_path = File.join(download_root, download_path)
     FileUtils.mkdir_p File.join(download_root, episode_folder)
 
     content_length_proc = lambda do |content_length|
