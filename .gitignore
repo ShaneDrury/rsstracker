@@ -26,6 +26,7 @@
 /config/master.key
 .irb_history
 public/uploads/
+public/shrine/
 /public/packs
 /public/packs-test
 /node_modules
