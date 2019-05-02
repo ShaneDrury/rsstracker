@@ -29,6 +29,6 @@ class Episode < ApplicationRecord
   end
 
   def audio_url
-    File.join(Rails.application.config.storage_root, audio_attachment.audio_url) if audio_attachment&.audio&.exists?
+    File.join(Rails.application.config.storage_root, "shrine", audio_attachment.audio_url) if audio_attachment&.audio&.exists?
   end
 end
