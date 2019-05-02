@@ -3,7 +3,6 @@ class AudioUploader < Shrine
   plugin :determine_mime_type
   plugin :pretty_location
   plugin :delete_promoted
-  plugin :delete_raw
   plugin :logging
   plugin :recache
 
