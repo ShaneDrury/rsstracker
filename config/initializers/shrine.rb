@@ -26,8 +26,8 @@ end
 
 def development_storages
   {
-    cache: Shrine::Storage::FileSystem.new('storage/shrine', prefix: 'cache'),
-    store: Shrine::Storage::FileSystem.new('storage/shrine', prefix: 'audio'),
+    cache: Shrine::Storage::FileSystem.new('public/shrine', prefix: 'cache'),
+    store: Shrine::Storage::FileSystem.new('public/shrine', prefix: 'audio'),
   }
 end
 
