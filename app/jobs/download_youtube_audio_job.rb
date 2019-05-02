@@ -20,7 +20,6 @@ class DownloadYoutubeAudioJob < ApplicationJob
 
     episode_filename = '%(id)s.%(ext)s'
     episode_folder = episode.feed.name.parameterize
-    FileUtils.mkdir_p File.join(Rails.application.config.download_root, episode_folder)
 
     Dir.mktmpdir do |temp_dir|
       tmp_path = File.join(temp_dir, episode_folder, episode_filename)
@@ -32,13 +31,17 @@ class DownloadYoutubeAudioJob < ApplicationJob
       end
       out = `#{Rails.application.config.youtube_dl_path} -j -- #{url}`
       json = JSON.parse(out)
-      Dir.entries(Rails.application.config.download_root)
-      FileUtils.mv(File.join(temp_dir, episode_folder, "#{json['id']}.m4a"), File.join(Rails.application.config.download_root, episode_folder, '/'))
-      actual_download_path = File.join(episode_folder, "#{json['id']}.m4a")
-      filesize = `gstat --printf="%s" "#{File.join(Rails.application.config.download_root, actual_download_path)}"`
+      temp_file_path = File.join(temp_dir, episode_folder, "#{json['id']}.m4a")
+
+      audio_attachment = episode.create_audio_attachment
+      audio_attachment.audio = File.open(temp_file_path, binmode: true)
+      audio_attachment.save
+
+      filesize = 0
       description = json['description']
       duration = Time.at(json['duration']).utc.strftime('%H:%M:%S')
       publication_date = Date.strptime(json['upload_date'], '%Y%m%d')
+
       episode.update_attributes(
         description: description,
         duration: duration,
@@ -46,7 +49,7 @@ class DownloadYoutubeAudioJob < ApplicationJob
       )
       episode.build_fetch_status(
         status: 'SUCCESS',
-        url: File.join(Rails.application.config.storage_root, actual_download_path),
+        url: "",
         bytes_total: filesize
       ).save
     end
