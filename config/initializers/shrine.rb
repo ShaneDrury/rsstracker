@@ -13,6 +13,7 @@ require 'shrine/plugins/pretty_location'
 Shrine.plugin :activerecord
 Shrine.plugin :backgrounding
 Shrine.plugin :data_uri
+Shrine.plugin :delete_promoted
 Shrine.plugin :logging
 Shrine.plugin :restore_cached_data
 
