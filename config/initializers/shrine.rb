@@ -20,7 +20,7 @@ def production_storages
   # Your probably want the directory to be in a shared location so its persisted between deployments
   {
     cache: Shrine::Storage::FileSystem.new('storage/shrine', prefix: 'cache'),
-    store: Shrine::Storage::FileSystem.new(Rails.application.config.download_root.join("shrine"), prefix: 'audio'),
+    store: Shrine::Storage::FileSystem.new(File.join(Rails.application.config.download_root, "shrine"), prefix: 'audio'),
   }
 end
 
