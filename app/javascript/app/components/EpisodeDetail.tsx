@@ -102,6 +102,7 @@ export class Episode extends React.Component<Props> {
       fullUrl,
       updating,
       isFavourited,
+      audioUrl,
     } = this.props;
     return (
       <div className="tile is-parent">
@@ -109,7 +110,7 @@ export class Episode extends React.Component<Props> {
           <TitleWrapper>
             <NameWrapper className="title is-5 is-spaced">
               {fetchStatus.status === "SUCCESS" && (
-                <a href={fetchStatus.url}>{name}</a>
+                <a href={audioUrl || fetchStatus.url}>{name}</a>
               )}
               {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
             </NameWrapper>

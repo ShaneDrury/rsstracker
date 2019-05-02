@@ -28,6 +28,7 @@ interface DataProps {
 
 interface PropsExtended {
   name: string;
+  audioUrl: string | undefined;
   description: string;
   publicationDate: string;
   smallThumbnail?: string;
@@ -86,6 +87,7 @@ export class Episode extends React.Component<Props> {
     }
 
     return (
+      this.props.audioUrl !== nextProps.audioUrl ||
       this.props.name !== nextProps.name ||
       this.props.description !== nextProps.description ||
       this.props.publicationDate !== nextProps.publicationDate ||
@@ -122,13 +124,14 @@ export class Episode extends React.Component<Props> {
       publicationDate,
       smallThumbnail,
       updating,
+      audioUrl,
     } = this.props;
     return (
       <EpisodeWrapper className="tile is-child box">
         <Title>
           <Name className="title is-5 is-spaced">
             {fetchStatus.status === "SUCCESS" && (
-              <a href={fetchStatus.url}>{name}</a>
+              <a href={audioUrl || fetchStatus.url}>{name}</a>
             )}
             {!(fetchStatus.status === "SUCCESS") && <div>{name}</div>}
           </Name>
@@ -190,6 +193,7 @@ const mapStateToProps = (
   const detailEpisodeId = getDetailEpisodeId(state);
   const episode = getEpisodes(state)[ownProps.episodeId];
   return {
+    audioUrl: episode.audioUrl,
     name: episode.name,
     description: episode.description,
     publicationDate: episode.publicationDate,

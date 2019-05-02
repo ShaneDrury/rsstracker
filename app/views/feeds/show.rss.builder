@@ -23,7 +23,7 @@ xml.rss :version => '2.0',
         xml.itunes :duration, episode.duration
         xml.media :thumbnail, url: polymorphic_url(episode.thumbnail) if episode.thumbnail.attached?
         xml.media :content,
-          url: episode.fetch_status.url,
+          url: episode.audio_url || episode.fetch_status.url,
           fileSize: episode.file_size.to_s,
           duration: episode.duration
         xml.guid({:isPermaLink => "false"}, episode.guid)

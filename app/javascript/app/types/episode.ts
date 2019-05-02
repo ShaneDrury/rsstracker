@@ -24,6 +24,7 @@ export interface EpisodeData {
   links: {
     smallThumbnail: string | undefined;
     largeThumbnail: string | undefined;
+    audioUrl: string | undefined;
   };
 }
 
@@ -42,4 +43,5 @@ export interface RemoteEpisode extends EpisodeAttributes {
   feedId: string;
   smallThumbnail: string | undefined;
   largeThumbnail: string | undefined;
+  audioUrl: string | undefined;
 }

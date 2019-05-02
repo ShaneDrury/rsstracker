@@ -111,7 +111,10 @@ const mapStateToProps = (
   const playingEpisodeId = ownProps.episodeId;
   const episode = getEpisodes(state)[playingEpisodeId];
   const fetchStatus = episode && episode.fetchStatus;
-  const url = fetchStatus.status === "SUCCESS" ? fetchStatus.url : undefined;
+  const url =
+    fetchStatus.status === "SUCCESS"
+      ? episode.audioUrl || fetchStatus.url
+      : undefined;
   const playedSeconds = getPlayedSeconds(state)[ownProps.episodeId];
   return {
     url,

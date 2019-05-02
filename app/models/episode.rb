@@ -27,4 +27,8 @@ class Episode < ApplicationRecord
   def small_thumbnail
     thumbnail.variant(resize: "128x128") if thumbnail.attached?
   end
+
+  def audio_url
+    File.join(Rails.application.config.storage_root, audio_attachment.audio_url) if audio_attachment&.audio&.exists?
+  end
 end
