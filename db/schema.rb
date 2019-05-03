@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_02_200308) do
+ActiveRecord::Schema.define(version: 2019_05_03_130525) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 2019_05_02_200308) do
   end
 
   create_table "audio_attachments", force: :cascade do |t|
-    t.string "audio_data"
+    t.text "audio_data"
     t.integer "episode_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -71,7 +71,6 @@ ActiveRecord::Schema.define(version: 2019_05_02_200308) do
     t.text "thumbnail_url"
     t.boolean "seen", default: true
     t.integer "source_id"
-    t.integer "duplicate_set_id"
     t.index ["feed_id"], name: "index_episodes_on_feed_id"
     t.index ["guid"], name: "index_episodes_on_guid", unique: true
     t.index ["source_id"], name: "index_episodes_on_source_id"
@@ -90,12 +89,9 @@ ActiveRecord::Schema.define(version: 2019_05_02_200308) do
   create_table "feeds", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "url"
     t.text "name"
     t.text "image_url"
     t.text "description"
-    t.text "source"
-    t.boolean "disabled", default: false
     t.boolean "autodownload", default: false
     t.integer "preferred_source_id"
     t.index ["preferred_source_id"], name: "index_feeds_on_preferred_source_id"
@@ -129,7 +125,6 @@ ActiveRecord::Schema.define(version: 2019_05_02_200308) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "source_type", default: ""
-    t.integer "feed_id"
     t.text "name"
   end
 
