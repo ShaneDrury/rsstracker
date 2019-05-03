@@ -19,10 +19,9 @@ class DownloadYoutubeAudioJob < ApplicationJob
     url = episode.url
 
     episode_filename = '%(id)s.%(ext)s'
-    episode_folder = episode.feed.name.parameterize
 
     Dir.mktmpdir do |temp_dir|
-      tmp_path = File.join(temp_dir, episode_folder, episode_filename)
+      tmp_path = File.join(temp_dir, episode_filename)
       result = system "#{Rails.application.config.youtube_dl_path} -f 22 -o \"#{tmp_path}\" -x -- #{url}"
       result ||= system "#{Rails.application.config.youtube_dl_path} -f 18 -o \"#{tmp_path}\" -x -- #{url}"
       unless result
@@ -31,7 +30,7 @@ class DownloadYoutubeAudioJob < ApplicationJob
       end
       out = `#{Rails.application.config.youtube_dl_path} -j -- #{url}`
       json = JSON.parse(out)
-      temp_file_path = File.join(temp_dir, episode_folder, "#{json['id']}.m4a")
+      temp_file_path = File.join(temp_dir, "#{json['id']}.m4a")
 
       audio_attachment = episode.create_audio_attachment
       audio_attachment.audio = File.open(temp_file_path, binmode: true)
