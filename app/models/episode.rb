@@ -4,7 +4,7 @@ class Episode < ApplicationRecord
   has_one :fetch_status, as: :fetchable, dependent: :destroy
   belongs_to :source
   has_one_attached :thumbnail
-  has_one :audio_attachment
+  has_one :audio_attachment, dependent: :destroy
 
   default_scope { order(publication_date: :desc, created_at: :desc) }
 
