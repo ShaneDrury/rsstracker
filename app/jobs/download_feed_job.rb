@@ -36,7 +36,9 @@ class DownloadFeedJob < ApplicationJob
         ep.seen = false
         ep.save
         feed.touch
-        DownloadEpisodeJob.perform_later(ep.id) if feed.autodownload
+        unless Episode.duplicates_for(ep).exists?
+          DownloadEpisodeJob.perform_later(ep.id) if feed.autodownload
+        end
       end
     end
     nil
