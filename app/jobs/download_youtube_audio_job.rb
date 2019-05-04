@@ -24,9 +24,9 @@ class DownloadYoutubeAudioJob < ApplicationJob
       audio_attachment.save
 
       episode.update_attributes(
-        description: details['description'],
-        duration: Time.at(details['duration']).utc.strftime('%H:%M:%S'),
-        publication_date: Date.strptime(details['upload_date'], '%Y%m%d')
+        description: details.description,
+        duration: details.duration,
+        publication_date: details.publication_date,
       )
       episode.build_fetch_status(
         status: 'SUCCESS',

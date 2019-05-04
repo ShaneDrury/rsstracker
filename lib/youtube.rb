@@ -15,7 +15,12 @@ class Youtube
 
   def details(url)
     out = with_youtube_dl('-j', '--', url)
-    JSON.parse(out)
+    json_out = JSON.parse(out)
+    description = json_out['description']
+    duration = Time.at(json_out['duration']).utc.strftime('%H:%M:%S')
+    publication_date = Date.strptime(json_out['upload_date'], '%Y%m%d')
+    thumbnail_url = json_out['thumbnail']
+    EpisodeDetails.new(description, duration, publication_date, thumbnail_url)
   end
 
   def download_audio(url, quality: "22")
@@ -41,4 +46,6 @@ class Youtube
     raise YoutubeDlError, "Error running #{commands}" if status.exitstatus != 0
     out
   end
+
+  EpisodeDetails = Struct.new(:description, :duration, :publication_date, :thumbnail_url)
 end
