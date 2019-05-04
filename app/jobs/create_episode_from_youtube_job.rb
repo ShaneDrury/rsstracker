@@ -26,9 +26,9 @@ class CreateEpisodeFromYoutubeJob < ApplicationJob
       ep.feed.touch
       # TODO: If the new episode's source is preferred by the feed
       # download it and remove the other one
-      unless Episode.duplicates_for(ep).exists?
+      if ep.should_download?
         DownloadThumbnailJob.perform_later(ep.id)
-        DownloadYoutubeAudioJob.perform_later(ep.id) if ep.feed.autodownload
+        ep.download! if ep.feed.autodownload
       end
     end
   end

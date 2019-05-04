@@ -10,12 +10,20 @@ class Source < ApplicationRecord
   end
 
   def update_episodes
-    if source_type == 'rss'
+    if rss?
       DownloadFeedJob.perform_later(id)
-    elsif source_type == 'youtube'
+    elsif youtube?
       DownloadYoutubePlaylistJob.perform_later(id)
     else
       raise 'Unknown source type'
     end
+  end
+
+  def youtube?
+    source_type == "youtube"
+  end
+
+  def rss?
+    source_type == "rss"
   end
 end

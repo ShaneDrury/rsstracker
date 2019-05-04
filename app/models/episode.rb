@@ -21,7 +21,7 @@ class Episode < ApplicationRecord
   end
 
   def full_url
-    source.source_type == 'youtube' ? "https://www.youtube.com/watch?v=#{url}" : url
+    source.youtube? ? "https://www.youtube.com/watch?v=#{url}" : url
   end
 
   def small_thumbnail
@@ -30,5 +30,19 @@ class Episode < ApplicationRecord
 
   def audio_url
     File.join(Rails.application.config.storage_root, "shrine", audio_attachment.audio_url) if audio_attachment&.audio&.exists?
+  end
+
+  def should_download?
+    !Episode.duplicates_for(self).exists?
+  end
+
+  def download!
+    if source.rss?
+      DownloadEpisodeJob.perform_later(id)
+    elsif source.youtube?
+      DownloadYoutubeAudioJob.perform_later(id)
+    else
+      raise "Unknown source type"
+    end
   end
 end
