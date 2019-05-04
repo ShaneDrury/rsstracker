@@ -10,7 +10,8 @@ class Youtube
 
   def short_details(url)
     out = with_youtube_dl('--flat-playlist', '-j', '--', url)
-    out.split("\n").map { |line| JSON.parse(line) }
+    json_out = out.split("\n").map { |line| JSON.parse(line) }
+    ShortEpisodeDetails.new(json_out[:url], json_out[:title])
   end
 
   def details(url)
@@ -48,4 +49,5 @@ class Youtube
   end
 
   EpisodeDetails = Struct.new(:description, :duration, :publication_date, :thumbnail_url)
+  ShortEpisodeDetails = Struct.new(:url, :title)
 end

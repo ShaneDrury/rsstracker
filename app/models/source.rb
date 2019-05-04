@@ -26,4 +26,12 @@ class Source < ApplicationRecord
   def rss?
     source_type == "rss"
   end
+
+  def matching_feed(title = nil)
+    if feed.present?
+      feed
+    elsif feed_guesses.exists?
+      feed_guesses.detect { |guess| guess.matches_text?(title) }&.feed
+    end
+  end
 end
