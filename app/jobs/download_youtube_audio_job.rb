@@ -1,5 +1,3 @@
-require 'fileutils'
-
 class DownloadYoutubeAudioJob < ApplicationJob
   queue_as :default
 
@@ -18,39 +16,34 @@ class DownloadYoutubeAudioJob < ApplicationJob
     episode.build_fetch_status(status: 'LOADING').save
     url = episode.url
 
-    episode_filename = '%(id)s.%(ext)s'
+    youtube = Youtube.new(Rails.application.config.youtube_dl_path)
 
-    Dir.mktmpdir do |temp_dir|
-      tmp_path = File.join(temp_dir, episode_filename)
-      result = system "#{Rails.application.config.youtube_dl_path} -f 22 -o \"#{tmp_path}\" -x -- #{url}"
-      result ||= system "#{Rails.application.config.youtube_dl_path} -f 18 -o \"#{tmp_path}\" -x -- #{url}"
-      unless result
-        episode.build_fetch_status(status: 'FAILURE').save
-        raise "Failed!"
-      end
-      out = `#{Rails.application.config.youtube_dl_path} -j -- #{url}`
-      json = JSON.parse(out)
-      temp_file_path = File.join(temp_dir, "#{json['id']}.m4a")
-
+    handle_download = lambda do |f, details|
       audio_attachment = episode.create_audio_attachment
-      audio_attachment.audio = File.open(temp_file_path, binmode: true)
+      audio_attachment.audio = f
       audio_attachment.save
 
-      filesize = 0
-      description = json['description']
-      duration = Time.at(json['duration']).utc.strftime('%H:%M:%S')
-      publication_date = Date.strptime(json['upload_date'], '%Y%m%d')
-
       episode.update_attributes(
-        description: description,
-        duration: duration,
-        publication_date: publication_date
+        description: details['description'],
+        duration: Time.at(details['duration']).utc.strftime('%H:%M:%S'),
+        publication_date: Date.strptime(details['upload_date'], '%Y%m%d')
       )
       episode.build_fetch_status(
         status: 'SUCCESS',
         url: "",
-        bytes_total: filesize
+        bytes_total: 0
       ).save
+    end
+
+    begin
+      youtube.download_audio(url, quality: "22", &handle_download)
+    rescue Youtube::DownloadError
+      begin
+        youtube.download_audio(url, quality: "18", &handle_download)
+      rescue Youtube::DownloadError => e
+        episode.build_fetch_status(status: 'FAILURE').save
+        raise e
+      end
     end
     nil
   end
