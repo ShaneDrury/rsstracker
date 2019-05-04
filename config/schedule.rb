@@ -11,6 +11,11 @@ set :environment, "production"
 every 1.hour do
   rake 'update:feeds'
 end
+
+every 1.day do
+  rake 'shrine:clear_cache'
+end
+
 #
 # every 4.days do
 #   runner "AnotherModel.prune_old_records"
