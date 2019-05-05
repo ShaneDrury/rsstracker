@@ -29,6 +29,7 @@
   <%= form_for Source.new, builder: BulmaFormBuilder do |f| %>
     <%= f.text_field :url %>
     <%= f.text_field :source_type %>
+    <%= f.text_field :name %>
     <%= f.submit %>
   <% end %>
 </div>

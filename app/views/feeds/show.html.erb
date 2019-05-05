@@ -5,6 +5,7 @@
       <%= f.text_field :name %>
       <%= f.text_area :description %>
       <%= f.check_box :autodownload %>
+      <%= f.text_field :image_url %>
       <%= f.collection_select :preferred_source_id, @feed.all_sources_with_disabled, :id, :name, include_blank: true %>
       <%= f.submit %>
     <% end %>

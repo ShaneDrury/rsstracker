@@ -80,6 +80,6 @@ class FeedsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def feed_params
-    params.require(:feed).permit(:disabled, :autodownload, :name, :description, :preferred_source)
+    params.require(:feed).permit(:disabled, :autodownload, :name, :description, :preferred_source_id, :image_url)
   end
 end

@@ -14,7 +14,7 @@ class DownloadFeedJob < ApplicationJob
     if rss.nil?
       raise RssError.new("RSS Feed was nil. Source id: #{source_id}")
     end
-    if feed.image_url.empty?
+    if feed.image_url.nil?
       thumbnail_url = rss.channel.image.url
       thumbnail_filename = File.basename(URI(thumbnail_url).path)
       open(thumbnail_url, 'r') do |input|
