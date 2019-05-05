@@ -1,4 +1,3 @@
-require "youtube_episode_updater"
 require "youtube"
 
 class YoutubePlaylistDownloader

@@ -5,6 +5,7 @@ class Source < ApplicationRecord
   has_many :feeds, through: :feed_guesses
 
   scope :for_feed, ->(feed_id) do
+    # TODO: Remove dupes
     left_joins(:feed_guesses, :single_feed_source)
       .where("feed_guesses.feed_id = ? OR single_feed_sources.feed_id = ?", feed_id, feed_id)
   end

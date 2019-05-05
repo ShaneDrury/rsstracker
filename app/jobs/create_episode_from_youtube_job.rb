@@ -1,4 +1,4 @@
-require 'fileutils'
+require "youtube_episode_updater"
 
 class CreateEpisodeFromYoutubeJob < ApplicationJob
   queue_as :default
