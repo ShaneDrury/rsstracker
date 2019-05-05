@@ -77,13 +77,7 @@ class EpisodesController < ApplicationController
   def search
     episodes = Episode.includes(:fetch_status, :feed)
     episodes = episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
-    episodes = if params[:search_term].present?
-                 description = DbTextSearch::FullText.new(episodes, :description).search(params[:search_term])
-                 name = DbTextSearch::FullText.new(episodes, :name).search(params[:search_term])
-                 description.or(name)
-               else
-                 episodes
-               end
+    episodes = episodes.with_search_term(params[:search_term]) if params[:search_term].present?
     episodes = episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
     paged = episodes.page(params[:page_number] || 1).per(10)
 

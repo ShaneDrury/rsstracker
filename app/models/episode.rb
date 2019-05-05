@@ -12,6 +12,13 @@ class Episode < ApplicationRecord
     where(name: episode.name, feed: episode.feed).where.not(id: episode.id)
   end
 
+
+  scope :with_search_term, ->(term) do
+    description = DbTextSearch::FullText.new(self, :description).search(term)
+    name = DbTextSearch::FullText.new(self, :name).search(term)
+    description.or(name)
+  end
+
   after_update_commit do
     EpisodeUpdateBroadcastJob.perform_later(id)
   end
