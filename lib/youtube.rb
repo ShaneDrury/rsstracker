@@ -21,7 +21,7 @@ class Youtube
     duration = Time.at(json_out['duration']).utc.strftime('%H:%M:%S')
     publication_date = Date.strptime(json_out['upload_date'], '%Y%m%d')
     thumbnail_url = json_out['thumbnail']
-    EpisodeDetails.new(description, duration, publication_date, thumbnail_url)
+    EpisodeDetails.new(json_out['id'], description, duration, publication_date, thumbnail_url)
   end
 
   def download_audio(url, quality: "22")
@@ -33,7 +33,7 @@ class Youtube
         raise DownloadError("Could not download #{url} with quality #{quality} to #{tmp_path}")
       end
       json_details = details(url)
-      temp_file_path = File.join(temp_dir, "#{json_details['id']}.m4a")
+      temp_file_path = File.join(temp_dir, "#{json_details.id}.m4a")
       yield File.open(temp_file_path, binmode: true), json_details
     end
   end
@@ -48,6 +48,6 @@ class Youtube
     out
   end
 
-  EpisodeDetails = Struct.new(:description, :duration, :publication_date, :thumbnail_url)
+  EpisodeDetails = Struct.new(:id, :description, :duration, :publication_date, :thumbnail_url)
   ShortEpisodeDetails = Struct.new(:url, :title)
 end
