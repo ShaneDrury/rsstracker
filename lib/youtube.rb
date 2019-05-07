@@ -30,7 +30,7 @@ class Youtube
       begin
         with_youtube_dl('-f', quality, '-o', tmp_path, '-x', '--', url)
       rescue YoutubeDlError
-        raise DownloadError("Could not download #{url} with quality #{quality} to #{tmp_path}")
+        raise DownloadError.new("Could not download #{url} with quality #{quality} to #{tmp_path}")
       end
       json_details = details(url)
       temp_file_path = File.join(temp_dir, "#{json_details.id}.m4a")
