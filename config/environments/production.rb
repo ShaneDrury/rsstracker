@@ -98,4 +98,5 @@ Rails.application.configure do
 
   ActiveModelSerializers.config.adapter = :json_api
   ActiveModelSerializers.config.key_transform = :camel_lower
+  ActiveRecord::Base.logger.level = 1
 end
