@@ -68,3 +68,4 @@ gem "sentry-raven"
 gem 'mini_magick'
 gem "active_model_serializers"
 gem "shrine"
+gem "marginalia"
