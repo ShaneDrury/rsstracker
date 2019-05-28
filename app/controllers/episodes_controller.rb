@@ -4,7 +4,7 @@ class EpisodesController < ApplicationController
 
   # GET /episodes
   def index
-    @episodes = Episode.includes(:fetch_status)
+    @episodes = Episode.includes(:fetch_status, :feed, :audio_attachment, :thumbnail_attachment, :source)
     @episodes = @episodes.where(id: params[:id]) if params[:id].present?
     @episodes = @episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     @episodes = @episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?
@@ -75,7 +75,7 @@ class EpisodesController < ApplicationController
   end
 
   def search
-    episodes = Episode.includes(:fetch_status, :feed)
+    episodes = Episode.includes(:fetch_status, :feed, :audio_attachment, :thumbnail_attachment, :source)
     episodes = episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     episodes = episodes.with_search_term(params[:search_term]) if params[:search_term].present?
     episodes = episodes.where(fetch_statuses: { status: params[:status] }) if params[:status].present?

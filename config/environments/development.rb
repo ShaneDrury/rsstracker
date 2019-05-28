@@ -66,4 +66,9 @@ Rails.application.configure do
   config.download_root = yml['download_root']
   config.storage_root = yml['storage_root']
   config.youtube_dl_path = yml['youtube_dl_path']
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.rails_logger = true
+  end
 end
