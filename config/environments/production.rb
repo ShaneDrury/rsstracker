@@ -98,10 +98,4 @@ Rails.application.configure do
 
   ActiveModelSerializers.config.adapter = :json_api
   ActiveModelSerializers.config.key_transform = :camel_lower
-
-  config.lograge.enabled = false
-  config.lograge.formatter = Lograge::Formatters::Logstash.new
-  config.logstash.host = "ubuntu.home"
-  config.logstash.port = 5000
-  config.logstash.type = :tcp
 end
