@@ -3,7 +3,6 @@ import qs from "qs";
 import { ApiEpisodes, EpisodeData, RemoteEpisode } from "../../types/episode";
 import { ProviderJob } from "../../types/job";
 import { PageInfo } from "../../types/page";
-import { Omit } from "../../types/util";
 import apiFetch from "../apiFetch";
 import { Status } from "../status";
 
