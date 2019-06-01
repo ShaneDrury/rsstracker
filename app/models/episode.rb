@@ -28,7 +28,7 @@ class Episode < ApplicationRecord
   end
 
   def small_thumbnail
-    thumbnail.variant(resize: "128x128") if thumbnail.attached?
+    thumbnail.variant(combine_options: { resize: "128x72>", extent: "128x72", background: "white", gravity: "center"}) if thumbnail.attached?
   end
 
   def audio_url

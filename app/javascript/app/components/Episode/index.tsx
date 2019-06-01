@@ -69,6 +69,7 @@ const Thumbnail = styled.div`
 const Content = styled.div`
   display: flex;
   flex: 1;
+  margin-bottom: 20px;
 `;
 
 const EpisodeWrapper = styled.article``;
@@ -76,6 +77,10 @@ const EpisodeWrapper = styled.article``;
 const Footer = styled.div`
   display: flex;
   flex: 1;
+`;
+
+const ThumbnailWrapper = styled.figure`
+  width: 128px;
 `;
 
 export class Episode extends React.Component<Props> {
@@ -149,9 +154,9 @@ export class Episode extends React.Component<Props> {
           <Thumbnail>
             {smallThumbnail && (
               <div className="media-right">
-                <figure className="image is-128x128">
+                <ThumbnailWrapper className="image is-16by9">
                   <img src={smallThumbnail} />
-                </figure>
+                </ThumbnailWrapper>
               </div>
             )}
           </Thumbnail>
