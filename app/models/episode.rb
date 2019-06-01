@@ -23,10 +23,6 @@ class Episode < ApplicationRecord
     EpisodeUpdateBroadcastJob.perform_later(id)
   end
 
-  def image_link(request)
-    "#{request.protocol}#{request.host}:#{request.port}#{relative_image_link}" if thumbnail_url
-  end
-
   def full_url
     source.youtube? ? "https://www.youtube.com/watch?v=#{url}" : url
   end

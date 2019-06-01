@@ -5,7 +5,6 @@ class FeedSerializer < ActiveModel::Serializer
     :image_url,
     :autodownload,
     :source_type,
-    :relative_image_link,
     :status_counts,
     :source_type
 

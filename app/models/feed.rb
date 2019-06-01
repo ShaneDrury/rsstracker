@@ -9,14 +9,6 @@ class Feed < ApplicationRecord
   has_one_attached :thumbnail
   belongs_to :preferred_source, class_name: "Source"
 
-  def image_link(request)
-    "#{request.protocol}#{request.host}:#{request.port}#{relative_image_link}"
-  end
-
-  def relative_image_link
-    "/uploads/#{id}/#{image_url}"
-  end
-
   def status_counts
     counts = FetchStatus.where(fetchable: episodes).group(:status).count
     counts['all'] = counts.values.sum
