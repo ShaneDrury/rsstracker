@@ -10,7 +10,7 @@ class DownloadFeedJob < ApplicationJob
   def perform(source_id)
     source = Source.find(source_id)
     feed = source.feed
-    rss = RSS::Parser.parse(open(source.url).read, false)
+    rss = RssFeed.from_url(source.url)
     if rss.nil?
       raise RssError.new("RSS Feed was nil. Source id: #{source_id}")
     end
@@ -25,14 +25,19 @@ class DownloadFeedJob < ApplicationJob
       )
     end
 
-    rss.items.each do |result|
-      Episode.find_or_create_by(feed: feed, source: source, name: result.title, guid: result.guid.content) do |ep|
+    rss.items.each do |rss_item|
+      Episode.find_or_create_by(feed: feed, source: source, name: rss_item.title, guid: rss_item.guid.content) do |ep|
+        description = if rss_item.description.strip.empty?
+                        rss_item.itunes_summary
+                      else
+                        rss_item.description.strip
+                      end
         ep.build_fetch_status(status: 'NOT_ASKED')
-        ep.description = result.description
-        ep.duration = result.itunes_duration.content
-        ep.file_size = result.enclosure.length
-        ep.publication_date = result.pubDate
-        ep.url = result.link
+        ep.description = description
+        ep.duration = rss_item.itunes_duration.content
+        ep.file_size = rss_item.enclosure.length
+        ep.publication_date = rss_item.pubDate
+        ep.url = rss_item.link
         ep.seen = false
         ep.save
         feed.touch
