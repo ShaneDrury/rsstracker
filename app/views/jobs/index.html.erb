@@ -9,6 +9,7 @@
       <th>Last error</th>
       <th>Created at</th>
       <th>Run at</th>
+      <th>Locked at</th>
       <th></th>
       <th></th>
     </tr>
@@ -38,6 +39,9 @@
         </td>
         <td>
           <%= job.run_at %>
+        </td>
+        <td>
+          <%= job.locked_at %>
         </td>
         <td>
           <%= form_for job, builder: BulmaFormBuilder, method: "POST", url: retry_job_path(job) do |f| %>
