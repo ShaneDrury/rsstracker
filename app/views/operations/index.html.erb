@@ -1,4 +1,16 @@
-<%= tag.div(id: "root", style: "height:100%", data: {
+<main class="my-main">
+  <div id="navbar"></div>
+  <div id="wrapper" class="content-wrapper">
+    <div id="sidebar" class="sidebar">
+      <div class="panel" id="feed-select"></div>
+      <div id="favourites"></div>
+    </div>
+    <div id="content" class="my-content"></div>
+    <div id="aside" class="my-aside"></div>
+  </div>
+</main>
+
+<%= tag.div(id: "root", data: {
   preload: {
     feeds: @feeds,
     jobs: @jobs,
