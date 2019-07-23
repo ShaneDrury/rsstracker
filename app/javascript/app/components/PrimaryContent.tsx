@@ -1,46 +1,24 @@
-import { History, Location } from "history";
-import * as qs from "qs";
+import { History } from "history";
 import React from "react";
 import { connect } from "react-redux";
 import { Route, RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
 import { getDetailEpisodeId } from "../modules/episodes/selectors";
-import { QueryParams, syncQueryParams } from "../modules/location/queryParams";
+import {
+  parseLocation,
+  QueryParams,
+  syncQueryParams,
+} from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import EpisodeDetail from "./EpisodeDetail";
 import EpisodeLoader from "./EpisodeLoader";
 import Episodes from "./Episodes";
 import EpisodesLoader from "./EpisodesLoader";
-import FeedSelect from "./FeedSelect";
-
-const parseLocation = (location: Location): QueryParams =>
-  qs.parse(location.search, {
-    ignoreQueryPrefix: true,
-  });
 
 const Scrollable = styled.div`
   height: 100%;
   overflow: auto;
 `;
-
-export const FeedSelectContainer = () => {
-  const renderRoot = ({
-    history,
-    location,
-    match,
-  }: RouteComponentProps<{ feedId?: string }>) => {
-    const queryParams = parseLocation(location);
-    return (
-      <FeedSelect
-        queryParams={queryParams}
-        feedId={match.params.feedId}
-        history={history}
-      />
-    );
-  };
-
-  return <Route path="/:feedId?" render={renderRoot} />;
-};
 
 export const EpisodesContainer = () => {
   const handleChangePage = (queryParams: QueryParams, history: History) => (

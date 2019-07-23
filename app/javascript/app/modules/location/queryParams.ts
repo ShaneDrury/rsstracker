@@ -1,4 +1,4 @@
-import { History } from "history";
+import { History, Location } from "history";
 import { isEqual } from "lodash";
 import * as qs from "qs";
 import { Status } from "../status";
@@ -39,3 +39,8 @@ export const syncQueryParams = (
     history.push({ search: `?${qs.stringify(newQueryParams)}` });
   }
 };
+
+export const parseLocation = (location: Location): QueryParams =>
+  qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+  });

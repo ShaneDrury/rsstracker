@@ -7,7 +7,6 @@ import { Router, Route } from "react-router-dom";
 import {
   EpisodeContainer,
   EpisodesContainer,
-  FeedSelectContainer,
 } from "./components/PrimaryContent";
 import { fetchFeedsComplete } from "./modules/feeds/actions";
 import { processFeed } from "./modules/feeds/sources";
@@ -20,6 +19,11 @@ import { init } from "./websocket";
 import { Navbar } from "./components/Navbar";
 import Favourites from "./components/Favourites";
 import { createBrowserHistory } from "history";
+import {
+  FeedSelectPanelContainer,
+  SearchPanelContainer,
+  UpdateFeedsContainer,
+} from "./components/FeedSelect";
 
 if (process.env.NODE_ENV === "production") {
   Sentry.init({
@@ -48,7 +52,9 @@ const rootWrap = (Component: React.ComponentType, el: HTMLElement | null) => {
 
 const renderRoots = () => {
   rootWrap(Navbar, document.getElementById("navbar"));
-  rootWrap(FeedSelectContainer, document.getElementById("feed-select"));
+  rootWrap(FeedSelectPanelContainer, document.getElementById("feed-select"));
+  rootWrap(UpdateFeedsContainer, document.getElementById("update-feeds"));
+  rootWrap(SearchPanelContainer, document.getElementById("search-panel"));
   rootWrap(Favourites, document.getElementById("favourites"));
   rootWrap(EpisodesContainer, document.getElementById("content"));
   rootWrap(EpisodeContainer, document.getElementById("aside"));
