@@ -65,6 +65,7 @@ const player = (state: State = initialState, action: Action): State => {
     case actions.PLAYER_ENABLED: {
       return {
         ...state,
+        playing: true,
         enabled: true,
       };
     }
