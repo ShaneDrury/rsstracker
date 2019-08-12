@@ -5,6 +5,7 @@ class Episode < ApplicationRecord
   belongs_to :source
   has_one_attached :thumbnail
   has_one :audio_attachment, dependent: :destroy
+  validates_uniqueness_of :guid
 
   default_scope { order(publication_date: :desc, created_at: :desc) }
 
