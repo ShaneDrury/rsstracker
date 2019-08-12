@@ -3,22 +3,24 @@ require "youtube_episode_updater"
 class CreateEpisodeFromYoutubeJob < ApplicationJob
   queue_as :default
 
-  def perform(source_id, feed_id, url, description, youtube_dl_path)
+  def perform(source_id, feed_id, url, description)
     feed = Feed.find(feed_id)
     return unless feed
     source = Source.find(source_id)
-    updater = ::YoutubeEpisodeUpdater.new(youtube_dl_path)
+    updater = ::YoutubeEpisodeUpdater.new
     Episode.find_or_create_by(guid: url) do |ep|
       ep.build_fetch_status(status: 'NOT_ASKED')
-      ep.feed = feed
-      ep.source = source
-      ep.name = description
+      ep.assign_attributes(
+        feed: feed,
+        source: source,
+        name: description,
+        seen: false
+      )
       begin
         updater.update(ep, url)
       rescue IOError
         break
       end
-      ep.seen = false
       unless ep.save
         Raven.capture_message("Could not save episode because: #{ep.errors.full_messages}")
         break

@@ -3,10 +3,6 @@ require "youtube_api"
 class Youtube
   FILENAME_FORMAT = '%(id)s.%(ext)s'
 
-  def initialize(youtube_dl_path)
-    @youtube_dl_path = youtube_dl_path
-  end
-
   def short_details(url)
     json_out = api.playlist(url)
     json_out.map { |j| ShortEpisodeDetails.new(j["url"], j["title"]) }
@@ -34,10 +30,8 @@ class Youtube
   private
 
   def api
-    @api ||= YoutubeApi.new(youtube_dl_path)
+    @api ||= YoutubeApi.new
   end
-
-  attr_reader :youtube_dl_path
 
   EpisodeDetails = Struct.new(:id, :description, :duration, :publication_date, :thumbnail_url)
   ShortEpisodeDetails = Struct.new(:url, :title)

@@ -2,10 +2,6 @@ class YoutubeApi
   class YoutubeDlError < StandardError; end
   class DownloadError < YoutubeDlError; end
 
-  def initialize(youtube_dl_path)
-    @youtube_dl_path = youtube_dl_path
-  end
-
   def playlist(url)
     out = with_youtube_dl('--flat-playlist', '-j', '--', url)
     out.split("\n").map { |line| JSON.parse(line) }
@@ -25,11 +21,13 @@ class YoutubeApi
 
   private
 
-  attr_reader :youtube_dl_path
-
   def with_youtube_dl(*commands)
     out, status = Open3.capture2(youtube_dl_path, *commands)
     raise YoutubeDlError, "Error running #{commands}" if status.exitstatus != 0
     out
+  end
+
+  def youtube_dl_path
+    Rails.application.config.youtube_dl_path
   end
 end

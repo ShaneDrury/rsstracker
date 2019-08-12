@@ -16,7 +16,7 @@ class DownloadYoutubeAudioJob < ApplicationJob
     episode.build_fetch_status(status: 'LOADING').save
     url = episode.url
 
-    youtube = Youtube.new(Rails.application.config.youtube_dl_path)
+    youtube = Youtube.new
 
     handle_download = lambda do |f, details|
       audio_attachment = episode.create_audio_attachment

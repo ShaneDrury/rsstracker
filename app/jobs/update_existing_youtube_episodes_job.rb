@@ -9,7 +9,7 @@ class UpdateExistingYoutubeEpisodesJob < ApplicationJob
             .joins(:fetch_status)
             .where(fetch_statuses: { status: 'NOT_ASKED' })
             .where(description: nil)
-    updater = YoutubeEpisodeUpdater.new(Rails.application.config.youtube_dl_path)
+    updater = YoutubeEpisodeUpdater.new
     eps.each do |ep|
       updater.update(ep, ep.url)
       ep.save

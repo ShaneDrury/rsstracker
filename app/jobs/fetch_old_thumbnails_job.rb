@@ -5,7 +5,7 @@ class FetchOldThumbnailsJob < ApplicationJob
 
   def perform(feed_id)
     episodes = Feed.find(feed_id).episodes.where(thumbnail_url: nil)
-    updater = YoutubeEpisodeUpdater.new(Rails.application.config.youtube_dl_path)
+    updater = YoutubeEpisodeUpdater.new
     episodes.each do |episode|
       updater.update(episode, episode.url)
       episode.save

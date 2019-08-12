@@ -1,9 +1,8 @@
 require "youtube"
 
 class YoutubePlaylistDownloader
-  def initialize(source_id, youtube_dl_path)
+  def initialize(source_id)
     @source_id = source_id
-    @youtube_dl_path = youtube_dl_path
   end
 
   def download_playlist
@@ -17,7 +16,6 @@ class YoutubePlaylistDownloader
           feed.id,
           url,
           description,
-          youtube_dl_path
         )
       end
     end
@@ -26,10 +24,10 @@ class YoutubePlaylistDownloader
 
   private
 
-  attr_reader :source_id, :youtube_dl_path
+  attr_reader :source_id
 
   def short_episode_details
-    Youtube.new(youtube_dl_path).short_details(source.url)
+    Youtube.new.short_details(source.url)
   end
 
   def source
