@@ -1,6 +1,6 @@
 class EpisodesController < ApplicationController
   helper ReactHelper
-  before_action :set_episode, only: [:show, :update, :destroy, :download]
+  before_action :set_episode, only: [:show, :update, :destroy, :download, :redownload]
 
   # GET /episodes
   def index
@@ -37,6 +37,16 @@ class EpisodesController < ApplicationController
     active_job = @episode.download!
     job = Delayed::Job.find(active_job.provider_job_id)
     render json: job, status: :accepted
+  end
+
+  def redownload
+    active_job = @episode.redownload!
+    if active_job
+      job = Delayed::Job.find(active_job.provider_job_id)
+      render json: job, status: :accepted
+    else
+      render status: :no_content
+    end
   end
 
   # POST /episodes

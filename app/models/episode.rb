@@ -48,4 +48,10 @@ class Episode < ApplicationRecord
       raise "Unknown source type"
     end
   end
+
+  def redownload!
+    return if fetch_status&.status != "SUCCESS"
+    create_fetch_status!(status: 'NOT_ASKED')
+    download!
+  end
 end

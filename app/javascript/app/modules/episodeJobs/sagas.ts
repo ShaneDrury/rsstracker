@@ -1,5 +1,9 @@
-import { put, takeEvery } from "redux-saga/effects";
-import { downloadEpisode, DownloadEpisodeResponse } from "../episodes/sources";
+import { all, put, take } from "redux-saga/effects";
+import {
+  downloadEpisode,
+  DownloadEpisodeResponse,
+  redownloadEpisode,
+} from "../episodes/sources";
 import { processJobResponse } from "../jobs/sources";
 import {
   DownloadEpisodeRequested,
@@ -7,9 +11,12 @@ import {
   episodeJobsActions,
 } from "./actions";
 
-function* downloadEpisodeSaga({
-  payload: { episodeId },
-}: DownloadEpisodeRequested) {
+function* downloadEpisodeSaga() {
+  const {
+    payload: { episodeId },
+  }: DownloadEpisodeRequested = yield take(
+    episodeJobsActions.DOWNLOAD_EPISODE_REQUESTED
+  );
   const downloadResponse: DownloadEpisodeResponse = yield downloadEpisode(
     episodeId
   );
@@ -17,9 +24,19 @@ function* downloadEpisodeSaga({
   yield put(downloadEpisodeStarted(job, episodeId));
 }
 
-export default function* episodeJobsSagas() {
-  yield takeEvery(
-    episodeJobsActions.DOWNLOAD_EPISODE_REQUESTED,
-    downloadEpisodeSaga
+function* redownloadEpisodeSaga() {
+  const {
+    payload: { episodeId },
+  }: DownloadEpisodeRequested = yield take(
+    episodeJobsActions.REDOWNLOAD_EPISODE_REQUESTED
   );
+  const downloadResponse: DownloadEpisodeResponse = yield redownloadEpisode(
+    episodeId
+  );
+  const job = processJobResponse(downloadResponse.data);
+  yield put(downloadEpisodeStarted(job, episodeId));
+}
+
+export default function* episodeJobsSagas() {
+  yield all([downloadEpisodeSaga(), redownloadEpisodeSaga()]);
 }

@@ -13,7 +13,10 @@ import { isEqual } from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { downloadEpisodeRequested } from "../modules/episodeJobs/actions";
+import {
+  downloadEpisodeRequested,
+  redownloadEpisodeRequested,
+} from "../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../modules/episodeJobs/selectors";
 import { detailsClosed } from "../modules/episodes/actions";
 import {
@@ -28,6 +31,7 @@ import { RemoteEpisode } from "../types/episode";
 import DateField from "./DateField";
 import Description from "./Description";
 import { Icon } from "./Icon";
+import { EpisodeControl } from "./EpisodeControl";
 
 interface DataProps {
   episode: RemoteEpisode;
@@ -42,6 +46,7 @@ interface PropsExtended extends RemoteEpisode {
 interface DispatchProps {
   togglePlay: (episodeId: string) => void;
   downloadEpisode: (episodeId: string) => void;
+  redownloadEpisode: (episodeId: string) => void;
   onCloseDetail: () => void;
   onAddFavourite: (episodeId: string) => void;
   onRemoveFavourite: (episodeId: string) => void;
@@ -76,6 +81,10 @@ export class Episode extends React.Component<Props> {
 
   public handleDownload = () => {
     this.props.downloadEpisode(this.props.id);
+  };
+
+  public handleRedownload = () => {
+    this.props.redownloadEpisode(this.props.id);
   };
 
   public handleToggleShow = () => {
@@ -164,46 +173,14 @@ export class Episode extends React.Component<Props> {
             </div>
           </div>
           <FooterWrapper>
-            {fetchStatus.status === "SUCCESS" && (
-              <button
-                className={classNames("button", {
-                  "is-link": !this.props.playing,
-                  "is-danger": this.props.playing,
-                })}
-                onClick={this.handleToggleShow}
-              >
-                <span className="icon">
-                  {this.props.playing ? (
-                    <Icon icon={faStop} />
-                  ) : (
-                    <Icon icon={faPlay} />
-                  )}
-                </span>
-                <span>{this.props.playing ? "Stop" : "Play"}</span>
-              </button>
-            )}
-            {!(fetchStatus.status === "SUCCESS") && (
-              <div>
-                {(fetchStatus.status === "NOT_ASKED" ||
-                  fetchStatus.status === "FAILURE" ||
-                  this.props.isUpdating) && (
-                  <button
-                    className="button is-primary"
-                    onClick={this.handleDownload}
-                    disabled={this.props.isUpdating}
-                  >
-                    <span className="icon">
-                      {this.props.isUpdating ? (
-                        <Icon icon={faSync} spin />
-                      ) : (
-                        <Icon icon={faDownload} />
-                      )}
-                    </span>
-                    <span>Download</span>
-                  </button>
-                )}
-              </div>
-            )}
+            <EpisodeControl
+              playing={this.props.playing}
+              fetchStatus={fetchStatus}
+              isUpdating={this.props.isUpdating}
+              handleToggleShow={this.handleToggleShow}
+              handleDownload={this.handleDownload}
+              handleRedownload={this.handleRedownload}
+            />
           </FooterWrapper>
         </EpisodeWrapper>
       </div>
@@ -231,6 +208,7 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   togglePlay: togglePlayAction,
   downloadEpisode: downloadEpisodeRequested,
+  redownloadEpisode: redownloadEpisodeRequested,
   onCloseDetail: detailsClosed,
   onAddFavourite: favouriteAdded,
   onRemoveFavourite: favouriteRemoved,

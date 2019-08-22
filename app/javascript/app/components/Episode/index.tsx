@@ -5,7 +5,10 @@ import Dotdotdot from "react-dotdotdot";
 import { connect } from "react-redux";
 import VisibilitySensor from "react-visibility-sensor/visibility-sensor";
 import styled from "styled-components";
-import { downloadEpisodeRequested } from "../../modules/episodeJobs/actions";
+import {
+  downloadEpisodeRequested,
+  redownloadEpisodeRequested,
+} from "../../modules/episodeJobs/actions";
 import { getEpisodeJobs } from "../../modules/episodeJobs/selectors";
 import {
   detailsOpened,
@@ -43,6 +46,7 @@ interface PropsExtended {
 interface DispatchProps {
   togglePlay: (episodeId: string) => void;
   downloadEpisode: (episodeId: string) => void;
+  redownloadEpisode: (episodeId: string) => void;
   handleDetailOpened: (episodeId: string) => void;
   onVisibilityChange: (isVisible: boolean, episodeId: string) => void;
 }
@@ -117,6 +121,10 @@ export class Episode extends React.Component<Props> {
     this.props.downloadEpisode(this.props.episodeId);
   };
 
+  public handleRedownload = () => {
+    this.props.redownloadEpisode(this.props.episodeId);
+  };
+
   public onVisibilityChange = (isVisible: boolean) => {
     this.props.onVisibilityChange(isVisible, this.props.episodeId);
   };
@@ -165,6 +173,7 @@ export class Episode extends React.Component<Props> {
           <EpisodeFooter
             handleDetailOpened={this.handleDetailOpened}
             handleDownload={this.handleDownload}
+            handleRedownload={this.handleRedownload}
             fetchStatus={this.props.fetchStatus}
             handleToggleShow={this.handleToggleShow}
             playing={this.props.playing}
@@ -215,6 +224,7 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   togglePlay: togglePlayAction,
   downloadEpisode: downloadEpisodeRequested,
+  redownloadEpisode: redownloadEpisodeRequested,
   handleDetailOpened: detailsOpened,
   onVisibilityChange: visibilityChanged,
 };

@@ -25,7 +25,6 @@ class CreateEpisodeFromYoutubeJob < ApplicationJob
         Raven.capture_message("Could not save episode because: #{ep.errors.full_messages}")
         break
       end
-      ep.feed.touch
       # TODO: If the new episode's source is preferred by the feed
       # download it and remove the other one
       if ep.should_download?

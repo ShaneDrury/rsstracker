@@ -1,5 +1,5 @@
 class FetchStatus < ApplicationRecord
-  belongs_to :fetchable, polymorphic: true
+  belongs_to :fetchable, polymorphic: true, touch: true
   include ActionView::Helpers::NumberHelper
 
   def percentage_fetched

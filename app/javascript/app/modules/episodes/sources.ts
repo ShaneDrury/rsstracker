@@ -66,6 +66,11 @@ export const downloadEpisode = async (
 ): Promise<DownloadEpisodeResponse> =>
   apiFetch(`/episodes/${episodeId}/download`, { method: "POST" });
 
+export const redownloadEpisode = async (
+  episodeId: string
+): Promise<DownloadEpisodeResponse> =>
+  apiFetch(`/episodes/${episodeId}/redownload`, { method: "POST" });
+
 export const updateEpisodeDescription = async (
   episodeId: string,
   description: string

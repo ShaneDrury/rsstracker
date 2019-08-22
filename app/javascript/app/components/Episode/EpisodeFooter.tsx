@@ -1,20 +1,16 @@
-import {
-  faDownload,
-  faInfoCircle,
-  faPlay,
-  faStop,
-  faSync,
-} from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import React from "react";
 import styled from "styled-components";
 import { FetchStatus } from "../../modules/fetchStatus";
 import { Icon } from "../Icon";
+import { EpisodeControl } from "../EpisodeControl";
 
 interface EpisodeFooterProps {
   handleDetailOpened: () => void;
   handleToggleShow: () => void;
   handleDownload: () => void;
+  handleRedownload: () => void;
   fetchStatus: FetchStatus;
   playing: boolean;
   isUpdating: boolean;
@@ -31,46 +27,14 @@ class EpisodeFooter extends React.PureComponent<EpisodeFooterProps> {
     const { fetchStatus } = this.props;
     return (
       <React.Fragment>
-        {fetchStatus.status === "SUCCESS" && (
-          <button
-            className={classNames("button", {
-              "is-link": !this.props.playing,
-              "is-danger": this.props.playing,
-            })}
-            onClick={this.props.handleToggleShow}
-          >
-            <span className="icon">
-              {this.props.playing ? (
-                <Icon icon={faStop} />
-              ) : (
-                <Icon icon={faPlay} />
-              )}
-            </span>
-            <span>{this.props.playing ? "Stop" : "Play"}</span>
-          </button>
-        )}
-        {!(fetchStatus.status === "SUCCESS") && (
-          <div>
-            {(fetchStatus.status === "NOT_ASKED" ||
-              fetchStatus.status === "FAILURE" ||
-              this.props.isUpdating) && (
-              <button
-                className="button is-primary"
-                onClick={this.props.handleDownload}
-                disabled={this.props.isUpdating}
-              >
-                <span className="icon">
-                  {this.props.isUpdating ? (
-                    <Icon icon={faSync} spin />
-                  ) : (
-                    <Icon icon={faDownload} />
-                  )}
-                </span>
-                <span>Download</span>
-              </button>
-            )}
-          </div>
-        )}
+        <EpisodeControl
+          playing={this.props.playing}
+          fetchStatus={fetchStatus}
+          isUpdating={this.props.isUpdating}
+          handleToggleShow={this.props.handleToggleShow}
+          handleDownload={this.props.handleDownload}
+          handleRedownload={this.props.handleRedownload}
+        />
         {!this.props.seen && <span className="tag">NEW</span>}
         <InfoWrapper>
           <button

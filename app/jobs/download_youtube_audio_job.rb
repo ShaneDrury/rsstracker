@@ -13,7 +13,7 @@ class DownloadYoutubeAudioJob < ApplicationJob
     episode = Episode.find(episode_id)
     fetch_status = episode.fetch_status&.status
     return if fetch_status == "SUCCESS"
-    episode.build_fetch_status(status: 'LOADING').save
+    episode.create_fetch_status!(status: 'LOADING')
     url = episode.url
 
     youtube = Youtube.new
@@ -28,11 +28,11 @@ class DownloadYoutubeAudioJob < ApplicationJob
         duration: details.duration,
         publication_date: details.publication_date,
       )
-      episode.build_fetch_status(
+      episode.create_fetch_status!(
         status: 'SUCCESS',
         url: "",
         bytes_total: 0
-      ).save
+      )
     end
 
     begin
@@ -41,7 +41,7 @@ class DownloadYoutubeAudioJob < ApplicationJob
       begin
         youtube.download_audio(url, quality: "18", &handle_download)
       rescue Youtube::DownloadError => e
-        episode.build_fetch_status(status: 'FAILURE').save
+        episode.create_fetch_status!(status: 'FAILURE')
         raise e
       end
     end
