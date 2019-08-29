@@ -183,7 +183,7 @@ function* watchVisibilityChanged() {
     payload,
   }: VisibilityChanged) {
     if (payload.isVisible) {
-      const task = yield fork(episodeIsBeingLookedAt, payload.episodeId);
+      const task: Task = yield fork(episodeIsBeingLookedAt, payload.episodeId);
       episodeTimerTasks.set(payload.episodeId, task);
     }
     if (!payload.isVisible) {
