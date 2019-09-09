@@ -9,6 +9,7 @@ class YoutubePlaylistDownloader
     short_episode_details.each do |episode|
       url = episode.url
       description = episode.title
+      next if description == "[Deleted video]"
       feed = source.matching_feed(description)
       if !Episode.exists?(guid: url) && feed.present?
         CreateEpisodeFromYoutubeJob.perform_later(
