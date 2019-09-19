@@ -8,6 +8,12 @@ xml.rss :version => '2.0',
     xml.description @feed.description
     xml.language 'en'
     xml.itunes :image, href: polymorphic_url(@feed.thumbnail) if @feed.thumbnail.attached?
+    xml.itunes :category, text: "Comedy"
+    xml.itunes :explicit, "no"
+    xml.itunes :owner do
+      xml.itunes :name, "Me"
+      xml.itunes :email, "foo@example.com"
+    end
     xml.link root_url
     xml.tag! 'atom:link', rel: 'self', type: 'application/rss+xml', href: feed_url(@feed.id, format: "rss")
     @feed.episodes.includes(:fetch_status, :audio_attachment, :thumbnail_attachment).each do |episode|
