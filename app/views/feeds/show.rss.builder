@@ -10,7 +10,7 @@ xml.rss :version => '2.0',
     xml.itunes :image, href: polymorphic_url(@feed.thumbnail) if @feed.thumbnail.attached?
     xml.link root_url
     xml.tag! 'atom:link', rel: 'self', type: 'application/rss+xml', href: feed_url(@feed.id, format: "rss")
-    @feed.episodes.includes(:fetch_status).each do |episode|
+    @feed.episodes.includes(:fetch_status, :audio_attachment, :thumbnail_attachment).each do |episode|
       next unless episode.fetch_status&.status == 'SUCCESS'
       xml.item do
         if episode.name
