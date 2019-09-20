@@ -37,10 +37,10 @@ class DownloadYoutubeAudioJob < ApplicationJob
 
     begin
       youtube.download_audio(url, quality: "22", &handle_download)
-    rescue Youtube::DownloadError
+    rescue YoutubeApi::DownloadError
       begin
         youtube.download_audio(url, quality: "18", &handle_download)
-      rescue Youtube::DownloadError => e
+      rescue YoutubeApi::DownloadError => e
         episode.create_fetch_status!(status: 'FAILURE')
         raise e
       end
