@@ -7,13 +7,11 @@ class ThumbnailDownloader
 
   def download
     url = episode.source_thumbnail_url
-    thumbnail_extension = File.extname(URI(url).path)
-    thumbnail_filename = episode.guid + thumbnail_extension
     episode_folder = episode.feed.name.parameterize
     Dir.mktmpdir do |temp_dir|
       FileUtils.mkdir_p File.join(temp_dir, episode_folder)
       open(url, 'r') do |input|
-        episode.thumbnail.attach(io: input, filename: thumbnail_filename, content_type: "image/jpeg")
+        episode.thumbnail.attach(io: input, filename: "thumbnail.jpg", content_type: "image/jpeg")
       end
     end
     nil
