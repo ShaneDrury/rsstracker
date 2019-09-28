@@ -1,5 +1,3 @@
-require 'open-uri'
-
 class ThumbnailDownloader
   def initialize(episode)
     @episode = episode
@@ -7,7 +5,7 @@ class ThumbnailDownloader
 
   def download
     url = episode.source_thumbnail_url
-    open(url, 'r') do |input|
+    FileDownloader.get(url) do |input|
       episode.thumbnail.attach(io: input, filename: "thumbnail.jpg", content_type: "image/jpeg")
     end
     nil
