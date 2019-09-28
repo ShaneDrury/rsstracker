@@ -1,27 +1,19 @@
 require 'open-uri'
 
 class ThumbnailDownloader
-  def initialize(episode_id)
-    @episode_id = episode_id
+  def initialize(episode)
+    @episode = episode
   end
 
   def download
     url = episode.source_thumbnail_url
-    episode_folder = episode.feed.name.parameterize
-    Dir.mktmpdir do |temp_dir|
-      FileUtils.mkdir_p File.join(temp_dir, episode_folder)
-      open(url, 'r') do |input|
-        episode.thumbnail.attach(io: input, filename: "thumbnail.jpg", content_type: "image/jpeg")
-      end
+    open(url, 'r') do |input|
+      episode.thumbnail.attach(io: input, filename: "thumbnail.jpg", content_type: "image/jpeg")
     end
     nil
   end
 
   private
 
-  attr_reader :episode_id
-
-  def episode
-    Episode.find(episode_id)
-  end
+  attr_reader :episode
 end
