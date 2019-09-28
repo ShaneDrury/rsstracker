@@ -47,6 +47,7 @@ group :development do
   gem 'capistrano3-delayed-job', '~> 1.0'
   gem 'pry-rails'
   gem "bullet"
+  gem "rubocop"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
