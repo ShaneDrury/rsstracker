@@ -11,14 +11,10 @@
 # Configuration parameters: EnforcedStyle, IndentationWidth.
 # SupportedStyles: with_first_argument, with_fixed_indentation
 Layout/AlignArguments:
+  EnforcedStyle: with_fixed_indentation
   Exclude:
-    - 'app/serializers/episode_serializer.rb'
-    - 'app/serializers/feed_serializer.rb'
-    - 'app/serializers/job_serializer.rb'
-    - 'app/views/feeds/show.rss.builder'
     - 'bin/webpack'
     - 'bin/webpack-dev-server'
-    - 'lib/capistrano/tasks/manifestfix.rake'
 
 # Offense count: 3
 # Cop supports --auto-correct.
