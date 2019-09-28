@@ -15,11 +15,8 @@ Layout/AlignArguments:
 Layout/AlignHash:
   EnforcedHashRocketStyle: key
 
-# Offense count: 1
-# Cop supports --auto-correct.
 Layout/CommentIndentation:
   Exclude:
-    - 'config/environments/development.rb'
 
 # Offense count: 9
 # Cop supports --auto-correct.
