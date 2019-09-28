@@ -33,9 +33,7 @@ module Rsstracker
     config.middleware.use Rack::Deflater
 
     config.active_job.queue_adapter = :delayed_job
-
-    config.autoload_paths += %W(#{config.root}/lib)
-    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    config.eager_load_paths << Rails.root.join('lib')
     config.action_controller.include_all_helpers = false
   end
 end
