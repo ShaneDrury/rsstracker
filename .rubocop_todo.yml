@@ -6,25 +6,14 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 23
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: with_first_argument, with_fixed_indentation
 Layout/AlignArguments:
   EnforcedStyle: with_fixed_indentation
   Exclude:
     - 'bin/webpack'
     - 'bin/webpack-dev-server'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: AllowMultipleStyles, EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle.
-# SupportedHashRocketStyles: key, separator, table
-# SupportedColonStyles: key, separator, table
-# SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
 Layout/AlignHash:
-  Exclude:
-    - 'app/views/feeds/show.rss.builder'
+  EnforcedHashRocketStyle: key
 
 # Offense count: 1
 # Cop supports --auto-correct.
