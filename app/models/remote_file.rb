@@ -7,7 +7,7 @@ class RemoteFile
 
   def get
     Dir.mktmpdir do |temp_dir|
-      tmp_path = File.join(temp_dir, filename)
+      tmp_path = File.join(temp_dir, "audiofile")
       FileDownloader.get(url) do |input|
         open(tmp_path, 'wb') do |output|
           while (buffer = input.read(BUFFER_SIZE))
@@ -21,10 +21,6 @@ class RemoteFile
   end
 
   private
-
-  def filename
-    @filename ||= File.basename(FileDownloader.follow_redirect(url).path)
-  end
 
   attr_accessor :url
 end
