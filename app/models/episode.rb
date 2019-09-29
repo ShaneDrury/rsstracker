@@ -62,4 +62,8 @@ class Episode < ApplicationRecord
   def set_as_loading!
     build_fetch_status(status: 'LOADING').save
   end
+
+  def set_as_success!
+    build_fetch_status(status: 'SUCCESS').save
+  end
 end
