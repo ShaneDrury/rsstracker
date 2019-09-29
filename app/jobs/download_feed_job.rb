@@ -1,4 +1,3 @@
-require 'open-uri'
 require 'rss'
 
 class DownloadFeedJob < ApplicationJob
@@ -16,9 +15,8 @@ class DownloadFeedJob < ApplicationJob
     end
     if feed.image_url.nil?
       thumbnail_url = rss.channel.image.url
-      thumbnail_filename = File.basename(URI(thumbnail_url).path)
-      open(thumbnail_url, 'r') do |input|
-        feed.thumbnail.attach(io: input, filename: thumbnail_filename, content_type: "image/jpeg")
+      FileDownloader.get(thumbnail_url) do |input|
+        feed.thumbnail.attach(io: input, filename: "thumbnail.jpg", content_type: "image/jpeg")
       end
       feed.update_attributes(
         description: rss.channel.description,

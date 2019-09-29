@@ -54,4 +54,12 @@ class Episode < ApplicationRecord
     create_fetch_status!(status: 'NOT_ASKED')
     download!
   end
+
+  def fetched?
+    fetch_status&.status == "SUCCESS"
+  end
+
+  def set_as_loading!
+    build_fetch_status(status: 'LOADING').save
+  end
 end

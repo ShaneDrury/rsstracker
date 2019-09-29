@@ -1,25 +1,23 @@
 # frozen_string_literal: true
 
-require 'open-uri'
-
 class DownloadEpisodeJob < ApplicationJob
   queue_as :default
 
   BUFFER_SIZE = 8 * 1024
 
   def perform(episode_id)
+    # business logic
+    # unless episode already fetched
+    # mark episode as loading
+    # get audio file
+    # for each tick, update bytes transferred
+    # when finished
+    # attach audio file to episode and persist
     episode = Episode.find(episode_id)
-    fetch_status = episode.fetch_status&.status
-    return if fetch_status == "SUCCESS"
-    episode.build_fetch_status(status: 'LOADING').save
+    return if episode.fetched?
+    episode.set_as_loading!
     url = episode.url
-
-    begin
-      open(url, redirect: false)
-      episode_filename = File.basename(URI(url).path)
-    rescue OpenURI::HTTPRedirect => e
-      episode_filename = File.basename(URI(e.uri).path)
-    end
+    episode_filename = File.basename(FileDownloader.follow_redirect(url).path)
 
     content_length_proc = lambda do |content_length|
       @bytes_total = content_length
@@ -43,7 +41,7 @@ class DownloadEpisodeJob < ApplicationJob
 
     Dir.mktmpdir do |temp_dir|
       tmp_path = File.join(temp_dir, episode_filename)
-      open(url, 'r', content_length_proc: content_length_proc, progress_proc: progress_proc) do |input|
+      FileDownloader.get(url, content_length_proc: content_length_proc, progress_proc: progress_proc) do |input|
         open(tmp_path, 'wb') do |output|
           while (buffer = input.read(BUFFER_SIZE))
             output.write(buffer)

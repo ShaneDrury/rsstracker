@@ -11,6 +11,9 @@ import {
   episodeJobsActions,
 } from "./actions";
 
+// TODO: When we get a new episodeJob, check if we have it already in local
+// if not dispatch fetch action
+
 function* downloadEpisodeSaga() {
   const {
     payload: { episodeId },
