@@ -1,8 +1,8 @@
 require "open-uri"
 
 class FileDownloader
-  def self.get(url, content_length_proc: nil, progress_proc: nil)
-    open(url, 'r', content_length_proc: content_length_proc, progress_proc: progress_proc) do |input|
+  def self.get(url)
+    open(url, 'r') do |input|
       yield input
     end
   end
