@@ -29,7 +29,7 @@ class CreateEpisodeFromYoutubeJob < ApplicationJob
       # download it and remove the other one
       if ep.should_download?
         DownloadThumbnailJob.perform_later(ep.id)
-        ep.download! if ep.feed.autodownload
+        DownloadRemoteAudioJob.perform_later(ep.id) if ep.feed.autodownload
       end
     end
   end

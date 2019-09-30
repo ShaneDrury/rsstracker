@@ -43,16 +43,6 @@ class Episode < ApplicationRecord
     source.source_type.to_sym
   end
 
-  def download!
-    DownloadRemoteAudioJob.perform_later(id)
-  end
-
-  def redownload!
-    return if fetch_status&.status != "SUCCESS"
-    create_fetch_status!(status: 'NOT_ASKED')
-    download!
-  end
-
   def fetched?
     fetch_status&.status == "SUCCESS"
   end
@@ -67,6 +57,10 @@ class Episode < ApplicationRecord
 
   def mark_as_error!(reason)
     create_fetch_status(status: 'FAILURE', error_reason: reason)
+  end
+
+  def mark_as_not_asked!
+    create_fetch_status!(status: 'NOT_ASKED')
   end
 
   def attach_audio(file)
