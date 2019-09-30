@@ -5,7 +5,9 @@ class RemoteAudio
 
   def get
     handler = lambda do |f|
-      yield(f)
+      episode.try_fetching do
+        yield(f)
+      end
     end
 
     case source_type
