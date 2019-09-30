@@ -27,6 +27,12 @@ class Youtube
     end
   end
 
+  def download_audio_with_fallback(url, &block)
+    download_audio(url, quality: "22", &block)
+  rescue YoutubeApi::DownloadError
+    download_audio(url, quality: "18", &block)
+  end
+
   private
 
   def api

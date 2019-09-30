@@ -82,6 +82,23 @@ class Episode < ApplicationRecord
     end
   end
 
+  def attach_remote_youtube_audio
+    return if fetched?
+    try_fetching do
+      Youtube.new.download_audio_with_fallback(url) do |audio_file, details|
+        audio_attachment = create_audio_attachment
+        audio_attachment.audio = audio_file
+        audio_attachment.save
+
+        update(
+          description: details.description,
+          duration: details.duration,
+          publication_date: details.publication_date,
+        )
+      end
+    end
+  end
+
   private
 
   def try_fetching
