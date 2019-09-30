@@ -59,11 +59,38 @@ class Episode < ApplicationRecord
     fetch_status&.status == "SUCCESS"
   end
 
-  def set_as_loading!
-    build_fetch_status(status: 'LOADING').save
+  def mark_as_loading!
+    create_fetch_status(status: 'LOADING')
   end
 
-  def set_as_success!
-    build_fetch_status(status: 'SUCCESS').save
+  def mark_as_success!
+    create_fetch_status(status: 'SUCCESS')
+  end
+
+  def mark_as_error!(reason)
+    create_fetch_status(status: 'FAILURE', error_reason: reason)
+  end
+
+  def attach_remote_file
+    return if fetched?
+    try_fetching do
+      remote_file = RemoteFile.new(url)
+      remote_file.get do |audio_file|
+        audio_attachment = create_audio_attachment
+        audio_attachment.audio = audio_file
+        audio_attachment.save
+      end
+    end
+  end
+
+  private
+
+  def try_fetching
+    mark_as_loading!
+    yield
+    mark_as_success!
+  rescue StandardError => e
+    mark_as_error!(e.to_s)
+    raise e
   end
 end
