@@ -74,8 +74,7 @@ class Episode < ApplicationRecord
   def attach_remote_file
     return if fetched?
     try_fetching do
-      remote_file = RemoteFile.new(url)
-      remote_file.get do |audio_file|
+      RemoteFile.new(url).get do |audio_file|
         audio_attachment = create_audio_attachment
         audio_attachment.audio = audio_file
         audio_attachment.save
