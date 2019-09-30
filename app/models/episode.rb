@@ -39,14 +39,12 @@ class Episode < ApplicationRecord
     !Episode.duplicates_for(self).exists?
   end
 
+  def source_type
+    source.source_type.to_sym
+  end
+
   def download!
-    if source.rss?
-      DownloadEpisodeJob.perform_later(id)
-    elsif source.youtube?
-      DownloadYoutubeAudioJob.perform_later(id)
-    else
-      raise "Unknown source type"
-    end
+    DownloadRemoteAudioJob.perform_later(id)
   end
 
   def redownload!
@@ -71,35 +69,11 @@ class Episode < ApplicationRecord
     create_fetch_status(status: 'FAILURE', error_reason: reason)
   end
 
-  def attach_remote_file
-    return if fetched?
-    try_fetching do
-      RemoteFile.new(url).get do |audio_file|
-        audio_attachment = create_audio_attachment
-        audio_attachment.audio = audio_file
-        audio_attachment.save
-      end
-    end
+  def attach_audio(file)
+    audio_attachment = create_audio_attachment
+    audio_attachment.audio = file
+    audio_attachment.save
   end
-
-  def attach_remote_youtube_audio
-    return if fetched?
-    try_fetching do
-      Youtube.new.download_audio_with_fallback(url) do |audio_file, details|
-        audio_attachment = create_audio_attachment
-        audio_attachment.audio = audio_file
-        audio_attachment.save
-
-        update(
-          description: details.description,
-          duration: details.duration,
-          publication_date: details.publication_date,
-        )
-      end
-    end
-  end
-
-  private
 
   def try_fetching
     mark_as_loading!

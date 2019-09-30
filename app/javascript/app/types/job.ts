@@ -1,8 +1,7 @@
 export type JobClass =
   | "DownloadFeedJob"
   | "DownloadYoutubePlaylistJob"
-  | "DownloadEpisodeJob"
-  | "DownloadYoutubeAudioJob"
+  | "DownloadRemoteAudioJob"
   | "FetchOldThumbnailsJob"
   | "DownloadThumbnailJob";
 
@@ -37,7 +36,7 @@ export const isFeedJob = (job: RemoteJob) =>
   ["DownloadFeedJob", "DownloadYoutubePlaylistJob"].includes(job.jobClass);
 
 export const isEpisodeJob = (job: RemoteJob) =>
-  ["DownloadEpisodeJob", "DownloadYoutubeAudioJob"].includes(job.jobClass);
+  ["DownloadRemoteAudioJob"].includes(job.jobClass);
 
 export const isThumbnailJob = (job: RemoteJob) =>
   ["DownloadThumbnailJob"].includes(job.jobClass);

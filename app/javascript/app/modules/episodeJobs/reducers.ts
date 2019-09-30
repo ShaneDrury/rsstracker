@@ -26,9 +26,8 @@ const episodeJobs = (
     }
     case jobActions.NEW_JOB: {
       const job = action.payload.job;
-      switch (job.jobClass) {
-        case "DownloadYoutubeAudioJob":
-        case "DownloadEpisodeJob": {
+      if (job.jobClass === "DownloadRemoteAudioJob") {
+        {
           return {
             ...state,
             items: {
@@ -44,8 +43,7 @@ const episodeJobs = (
       const newJobs = action.payload.jobs.reduce<{ [key: string]: string }>(
         (acc, job) => {
           switch (job.jobClass) {
-            case "DownloadYoutubeAudioJob":
-            case "DownloadEpisodeJob": {
+            case "DownloadRemoteAudioJob": {
               return {
                 ...acc,
                 [job.arguments[0]]: job.id,

@@ -23,7 +23,7 @@ class Youtube
       api.download(url, quality, to: tmp_path)
       json_details = details(url)
       temp_file_path = File.join(temp_dir, "#{json_details.id}.m4a")
-      yield File.open(temp_file_path, binmode: true), json_details
+      yield File.open(temp_file_path, binmode: true)
     end
   end
 

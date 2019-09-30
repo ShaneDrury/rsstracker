@@ -4,8 +4,7 @@ class JobNotifyPlugin < Delayed::Plugin
   BROADCAST_WHITELIST = %w[
     DownloadFeedJob
     DownloadYoutubePlaylistJob
-    DownloadEpisodeJob
-    DownloadYoutubeAudioJob
+    DownloadRemoteAudioJob
     FetchOldThumbnailsJob
     DownloadThumbnailJob
   ].freeze

@@ -23,8 +23,7 @@ function* watchJobsRequested() {
 
 function* fetchRelatedEpisode(job: RemoteJob) {
   switch (job.jobClass) {
-    case "DownloadYoutubeAudioJob":
-    case "DownloadEpisodeJob": {
+    case "DownloadRemoteAudioJob": {
       yield put(fetchEpisodeRequested(job.arguments[0].toString(10)));
       break;
     }
