@@ -62,7 +62,7 @@ class Feed < ApplicationRecord
     # TODO: Move to source? it's a scope on that really
     all_sources.flat_map do |source|
       source.new_episodes.select do |episode|
-        source.matching_feed(episode.title) == feed
+        source.matching_feed(episode.title) == self
       end.map do |episode|
         [source, episode]
       end
