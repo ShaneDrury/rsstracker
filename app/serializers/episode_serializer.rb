@@ -2,6 +2,7 @@ class EpisodeSerializer < ActiveModel::Serializer
   attributes :id,
     :name,
     :description,
+    :duration,
     :guid,
     :url,
     :full_url,
