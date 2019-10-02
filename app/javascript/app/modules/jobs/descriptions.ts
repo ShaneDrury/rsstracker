@@ -1,4 +1,3 @@
-import { uniq } from "lodash";
 import { RemoteEpisode } from "../../types/episode";
 import { RemoteFeed, Source } from "../../types/feed";
 import { JobClass, RemoteJob } from "../../types/job";
@@ -63,33 +62,22 @@ export const episodeToJobDescription = (
   };
 };
 
-const feedsForSource = (feeds: RemoteFeed[], sourceId: number) =>
-  uniq(
-    feeds.filter(feed =>
-      feed.sources.map(source => source.id).includes(sourceId)
-    )
-  );
-
 export const feedToJobDescription = (
   feeds: { [key: string]: RemoteFeed },
   sources: { [key: string]: Source },
   { itemId, key, errorMessage, id }: ProcessedJob
-): JobDescription[] => {
-  const sourceFeeds = feedsForSource(Object.values(feeds), itemId);
-  const notifications: JobDescription[] = [];
-  sourceFeeds.forEach(feed => {
-    const name = feed.name;
-    const error = errorMessage
-      ? `${errorMessage} during Updating: ${name}`
-      : undefined;
-    notifications.push({
-      id,
-      key,
-      description: `Updating: ${name}`,
-      error,
-    });
-  });
-  return notifications;
+): JobDescription => {
+  const sourceFeed = feeds[itemId];
+  const name = sourceFeed.name;
+  const error = errorMessage
+    ? `${errorMessage} during Updating: ${name}`
+    : undefined;
+  return {
+    id,
+    key,
+    description: `Updating: ${name}`,
+    error,
+  };
 };
 
 export const thumbnailJobToDescription = ({

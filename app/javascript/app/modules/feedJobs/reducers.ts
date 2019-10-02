@@ -1,5 +1,5 @@
 import { invert, mapValues, omit } from "lodash";
-import { FeedJobsAction, feedJobsActions } from "../feedJobs/actions";
+import { FeedJobsAction, feedJobsActions } from "./actions";
 import { jobActions, JobsAction } from "../jobs/actions";
 
 export interface State {
@@ -9,7 +9,7 @@ export interface State {
 }
 
 const initialState: State = { items: {} };
-
+// TODO: the first argument to UpdateFeedJob is now a feed not a source
 const sourceJobs = (
   state: State = initialState,
   action: FeedJobsAction | JobsAction
@@ -17,7 +17,7 @@ const sourceJobs = (
   switch (action.type) {
     case feedJobsActions.UPDATE_FEEDS_STARTED: {
       const feedsToJobIds = mapValues(
-        action.payload.sourcesToJobs,
+        action.payload.feedsToJobs,
         job => job.id
       );
       return {
@@ -30,9 +30,8 @@ const sourceJobs = (
     }
     case jobActions.NEW_JOB: {
       const job = action.payload.job;
-      switch (job.jobClass) {
-        case "DownloadFeedJob":
-        case "DownloadYoutubePlaylistJob": {
+      if (job.jobClass === "UpdateFeedJob") {
+        {
           return {
             ...state,
             items: {
@@ -48,8 +47,7 @@ const sourceJobs = (
       const newJobs = action.payload.jobs.reduce<{ [key: string]: string }>(
         (acc, job) => {
           switch (job.jobClass) {
-            case "DownloadFeedJob":
-            case "DownloadYoutubePlaylistJob": {
+            case "UpdateFeedJob": {
               return {
                 ...acc,
                 [job.arguments[0]]: job.id,

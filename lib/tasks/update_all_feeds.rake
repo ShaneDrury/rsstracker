@@ -1,5 +1,7 @@
 namespace :update do
   task feeds: :environment do
-    UpdateAllFeedsJob.perform_now
+    Feed.pluck(:id).map do |feed_id|
+      UpdateFeedJob.perform_later(feed_id)
+    end
   end
 end

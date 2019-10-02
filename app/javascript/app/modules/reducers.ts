@@ -6,7 +6,7 @@ import favourites, { State as FavouritesState } from "./favourites/reducers";
 import feeds, { State as FeedsState } from "./feeds/reducers";
 import jobs, { JobsState } from "./jobs/reducers";
 import player, { State as PlayerState } from "./player/reducers";
-import sourceJobs, { State as SourceJobsState } from "./sourceJobs/reducers";
+import feedJobs, { State as FeedJobsState } from "./feedJobs/reducers";
 import sources, { State as SourcesState } from "./sources/reducers";
 
 export interface RootState {
@@ -17,7 +17,7 @@ export interface RootState {
   jobs: JobsState;
   favourites: FavouritesState;
   sources: SourcesState;
-  sourceJobs: SourceJobsState;
+  feedJobs: FeedJobsState;
 }
 
 const rootReducer: Reducer<RootState, RootAction> = combineReducers({
@@ -28,7 +28,7 @@ const rootReducer: Reducer<RootState, RootAction> = combineReducers({
   jobs,
   player,
   sources,
-  sourceJobs,
+  feedJobs,
 });
 
 export default rootReducer;

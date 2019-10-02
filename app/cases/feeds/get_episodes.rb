@@ -1,4 +1,4 @@
-module Feed
+module Feeds
   class GetEpisodes
     def initialize(feed)
       @feed = feed

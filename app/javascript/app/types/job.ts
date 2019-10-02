@@ -1,6 +1,5 @@
 export type JobClass =
-  | "DownloadFeedJob"
-  | "DownloadYoutubePlaylistJob"
+  | "UpdateFeedJob"
   | "DownloadRemoteAudioJob"
   | "FetchOldThumbnailsJob"
   | "DownloadThumbnailJob";
@@ -33,7 +32,7 @@ export interface RemoteJob extends JobAttributes {
 }
 
 export const isFeedJob = (job: RemoteJob) =>
-  ["DownloadFeedJob", "DownloadYoutubePlaylistJob"].includes(job.jobClass);
+  ["UpdateFeedJob"].includes(job.jobClass);
 
 export const isEpisodeJob = (job: RemoteJob) =>
   ["DownloadRemoteAudioJob"].includes(job.jobClass);

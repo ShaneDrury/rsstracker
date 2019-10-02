@@ -7,7 +7,7 @@ import { SearchParams } from "../modules/location/queryParams";
 import { RootState } from "../modules/reducers";
 import { FetchStatus } from "../modules/remoteData";
 
-import { getUpdatingSources } from "../modules/sourceJobs/selectors";
+import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
 import { usePrevious } from "../modules/hooks";
 
 interface DataProps {
@@ -18,7 +18,7 @@ interface DataProps {
 
 interface EnhancedProps {
   fetchStatus: FetchStatus;
-  loadingSources: string[];
+  loadingFeeds: string[];
 }
 
 interface DispatchProps {
@@ -32,14 +32,14 @@ const EpisodesLoader: React.FunctionComponent<Props> = ({
   feedId,
   fetchEpisodes,
   fetchStatus,
-  loadingSources,
+  loadingFeeds,
   children,
 }) => {
-  const sourcesLoading = loadingSources.length;
-  const previousLoadingSources = usePrevious(loadingSources);
+  const feedsLoading = loadingFeeds.length;
+  const previousLoadingFeeds = usePrevious(loadingFeeds);
   const noLongerLoading =
-    sourcesLoading === 0 &&
-    (previousLoadingSources ? previousLoadingSources.length > 0 : false);
+    feedsLoading === 0 &&
+    (previousLoadingFeeds ? previousLoadingFeeds.length > 0 : false);
   React.useEffect(() => {
     if (fetchStatus !== "LOADING" || noLongerLoading) {
       if (feedId) {
@@ -57,10 +57,10 @@ const EpisodesLoader: React.FunctionComponent<Props> = ({
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
   const fetchStatus = getFetchStatus(state);
-  const loadingSources = getUpdatingSources(state);
+  const loadingFeeds = getUpdatingFeeds(state);
 
   return {
-    loadingSources,
+    loadingFeeds,
     fetchStatus,
   };
 };

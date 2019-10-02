@@ -37,14 +37,6 @@ class Feed < ApplicationRecord
     all.map(&:all_sources).flatten.uniq
   end
 
-  def self.update_all
-    all_unique_sources.map(&:update_episodes)
-  end
-
-  def update_episodes
-    all_sources.map(&:update_episodes)
-  end
-
   after_update_commit do
     FeedUpdateBroadcastJob.perform_later(id)
   end
@@ -67,6 +59,7 @@ class Feed < ApplicationRecord
   end
 
   def new_episodes
+    # TODO: Move to source? it's a scope on that really
     all_sources.flat_map do |source|
       source.new_episodes.map { |episode| [source, episode] }
     end

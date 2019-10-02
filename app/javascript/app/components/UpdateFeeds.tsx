@@ -4,7 +4,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { updateFeedsRequested } from "../modules/feedJobs/actions";
 import { RootState } from "../modules/reducers";
-import { getUpdatingSources } from "../modules/sourceJobs/selectors";
+import { getUpdatingFeeds } from "../modules/feedJobs/selectors";
 import { Icon } from "./Icon";
 
 interface DataProps {
@@ -43,7 +43,7 @@ export class UpdateFeeds extends React.PureComponent<Props> {
 }
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
-  const updating = getUpdatingSources(state).length > 0;
+  const updating = getUpdatingFeeds(state).length > 0;
   return {
     updating,
   };

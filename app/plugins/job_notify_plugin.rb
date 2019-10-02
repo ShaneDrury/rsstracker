@@ -2,8 +2,7 @@ require 'delayed_job'
 
 class JobNotifyPlugin < Delayed::Plugin
   BROADCAST_WHITELIST = %w[
-    DownloadFeedJob
-    DownloadYoutubePlaylistJob
+    UpdateFeedJob
     DownloadRemoteAudioJob
     FetchOldThumbnailsJob
     DownloadThumbnailJob

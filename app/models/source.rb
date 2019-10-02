@@ -10,16 +10,6 @@ class Source < ApplicationRecord
       .where("feed_guesses.feed_id = ? OR single_feed_sources.feed_id = ?", feed_id, feed_id)
   end
 
-  def update_episodes
-    if rss?
-      DownloadFeedJob.perform_later(id)
-    elsif youtube?
-      DownloadYoutubePlaylistJob.perform_later(id)
-    else
-      raise 'Unknown source type'
-    end
-  end
-
   def youtube?
     source_type == "youtube"
   end

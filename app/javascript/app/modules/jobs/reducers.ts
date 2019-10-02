@@ -31,9 +31,9 @@ const jobs = (
       };
     }
     case feedJobsActions.UPDATE_FEEDS_STARTED: {
-      const sourceJobs = values(action.payload.sourcesToJobs);
-      const jobIds = sourceJobs.map(job => job.id);
-      const jobIdsToJob = zipObject(jobIds, sourceJobs);
+      const feedJobs = values(action.payload.feedsToJobs);
+      const jobIds = feedJobs.map(job => job.id);
+      const jobIdsToJob = zipObject(jobIds, feedJobs);
       return {
         ...state,
         ids: union(state.ids, jobIds),
