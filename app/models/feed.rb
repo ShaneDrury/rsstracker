@@ -2,9 +2,9 @@ class Feed < ApplicationRecord
   has_many :episodes do
     def create_episode(source, remote_episode)
       episode = create!(
-        guid: remote_episode.url,
+        guid: remote_episode.guid,
         source: source,
-        name: remote_episode.description,
+        name: remote_episode.title,
         description: remote_episode.description,
         duration: remote_episode.duration,
         file_size: remote_episode.file_size,
@@ -61,7 +61,11 @@ class Feed < ApplicationRecord
   def new_episodes
     # TODO: Move to source? it's a scope on that really
     all_sources.flat_map do |source|
-      source.new_episodes.map { |episode| [source, episode] }
+      source.new_episodes.select do |episode|
+        source.matching_feed(episode.title) == feed
+      end.map do |episode|
+        [source, episode]
+      end
     end
   end
 end

@@ -32,9 +32,7 @@ class Source < ApplicationRecord
     # better to chunk?
     existing_guids = Episode.where(guid: guids).pluck(:guid)
     new_guids = guids - existing_guids
-    remote_episodes.select do |episode|
-      new_guids.include?(episode.url)
-    end
+    remote_episodes.select { |episode| new_guids.include?(episode.url) }
   end
 
   private

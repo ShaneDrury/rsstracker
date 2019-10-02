@@ -8,7 +8,7 @@ class YoutubePlaylist
       RemoteYoutubeEpisode.from_short_details(item.title, item.url)
     end
     episodes.reject do |episode|
-      episode.description == "[Deleted video]"
+      episode.title == "[Deleted video]"
     end
   end
 
