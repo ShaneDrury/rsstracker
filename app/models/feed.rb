@@ -1,5 +1,22 @@
 class Feed < ApplicationRecord
-  has_many :episodes
+  has_many :episodes do
+    def create_episode(source, remote_episode)
+      episode = create!(
+        guid: remote_episode.url,
+        source: source,
+        name: remote_episode.description,
+        description: remote_episode.description,
+        duration: remote_episode.duration,
+        file_size: remote_episode.file_size,
+        publication_date: remote_episode.publication_date,
+        source_thumbnail_url: remote_episode.thumbnail_url,
+        url: remote_episode.url,
+        seen: false,
+      )
+      episode.mark_as_not_asked!
+    end
+  end
+
   has_many :single_feed_sources
   # TODO: Rename this :single_feed_sources and let sources be the union of that and guessing
   # Are they polymorphic? Both have disabled field which would be useful to merge
@@ -46,6 +63,12 @@ class Feed < ApplicationRecord
       source_types[0]
     elsif source_types.length > 1
       "mixed"
+    end
+  end
+
+  def new_episodes
+    all_sources.flat_map do |source|
+      source.new_episodes.map { |episode| [source, episode] }
     end
   end
 end

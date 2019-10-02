@@ -4,8 +4,6 @@ class DownloadFeedJob < ApplicationJob
   class RssError < StandardError; end
   queue_as :default
 
-  BUFFER_SIZE = 8 * 1024
-
   def perform(source_id)
     source = Source.find(source_id)
     feed = source.feed
@@ -18,9 +16,6 @@ class DownloadFeedJob < ApplicationJob
       FileDownloader.get(thumbnail_url) do |input|
         feed.thumbnail.attach(io: input, filename: "thumbnail.jpg", content_type: "image/jpeg")
       end
-      feed.update_attributes(
-        description: rss.channel.description,
-      )
     end
 
     rss.items.each do |rss_item|

@@ -2,6 +2,7 @@ require "youtube_api"
 
 class Youtube
   FILENAME_FORMAT = '%(id)s.%(ext)s'
+  # TODO: Maybe url as a constructor param, used everywhere here
 
   def short_details(url)
     json_out = api.playlist(url)
@@ -21,6 +22,7 @@ class Youtube
     Dir.mktmpdir do |temp_dir|
       tmp_path = File.join(temp_dir, FILENAME_FORMAT)
       api.download(url, quality, to: tmp_path)
+      # TODO: Consider extracting id manually, faster
       json_details = details(url)
       temp_file_path = File.join(temp_dir, "#{json_details.id}.m4a")
       yield File.open(temp_file_path, binmode: true)

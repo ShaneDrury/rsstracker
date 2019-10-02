@@ -35,4 +35,31 @@ class Source < ApplicationRecord
       feed_guesses.detect { |guess| guess.matches_text?(title) }&.feed
     end
   end
+
+  def new_episodes
+    guids = remote_episodes.map(&:url)
+    # Bit dodgy, maximum 32k values here in the where(guid: guids)
+    # better to chunk?
+    existing_guids = Episode.where(guid: guids).pluck(:guid)
+    new_guids = guids - existing_guids
+    remote_episodes.select do |episode|
+      new_guids.include?(episode.url)
+    end
+  end
+
+  private
+
+  def remote_episodes
+    @remote_episodes ||= remote.episodes
+  end
+
+  def remote
+    if rss?
+      RssFeed.new(url)
+    elsif youtube?
+      YoutubePlaylist.new(url)
+    else
+      raise 'Unknown source type'
+    end
+  end
 end
