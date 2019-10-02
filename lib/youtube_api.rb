@@ -15,7 +15,7 @@ class YoutubeApi
     begin
       with_youtube_dl('-f', quality, '-o', to, '-x', '--', url)
     rescue YoutubeDlError
-      raise DownloadError.new("Could not download #{url} with quality #{quality} to #{tmp_path}")
+      raise DownloadError.new("Could not download #{url} with quality #{quality}")
     end
   end
 
