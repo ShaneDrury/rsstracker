@@ -42,9 +42,9 @@ class FeedsController < ApplicationController
   end
 
   def update_feeds
-    active_jobs = Feed.pluck(:id).map { |feed_id| UpdateFeedJob.perform_later(feed_id) }
-    jobs = Delayed::Job.find(active_jobs.map(&:provider_job_id))
-    render json: jobs, status: :accepted
+    active_job = UpdateFeedsJob.perform_later(feed_id)
+    job = Delayed::Job.find(active_job.provider_job_id)
+    render json: job, status: :accepted
   end
 
   # PATCH/PUT /feeds/1
