@@ -60,13 +60,4 @@ class Feed < ApplicationRecord
       "mixed"
     end
   end
-
-  def new_episodes(scope = all_sources)
-    scope.flat_map do |source|
-      matching_episodes = source.new_episodes.select do |episode|
-        source.matching_feed(episode.title) == self
-      end
-      matching_episodes.map { |episode| [source, episode] }
-    end
-  end
 end
