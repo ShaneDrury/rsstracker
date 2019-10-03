@@ -27,7 +27,7 @@ class RemoteYoutubeEpisode < RemoteEpisode
     details.description
   end
 
-  attr_accessor :file_size, :url, :title
+  attr_accessor :file_size, :url, :title, :guid
 
   private
 
