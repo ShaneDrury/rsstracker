@@ -14,6 +14,7 @@ class Feed < ApplicationRecord
         seen: false,
       )
       episode.mark_as_not_asked!
+      episode
     end
   end
 
@@ -34,6 +35,8 @@ class Feed < ApplicationRecord
 
   def self.all_unique_sources
     # TODO: Non disabled sources?
+    # TODO: Make this a query
+    # The unique non disabled sources over all feeds
     all.map(&:all_sources).flatten.uniq
   end
 
@@ -58,14 +61,12 @@ class Feed < ApplicationRecord
     end
   end
 
-  def new_episodes
-    # TODO: Move to source? it's a scope on that really
-    all_sources.flat_map do |source|
-      source.new_episodes.select do |episode|
+  def new_episodes(scope = all_sources)
+    scope.flat_map do |source|
+      matching_episodes = source.new_episodes.select do |episode|
         source.matching_feed(episode.title) == self
-      end.map do |episode|
-        [source, episode]
       end
+      matching_episodes.map { |episode| [source, episode] }
     end
   end
 end
