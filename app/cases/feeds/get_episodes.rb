@@ -8,6 +8,10 @@ module Feeds
       new([feed])
     end
 
+    def initialize(feed_models)
+      @feed_models = feed_models
+    end
+
     def run
       feeds.new_episodes.each do |feed, source, remote_episode|
         episode = feed.episodes.create_episode(source, remote_episode)
@@ -21,10 +25,6 @@ module Feeds
     private
 
     attr_accessor :feed_models
-
-    def initialize(feed_models)
-      @feed_models = feed_models
-    end
 
     def feeds
       CompositeFeeds.new(feed_models)
