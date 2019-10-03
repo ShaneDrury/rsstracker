@@ -17,7 +17,7 @@ module Feeds
         episode = feed.episodes.create_episode(source, remote_episode)
         next unless episode.should_download?
 
-        DownloadThumbnailJob.perform_later(episode.id) if episode.thumbnail_url
+        DownloadThumbnailJob.perform_later(episode.id) if episode.source_thumbnail_url
         DownloadRemoteAudioJob.perform_later(episode.id) if feed.autodownload
       end
     end
