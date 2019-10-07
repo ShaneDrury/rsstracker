@@ -9,7 +9,7 @@ export interface State {
 }
 
 const initialState: State = { items: {} };
-// TODO: the first argument to UpdateFeedJob is now a feed not a source
+
 const sourceJobs = (
   state: State = initialState,
   action: FeedJobsAction | JobsAction

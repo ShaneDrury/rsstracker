@@ -4,6 +4,7 @@ import { FavouritesAction } from "./favourites/actions";
 import { FeedJobsAction } from "./feedJobs/actions";
 import { FeedsAction } from "./feeds/actions";
 import { JobsAction } from "./jobs/actions";
+import { SourceJobsAction } from "./sourceJobs/actions";
 
 export type RootAction =
   | FeedsAction
@@ -11,4 +12,5 @@ export type RootAction =
   | EpisodeJobsAction
   | EpisodesAction
   | JobsAction
+  | SourceJobsAction
   | FavouritesAction;

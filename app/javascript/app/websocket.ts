@@ -11,6 +11,10 @@ import { RootState } from "./modules/reducers";
 import { ApiEpisode } from "./types/episode";
 import { ApiFeed } from "./types/feed";
 import { ProviderJob } from "./types/job";
+import {
+  updateSourceComplete,
+  updateSourceStarted,
+} from "./modules/sourceJobs/actions";
 
 interface Meta extends Element {
   content: string;
@@ -70,7 +74,9 @@ type CableAction =
   | UpdateEpisode
   | JobComplete
   | JobError
-  | JobStart;
+  | JobStart
+  | SourceUpdateStarted
+  | SourceUpdateComplete;
 
 const handleCableAction = (
   action: CableAction,
@@ -85,6 +91,16 @@ const handleCableAction = (
     case "UPDATE_EPISODE": {
       const episode = action.payload.episode;
       dispatch(updateEpisodeComplete(processEpisode(episode.data)));
+      break;
+    }
+    case "SOURCE_UPDATE_STARTED": {
+      const sourceId = action.payload.sourceId;
+      dispatch(updateSourceStarted(sourceId));
+      break;
+    }
+    case "SOURCE_UPDATE_COMPLETE": {
+      const sourceId = action.payload.sourceId;
+      dispatch(updateSourceComplete(sourceId));
       break;
     }
     case "JOB_COMPLETE": {
