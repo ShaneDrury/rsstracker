@@ -13,7 +13,7 @@ module Feeds
     end
 
     def run
-      feeds.new_episodes.each do |feed, source, remote_episode|
+      feeds.new_episodes do |feed, source, remote_episode|
         episode = feed.episodes.create_episode(source, remote_episode)
         next unless episode.should_download?
 
