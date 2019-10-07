@@ -1,3 +1,6 @@
+require_relative "../jobs/source_update_started_broadcast_job"
+require_relative "../jobs/source_update_complete_broadcast_job"
+
 class Source < ApplicationRecord
   has_one :single_feed_source
   has_one :feed, through: :single_feed_source
@@ -33,6 +36,13 @@ class Source < ApplicationRecord
     existing_guids = Episode.where(guid: guids).pluck(:guid)
     new_guids = guids - existing_guids
     remote_episodes.select { |episode| new_guids.include?(episode.url) }
+  end
+
+  def with_update
+    SourceUpdateStartedBroadcastJob.perform_later(id)
+    result = yield
+    SourceUpdateCompleteBroadcastJob.perform_later(id)
+    result
   end
 
   private

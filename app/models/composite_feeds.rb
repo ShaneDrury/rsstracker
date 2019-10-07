@@ -5,14 +5,15 @@ class CompositeFeeds
 
   def new_episodes
     mapper(sources).map do |source|
-      # This should fire off a SOURCE_UPDATING event
-      matching_episodes = source.new_episodes.map do |episode|
-        feed = source.matching_feed(episode.title)
-        [feed, source, episode]
+      source.with_update do
+        matching_episodes = source.new_episodes.map do |episode|
+          feed = source.matching_feed(episode.title)
+          [feed, source, episode]
+        end
+        matching_episodes
+          .select { |feed, _, _| feeds.include?(feed) }
+          .map { |feed, src, episode| yield(feed, src, episode) }
       end
-      matching_episodes
-        .select { |feed, _, _| feeds.include?(feed) }
-        .map { |feed, src, episode| yield(feed, src, episode) }
     end
   end
 

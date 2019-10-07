@@ -30,6 +30,20 @@ interface UpdateEpisode {
   };
 }
 
+interface SourceUpdateStarted {
+  type: "SOURCE_UPDATE_STARTED";
+  payload: {
+    sourceId: string;
+  };
+}
+
+interface SourceUpdateComplete {
+  type: "SOURCE_UPDATE_COMPLETE";
+  payload: {
+    sourceId: string;
+  };
+}
+
 interface JobComplete {
   type: "JOB_COMPLETE";
   payload: {
