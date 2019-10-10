@@ -4,7 +4,20 @@ class RemoteEpisodes
     @feeds = feeds
   end
 
-  def new_episodes
+  def download_new
+    source.with_update do
+      new.each do |remote_episode|
+        feed = remote_episode.feed
+        episode = feed.episodes.create_episode(remote_episode)
+        next unless episode.should_download?
+
+        DownloadThumbnailJob.perform_later(episode.id) if episode.source_thumbnail_url
+        DownloadRemoteAudioJob.perform_later(episode.id) if feed.autodownload
+      end
+    end
+  end
+
+  def new
     source
       .new_episodes
       .select { |episode| feeds.include?(episode.feed) }
