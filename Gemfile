@@ -71,4 +71,3 @@ gem 'pg'
 gem "sentry-raven"
 gem "shrine"
 gem 'yaml_db'
-gem 'parallel'

@@ -1,6 +1,6 @@
 class RemoteEpisode
   # TODO: Probably no need for base class?
-  def initialize(description: nil, duration: nil, file_size: nil, publication_date: nil, thumbnail_url: nil, url:, title:, guid:)
+  def initialize(description: nil, duration: nil, file_size: nil, publication_date: nil, thumbnail_url: nil, url:, title:, guid:, source:)
     @description = description
     @duration = duration
     @file_size = file_size
@@ -9,5 +9,10 @@ class RemoteEpisode
     @thumbnail_url = thumbnail_url
     @title = title
     @url = url
+    @source = source
+  end
+
+  def feed
+    @feed ||= source.matching_feed(title)
   end
 end

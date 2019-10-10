@@ -53,9 +53,9 @@ class Source < ApplicationRecord
 
   def remote
     if rss?
-      RssFeed.new(url)
+      RssFeed.new(url, self)
     elsif youtube?
-      YoutubePlaylist.new(url)
+      YoutubePlaylist.new(url, self)
     else
       raise 'Unknown source type'
     end

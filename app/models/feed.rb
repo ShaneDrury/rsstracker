@@ -1,9 +1,9 @@
 class Feed < ApplicationRecord
   has_many :episodes do
-    def create_episode(source, remote_episode)
+    def create_episode(remote_episode)
       episode = create!(
         guid: remote_episode.guid,
-        source: source,
+        source: remote_episode.source,
         name: remote_episode.title,
         description: remote_episode.description,
         duration: remote_episode.duration,

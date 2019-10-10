@@ -7,19 +7,20 @@ class RssFeed
     RSS::Parser.parse(open(url).read, false)
   end
 
-  def initialize(url)
+  def initialize(url, source)
     @url = url
+    @source = source
   end
 
   def episodes
     raise RssError, "RSS Feed was nil. Source id: #{source_id}" if rss.nil?
 
-    rss.items.map { |item| RemoteRssEpisode.from_rss_episode(item) }
+    rss.items.map { |item| RemoteRssEpisode.from_rss_episode(item, source) }
   end
 
   private
 
-  attr_accessor :url
+  attr_accessor :url, :source
 
   def rss
     @rss ||= RSS::Parser.parse(open(url).read, false)

@@ -1,11 +1,12 @@
 class YoutubePlaylist
-  def initialize(url)
+  def initialize(url, source)
     @url = url
+    @source = source
   end
 
   def episodes
     episodes = youtube.short_details(url).map do |item|
-      RemoteYoutubeEpisode.from_short_details(item.title, item.url)
+      RemoteYoutubeEpisode.from_short_details(item.title, item.url, source)
     end
     episodes.reject do |episode|
       episode.title == "[Deleted video]"
@@ -18,5 +19,5 @@ class YoutubePlaylist
     @youtube ||= Youtube.new
   end
 
-  attr_accessor :url
+  attr_accessor :url, :source
 end

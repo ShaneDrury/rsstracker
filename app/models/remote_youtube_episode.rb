@@ -1,9 +1,10 @@
 class RemoteYoutubeEpisode < RemoteEpisode
-  def self.from_short_details(title, url)
+  def self.from_short_details(title, url, source)
     new(
       title: title,
       guid: url,
       url: url,
+      source: source,
     )
   end
 
@@ -27,7 +28,7 @@ class RemoteYoutubeEpisode < RemoteEpisode
     details.description
   end
 
-  attr_accessor :file_size, :url, :title, :guid
+  attr_accessor :file_size, :url, :title, :guid, :source
 
   private
 

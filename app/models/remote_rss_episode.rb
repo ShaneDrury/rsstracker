@@ -1,6 +1,6 @@
 class RemoteRssEpisode < RemoteEpisode
   # TODO: just use initialize
-  def self.from_rss_episode(rss_item)
+  def self.from_rss_episode(rss_item, source)
     rss_description = rss_item.description.strip
     description = if rss_description.empty?
                     rss_item.itunes_summary
@@ -15,8 +15,9 @@ class RemoteRssEpisode < RemoteEpisode
       guid: rss_item.guid.content,
       title: rss_item.title,
       url: rss_item.link,
+      source: source,
     )
   end
 
-  attr_accessor :description, :duration, :file_size, :publication_date, :thumbnail_url, :url, :guid
+  attr_accessor :description, :duration, :file_size, :publication_date, :thumbnail_url, :url, :guid, :source
 end
