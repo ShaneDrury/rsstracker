@@ -1,6 +1,3 @@
-require_relative "../jobs/source_update_started_broadcast_job"
-require_relative "../jobs/source_update_complete_broadcast_job"
-
 class Source < ApplicationRecord
   has_one :single_feed_source
   has_one :feed, through: :single_feed_source

@@ -1,29 +1,25 @@
 class RemoteEpisodes
-  def initialize(source, feeds)
+  def initialize(source)
     @source = source
-    @feeds = feeds
   end
 
   def download_new
     source.with_update do
-      new.each do |remote_episode|
-        feed = remote_episode.feed
-        episode = feed.episodes.create_episode(remote_episode)
+      new_episodes.each do |remote_episode|
+        episode = remote_episode.create_episode
         next unless episode.should_download?
 
         DownloadThumbnailJob.perform_later(episode.id) if episode.source_thumbnail_url
-        DownloadRemoteAudioJob.perform_later(episode.id) if feed.autodownload
+        DownloadRemoteAudioJob.perform_later(episode.id) if remote_episode.feed.autodownload
       end
     end
   end
 
-  def new
-    source
-      .new_episodes
-      .select { |episode| feeds.include?(episode.feed) }
-  end
-
   private
 
-  attr_accessor :source, :feeds
+  def new_episodes
+    source.new_episodes.select { |episode| episode.feed.present? }
+  end
+
+  attr_accessor :source
 end
