@@ -13,4 +13,4 @@ export const getSortedEpisodeIds = (state: RootState): string[] =>
 export const getPageInfo = (state: RootState) => state.episodes.pageInfo;
 
 export const getDetailEpisodeId = (state: RootState) =>
-  state.episodes.detailEpisodeId;
+  state.player.detailEpisodeId;

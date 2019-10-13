@@ -1,4 +1,5 @@
 import { Action, actions } from "./actions";
+import { episodeActions, EpisodesAction } from "../episodes/actions";
 
 export interface State {
   playingEpisodeId?: string;
@@ -7,7 +8,13 @@ export interface State {
   };
   playing: boolean;
   enabled: boolean;
+  detailEpisodeId?: string;
 }
+
+const detailEpisodeIdJSON = localStorage.getItem("lastPlayedEpisode");
+const detailEpisodeId = detailEpisodeIdJSON
+  ? JSON.parse(detailEpisodeIdJSON)
+  : undefined;
 
 const savedSecondsJSON = localStorage.getItem("savedSeconds");
 const savedSeconds = savedSecondsJSON ? JSON.parse(savedSecondsJSON) : {};
@@ -22,9 +29,13 @@ const initialState: State = {
   playingEpisodeId,
   playing: false,
   enabled: false,
+  detailEpisodeId,
 };
 
-const player = (state: State = initialState, action: Action): State => {
+const player = (
+  state: State = initialState,
+  action: Action | EpisodesAction
+): State => {
   switch (action.type) {
     case actions.PLAYED_SECONDS_UPDATED: {
       return {
@@ -58,6 +69,7 @@ const player = (state: State = initialState, action: Action): State => {
       return {
         ...state,
         playingEpisodeId: action.payload.playingEpisodeId,
+        detailEpisodeId: action.payload.playingEpisodeId,
         playing: true,
         enabled: true,
       };
@@ -67,6 +79,18 @@ const player = (state: State = initialState, action: Action): State => {
         ...state,
         playing: true,
         enabled: true,
+      };
+    }
+    case episodeActions.DETAILS_OPENED: {
+      return {
+        ...state,
+        detailEpisodeId: action.payload.episodeId,
+      };
+    }
+    case episodeActions.DETAILS_CLOSED: {
+      return {
+        ...state,
+        detailEpisodeId: undefined,
       };
     }
     default:

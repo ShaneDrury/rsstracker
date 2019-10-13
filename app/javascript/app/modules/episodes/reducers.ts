@@ -12,13 +12,7 @@ export interface State {
   fetchStatus: FetchStatus;
   ids: string[];
   pageInfo: PageInfo;
-  detailEpisodeId?: string;
 }
-
-const detailEpisodeIdJSON = localStorage.getItem("lastPlayedEpisode");
-const detailEpisodeId = detailEpisodeIdJSON
-  ? JSON.parse(detailEpisodeIdJSON)
-  : undefined;
 
 const initialState: State = {
   items: {},
@@ -33,7 +27,6 @@ const initialState: State = {
     lastPage: false,
     outOfRange: false,
   },
-  detailEpisodeId,
 };
 
 const episodes = (
@@ -101,18 +94,6 @@ const episodes = (
             updating: true,
           },
         },
-      };
-    }
-    case episodeActions.DETAILS_OPENED: {
-      return {
-        ...state,
-        detailEpisodeId: action.payload.episodeId,
-      };
-    }
-    case episodeActions.DETAILS_CLOSED: {
-      return {
-        ...state,
-        detailEpisodeId: undefined,
       };
     }
     default:
