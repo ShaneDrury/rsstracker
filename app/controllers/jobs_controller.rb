@@ -10,12 +10,7 @@ class JobsController < ApplicationController
   end
 
   def retry
-    @job.attempts = 0
-    @job.run_at = Time.now
-    @job.last_error = "Retry requested"
-    @job.failed_at = nil
-    @job.unlock
-    @job.save!
+    @job.mark_retriable!
     respond_to do |format|
       format.html { redirect_to jobs_url }
     end
