@@ -5,7 +5,7 @@ require 'shrine/plugins/data_uri'
 require 'shrine/plugins/delete_promoted'
 require 'shrine/plugins/delete_raw'
 require 'shrine/storage/file_system'
-require 'shrine/plugins/logging'
+require 'shrine/plugins/instrumentation'
 require 'shrine/plugins/store_dimensions'
 require 'shrine/plugins/restore_cached_data'
 require 'shrine/plugins/pretty_location'
@@ -14,7 +14,7 @@ Shrine.plugin :activerecord
 Shrine.plugin :backgrounding
 Shrine.plugin :data_uri
 Shrine.plugin :delete_promoted
-Shrine.plugin :logging
+Shrine.plugin :instrumentation
 Shrine.plugin :restore_cached_data
 
 def production_storages
