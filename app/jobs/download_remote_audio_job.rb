@@ -2,6 +2,6 @@ class DownloadRemoteAudioJob < ApplicationJob
   queue_as :default
 
   def perform(episode_id)
-    Downloading::GetRemoteAudio.new(Episode.find(episode_id)).run
+    Services::RemoteAudio.new(Episode.find(episode_id)).fetch_and_attach
   end
 end

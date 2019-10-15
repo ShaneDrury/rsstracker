@@ -1,5 +1,5 @@
-module Feeds
-  class GetEpisodes
+module Services
+  class Feeds
     def self.all
       new(Feed.all)
     end
@@ -12,7 +12,7 @@ module Feeds
       @feed_models = feed_models
     end
 
-    def run
+    def update
       feeds.sources.each do |source|
         UpdateSourceEpisodesJob.perform_later(source.id)
       end
