@@ -3,12 +3,8 @@ class RemoteAudio
     @episode = episode
   end
 
-  def get
-    remote_audio_source.fetch(episode.url) do |f|
-      episode.try_fetching do
-        yield(f)
-      end
-    end
+  def get(&block)
+    remote_audio_source.fetch(episode.url, &block)
   end
 
   private

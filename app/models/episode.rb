@@ -73,6 +73,25 @@ class Episode < ApplicationRecord
     audio_attachment.save
   end
 
+  def fetch_and_attach_remote_audio
+    return if fetched?
+
+    remote_audio.get do |file|
+      try_fetching do
+        attach_audio(file)
+      end
+    end
+  end
+
+  def redownload
+    return unless fetched?
+
+    mark_as_not_asked!
+    fetch_and_attach_remote_audio
+  end
+
+  private
+
   def try_fetching
     mark_as_loading!
     yield
