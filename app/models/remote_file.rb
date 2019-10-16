@@ -1,11 +1,7 @@
 class RemoteFile
   BUFFER_SIZE = 8 * 1024
 
-  def initialize(url)
-    @url = url
-  end
-
-  def get
+  def fetch(url)
     Dir.mktmpdir do |temp_dir|
       tmp_path = File.join(temp_dir, "audiofile")
       FileDownloader.get(url) do |input|
@@ -19,8 +15,4 @@ class RemoteFile
       yield(audio_file)
     end
   end
-
-  private
-
-  attr_accessor :url
 end
