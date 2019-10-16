@@ -4,7 +4,6 @@ class RemoteAudio
   end
 
   def get
-    # Add a .remote_audio method on episode for accessibility
     remote_audio_source.fetch(episode.url) do |f|
       episode.try_fetching do
         yield(f)

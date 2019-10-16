@@ -63,6 +63,10 @@ class Episode < ApplicationRecord
     create_fetch_status!(status: 'NOT_ASKED')
   end
 
+  def remote_audio
+    @remote_audio ||= RemoteAudio.new(self)
+  end
+
   def attach_audio(file)
     audio_attachment = create_audio_attachment
     audio_attachment.audio = file
