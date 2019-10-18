@@ -90,6 +90,12 @@ class Episode < ApplicationRecord
     fetch_and_attach_remote_audio
   end
 
+  def download_thumbnail
+    FileDownloader.get(source_thumbnail_url) do |input|
+      thumbnail.attach(io: input, filename: "thumbnail.jpg", content_type: "image/jpeg")
+    end
+  end
+
   private
 
   def try_fetching
