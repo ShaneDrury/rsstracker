@@ -40,6 +40,13 @@ class Feed < ApplicationRecord
     all.map(&:all_sources).flatten.uniq
   end
 
+  def self.update_episodes
+    cfs = CompositeFeeds.new(all)
+    cfs.sources.each do |source|
+      UpdateSourceEpisodesJob.perform_later(source.id)
+    end
+  end
+
   after_update_commit do
     FeedUpdateBroadcastJob.perform_later(id)
   end
