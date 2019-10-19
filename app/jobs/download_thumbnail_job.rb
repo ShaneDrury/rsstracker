@@ -1,5 +1,3 @@
-require "thumbnail_downloader"
-
 class DownloadThumbnailJob < ApplicationJob
   queue_as :default
 
