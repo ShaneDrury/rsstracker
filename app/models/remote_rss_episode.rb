@@ -19,5 +19,5 @@ class RemoteRssEpisode < RemoteEpisode
     )
   end
 
-  attr_accessor :description, :duration, :file_size, :publication_date, :thumbnail_url, :url, :guid, :source
+  attr_accessor :description, :duration, :file_size, :publication_date, :thumbnail_url, :url, :guid, :source, :title
 end
