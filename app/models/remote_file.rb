@@ -3,7 +3,8 @@ class RemoteFile
 
   def fetch(url)
     Dir.mktmpdir do |temp_dir|
-      tmp_path = File.join(temp_dir, "audiofile")
+      ext_name = File.extname(url)
+      tmp_path = File.join(temp_dir, "audiofile#{ext_name}")
       FileDownloader.get(url) do |input|
         open(tmp_path, 'wb') do |output|
           while (buffer = input.read(BUFFER_SIZE))
