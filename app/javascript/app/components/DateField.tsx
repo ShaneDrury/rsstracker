@@ -39,7 +39,7 @@ export class DateField extends React.PureComponent<Props> {
         type="date"
         value={value}
       />
-      <a className="button is-primary" onMouseDown={onSave}>
+      <a className="button is-primary is-small" onMouseDown={onSave}>
         Save
       </a>
     </span>
