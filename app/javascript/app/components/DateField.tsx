@@ -3,6 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { updateEpisodeRequested } from "../modules/episodes/actions";
 import { EditMode, EditModeOff, EditModeOn } from "./EditMode";
+import { parseISO } from "date-fns";
 
 interface DataProps {
   episodeId: string;
@@ -26,7 +27,7 @@ export class DateField extends React.PureComponent<Props> {
   };
 
   public editModeOff: EditModeOff = ({ value, startEditing }) => (
-    <span onClick={startEditing}>{format(value, "MMM Do YYYY")}</span>
+    <span onClick={startEditing}>{format(parseISO(value), "LLL do yyyy")}</span>
   );
 
   public editModeOn: EditModeOn = ({ value, onEdit, onCancel, onSave }) => (
@@ -47,7 +48,7 @@ export class DateField extends React.PureComponent<Props> {
   public render() {
     return (
       <EditMode
-        initialValue={format(this.props.date, "YYYY-MM-DD")}
+        initialValue={format(parseISO(this.props.date), "yyyy-LL-dd")}
         onSave={this.handleSave}
         editModeOff={this.editModeOff}
         editModeOn={this.editModeOn}

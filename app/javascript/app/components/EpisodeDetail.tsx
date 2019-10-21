@@ -1,11 +1,7 @@
 import {
-  faDownload,
   faFileAudio,
   faHeart,
-  faPlay,
   faSpinner,
-  faStop,
-  faSync,
   faWindowClose,
 } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";

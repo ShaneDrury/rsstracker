@@ -24,6 +24,7 @@ import { getPlayingEpisode } from "../../modules/player/selectors";
 import { RootState } from "../../modules/reducers";
 import { Icon } from "../Icon";
 import EpisodeFooter from "./EpisodeFooter";
+import { parseISO } from "date-fns";
 
 interface DataProps {
   episodeId: string;
@@ -150,7 +151,7 @@ export class Episode extends React.Component<Props> {
           </Name>
           {publicationDate && (
             <Date className="subtitle is-6">
-              {format(publicationDate, "MMM Do YYYY")}
+              {format(parseISO(publicationDate), "LLL do yyyy")}
             </Date>
           )}
         </Title>
