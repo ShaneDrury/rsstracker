@@ -86,6 +86,7 @@ class Episode < ApplicationRecord
   def redownload
     return unless fetched?
 
+    audio_attachment.destroy!
     mark_as_not_asked!
     fetch_and_attach_remote_audio
   end
