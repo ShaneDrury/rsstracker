@@ -43,41 +43,14 @@ class Episode < ApplicationRecord
     source.source_type.to_sym
   end
 
-  def fetched?
-    fetch_status&.status == "SUCCESS"
-  end
-
-  def mark_as_loading!
-    create_fetch_status(status: 'LOADING')
-  end
-
-  def mark_as_success!
-    create_fetch_status(status: 'SUCCESS')
-  end
-
-  def mark_as_error!(reason)
-    create_fetch_status(status: 'FAILURE', error_reason: reason)
-  end
-
   def mark_as_not_asked!
     create_fetch_status!(status: 'NOT_ASKED')
   end
 
-  def remote_audio
-    @remote_audio ||= RemoteAudio.new(self)
-  end
-
-  def attach_audio(file)
-    audio_attachment = create_audio_attachment
-    audio_attachment.audio = file
-    audio_attachment.save
-  end
-
   def fetch_and_attach_remote_audio
     return if fetched?
-
-    remote_audio.get do |file|
-      try_fetching do
+    try_fetching do
+      remote_audio.get do |file|
         attach_audio(file)
       end
     end
@@ -99,6 +72,16 @@ class Episode < ApplicationRecord
 
   private
 
+  def remote_audio
+    @remote_audio ||= RemoteAudio.new(self)
+  end
+
+  def attach_audio(file)
+    audio_attachment = create_audio_attachment
+    audio_attachment.audio = file
+    audio_attachment.save
+  end
+
   def try_fetching
     mark_as_loading!
     yield
@@ -106,5 +89,21 @@ class Episode < ApplicationRecord
   rescue StandardError => e
     mark_as_error!(e.to_s)
     raise e
+  end
+
+  def mark_as_loading!
+    create_fetch_status(status: 'LOADING')
+  end
+
+  def mark_as_success!
+    create_fetch_status(status: 'SUCCESS')
+  end
+
+  def mark_as_error!(reason)
+    create_fetch_status(status: 'FAILURE', error_reason: reason)
+  end
+
+  def fetched?
+    fetch_status&.status == "SUCCESS"
   end
 end
