@@ -37,14 +37,14 @@ interface UpdateEpisode {
 interface SourceUpdateStarted {
   type: "SOURCE_UPDATE_STARTED";
   payload: {
-    sourceId: string;
+    sourceId: number;
   };
 }
 
 interface SourceUpdateComplete {
   type: "SOURCE_UPDATE_COMPLETE";
   payload: {
-    sourceId: string;
+    sourceId: number;
   };
 }
 
@@ -95,12 +95,12 @@ const handleCableAction = (
     }
     case "SOURCE_UPDATE_STARTED": {
       const sourceId = action.payload.sourceId;
-      dispatch(updateSourceStarted(sourceId));
+      dispatch(updateSourceStarted(sourceId.toString()));
       break;
     }
     case "SOURCE_UPDATE_COMPLETE": {
       const sourceId = action.payload.sourceId;
-      dispatch(updateSourceComplete(sourceId));
+      dispatch(updateSourceComplete(sourceId.toString()));
       break;
     }
     case "JOB_COMPLETE": {
