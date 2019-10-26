@@ -1,4 +1,3 @@
-import { intersection } from "lodash";
 import { createSelector } from "reselect";
 import { RootState } from "../reducers";
 import { getSourceJobs } from "../sourceJobs/selectors";
@@ -11,12 +10,9 @@ export const getUpdatingFeeds = createSelector(
   getFeeds,
   (updatingSources, feeds) =>
     feeds
-      .filter(
-        feed =>
-          intersection(
-            updatingSources,
-            feed.sources.map(source => source.id.toString())
-          ).length >= 1
-      )
+      .filter(feed => {
+        const sourceIds = feed.sources.map(source => source.id.toString());
+        return updatingSources.some(source => sourceIds.includes(source));
+      })
       .map(feed => feed.id)
 );
