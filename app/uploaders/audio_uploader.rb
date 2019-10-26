@@ -3,7 +3,7 @@ class AudioUploader < Shrine
   plugin :determine_mime_type
   plugin :pretty_location
   plugin :delete_promoted
-  plugin :logging
+  plugin :instrumentation
   plugin :recache
 
   Attacher.promote { |data| ShrineBackgrounding::PromoteJob.perform_later(data) }
