@@ -16,7 +16,7 @@ class RemoteEpisode
     @feed ||= source.matching_feed(title)
   end
 
-  def create_episode
-    feed.episodes.create_episode(self)
+  def create_episode!
+    Episode.create_from_remote_episode!(self)
   end
 end

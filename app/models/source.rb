@@ -28,14 +28,9 @@ class Source < ApplicationRecord
 
   def download_new
     with_update do
-      episodes_with_feed.each do |remote_episode|
-        episode = remote_episode.create_episode
-        # Move stuff after this to episode?
-        # download_if_needed
-        next unless episode.should_download?
-
-        DownloadThumbnailJob.perform_later(episode.id) if episode.source_thumbnail_url
-        DownloadRemoteAudioJob.perform_later(episode.id) if remote_episode.feed.autodownload
+      new_episodes.each do |remote_episode|
+        episode = remote_episode.create_episode!
+        episode.download_if_needed
       end
     end
   end
@@ -48,11 +43,9 @@ class Source < ApplicationRecord
     # better to chunk?
     existing_guids = Episode.where(guid: guids).pluck(:guid)
     new_guids = guids - existing_guids
-    remote_episodes.select { |episode| new_guids.include?(episode.url) }
-  end
-
-  def episodes_with_feed
-    new_episodes.select { |episode| episode.feed.present? }
+    remote_episodes.select do |episode|
+      new_guids.include?(episode.url) && episode.feed.present?
+    end
   end
 
   def with_update

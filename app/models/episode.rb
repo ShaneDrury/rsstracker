@@ -6,6 +6,7 @@ class Episode < ApplicationRecord
   has_one_attached :thumbnail
   has_one :audio_attachment, dependent: :destroy
   validates_uniqueness_of :guid
+  after_create :mark_as_not_asked!
 
   default_scope { order(publication_date: :desc, created_at: :desc) }
 
@@ -17,6 +18,22 @@ class Episode < ApplicationRecord
     description = DbTextSearch::FullText.new(self, :description).search(term)
     name = DbTextSearch::FullText.new(self, :name).search(term)
     description.or(name)
+  end
+
+  def self.create_from_remote_episode!(remote_episode)
+    create!(
+      feed: remote_episode.feed,
+      guid: remote_episode.guid,
+      source: remote_episode.source,
+      name: remote_episode.title,
+      description: remote_episode.description,
+      duration: remote_episode.duration,
+      file_size: remote_episode.file_size,
+      publication_date: remote_episode.publication_date,
+      source_thumbnail_url: remote_episode.thumbnail_url,
+      url: remote_episode.url,
+      seen: false,
+    )
   end
 
   after_update_commit do
@@ -35,16 +52,8 @@ class Episode < ApplicationRecord
     File.join(Rails.application.config.storage_root, "shrine", audio_attachment.audio_url) if audio_attachment&.audio_url&.present?
   end
 
-  def should_download?
-    !Episode.duplicates_for(self).exists?
-  end
-
   def source_type
     source.source_type.to_sym
-  end
-
-  def mark_as_not_asked!
-    create_fetch_status!(status: 'NOT_ASKED')
   end
 
   def fetch_and_attach_remote_audio
@@ -62,6 +71,13 @@ class Episode < ApplicationRecord
     audio_attachment.destroy!
     mark_as_not_asked!
     fetch_and_attach_remote_audio
+  end
+
+  def download_if_needed
+    return unless should_download?
+
+    DownloadThumbnailJob.perform_later(id) if source_thumbnail_url
+    DownloadRemoteAudioJob.perform_later(id) if feed.autodownload
   end
 
   def download_thumbnail
@@ -103,7 +119,15 @@ class Episode < ApplicationRecord
     create_fetch_status(status: 'FAILURE', error_reason: reason)
   end
 
+  def mark_as_not_asked!
+    create_fetch_status(status: 'NOT_ASKED')
+  end
+
   def fetched?
     fetch_status&.status == "SUCCESS"
+  end
+
+  def should_download?
+    !Episode.duplicates_for(self).exists?
   end
 end
