@@ -8,7 +8,7 @@ class Episode < ApplicationRecord
   validates_uniqueness_of :guid
   after_create :mark_as_not_asked!
   scope :with_related, -> do
-    joins(:fetch_status, :feed, :audio_attachment, :source, thumbnail_attachment: :blob)
+    joins(:fetch_status, :feed, :source)
       .includes(:fetch_status, :feed, :audio_attachment, :source, thumbnail_attachment: :blob)
   end
   scope :publication_order, -> { order(publication_date: :desc, created_at: :desc) }
