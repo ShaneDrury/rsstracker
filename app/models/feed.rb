@@ -10,19 +10,6 @@ class Feed < ApplicationRecord
   has_one_attached :thumbnail
   belongs_to :preferred_source, class_name: "Source"
 
-  def status_counts
-    counts = FetchStatus.where(fetchable: episodes).group(:status).count
-    counts['all'] = counts.values.sum
-    counts
-  end
-
-  def self.all_unique_sources
-    # TODO: Non disabled sources?
-    # TODO: Make this a query
-    # The unique non disabled sources over all feeds
-    all.map(&:all_sources).flatten.uniq
-  end
-
   def self.update_episodes
     cfs = CompositeFeeds.new(all)
     cfs.sources.each do |source|
