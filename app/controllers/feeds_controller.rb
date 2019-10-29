@@ -42,8 +42,7 @@ class FeedsController < ApplicationController
   end
 
   def update_feeds
-    active_job = UpdateFeedsJob.perform_later
-    job = Delayed::Job.find(active_job.provider_job_id)
+    job = UpdateFeedsJob.perform_later.delayed_job
     render json: job, status: :accepted
   end
 

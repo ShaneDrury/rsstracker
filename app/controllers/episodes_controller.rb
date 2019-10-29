@@ -33,19 +33,13 @@ class EpisodesController < ApplicationController
 
   # POST /episodes/1/download
   def download
-    active_job = DownloadRemoteAudioJob.perform_later(@episode.id)
-    job = Delayed::Job.find(active_job.provider_job_id)
+    job = DownloadRemoteAudioJob.perform_later(@episode.id).delayed_job
     render json: job, status: :accepted
   end
 
   def redownload
-    active_job = RedownloadRemoteAudioJob.perform_later(@episode.id)
-    if active_job
-      job = Delayed::Job.find(active_job.provider_job_id)
-      render json: job, status: :accepted
-    else
-      render status: :no_content
-    end
+    job = RedownloadRemoteAudioJob.perform_later(@episode.id).delayed_job
+    render json: job, status: :accepted
   end
 
   # POST /episodes
