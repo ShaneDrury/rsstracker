@@ -25,9 +25,6 @@ Rails.application.routes.draw do
     collection do
       post 'update_feeds'
     end
-    member do
-      post 'update_feed'
-    end
     resources :sources
   end
 
