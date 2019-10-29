@@ -16,7 +16,10 @@ class FeedsController < ApplicationController
   def show
     respond_to do |format|
       format.json { render json: @feed }
-      format.rss { render layout: false }
+      format.rss do
+        @episodes = @feed.episodes.with_related.publication_order.for_status("SUCCESS")
+        render layout: false
+      end
       format.html
     end
   end
@@ -68,7 +71,7 @@ class FeedsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_feed
-    @feed = Feed.find(params[:id])
+    @feed = Feed.includes(thumbnail_attachment: :blob).find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
