@@ -7,8 +7,10 @@ class Episode < ApplicationRecord
   has_one :audio_attachment, dependent: :destroy
   validates_uniqueness_of :guid
   after_create :mark_as_not_asked!
-
-  default_scope { order(publication_date: :desc, created_at: :desc) }
+  scope :with_related, -> do
+    includes(:fetch_status, :feed, :audio_attachment, :source, thumbnail_attachment: :blob)
+  end
+  scope :publication_order, -> { order(publication_date: :desc, created_at: :desc) }
 
   scope :duplicates_for, ->(episode) do
     where(name: episode.name, feed: episode.feed).where.not(id: episode.id)
@@ -18,6 +20,13 @@ class Episode < ApplicationRecord
     description = DbTextSearch::FullText.new(self, :description).search(term)
     name = DbTextSearch::FullText.new(self, :name).search(term)
     description.or(name)
+  end
+
+  scope :for_status, ->(fetch_status) { where(fetch_statuses: { status: fetch_status }) }
+
+  scope :all_duplicates, -> do
+    dup_names = Episode.select(:name, "count(*)").group(:name).having("count(*) > 1").pluck(:name)
+    Episode.where(name: dup_names).order(name: :asc, id: :asc)
   end
 
   def self.create_from_remote_episode!(remote_episode)
