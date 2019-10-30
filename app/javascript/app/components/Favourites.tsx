@@ -6,6 +6,7 @@ import { getFavouritesIds } from "../modules/favourites/selectors";
 import { RootState } from "../modules/reducers";
 import EpisodeLoader from "./EpisodeLoader";
 import FavouriteItem from "./FavouriteItem";
+import { useIsTabletOrMobile } from "../modules/media";
 
 interface EnhancedProps {
   favouritesIds: string[];
@@ -50,7 +51,16 @@ const mapDispatchToProps = {
   handleDetailOpened: detailsOpened,
 };
 
-export default connect(
+const FavouritesContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Favourites);
+
+const FavouritesOrNull = () => {
+  if (useIsTabletOrMobile()) {
+    return null;
+  }
+  return <FavouritesContainer />;
+};
+
+export default FavouritesOrNull;

@@ -21,26 +21,28 @@ interface DispatchProps {
 
 type Props = DataProps & DispatchProps & EnhancedProps;
 
-export class UpdateFeeds extends React.PureComponent<Props> {
-  public handleUpdateFeeds = () => {
-    return this.props.updateFeeds();
+const UpdateFeeds: React.FunctionComponent<Props> = ({
+  updateFeeds,
+  className,
+  updating,
+}) => {
+  const handleUpdateFeeds = () => {
+    return updateFeeds();
   };
 
-  public render() {
-    return (
-      <button
-        className={classNames("button is-primary", this.props.className)}
-        onClick={this.handleUpdateFeeds}
-        disabled={this.props.updating}
-      >
-        <span className="icon">
-          <Icon icon={faSync} spin={this.props.updating} />
-        </span>
-        <span>Update all</span>
-      </button>
-    );
-  }
-}
+  return (
+    <button
+      className={classNames("button is-primary", className)}
+      onClick={handleUpdateFeeds}
+      disabled={updating}
+    >
+      <span className="icon">
+        <Icon icon={faSync} spin={updating} />
+      </span>
+      <span>Update all</span>
+    </button>
+  );
+};
 
 const mapStateToProps = (state: RootState): EnhancedProps => {
   const updating = getUpdatingFeeds(state).length > 0;

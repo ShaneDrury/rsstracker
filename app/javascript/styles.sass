@@ -3,23 +3,48 @@
 .my-main
   height: 100%
 
-.content-wrapper
-  display: flex
-  height: calc(100vh - 74px)
+@media (max-width: 1224px)
+  .content-wrapper
+    display: flex
+    flex-direction: column
+    height: calc(100vh - 74px)
 
-.sidebar
-  flex: none
+  .sidebar
+    flex: none
 
-.my-content
-  flex: 1
+  .my-content
+    order: 2
+    flex: 1
 
-.my-aside
-  flex: 1
+  .my-aside
+    order: 1
+    flex: 1
 
-.scrollable
-  height: 100%
-  overflow: auto
+  .scrollable
+    height: 100%
+    overflow: auto
 
-.feed-select-wrapper
-  margin: 0.75rem
+  .feed-select-wrapper
+    margin: 0.75rem
 
+
+@media (min-device-width: 1224px)
+  .content-wrapper
+    display: flex
+    height: calc(100vh - 74px)
+
+  .sidebar
+    flex: none
+
+  .my-content
+    flex: 1
+
+  .my-aside
+    flex: 1
+
+  .scrollable
+    height: 100%
+    overflow: auto
+
+  .feed-select-wrapper
+    margin: 0.75rem
