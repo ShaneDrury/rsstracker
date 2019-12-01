@@ -32,7 +32,7 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'public/uploads', 'storage'
 set :delayed_job_workers, 4
 set :delayed_job_pid_dir, '/tmp'
 
-set :sentry_host, "http://ubuntu.home:9001/"
+set :sentry_host, "http://shane-deskmini.home:9001/"
 set :sentry_api_token, "5b2c05ef96f7465885b195a9a338a56b940725763ae0414e8d3975c51b392212"
 set :sentry_organization, "sentry"
 set :sentry_repo, "RSSTracker / rsstracker"

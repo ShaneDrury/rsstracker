@@ -93,7 +93,7 @@ Rails.application.configure do
   config.youtube_dl_path = yml['youtube_dl_path']
 
   Raven.configure do |cfg|
-    cfg.dsn = 'http://d88d154936bc4afc924191fb2d4fee84:b4cff010960b4ea79617d8c37baebee1@ubuntu.home:9001/1'
+    cfg.dsn = 'http://d88d154936bc4afc924191fb2d4fee84:b4cff010960b4ea79617d8c37baebee1@shane-deskmini.home:9001/1'
   end
 
   ActiveModelSerializers.config.adapter = :json_api

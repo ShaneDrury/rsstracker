@@ -27,7 +27,7 @@ import {
 
 if (process.env.NODE_ENV === "production") {
   Sentry.init({
-    dsn: "http://d88d154936bc4afc924191fb2d4fee84@ubuntu.home:9001/1",
+    dsn: "http://d88d154936bc4afc924191fb2d4fee84@shane-deskmini.home:9001/1",
   });
 }
 
