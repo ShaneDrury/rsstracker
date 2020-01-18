@@ -10,6 +10,7 @@ class JobsController < ApplicationController
   end
 
   def retry
+    # TODO: Move into /jobs/1/
     @job.mark_retriable!
     respond_to do |format|
       format.html { redirect_to jobs_url }

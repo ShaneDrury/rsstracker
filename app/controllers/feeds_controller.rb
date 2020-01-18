@@ -39,6 +39,8 @@ class FeedsController < ApplicationController
   end
 
   def update_feeds
+    # TODO: Move into different controller
+    # POST to /feeds/1/updates/
     job = UpdateFeedsJob.perform_later.delayed_job
     render json: job, status: :accepted
   end

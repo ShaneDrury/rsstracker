@@ -78,6 +78,7 @@ class EpisodesController < ApplicationController
   end
 
   def search
+    # TODO: Just move this into index action
     episodes = Episode.with_related.publication_order
     episodes = episodes.where(feed_id: params[:feed_id]) if params[:feed_id].present?
     episodes = episodes.with_search_term(params[:search_term]) if params[:search_term].present?

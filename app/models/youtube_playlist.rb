@@ -5,8 +5,8 @@ class YoutubePlaylist
   end
 
   def episodes
-    episodes = youtube.short_details(url).map do |item|
-      RemoteYoutubeEpisode.from_short_details(item.title, item.url, source)
+    episodes = youtube.short_details(url).map do |short_details|
+      RemoteYoutubeEpisode.new(short_details, source)
     end
     episodes.reject do |episode|
       episode.title == "[Deleted video]"

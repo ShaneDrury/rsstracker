@@ -1,14 +1,9 @@
 class RemoteEpisode
-  # TODO: Probably no need for base class?
-  def initialize(description: nil, duration: nil, file_size: nil, publication_date: nil, thumbnail_url: nil, url:, title:, guid:, source:)
-    @description = description
-    @duration = duration
-    @file_size = file_size
-    @guid = guid
-    @publication_date = publication_date
-    @thumbnail_url = thumbnail_url
-    @title = title
-    @url = url
+  attr_accessor :source
+  # TODO: Consider moving source private
+  # and anything that uses it directly e.g. episode creation
+
+  def initialize(source)
     @source = source
   end
 

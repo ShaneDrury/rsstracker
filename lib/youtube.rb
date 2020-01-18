@@ -3,6 +3,8 @@ require "youtube_api"
 class Youtube
   FILENAME_FORMAT = '%(id)s.%(ext)s'
   # TODO: Maybe url as a constructor param, used everywhere here
+  # In that case it would represent a remote youtube video
+  # So, can move this into RemoteYoutubeEpisode?
 
   def short_details(url)
     json_out = api.playlist(url)
